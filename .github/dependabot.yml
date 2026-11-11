@@ -1,0 +1,19 @@
+# Weekly dependency updates. Minor and patch bumps come as one grouped PR per ecosystem;
+# majors get their own PRs. Dependabot PRs are never auto-merged (not claude[bot]/auto-fix).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]

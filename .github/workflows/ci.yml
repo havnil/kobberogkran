@@ -1,0 +1,49 @@
+# Build, type check, tests and an internal link check on the built site.
+# The job id `ci` is the required status check in the `main` ruleset: do not rename it.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:dist
+      # Internal links only (--offline). dist/client is the adapter's static output dir
+      # (same constant as scripts/check-dist.mjs). --root-dir must be absolute so that
+      # root-relative links like /en/ resolve; --index-files requires each linked
+      # directory to have an index.html, as a real page would.
+      - name: Check internal links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --no-progress
+            --root-dir ${{ github.workspace }}/dist/client
+            --index-files index.html
+            'dist/client/**/*.html'
+          jobSummary: true
+          fail: true

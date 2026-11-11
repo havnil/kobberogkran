@@ -1,0 +1,40 @@
+/*
+ * Kobber og Kran — brand tokens (forslag)
+ * Flytt verdiene inn i src/styles/tokens.css. Navnene følger --color-*, --font-*.
+ * Kontrast er målt mot WCAG: 4.5:1 for brødtekst, 3:1 for stor tekst og grafikk.
+ */
+
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("/fonts/inter/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("/fonts/inter/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-display: swap; src: url("/fonts/inter/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; font-display: swap; src: url("/fonts/inter/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url("/fonts/inter/inter-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 900; font-display: swap; src: url("/fonts/inter/inter-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 600; font-display: swap; src: url("/fonts/rubik/rubik-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: swap; src: url("/fonts/rubik/rubik-latin-800-normal.woff2") format("woff2"); }
+
+:root {
+  /* Merkefarger */
+  --color-orange: #F26A0F;        /* merket, flater, striper, knapper med brun tekst. Ikke brødtekst på hvitt (3.1:1) */
+  --color-orange-dark: #A84508;   /* oransje tekst og lenker på lys bunn (6.0:1 på hvitt) */
+  --color-orange-light: #F7883F;  /* oransje tekst på brun bunn */
+  --color-brown: #4A2412;         /* all tekst, mørke flater (13.5:1 på hvitt) */
+  --color-brown-dark: #2E170B;    /* hover på mørke flater */
+  --color-brown-muted: #6B4A38;   /* sekundærtekst (7.1:1 på krem) */
+
+  /* Bakgrunner */
+  --color-cream: #F7F2EC;         /* standard sidebakgrunn */
+  --color-sand: #EFE6DC;          /* seksjoner, kort */
+  --color-white: #FFFFFF;
+  --color-border: #E8DCCF;
+  --color-border-strong: #CDBBA9; /* skjemafelt */
+
+  /* Skrift */
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Inter", system-ui, sans-serif;  /* vekt 800–900, letter-spacing -0.02em */
+  --font-brand: "Rubik", "Inter", sans-serif;      /* kun sett B-ordmerket og store versaltitler */
+
+  /* Form */
+  --radius-card: 18px;
+  --radius-button: 999px;
+}

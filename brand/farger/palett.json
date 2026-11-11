@@ -1,0 +1,11 @@
+{
+  "orange": { "hex": "#F26A0F", "bruk": "Merket, flater, striper. Ikke brødtekst på hvitt." },
+  "orange-dark": { "hex": "#A84508", "bruk": "Oransje tekst og lenker på lys bunn." },
+  "orange-light": { "hex": "#F7883F", "bruk": "Oransje tekst på brun bunn." },
+  "brown": { "hex": "#4A2412", "bruk": "All tekst og mørke flater." },
+  "brown-dark": { "hex": "#2E170B", "bruk": "Hover og dypeste flater." },
+  "brown-muted": { "hex": "#6B4A38", "bruk": "Sekundærtekst." },
+  "cream": { "hex": "#F7F2EC", "bruk": "Standard bakgrunn." },
+  "sand": { "hex": "#EFE6DC", "bruk": "Seksjoner og kort." },
+  "white": { "hex": "#FFFFFF", "bruk": "Kort, skjema, logo på oransje." }
+}

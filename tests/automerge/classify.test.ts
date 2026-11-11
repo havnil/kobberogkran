@@ -44,6 +44,21 @@ describe('classifyPaths', () => {
     expect(classifyPaths([]).allowed).toBe(false);
   });
 
+  it('blocks changes to the agent guardrails themselves', () => {
+    const guards = [
+      'scripts/automerge/classify.mjs',
+      '.github/workflows/auto-merge.yml',
+      '.github/workflows/claude.yml',
+      '.github/workflows/claude-watchdog.yml',
+      '.github/prompts/watchdog.md',
+    ];
+    expect(classifyPaths(['package.json', ...guards])).toEqual({ allowed: false, blocked: guards });
+  });
+
+  it('still allows other workflow fixes', () => {
+    expect(classifyPaths(['.github/workflows/ci.yml']).allowed).toBe(true);
+  });
+
   it('uses the blocked prefixes from the Global Constraints', () => {
     expect(BLOCKED_PREFIXES).toEqual(['src/content/', 'public/images/', 'public/admin/', 'brand/']);
   });

@@ -35,7 +35,7 @@ the domain **stops resolving (website and email)** until it's fixed.
 1. Uniweb control panel → the domain → DNS / DNSSEC → turn DNSSEC **off**.
 2. Wait until the DS record is gone. This can take up to 24 hours because of Norid
    processing and caching. Check with
-   `https://cloudflare-dns.com/dns-query?name=kobberogkran.no&type=DS` (open it in a
+   `https://dns.google/resolve?name=kobberogkran.no&type=DS` (open it in a
    browser). When `"Answer"` is missing from the response, you can continue.
 
 ### 2. Add the domain in Cloudflare

@@ -1,0 +1,36 @@
+name: Watchdog (hourly)
+
+# Homepages return 200, the TLS certificate has more than 14 days left, and the MX
+# record still points at Microsoft 365. Failures become deduplicated `watchdog` issues.
+# Off until the repo variable WATCHDOG_ENABLED is 'true' (set it once DNS points at Cloudflare).
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: write # gh workflow run claude-watchdog.yml
+
+concurrency:
+  group: watchdog-hourly
+  cancel-in-progress: false
+
+jobs:
+  hourly:
+    if: vars.WATCHDOG_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Run checks
+        run: node scripts/watchdog/run.mjs --hourly --out results.json
+      - name: Report
+        run: node scripts/watchdog/report.mjs results.json

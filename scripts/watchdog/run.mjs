@@ -3,7 +3,7 @@
 //   node scripts/watchdog/run.mjs --hourly                       http, tls, dns-mx
 //   node scripts/watchdog/run.mjs --daily-translations           translations
 //   node scripts/watchdog/run.mjs --links <lychee.json>          links (lychee JSON report)
-//   node scripts/watchdog/run.mjs --lighthouse <assertion-results.json>
+//   node scripts/watchdog/run.mjs --lighthouse <assertion-results.json> [--outcome <step outcome>]
 //   node scripts/watchdog/run.mjs --pages                        print page URLs from the sitemap
 //
 // Results go to results.json (override with --out <file>). The script exits 0 when
@@ -103,9 +103,16 @@ function checkLinks(file) {
   return evaluateLinks(JSON.parse(readFileSync(file, 'utf8')));
 }
 
-/** @param {string | undefined} file */
-function checkLighthouse(file) {
-  if (!file || !existsSync(file)) {
+/**
+ * treosh/lighthouse-ci-action does not fail the step on failed assertions, and it only
+ * writes assertion-results.json when there is something to report. So a missing file
+ * means "all passed" when the action succeeded, and "no data" when it failed.
+ * @param {string | undefined} file
+ * @param {string | undefined} outcome GitHub step outcome of the Lighthouse step.
+ */
+function checkLighthouse(file, outcome) {
+  if (outcome === 'success' && (!file || !existsSync(file))) return evaluateLighthouse([]);
+  if (outcome !== 'success' || !file || !existsSync(file)) {
     return result(
       'lighthouse',
       false,
@@ -131,7 +138,8 @@ async function listPages() {
     for (const sitemap of locs(await get(`${SITE}/sitemap-index.xml`))) {
       pages.push(...locs(await get(sitemap)));
     }
-    const sameSite = pages.filter((p) => new URL(p).hostname === HOST);
+    // The list ends up on a lychee command line, so keep only plain same-site URLs.
+    const sameSite = pages.filter((p) => /^https:\/\/[\w.\-~%/:@+,=]+$/.test(p) && new URL(p).hostname === HOST);
     return [...new Set([...HOMEPAGES, ...sameSite])];
   } catch (error) {
     console.error(`Sitemap unavailable (${message(error)}); using the homepages only.`);
@@ -155,7 +163,7 @@ async function main(argv) {
   } else if (argv.includes('--links')) {
     results = [checkLinks(arg('--links'))];
   } else if (argv.includes('--lighthouse')) {
-    results = [checkLighthouse(arg('--lighthouse'))];
+    results = [checkLighthouse(arg('--lighthouse'), argv.includes('--outcome') ? arg('--outcome') : 'success')];
   } else {
     console.error('Usage: run.mjs --hourly | --daily-translations | --links <file> | --lighthouse <file> | --pages [--out <file>]');
     process.exitCode = 2;

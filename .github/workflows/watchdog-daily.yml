@@ -1,0 +1,103 @@
+name: Watchdog (daily)
+
+# Broken links, Lighthouse scores and missing translations. Each job writes its own
+# results.json and files deduplicated `watchdog` issues through report.mjs.
+# Off until the repo variable WATCHDOG_ENABLED is 'true' (set it once DNS points at Cloudflare).
+
+on:
+  schedule:
+    - cron: '43 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: write # gh workflow run claude-watchdog.yml
+
+concurrency:
+  group: watchdog-daily
+  cancel-in-progress: false
+
+jobs:
+  links:
+    if: vars.WATCHDOG_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # lychee does not crawl, so every page in the sitemap is an input. lychee then
+      # checks every internal and external link found on those pages.
+      - name: List pages from the sitemap
+        id: pages
+        run: echo "urls=$(node scripts/watchdog/run.mjs --pages | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+      - name: Check links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --max-retries 3
+            --accept '200..=299,429'
+            ${{ steps.pages.outputs.urls }}
+          format: json
+          output: lychee.json
+          jobSummary: false
+          fail: false
+          failIfEmpty: false
+      - name: Evaluate
+        run: node scripts/watchdog/run.mjs --links lychee.json --out results.json
+      - name: Report
+        run: node scripts/watchdog/report.mjs results.json
+
+  lighthouse:
+    if: vars.WATCHDOG_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Lighthouse
+        id: lhci
+        continue-on-error: true
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://kobberogkran.no/
+            https://kobberogkran.no/en/
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+      - name: Evaluate
+        run: >-
+          node scripts/watchdog/run.mjs
+          --lighthouse "${{ steps.lhci.outputs.resultsPath || '.lighthouseci' }}/assertion-results.json"
+          --outcome "${{ steps.lhci.outcome }}"
+          --out results.json
+      - name: Report
+        run: node scripts/watchdog/report.mjs results.json
+
+  translations:
+    if: vars.WATCHDOG_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Check translations
+        run: node scripts/watchdog/run.mjs --daily-translations --out results.json
+      - name: Report
+        run: node scripts/watchdog/report.mjs results.json

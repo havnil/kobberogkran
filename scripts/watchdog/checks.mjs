@@ -106,7 +106,7 @@ export function evaluateLinks(report) {
 
 /**
  * Evaluates Lighthouse CI assertion results (`assertion-results.json`).
- * @param {{name: string, auditId?: string, auditProperty?: string, actual?: number, expected?: number, level?: string, passed: boolean, url: string}[]} assertions
+ * @param {{name: string, auditId?: string, auditProperty?: string, actual?: number, expected?: number, operator?: string, level?: string, passed: boolean, url: string}[]} assertions
  * @returns {CheckResult}
  */
 export function evaluateLighthouse(assertions) {

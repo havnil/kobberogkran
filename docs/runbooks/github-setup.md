@@ -55,7 +55,8 @@ He gets an email invite and must accept it.
 > by role, and the ruleset exempts the **Admin** role, which only the owner has.
 >
 > So with write access the brother can:
-> - open and merge PRs (once `ci` is green)
+> - open PRs, and merge them once `ci` is green **and you have approved them** (the
+>   ruleset requires one approval from someone other than the last pusher)
 > - use `@claude` in issues and PRs
 > - edit through the CMS, **but CMS saves to `main` are rejected** by the ruleset
 >
@@ -70,8 +71,20 @@ He gets an email invite and must accept it.
 
 ## 4. Manual ruleset check
 
-The `main` ruleset requires a PR and a green `ci` check, blocks force-pushes and branch
-deletion, and exempts the Admin role. Its exact definition is
+The `main` ruleset requires a PR, a green `ci` check and one approval (dismissed on every
+new push, and never from the person who pushed last), blocks force-pushes and branch
+deletion, and exempts the Admin role.
+
+The approval is what stops the Claude agent from merging its own PRs: `claude[bot]` can't
+approve its own PR, and only `auto-merge.yml` approves an `auto-fix` PR, after
+`classify.mjs` has passed. For that to work, let GitHub Actions approve PRs (once):
+
+```sh
+gh api -X PUT repos/havnil/kobberogkran/actions/permissions/workflow   -F can_approve_pull_request_reviews=true
+```
+
+Without it, `auto-fix` PRs still pass `ci` but wait for your approval. Your own PRs and
+direct pushes are not affected, because the Admin role bypasses the ruleset. Its exact definition is
 [`main-ruleset.json`](main-ruleset.json). It is created (once the `ci` check has run
 green at least once) with:
 
@@ -87,7 +100,8 @@ Check it once now, and again whenever someone is added:
 2. **As a collaborator with write access** (for example, the brother):
    - `git push origin main` with a new commit → **rejected** ("Changes must be made through
      a pull request" / "Required status check `ci` is expected").
-   - Open a PR → the **Merge** button stays disabled until the `ci` check is green.
+   - Open a PR → the **Merge** button stays disabled until the `ci` check is green and
+     you (the owner) have approved it.
 3. **Force-push** to `main` (by anyone without bypass) → rejected.
 4. Look at the rules: `gh api repos/havnil/kobberogkran/rulesets` → one active ruleset
    targeting `main`.

@@ -52,9 +52,10 @@ build, built-output check, offline link check).
 - It never pushes to `main` and never touches secrets, DNS or Cloudflare.
 
 Auto-merge (`auto-merge.yml`): a PR opened by `claude[bot]` with the `auto-fix` label
-merges by itself once `ci` is green, **unless** it touches `src/content/`,
+is approved by the workflow and merges by itself once `ci` is green, **unless** it touches `src/content/`,
 `public/images/`, `public/admin/` or `brand/`. If it does, the label is removed, a comment
-lists the blocked files, and `needs-human` is added. You get a GitHub notification for
+lists the blocked files, and `needs-human` is added. The `main` ruleset requires that approval,
+so the agent can't merge a PR by any other route. You get a GitHub notification for
 every merge. To undo one, see [rollback.md](rollback.md).
 
 ## Labels

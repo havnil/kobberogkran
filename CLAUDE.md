@@ -86,8 +86,9 @@ auto-merged.
   `GITHUB_CLIENT_SECRET`, `.dev.vars`, `.env*`).
 - **DNS and email records**, and **Cloudflare settings** (dashboard, custom domains,
   redirect rules, the CMS auth Worker).
-- **`main` directly.** Always use a branch and a PR. The `main` ruleset requires a PR and
-  a green `ci` check, and only repository admins can bypass it.
+- **`main` directly.** Always use a branch and a PR. The `main` ruleset requires a PR, a
+  green `ci` check and an approval from someone other than the last pusher, and only
+  repository admins can bypass it. Never approve or merge a PR yourself.
 - Repo settings, rulesets and the `WATCHDOG_ENABLED` variable.
 
 If a problem falls in one of these areas, or you're unsure: comment with your findings, add

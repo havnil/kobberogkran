@@ -4,6 +4,12 @@
 #
 # pull_request_target runs this file and scripts/automerge/classify.mjs from the BASE
 # branch, so a PR cannot weaken its own check. No PR code is checked out or executed.
+#
+# The repo itself enforces this too: the `main` ruleset requires one approval, dismisses
+# it on every push, and requires the last push to be approved by someone else. This
+# workflow gives that approval (as github-actions[bot]) only after classify.mjs passes,
+# so claude[bot] cannot merge its own PR by any other route. That needs
+# "Allow GitHub Actions to approve pull requests" (docs/runbooks/github-setup.md).
 name: Auto-merge
 
 on:
@@ -43,6 +49,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       PR: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       CHANGED_FILES: ${{ github.event.pull_request.changed_files }}
     steps:
       - name: Checkout base branch (trusted code only)
@@ -66,9 +73,15 @@ jobs:
           echo "allowed=$(jq -r '.allowed' <<<"$result")" >> "$GITHUB_OUTPUT"
           jq -r '.blocked[] | "- `\(.)`"' <<<"$result" > blocked.md
 
-      - name: Queue the merge
+      - name: Approve and queue the merge
         if: steps.classify.outputs.allowed == 'true'
-        run: gh pr merge "$PR" --auto --squash
+        run: |
+          # Approve the exact commit this event is about. If the branch has moved on since,
+          # the approval is stale and the next `synchronize` run classifies the new head.
+          if ! gh api -X POST "repos/$GH_REPO/pulls/$PR/reviews"               -f event=APPROVE -f commit_id="$HEAD_SHA"               -f body="Auto-merge: only technical files changed (scripts/automerge/classify.mjs)." > /dev/null; then
+            echo "::warning::Could not approve the PR. Is 'Allow GitHub Actions to approve pull requests' on? The merge waits for a human approval."
+          fi
+          gh pr merge "$PR" --auto --squash
 
       - name: Hand over to a human
         if: steps.classify.outputs.allowed != 'true'

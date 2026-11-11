@@ -86,7 +86,11 @@ The agent runs on your Claude subscription (`CLAUDE_CODE_OAUTH_TOKEN`), so it's 
   workflow comments "Daily agent cap reached", adds `needs-human`, and stops (the run
   shows green). It resets at 00:00 UTC.
 - At most 30 turns per run (`--max-turns 30`) and a 30-minute job timeout.
-- One agent run at a time (concurrency group `claude-agent`). Others wait in line.
+- One agent run at a time (concurrency group `claude-agent`, shared with `@claude` runs).
+  Others wait in line: the group uses `queue: max`, so up to 100 runs can wait. (Without
+  it, GitHub keeps only one waiting run and cancels it when the next one arrives.)
+- `@claude` only starts a run for the owner, members and collaborators. Anyone else's
+  `@claude` is skipped before it can join the line.
 
 To change the cap, edit the number in the cap step of `.github/workflows/claude-watchdog.yml`
 through a PR.

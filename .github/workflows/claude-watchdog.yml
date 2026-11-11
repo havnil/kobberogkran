@@ -22,10 +22,13 @@ jobs:
       (github.event.label.name == 'watchdog' && !contains(github.event.issue.labels.*.name, 'needs-human'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # One agent run at a time, shared with claude.yml. Queue, never cancel.
+    # One agent run at a time, shared with claude.yml. The default queue (`single`) keeps
+    # only ONE pending run per group and cancels it when the next run arrives, which would
+    # silently drop watchdog dispatches. `queue: max` keeps up to 100 pending runs in order.
     concurrency:
       group: claude-agent
       cancel-in-progress: false
+      queue: max
     permissions:
       contents: write
       pull-requests: write

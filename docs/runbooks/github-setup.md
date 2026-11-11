@@ -71,8 +71,15 @@ He gets an email invite and must accept it.
 ## 4. Manual ruleset check
 
 The `main` ruleset requires a PR and a green `ci` check, blocks force-pushes and branch
-deletion, and exempts the Admin role. Check it once now, and again whenever someone is
-added:
+deletion, and exempts the Admin role. Its exact definition is
+[`main-ruleset.json`](main-ruleset.json). It is created (once the `ci` check has run
+green at least once) with:
+
+```sh
+gh api repos/havnil/kobberogkran/rulesets -X POST --input docs/runbooks/main-ruleset.json
+```
+
+Check it once now, and again whenever someone is added:
 
 1. **As the owner (admin):** a small direct push to `main` succeeds. GitHub prints a
    note that you bypassed the rules. A CMS save, made while signed in as you, appears as

@@ -1,0 +1,40 @@
+---
+import type { Alternate } from '../i18n/alternates';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  alternates: Alternate[];
+}
+
+const { locale, alternates } = Astro.props;
+// Only languages that actually have this page are linked; a missing translation is hidden.
+const others = alternates.filter((alt) => alt.locale !== locale);
+---
+
+{
+  others.length > 0 && (
+    <nav aria-label={ui[locale].switcherLabel}>
+      <ul class="language-switcher">
+        {others.map((alt) => (
+          <li>
+            <a href={alt.href} hreflang={alt.locale} lang={alt.locale}>
+              {ui[locale].languageNames[alt.locale]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .language-switcher {
+    display: flex;
+    gap: var(--space-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

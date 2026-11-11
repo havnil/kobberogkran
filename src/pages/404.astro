@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ui } from '../i18n/ui';
+
+const t = ui.nb;
+---
+
+<BaseLayout locale="nb" title={`${t.notFoundTitle} – Kobber og Kran AS`} description={t.notFoundText} alternates={[]} noindex>
+  <h1>{t.notFoundTitle}</h1>
+  <p>{t.notFoundText}</p>
+  <p><a href="/">{t.notFoundHomeLink}</a></p>
+</BaseLayout>

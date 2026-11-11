@@ -1,0 +1,46 @@
+---
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import type { Alternate } from '../i18n/alternates';
+import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  alternates: Alternate[];
+  /** Set on error pages: no canonical, no hreflang, not indexed. */
+  noindex?: boolean;
+}
+
+const { locale, title, description, alternates, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const absolute = (href: string) => new URL(href, Astro.site).href;
+const xDefault = alternates.find((alt) => alt.locale === DEFAULT_LOCALE);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={canonical.href} />}
+    {!noindex && alternates.map((alt) => <link rel="alternate" hreflang={alt.locale} href={absolute(alt.href)} />)}
+    {!noindex && xDefault && <link rel="alternate" hreflang="x-default" href={absolute(xDefault.href)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{ui[locale].skipLink}</a>
+    <header class="site-header container">
+      <a href={locale === DEFAULT_LOCALE ? '/' : `/${locale}/`}>Kobber og Kran AS</a>
+      <LanguageSwitcher locale={locale} alternates={alternates} />
+    </header>
+    <main id="main" class="container">
+      <slot />
+    </main>
+  </body>
+</html>

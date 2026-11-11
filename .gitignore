@@ -22,3 +22,6 @@ Thumbs.db
 # watchdog scratch output
 results.json
 .lighthouseci/
+
+# Claude Code worktrees
+.claude/worktrees/

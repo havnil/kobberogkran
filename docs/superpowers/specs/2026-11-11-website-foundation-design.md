@@ -56,10 +56,16 @@ through Claude (code/requests) and through a no-code editing screen.
 ## Decisions
 
 ### Repo
-- Private GitHub repo `havnil/kobberogkran` (builder's call on the name). Default branch
-  `main`. It can be transferred to a company organization later without losing history.
-- `main` is protected: changes go through pull requests, and the build check must pass.
-  The owner can still merge directly.
+- **Public** GitHub repo `havnil/kobberogkran` (owner's decision; the name is the
+  builder's call). Public because free accounts only get enforced branch rules on public
+  repos, and public repos get unlimited Actions minutes. Secrets live only in GitHub
+  Actions secrets and Cloudflare, never in the repo. Default branch `main`. The repo can
+  be transferred to a company organization later without losing history.
+- `main` is protected by a ruleset: changes go through pull requests, and the CI check
+  must pass. The owner (`havnil`) is on the bypass list, so the owner and the CMS can
+  commit directly. Neither the agent nor anyone else can.
+- `claude-code-action` only responds to users with write access (owner and brother), so
+  strangers opening issues on the public repo can't drive the agent.
 
 ### Stack
 - **Astro** (current major) with built-in i18n routing: `defaultLocale: "nb"`,
@@ -88,6 +94,18 @@ through Claude (code/requests) and through a no-code editing screen.
   Worker.
 - i18n configured so each entry has `nb` and `en` versions edited side by side. Images go
   to a shared media folder in the repo.
+- Saves commit **straight to `main`** and go live within minutes (builder's call: the
+  editing screen is for quick picture and text swaps, and every save can be undone with
+  a revert). Editors are the owner and the brother, both GitHub users with write access,
+  and both on the ruleset bypass list. The brother is added once he has a GitHub account.
+
+### Missing translations (builder's call)
+- A page that exists in only one language is still published in that language. The
+  language switcher hides the missing counterpart, and `hreflang` only lists the
+  languages that exist. The build does **not** fail, because that would block every
+  CMS save.
+- The daily watchdog check files a `needs-human` issue listing the untranslated entries.
+  The agent never writes translations on its own, since that would be wording.
 
 ### Watchdog (automated upkeep)
 Built on GitHub Actions plus Anthropic's official `anthropics/claude-code-action@v1`.
@@ -104,16 +122,32 @@ Built on GitHub Actions plus Anthropic's official `anthropics/claude-code-action
 the same check instead of duplicating it. Assign it to `havnil`, which makes GitHub email
 the owner.
 
-**Agent:** an issue labelled `watchdog` triggers Claude via `claude-code-action` with
-repo-level instructions:
-- Diagnose the problem. If the fix is safe and technical (a broken link, a build error, a
-  dependency bump, a missing alt text), open a PR with the fix, which gives it a preview URL.
-- If it involves wording, prices, legal text, DNS, email or anything uncertain, comment with
-  findings, label the issue `needs-human`, and stop.
+**Agent:** a newly opened or newly labelled `watchdog` issue triggers Claude via
+`claude-code-action`. Updates to an existing issue do **not** trigger it again. Repo-level
+instructions:
+- Diagnose the problem. If the fix is purely technical, open a PR with the fix, which
+  gives it a preview URL. Technical means: broken links, build/type errors, dependency
+  patch/minor updates, and workflow or config errors. The PR is labelled `auto-fix`.
+- If it involves wording (including alt text, which is content), prices, legal text,
+  translations, DNS, email or anything uncertain, comment with findings, label the issue
+  `needs-human`, and stop.
 - Never push to `main` directly. Never touch secrets, DNS or Cloudflare settings.
-- Bounded by `--max-turns` and a workflow timeout.
-- Anyone with repo access (owner, brother) can also write `@claude` in any issue or PR
-  to ask for a change.
+- Bounded by `--max-turns`, a workflow timeout, a concurrency group (one agent run at a
+  time) and a daily cap of agent runs (builder sets the number, around 10). Once the cap is
+  hit, the workflow comments and labels `needs-human` instead of running.
+- Anyone with write access (owner, brother) can also write `@claude` in any issue or PR
+  to ask for a change. Those PRs are never auto-merged.
+
+**Auto-merge (owner's decision):** PRs labelled `auto-fix` that were opened by the agent
+and only touch files outside `src/content/`, `public/` media and `brand/` are
+auto-merged once CI passes. A CI job verifies the file paths and removes the label if
+the PR touches content. The owner gets a GitHub notification for each merge. Everything
+else waits for a human to merge.
+
+**Billing (owner's decision):** the agent runs on the owner's Claude subscription via
+`CLAUDE_CODE_OAUTH_TOKEN` (created with `claude setup-token`, stored as a repo secret).
+Agent runs therefore share the owner's personal usage limits. This is why the trigger
+rules and the daily cap above matter.
 
 **Rollback:** document the one-click Cloudflare rollback and `git revert` in
 `docs/runbooks/` so a human (or Claude when asked) can put out a fire fast.
@@ -130,8 +164,8 @@ repo-level instructions:
 
 ## What gets built in this phase
 
-1. `git init`, `.gitignore`, `.gitattributes` (LF line endings), the private GitHub repo,
-   and branch protection.
+1. `git init`, `.gitignore`, `.gitattributes` (LF line endings), the public GitHub repo,
+   and the `main` ruleset.
 2. An Astro skeleton with i18n, the Cloudflare adapter, a base layout, a placeholder home
    page in both languages, a language switcher, `hreflang` tags, sitemap and `robots.txt`.
 3. Sveltia CMS config and the admin page (the authenticator Worker is deployed once the
@@ -149,6 +183,8 @@ repo-level instructions:
 - Choice of link checker and uptime check tooling within GitHub Actions.
 - Placeholder content wording.
 
-## Open questions for the owner
+## Owner decisions (2026-11-11)
 
-(Filled after the builder check.)
+- Public repo.
+- Technical agent fixes auto-merge once CI passes. Content always waits for a human.
+- The agent is billed through the owner's Claude subscription.

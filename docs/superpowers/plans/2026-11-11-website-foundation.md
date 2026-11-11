@@ -18,10 +18,11 @@
 - Never commit secrets. Secrets: `CLAUDE_CODE_OAUTH_TOKEN` (repo secret), `GITHUB_CLIENT_SECRET` (Cloudflare authenticator Worker only).
 - Agent: `anthropics/claude-code-action@v1`, `claude_code_oauth_token` input, `--max-turns 30`, job `timeout-minutes: 30`, concurrency group `claude-agent`, daily cap **10** agent runs.
 - Watchdog thresholds: TLS cert valid more than **14 days**. MX must contain `kobberogkran-no.mail.protection.outlook.com`. Lighthouse minimums: performance 0.85, accessibility 0.95, SEO 0.95, best-practices 0.9 (builder's call; spec left it open).
-- Auto-merge blocked paths (content): `src/content/`, `public/images/`, `public/admin/`, `brand/`. Also any PR not authored by `claude[bot]` or not labelled `auto-fix`.
-- Labels: `watchdog`, `needs-human`, `auto-fix`.
+- Auto-merge blocked paths (content): `src/content/`, `public/images/`, `public/admin/`, `brand/`. Also any PR whose author is not in repo variable `AUTOFIX_AUTHORS` (comma-separated, default `claude[bot]`) or that is not labelled `auto-fix`.
+- **Agent-agnostic watchdog (owner wants a Grok bot as watchdog):** GitHub issues labelled `watchdog` are the interface, and `docs/watchdog/bot-contract.md` defines it. Repo variable `WATCHDOG_AGENT` selects the fixer: `claude` (default, works today), `grok` (Grok Build CLI headless with secret `XAI_API_KEY`; a prepared adapter, verified once a key exists), or `external` (no in-Actions agent; an external bot such as Grok Bot with its GitHub plugin reads the issues itself). `AGENTS.md` is the canonical agent instruction file, and `CLAUDE.md` imports it with `@AGENTS.md`.
+- Labels: `watchdog`, `needs-human`, `auto-fix`, `bot-queue`.
 - Watchdog scheduled jobs are gated on repo variable `WATCHDOG_ENABLED == 'true'` (off until DNS points at Cloudflare).
-- Issues created with `GITHUB_TOKEN` do not trigger workflows, so the watchdog dispatches the agent with `gh workflow run claude-watchdog.yml -f issue_number=N`.
+- Issues created with `GITHUB_TOKEN` do not trigger workflows, so the watchdog dispatches the agent with `gh workflow run watchdog-agent.yml -f issue_number=N`.
 - Line endings LF (`.gitattributes: * text=auto eol=lf`).
 
 ## Review Focus
@@ -42,7 +43,7 @@
 - [ ] **Step 1:** Write the files. `README.md` covers the project purpose, `npm` commands (filled in Task 2), and links to `CLAUDE.md` and `docs/runbooks/`. `brand/README.md` tells the owner to drop logo, fonts, colours and layout files here.
 - [ ] **Step 2:** `git add --renormalize . && git commit`.
 - [ ] **Step 3:** Create the remote: `gh repo create havnil/kobberogkran --public --source . --push --description "Kobber og Kran AS – kobberogkran.no"`. Expected: the push succeeds.
-- [ ] **Step 4:** Repo settings: `gh repo edit havnil/kobberogkran --enable-auto-merge --delete-branch-on-merge --enable-wiki=false`. Create the labels `watchdog` (red), `needs-human` (orange) and `auto-fix` (green) with `gh label create`.
+- [ ] **Step 4:** Repo settings: `gh repo edit havnil/kobberogkran --enable-auto-merge --delete-branch-on-merge --enable-wiki=false`. Create the labels `watchdog` (red), `needs-human` (orange), `auto-fix` (green) and `bot-queue` (purple) with `gh label create`.
 - [ ] **Step 5:** Verify with `gh repo view havnil/kobberogkran --json visibility,autoMergeAllowed`. Expected: `PUBLIC`, `true`.
 
 (The ruleset is added in Task 4, once the `ci` check exists.)
@@ -166,7 +167,7 @@ expect(alternates('only-nb', entries)).toEqual([{ locale:'nb', href:'/kun-norsk/
   - Check ids: `http`, `tls`, `dns-mx`, `links`, `lighthouse`, `translations`. `dns-mx` and `translations` set `needsHuman: true`.
 - Produces (in `report.mjs`): `planIssueAction(openIssues: {number, title}[], result: CheckResult): {action: 'create'|'comment'|'none', issueNumber?: number, title: string}`. The title is `[watchdog] <id>: <summary>`, matched by prefix `[watchdog] <id>:`. When `ok` it returns `none`. Recovery doesn't auto-close; it adds a "recovered" comment when an issue is open, so `planIssueAction` returns `comment` for an ok result with an open issue.
 - Produces: the `report.mjs` CLI `node scripts/watchdog/report.mjs <results.json>`, which uses `gh` with `GH_TOKEN`.
-  - On `create`: open the issue with labels `watchdog` (plus `needs-human` if `needsHuman`) and assignee `havnil`. If not `needsHuman`, run `gh workflow run claude-watchdog.yml -f issue_number=<n>`.
+  - On `create`: open the issue with labels `watchdog` (plus `needs-human` if `needsHuman`) and assignee `havnil`. If not `needsHuman`, run `gh workflow run watchdog-agent.yml -f issue_number=<n>`.
   - On `comment`: append the details. The agent is never dispatched on a comment.
 - Produces: `node scripts/watchdog/run.mjs --hourly|--daily-translations` writes `results.json`. Hourly runs http (`https://kobberogkran.no/`, `https://kobberogkran.no/en/`), tls (node `tls.connect` → `getPeerCertificate().valid_to`), and dns-mx (`dns.promises.Resolver` with servers `['1.1.1.1']`).
 
@@ -193,13 +194,13 @@ expect(alternates('only-nb', entries)).toEqual([{ locale:'nb', href:'/kun-norsk/
 ### Task 6: Claude agent and auto-merge
 
 **Files:**
-- Create: `.github/workflows/claude.yml`, `.github/workflows/claude-watchdog.yml`, `.github/workflows/auto-merge.yml`
+- Create: `.github/workflows/claude.yml`, `.github/workflows/watchdog-agent.yml`, `.github/workflows/auto-merge.yml`
 - Create: `.github/prompts/watchdog.md`
 - Create: `scripts/automerge/classify.mjs`
 - Test: `tests/automerge/classify.test.ts`
 
 **Interfaces:**
-- Consumes: the `planIssueAction` dispatch contract (`claude-watchdog.yml` input `issue_number`), labels from Task 1, and the `ci` check from Task 4.
+- Consumes: the `planIssueAction` dispatch contract (`watchdog-agent.yml` input `issue_number`), labels from Task 1, and the `ci` check from Task 4.
 - Produces: `classifyPaths(files: string[]): { allowed: boolean, blocked: string[] }`. Blocked prefixes come from Global Constraints.
 
 - [ ] **Step 1: Write the failing test.**
@@ -213,10 +214,15 @@ expect(alternates('only-nb', entries)).toEqual([{ locale:'nb', href:'/kun-norsk/
   - Permissions: `contents: write`, `pull-requests: write`, `issues: write`, `id-token: write`, `actions: read`. Same concurrency group and timeout as Global Constraints.
   - Uses `claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}` and `claude_args: --max-turns 30`.
   - The action's default write-access requirement stays on. Do not set `allowed_non_write_users`.
-- [ ] **Step 4:** `claude-watchdog.yml` handles automated runs.
+- [ ] **Step 4:** `watchdog-agent.yml` handles automated runs and is provider-agnostic. A first job `route` reads `vars.WATCHDOG_AGENT` (default `claude`). Then:
+  - `claude`: job `claude-fix` uses `claude-code-action` (below).
+  - `grok`: job `grok-fix` installs Grok Build (`curl -fsSL https://x.ai/cli/install.sh | bash`) and runs it headless with `XAI_API_KEY` and the same prompt file. Its exact headless flags come from docs.x.ai/build at implementation time; if they can't be confirmed, implement the job behind `if: false`-style gating with a `TODO(grok)` comment and document it in the runbook. It must never fail silently: if `XAI_API_KEY` is missing, comment on the issue and add `needs-human`.
+  - `external`: job `handoff` only comments "Waiting for external watchdog bot" and adds the label `bot-queue`.
+  - The cap and concurrency below apply to all routes.
+  The remaining details below describe the `claude` route.
   - Triggers: `workflow_dispatch` with input `issue_number`, and `issues` `labeled` when the label is `watchdog`.
   - Skip when the issue has `needs-human`.
-  - A cap step runs before the agent: `gh run list --workflow claude-watchdog.yml --created ">=$(date -u +%F)" --json databaseId --jq length`. If it is ≥ 10, comment "Daily agent cap reached", add `needs-human`, and exit successfully.
+  - A cap step runs before the agent: `gh run list --workflow watchdog-agent.yml --created ">=$(date -u +%F)" --json databaseId --jq length`. If it is ≥ 10, comment "Daily agent cap reached", add `needs-human`, and exit successfully.
   - The agent step uses `prompt` = the contents of `.github/prompts/watchdog.md` with the issue number substituted, plus the same auth and `--max-turns 30`.
 - [ ] **Step 5:** Write `.github/prompts/watchdog.md` with the spec's agent rules, verbatim in substance:
   - Read the issue and `CLAUDE.md`, then diagnose.
@@ -225,7 +231,7 @@ expect(alternates('only-nb', entries)).toEqual([{ locale:'nb', href:'/kun-norsk/
   - Never push to `main`. Never touch secrets, DNS or Cloudflare settings.
 - [ ] **Step 6:** `auto-merge.yml`.
   - Trigger: `pull_request` (`opened`, `synchronize`, `labeled`, `reopened`). Permissions: `contents: write`, `pull-requests: write`.
-  - Job condition: author `claude[bot]` and label `auto-fix`.
+  - Job condition: author is in `vars.AUTOFIX_AUTHORS` (default `claude[bot]`) and label `auto-fix`.
   - Steps: list the changed files with `gh pr diff --name-only`, then `node scripts/automerge/classify.mjs`.
     - Not allowed: remove `auto-fix`, comment listing the blocked files, add `needs-human`.
     - Allowed: `gh pr merge --auto --squash`.
@@ -234,11 +240,18 @@ expect(alternates('only-nb', entries)).toEqual([{ locale:'nb', href:'/kun-norsk/
 ### Task 7: Agent guidance and runbooks
 
 **Files:**
-- Create: `CLAUDE.md`, `AGENTS.md` (one line: "See CLAUDE.md")
+- Create: `AGENTS.md` (the canonical, tool-neutral agent instructions), `CLAUDE.md` (`@AGENTS.md` plus Claude-specific notes only), `docs/watchdog/bot-contract.md`
 - Create: `docs/runbooks/cloudflare-setup.md`, `docs/runbooks/github-setup.md`, `docs/runbooks/rollback.md`, `docs/runbooks/watchdog.md`
 - Existing: `docs/runbooks/dns-migration.md` (already written; link to it)
 
-- [ ] **Step 1:** Write `CLAUDE.md`, covering:
+- [ ] **Step 0:** Write `docs/watchdog/bot-contract.md`, the contract any watchdog bot (Grok, Claude, a future one) follows:
+  - **Inputs:** open issues labelled `watchdog` or `bot-queue`. Issue titles look like `[watchdog] <check-id>: <summary>`. Read `AGENTS.md` first.
+  - **Allowed:** comment, create a branch `bot/<issue-number>-<slug>`, and open a PR that references the issue and carries the label `auto-fix` only for technical fixes.
+  - **Forbidden:** pushing to `main`, editing content paths, secrets, DNS or Cloudflare, closing issues not created by the watchdog.
+  - **Escalation:** add `needs-human` with a findings comment.
+  - **Auto-merge eligibility:** the bot's GitHub login must be added to `AUTOFIX_AUTHORS`.
+  - **Setup for Grok:** two options. (a) `WATCHDOG_AGENT=grok` and add `XAI_API_KEY`. (b) Grok Bot with the GitHub plugin, a routine that reads `bot-queue` issues, and `WATCHDOG_AGENT=external`.
+- [ ] **Step 1:** Write `AGENTS.md` (and a thin `CLAUDE.md`), covering:
   - The project and the domain.
   - Commands (from Task 2).
   - The folder map.

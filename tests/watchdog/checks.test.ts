@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   evaluateHttp,
   evaluateLighthouse,
+  evaluateLighthouseRun,
   evaluateLinks,
   evaluateMx,
   evaluateTls,
@@ -114,6 +115,39 @@ describe('evaluateLighthouse', () => {
 
   it('passes with no failed error-level assertions', () => {
     expect(evaluateLighthouse([]).ok).toBe(true);
+  });
+});
+
+describe('evaluateLighthouseRun', () => {
+  const failing = [
+    {
+      name: 'minScore',
+      auditId: 'categories',
+      auditProperty: 'accessibility',
+      actual: 0.9,
+      expected: 0.95,
+      operator: '>=',
+      level: 'error',
+      passed: false,
+      url: 'https://kobberogkran.no/en/',
+    },
+  ];
+
+  it('reads the assertion results when the step failed because an assertion failed', () => {
+    const result = evaluateLighthouseRun(failing, 'failure');
+    expect(result.ok).toBe(false);
+    expect(result.summary).toBe('below threshold: accessibility');
+    expect(result.details).toContain('https://kobberogkran.no/en/');
+  });
+
+  it('passes when the step succeeded and wrote no results', () => {
+    expect(evaluateLighthouseRun(null, 'success').ok).toBe(true);
+  });
+
+  it('reports missing results when the step failed and wrote none', () => {
+    const result = evaluateLighthouseRun(null, 'failure');
+    expect(result.ok).toBe(false);
+    expect(result.summary).toBe('Lighthouse produced no results');
   });
 });
 

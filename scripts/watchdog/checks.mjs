@@ -121,6 +121,27 @@ export function evaluateLighthouse(assertions) {
 }
 
 /**
+ * Evaluates one run of treosh/lighthouse-ci-action. The action fails the step
+ * (core.setFailed) whenever an error-level assertion fails, and only writes
+ * assertion-results.json when there is something to report. So the results are read
+ * whenever they exist, whatever the outcome. Without results, a successful step means
+ * everything passed and a failed step means Lighthouse itself broke.
+ * @param {Parameters<typeof evaluateLighthouse>[0] | null} assertions parsed assertion-results.json, or null when the file is missing
+ * @param {string} outcome GitHub step outcome of the Lighthouse step
+ * @returns {CheckResult}
+ */
+export function evaluateLighthouseRun(assertions, outcome) {
+  if (assertions) return evaluateLighthouse(assertions);
+  if (outcome === 'success') return evaluateLighthouse([]);
+  return result(
+    'lighthouse',
+    false,
+    'Lighthouse produced no results',
+    'Lighthouse CI did not write assertion results. See the workflow run log.',
+  );
+}
+
+/**
  * @param {{translationKey: string, missing: string[], present: string[]}[]} missing
  * @returns {CheckResult}
  */

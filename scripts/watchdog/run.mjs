@@ -14,7 +14,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import tls from 'node:tls';
 import {
   evaluateHttp,
-  evaluateLighthouse,
+  evaluateLighthouseRun,
   evaluateLinks,
   evaluateMx,
   evaluateTls,
@@ -104,23 +104,12 @@ function checkLinks(file) {
 }
 
 /**
- * treosh/lighthouse-ci-action does not fail the step on failed assertions, and it only
- * writes assertion-results.json when there is something to report. So a missing file
- * means "all passed" when the action succeeded, and "no data" when it failed.
- * @param {string | undefined} file
- * @param {string | undefined} outcome GitHub step outcome of the Lighthouse step.
+ * @param {string | undefined} file assertion-results.json
+ * @param {string} outcome GitHub step outcome of the Lighthouse step.
  */
 function checkLighthouse(file, outcome) {
-  if (outcome === 'success' && (!file || !existsSync(file))) return evaluateLighthouse([]);
-  if (outcome !== 'success' || !file || !existsSync(file)) {
-    return result(
-      'lighthouse',
-      false,
-      'Lighthouse produced no results',
-      'Lighthouse CI did not write assertion results. See the workflow run log.',
-    );
-  }
-  return evaluateLighthouse(JSON.parse(readFileSync(file, 'utf8')));
+  const assertions = file && existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : null;
+  return evaluateLighthouseRun(assertions, outcome);
 }
 
 /** @param {string} xml */

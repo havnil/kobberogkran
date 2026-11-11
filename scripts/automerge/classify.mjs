@@ -8,6 +8,18 @@ import { pathToFileURL } from 'node:url';
 /** Content paths (Global Constraints). A PR touching any of these always waits for a human. */
 export const BLOCKED_PREFIXES = ['src/content/', 'public/images/', 'public/admin/', 'brand/'];
 
+/**
+ * The agent's own guardrails. An agent PR must never loosen them without a human, so a
+ * change here also blocks auto-merge. Other workflow fixes (e.g. ci.yml) stay technical.
+ */
+export const GUARD_PREFIXES = [
+  'scripts/automerge/',
+  '.github/workflows/auto-merge.yml',
+  '.github/workflows/claude.yml',
+  '.github/workflows/claude-watchdog.yml',
+  '.github/prompts/',
+];
+
 /** @param {string} path */
 function normalize(path) {
   return path.trim().replaceAll('\\', '/').replace(/^(\.\/)+/, '');
@@ -19,7 +31,8 @@ function normalize(path) {
  */
 export function classifyPaths(files) {
   const paths = files.map(normalize).filter((p) => p.length > 0);
-  const blocked = paths.filter((p) => BLOCKED_PREFIXES.some((prefix) => p.startsWith(prefix)));
+  const prefixes = [...BLOCKED_PREFIXES, ...GUARD_PREFIXES];
+  const blocked = paths.filter((p) => prefixes.some((prefix) => p.startsWith(prefix)));
   // An empty list means we could not see the change set, so never merge blind.
   return { allowed: paths.length > 0 && blocked.length === 0, blocked };
 }

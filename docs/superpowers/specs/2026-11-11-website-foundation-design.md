@@ -183,27 +183,16 @@ rules and the daily cap above matter.
 - Choice of link checker and uptime check tooling within GitHub Actions.
 - Placeholder content wording.
 
-## Change: Grok-ready watchdog (2026-11-11)
-
-The owner wants a **Grok bot as the watchdog**. The checks stay as GitHub Actions scripts.
-The fixer agent becomes pluggable:
-- GitHub issues labelled `watchdog` are the interface. `docs/watchdog/bot-contract.md`
-  defines what any bot reads, may do and must never do.
-- Repo variable `WATCHDOG_AGENT` = `claude` (default until Grok is set up), `grok`
-  (Grok Build CLI headless in Actions, secret `XAI_API_KEY`), or `external` (an outside
-  bot such as Grok Bot with its GitHub plugin picks up `bot-queue` issues itself).
-- Auto-merge trusts PR authors listed in repo variable `AUTOFIX_AUTHORS`, so a Grok bot's
-  login can be added there.
-- `AGENTS.md` is the canonical, tool-neutral instruction file. `CLAUDE.md` imports it.
-- Interactive `@claude` in issues and PRs stays as is (builder's call).
-
-Unverified: Grok Build's exact headless flags and auth for CI, and whether Grok Bot's
-GitHub plugin can open PRs (one report says it's read-only for merging). The
-`external` route works even with a read-only bot, because it can still read issues and
-escalate.
-
 ## Owner decisions (2026-11-11)
 
 - Public repo.
 - Technical agent fixes auto-merge once CI passes. Content always waits for a human.
 - The agent is billed through the owner's Claude subscription.
+
+## External uptime monitoring (2026-11-11)
+
+The owner already monitors their other services with a Grok Bot in the Grok Bot app. It
+will also check `kobberogkran.no` from outside and notify the owner. It has **no**
+integration with the repo. The GitHub watchdog with the Claude agent, as described above,
+is unchanged. The site doesn't need to do anything for this, beyond the public pages
+returning 200.

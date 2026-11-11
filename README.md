@@ -24,6 +24,11 @@ Requires Node 24 (see `.nvmrc`).
 ## Where things are
 
 - Agent and contributor instructions: [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md)
-- Owner runbooks (DNS, Cloudflare, GitHub, rollback, watchdog): [`docs/runbooks/`](docs/runbooks/)
+- Owner runbooks in [`docs/runbooks/`](docs/runbooks/):
+  [DNS migration](docs/runbooks/dns-migration.md),
+  [Cloudflare setup](docs/runbooks/cloudflare-setup.md),
+  [GitHub setup](docs/runbooks/github-setup.md),
+  [rollback](docs/runbooks/rollback.md),
+  [watchdog](docs/runbooks/watchdog.md)
 - Incoming branding and layout files: [`brand/`](brand/)
 - Design and plan: [`docs/superpowers/`](docs/superpowers/)

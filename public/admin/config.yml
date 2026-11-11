@@ -1,0 +1,62 @@
+# Sveltia CMS configuration: https://sveltiacms.app/en/docs
+# Saves commit straight to `main` (no editorial workflow) and go live after the next deploy.
+backend:
+  name: github
+  repo: havnil/kobberogkran
+  branch: main
+  # TODO(runbook cloudflare-setup.md): set to the sveltia-cms-auth Worker URL
+  # base_url: https://sveltia-cms-auth.<account>.workers.dev
+
+site_url: https://kobberogkran.no
+display_url: https://kobberogkran.no
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+i18n:
+  # Files live in src/content/pages/<locale>/<slug>.md
+  structure: multiple_folders
+  locales: [nb, en]
+  default_locale: nb
+  # Links the language versions of one page. Sveltia writes the nb slug into this
+  # front matter property of every locale (the site matches pages on `translationKey`).
+  canonical_slug:
+    key: translationKey
+    value: '{{slug}}'
+
+collections:
+  - name: pages
+    label: Sider
+    label_singular: Side
+    folder: src/content/pages
+    extension: md
+    format: frontmatter
+    create: true
+    i18n: true
+    # Each language gets its own file name from its own title (e.g. nb/om-oss.md, en/about.md).
+    slug: '{{title | localize}}'
+    summary: '{{title}}'
+    fields:
+      - name: title
+        label: Tittel
+        widget: string
+        i18n: true
+      - name: description
+        label: Beskrivelse
+        hint: Kort tekst for søkemotorer (ca. 150 tegn).
+        widget: text
+        i18n: true
+      - name: translationKey
+        label: Oversettelsesnøkkel
+        # Managed by Sveltia through i18n.canonical_slug; same value in every locale.
+        widget: hidden
+        i18n: duplicate
+      - name: locale
+        label: Språk
+        widget: hidden
+        default: '{{locale}}'
+        i18n: true
+      - name: body
+        label: Innhold
+        widget: markdown
+        i18n: true

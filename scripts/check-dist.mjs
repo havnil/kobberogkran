@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 // Asserts that the built site is complete. Run after `npm run build`.
-// Usage: node scripts/check-dist.mjs [--skip-admin]
+// Usage: node scripts/check-dist.mjs
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /** Static output dir of the Cloudflare adapter (server code goes to dist/server). */
 export const STATIC_DIR = 'dist/client';
 
-const skipAdmin = process.argv.includes('--skip-admin');
 const failures = [];
 
 function read(file) {
@@ -33,10 +32,11 @@ expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);
 read('sitemap-index.xml');
 read('robots.txt');
-if (!skipAdmin) read('admin/index.html');
+read('admin/index.html');
+read('admin/config.yml');
 
 if (failures.length > 0) {
   for (const failure of failures) console.error(`check-dist: ${failure}`);
   process.exit(1);
 }
-console.log(`check-dist: ${STATIC_DIR} OK${skipAdmin ? ' (admin skipped)' : ''}`);
+console.log(`check-dist: ${STATIC_DIR} OK`);

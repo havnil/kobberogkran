@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Decides whether an `auto-fix` PR may auto-merge: only when it touches no content.
+// Decides whether an `auto-fix` PR may auto-merge: only when it touches no content and
+// none of the agent's guardrails.
 // Usage: <one path per line on stdin> | node scripts/automerge/classify.mjs
 // Prints {"allowed": boolean, "blocked": string[]} as JSON on stdout.
 import { readFileSync } from 'node:fs';
@@ -9,16 +10,28 @@ import { pathToFileURL } from 'node:url';
 export const BLOCKED_PREFIXES = ['src/content/', 'public/images/', 'public/admin/', 'brand/'];
 
 /**
- * The agent's own guardrails. An agent PR must never loosen them without a human, so a
- * change here also blocks auto-merge. Other workflow fixes (e.g. ci.yml) stay technical.
+ * The agent's own guardrails: its instructions, the workflows and scripts that decide what
+ * it is dispatched to and what may merge, and production routing. An agent PR must never
+ * change them without a human, so a change here also blocks auto-merge. Other workflow
+ * fixes (e.g. ci.yml) stay technical.
  */
 export const GUARD_PREFIXES = [
+  'CLAUDE.md',
+  'AGENTS.md',
+  '.claude/',
   'scripts/automerge/',
+  'scripts/watchdog/',
   '.github/workflows/auto-merge.yml',
   '.github/workflows/claude.yml',
   '.github/workflows/claude-watchdog.yml',
+  '.github/workflows/watchdog-',
   '.github/prompts/',
+  '.github/dependabot.yml',
+  'wrangler.jsonc',
 ];
+
+/** Media served from public/ (favicon, fonts, images outside uploads) is brand content. */
+export const PUBLIC_MEDIA = /^public\/.*\.(svg|png|jpe?g|gif|webp|avif|ico|bmp|tiff?|woff2?|ttf|otf|eot|mp4|webm|mov|mp3|pdf)$/i;
 
 /** @param {string} path */
 function normalize(path) {
@@ -32,7 +45,7 @@ function normalize(path) {
 export function classifyPaths(files) {
   const paths = files.map(normalize).filter((p) => p.length > 0);
   const prefixes = [...BLOCKED_PREFIXES, ...GUARD_PREFIXES];
-  const blocked = paths.filter((p) => prefixes.some((prefix) => p.startsWith(prefix)));
+  const blocked = paths.filter((p) => PUBLIC_MEDIA.test(p) || prefixes.some((prefix) => p.startsWith(prefix)));
   // An empty list means we could not see the change set, so never merge blind.
   return { allowed: paths.length > 0 && blocked.length === 0, blocked };
 }

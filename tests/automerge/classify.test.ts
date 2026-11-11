@@ -55,6 +55,37 @@ describe('classifyPaths', () => {
     expect(classifyPaths(['package.json', ...guards])).toEqual({ allowed: false, blocked: guards });
   });
 
+  it('blocks the agent instructions, the watchdog and production config', () => {
+    const guards = [
+      'CLAUDE.md',
+      'AGENTS.md',
+      '.claude/settings.json',
+      'scripts/watchdog/checks.mjs',
+      'scripts/watchdog/report.mjs',
+      '.github/workflows/watchdog-hourly.yml',
+      '.github/workflows/watchdog-daily.yml',
+      '.github/dependabot.yml',
+      'wrangler.jsonc',
+    ];
+    for (const path of guards) {
+      expect(classifyPaths(['package.json', path]), path).toEqual({ allowed: false, blocked: [path] });
+    }
+  });
+
+  it('blocks media anywhere under public/', () => {
+    for (const path of ['public/favicon.svg', 'public/og.png', 'public/fonts/brand.woff2', 'public/icon.ICO', 'public/a/b.jpeg', 'public/x.webp']) {
+      expect(classifyPaths([path]).allowed, path).toBe(false);
+    }
+  });
+
+  it('still allows robots.txt', () => {
+    expect(classifyPaths(['public/robots.txt']).allowed).toBe(true);
+  });
+
+  it('does not treat similarly named files as guardrails', () => {
+    expect(classifyPaths(['docs/CLAUDE.md.bak', 'src/favicon.svg.ts', 'scripts/watchdogs.md']).allowed).toBe(true);
+  });
+
   it('still allows other workflow fixes', () => {
     expect(classifyPaths(['.github/workflows/ci.yml']).allowed).toBe(true);
   });

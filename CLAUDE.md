@@ -69,13 +69,19 @@ Content (needs a human, never auto-merged):
 - `public/images/`
 - `public/admin/`
 - `brand/`
+- Media anywhere under `public/` (for example `public/favicon.svg`, fonts, images)
 - Plus anything that's wording, alt text, prices, legal text or translations, wherever it lives.
+
+Agent guardrails (also need a human, never auto-merged): `CLAUDE.md`, `AGENTS.md`,
+`.claude/`, `scripts/automerge/`, `scripts/watchdog/`, `.github/prompts/`,
+`.github/dependabot.yml`, the `auto-merge`, `claude`, `claude-watchdog` and `watchdog-*`
+workflows, and `wrangler.jsonc` (production routes and domains).
 
 Technical (an agent may fix it): broken links, build or type errors, dependency
 patch/minor updates, workflow or config errors.
 
 An `auto-fix` PR is auto-merged only when `claude[bot]` opened it **and**
-`scripts/automerge/classify.mjs` finds no file under the content paths above. If the PR
+`scripts/automerge/classify.mjs` finds no file under the content or guardrail paths above. If the PR
 touches content, the `auto-merge` workflow removes the `auto-fix` label, comments with
 the blocked files, and adds `needs-human`. PRs started with `@claude` are never
 auto-merged.

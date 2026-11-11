@@ -1,0 +1,88 @@
+# Auto-merges technical-only fixes from the watchdog agent once the required `ci` check
+# passes. A PR that touches content (or the agent's own guardrails) loses `auto-fix`,
+# gets `needs-human`, and waits for a human.
+#
+# pull_request_target runs this file and scripts/automerge/classify.mjs from the BASE
+# branch, so a PR cannot weaken its own check. No PR code is checked out or executed.
+name: Auto-merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  disarm:
+    # Someone removed auto-fix: make sure nothing is still queued to merge.
+    if: github.event.action == 'unlabeled' && github.event.label.name == 'auto-fix'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+    steps:
+      - run: gh pr merge "$PR" --disable-auto || true
+
+  classify:
+    if: |
+      github.event.action != 'unlabeled' &&
+      github.event.pull_request.user.login == 'claude[bot]' &&
+      github.event.pull_request.base.ref == 'main' &&
+      contains(github.event.pull_request.labels.*.name, 'auto-fix')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+      CHANGED_FILES: ${{ github.event.pull_request.changed_files }}
+    steps:
+      - name: Checkout base branch (trusted code only)
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+          sparse-checkout: scripts/automerge
+
+      - name: Classify changed paths
+        id: classify
+        run: |
+          # The files API lists up to 3000 files; renames also report the old path.
+          gh api --paginate "repos/$GH_REPO/pulls/$PR/files" \
+            --jq '.[] | .filename, (.previous_filename // empty)' > changed-files.txt
+          result=$(node scripts/automerge/classify.mjs < changed-files.txt)
+          if (( CHANGED_FILES > 3000 )); then
+            result='{"allowed":false,"blocked":["(more than 3000 changed files)"]}'
+          fi
+          echo "$result"
+          echo "allowed=$(jq -r '.allowed' <<<"$result")" >> "$GITHUB_OUTPUT"
+          jq -r '.blocked[] | "- `\(.)`"' <<<"$result" > blocked.md
+
+      - name: Queue the merge
+        if: steps.classify.outputs.allowed == 'true'
+        run: gh pr merge "$PR" --auto --squash
+
+      - name: Hand over to a human
+        if: steps.classify.outputs.allowed != 'true'
+        run: |
+          gh pr merge "$PR" --disable-auto || true
+          gh pr edit "$PR" --remove-label auto-fix --add-label needs-human
+          {
+            echo "Auto-merge refused: this PR is not purely technical, so a human must review and merge it."
+            echo
+            if [[ -s blocked.md ]]; then
+              echo "Blocked files:"
+              cat blocked.md
+            else
+              echo "No changed files could be listed."
+            fi
+          } > comment.md
+          gh pr comment "$PR" --body-file comment.md

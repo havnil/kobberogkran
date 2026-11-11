@@ -1,0 +1,114 @@
+# Automated Claude runs for watchdog issues.
+# - scripts/watchdog/report.mjs dispatches this with issue_number when it creates an issue
+#   (issues created with GITHUB_TOKEN do not fire `issues` events).
+# - A human adding the `watchdog` label to an issue also starts it.
+# Comments on an existing issue never start it again.
+name: Claude watchdog
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Watchdog issue number
+        required: true
+        type: string
+  issues:
+    types: [labeled]
+
+jobs:
+  agent:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.label.name == 'watchdog' && !contains(github.event.issue.labels.*.name, 'needs-human'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # One agent run at a time, shared with claude.yml. Queue, never cancel.
+    concurrency:
+      group: claude-agent
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ISSUE_NUMBER: ${{ inputs.issue_number || github.event.issue.number }}
+      DAILY_CAP: 10
+    steps:
+      - name: Check the issue
+        id: gate
+        run: |
+          if ! [[ "$ISSUE_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::issue_number must be a positive integer"
+            exit 1
+          fi
+          issue=$(gh issue view "$ISSUE_NUMBER" --json state,labels)
+          state=$(jq -r '.state' <<<"$issue")
+          labels=$(jq -r '[.labels[].name] | join(",")' <<<"$issue")
+          run=true
+          if [[ "$state" != "OPEN" ]]; then
+            echo "Issue #$ISSUE_NUMBER is $state, skipping."; run=false
+          elif [[ ",$labels," != *",watchdog,"* ]]; then
+            echo "Issue #$ISSUE_NUMBER has no watchdog label, skipping."; run=false
+          elif [[ ",$labels," == *",needs-human,"* ]]; then
+            echo "Issue #$ISSUE_NUMBER needs a human, skipping."; run=false
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce the daily agent cap
+        id: cap
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          # Runs of this workflow created today (UTC), excluding this one and runs that
+          # never reached the agent (skipped by the job condition, or cancelled).
+          previous=$(gh run list --workflow claude-watchdog.yml --created ">=$(date -u +%F)" \
+            --limit 200 --json databaseId,conclusion \
+            --jq "[.[] | select(.databaseId != $GITHUB_RUN_ID and .conclusion != \"skipped\" and .conclusion != \"cancelled\")] | length")
+          echo "Agent runs today before this one: $previous (cap $DAILY_CAP)"
+          if (( previous >= DAILY_CAP )); then
+            gh issue comment "$ISSUE_NUMBER" --body "Daily agent cap reached ($DAILY_CAP runs today). A human needs to look at this issue."
+            gh issue edit "$ISSUE_NUMBER" --add-label needs-human
+            echo "capped=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "capped=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout repository
+        if: steps.cap.outputs.capped == 'false'
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node
+        if: steps.cap.outputs.capped == 'false'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Build the prompt
+        id: prompt
+        if: steps.cap.outputs.capped == 'false'
+        run: |
+          delimiter="PROMPT_$(openssl rand -hex 16)"
+          {
+            echo "text<<$delimiter"
+            sed -e "s/{{ISSUE_NUMBER}}/$ISSUE_NUMBER/g" -e "s|{{REPO}}|$GH_REPO|g" .github/prompts/watchdog.md
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run Claude Code
+        if: steps.cap.outputs.capped == 'false'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: ${{ steps.prompt.outputs.text }}
+          # gh workflow run with GITHUB_TOKEN makes github-actions[bot] the actor of a
+          # dispatched run; the action refuses bot actors unless they are listed here.
+          allowed_bots: github-actions
+          claude_args: |
+            --max-turns 30
+            --allowedTools "Read,Write,Edit,MultiEdit,Glob,Grep,Bash(npm ci),Bash(npm install:*),Bash(npm run:*),Bash(npm test:*),Bash(npm ls:*),Bash(npm outdated:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git checkout -b claude/:*),Bash(git add:*),Bash(git commit:*),Bash(git push -u origin claude/:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh run list:*),Bash(gh run view:*)"

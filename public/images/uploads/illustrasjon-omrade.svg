@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <g id="kran">
+      <rect x="0" y="34" width="9" height="34" rx="3"/>
+      <path d="M9 44h44q26 0 26 26v10H67V70q0-10-10-10H9z"/>
+      <path d="M26 60a16 13 0 0 0 32 0z"/>
+      <rect x="37" y="24" width="12" height="22"/>
+      <rect x="31" y="34" width="24" height="6" rx="2"/>
+      <rect x="26" y="16" width="34" height="9" rx="4.5"/>
+      <circle cx="26" cy="20.5" r="7"/>
+      <circle cx="60" cy="20.5" r="7"/>
+      <rect x="39" y="8" width="8" height="12" rx="3"/>
+    </g>
+  </defs>
+  <rect width="1200" height="900" rx="0" fill="#EFE6DC"/>
+
+  <!-- service area -->
+  <path d="M520 190c90-40 230-30 330-10 120 24 210 40 230 110 18 70-10 150-30 240-20 90-40 170-140 200-110 32-250 20-350-30-90-46-120-130-110-230 8-90-20-230 70-280z" fill="#F7F2EC" stroke="#CDBBA9" stroke-width="4" stroke-dasharray="14 12"/>
+
+  <!-- forest texture -->
+  <g fill="#D9CDB5">
+    <use href="#gran" transform="translate(140 480) scale(.32)"/><use href="#gran" transform="translate(160 492) scale(.26)"/><use href="#gran" transform="translate(470 120) scale(.3)"/>
+    <use href="#gran" transform="translate(490 130) scale(.24)"/><use href="#gran" transform="translate(800 470) scale(.3)"/><use href="#gran" transform="translate(820 480) scale(.24)"/>
+    <use href="#gran" transform="translate(760 220) scale(.28)"/><use href="#gran" transform="translate(700 760) scale(.3)"/><use href="#gran" transform="translate(720 770) scale(.24)"/>
+    <use href="#gran" transform="translate(1010 470) scale(.3)"/><use href="#gran" transform="translate(140 780) scale(.3)"/><use href="#gran" transform="translate(470 520) scale(.26)"/>
+  </g>
+
+  <!-- lakes: Øyeren and Hemnessjøen -->
+  <path d="M232 230c30-10 60 10 70 50 10 50 50 70 60 130 10 60 50 90 50 150s-20 130-40 170c-14 26-50 20-56-10-10-50-30-90-56-130-30-46-40-100-40-150 0-80-20-200 12-210z" fill="#CBD8D2"/>
+  <path d="M560 545c16-6 30 10 32 40 4 40 0 80-10 110-6 20-26 22-32 2-10-36-10-80-8-110 2-24 6-38 18-42z" fill="#CBD8D2"/>
+  <path d="M670 330c14-6 30 4 30 18s-16 22-30 18-14-30 0-36z" fill="#CBD8D2"/>
+
+  <!-- border to the east -->
+  <path d="M1110 100c-20 80 10 150-10 230s20 160 0 250 10 180-20 260" fill="none" stroke="#B89A7C" stroke-width="4" stroke-dasharray="2 14" stroke-linecap="round"/>
+
+  <!-- roads as copper pipes -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M170 188C320 200 450 230 572 240S650 290 687 330M687 330C780 320 880 290 964 280M572 240C590 330 600 420 602 500S596 640 592 700M602 500C700 560 820 610 933 659M592 700C680 700 820 690 933 659M687 330C660 400 630 450 602 500" stroke="#A84508" stroke-width="10"/>
+    <path d="M170 188C320 200 450 230 572 240S650 290 687 330M687 330C780 320 880 290 964 280M572 240C590 330 600 420 602 500S596 640 592 700M602 500C700 560 820 610 933 659M592 700C680 700 820 690 933 659M687 330C660 400 630 450 602 500" stroke="#F7883F" stroke-width="3"/>
+  </g>
+
+  <!-- driving rings around Hemnes -->
+  <circle cx="592" cy="700" r="110" fill="none" stroke="#F26A0F" stroke-width="4" opacity=".35"/>
+  <circle cx="592" cy="700" r="60" fill="#F26A0F" opacity=".12"/>
+
+  <!-- places -->
+  <g fill="#4A2412" stroke="#F7F2EC" stroke-width="5">
+    <circle cx="170" cy="188" r="13"/>
+    <circle cx="572" cy="240" r="13"/>
+    <circle cx="687" cy="330" r="13"/>
+    <circle cx="964" cy="280" r="13"/>
+    <circle cx="602" cy="500" r="13"/>
+    <circle cx="933" cy="659" r="13"/>
+  </g>
+  <!-- home base: Hemnes -->
+  <circle cx="592" cy="700" r="34" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <use href="#kran" transform="translate(568 678) scale(.5)" fill="#FFFFFF"/>
+
+  <g font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-weight="800" font-size="32" fill="#4A2412" stroke="#EFE6DC" stroke-width="8" paint-order="stroke" stroke-linejoin="round">
+    <text x="170" y="160" text-anchor="middle">Lillestrøm</text>
+    <text x="548" y="210" text-anchor="end">Aurskog</text>
+    <text x="710" y="372">Bjørkelangen</text>
+    <text x="964" y="250" text-anchor="middle">Setskog</text>
+    <text x="628" y="510">Løken</text>
+    <text x="933" y="712" text-anchor="middle">Rømskog</text>
+    <text x="592" y="780" text-anchor="middle" font-size="40">Hemnes</text>
+  </g>
+  <g font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-weight="600" font-style="italic" font-size="22" fill="#6B4A38">
+    <text x="300" y="470" text-anchor="middle" transform="rotate(70 300 470)">Øyeren</text>
+    <text x="540" y="620" text-anchor="end">Hemnessjøen</text>
+  </g>
+
+  <!-- compass -->
+  <g transform="translate(1040 800)">
+    <circle r="40" fill="#F7F2EC" stroke="#CDBBA9" stroke-width="4"/>
+    <path d="M0-30 10 0H-10z" fill="#F26A0F"/>
+    <path d="M0 30 10 0H-10z" fill="#4A2412"/>
+    <text y="-48" text-anchor="middle" font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-weight="800" font-size="22" fill="#4A2412">N</text>
+  </g>
+</svg>

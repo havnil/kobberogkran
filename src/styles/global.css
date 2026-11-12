@@ -128,3 +128,28 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
+/* Draft banner (builds that are not for launch). In the page flow, so it never covers content.
+   Cream on brown is 11.9:1. */
+.utkast-banner {
+  margin: 0;
+  padding: 0.4rem var(--space-3);
+  background: var(--color-brown);
+  color: var(--color-cream);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.utkast-banner::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+  vertical-align: 0.1em;
+}

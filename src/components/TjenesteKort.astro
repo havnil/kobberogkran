@@ -1,32 +1,31 @@
 ---
+import Illustrasjon from './Illustrasjon.astro';
 import type { Tjeneste } from '../lib/innhold';
+import type { Locale } from '../i18n/locales';
+import { tjenesteBilde } from '../lib/illustrasjon';
 import { aktivSesong } from '../lib/priser';
 
 interface Props {
   href: string;
   tjeneste: Tjeneste;
+  locale: Locale;
 }
 
-const { href, tjeneste } = Astro.props;
+const { href, tjeneste, locale } = Astro.props;
 // The cabin card swaps text with the season when the page is built.
 const tekst = tjeneste.sesong ? tjeneste.sesong[aktivSesong(new Date())] : tjeneste.kort;
-// Placeholder images do not exist on disk: render a neutral block instead of a broken <img>.
-const bilde = tjeneste.bilder.find((b) => !b.plassholder && b.src);
+// A real image when there is one; otherwise the drawn illustration, marked as a placeholder.
+const bilde = tjenesteBilde(tjeneste);
 ---
 
 <li class="kort">
   <a href={href}>
-    {
-      bilde ? (
-        <img class="bilde" src={bilde.src} alt="" loading="lazy" width="640" height="360" />
-      ) : (
-        <div class="bilde" data-plassholder aria-hidden="true" />
-      )
-    }
+    <Illustrasjon class="bilde" src={bilde.src} width={1200} height={900} locale={locale} plassholder={bilde.plassholder} />
     <span class="nummer" aria-hidden="true">{tjeneste.nummer}</span>
     <h3>{tjeneste.kundeTittel}</h3>
     <p class="fagord">{tjeneste.fagord}</p>
     <p class="tekst">{tekst}</p>
+    <span class="mer" aria-hidden="true">→</span>
   </a>
 </li>
 
@@ -37,9 +36,20 @@ const bilde = tjeneste.bilder.find((b) => !b.plassholder && b.src);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
     overflow: hidden;
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .kort:hover,
+  .kort:focus-within {
+    border-color: var(--color-border-strong);
+    box-shadow: 0 14px 30px -18px rgb(74 36 18 / 0.45);
+    transform: translateY(-2px);
   }
   a {
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     color: var(--color-text);
     text-decoration: none;
@@ -48,13 +58,18 @@ const bilde = tjeneste.bilder.find((b) => !b.plassholder && b.src);
   a:hover h3 {
     text-decoration: underline;
   }
-  .bilde {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    background: var(--color-sand);
+  .kort :global(.bilde) {
+    aspect-ratio: 3 / 2;
+    border-radius: 0;
     margin-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .kort :global(.bilde img) {
+    object-position: center 65%;
+    transition: transform 0.4s ease;
+  }
+  .kort:hover :global(.bilde img) {
+    transform: scale(1.03);
   }
   .nummer {
     position: absolute;
@@ -68,6 +83,7 @@ const bilde = tjeneste.bilder.find((b) => !b.plassholder && b.src);
     background: var(--color-orange);
     color: var(--color-on-orange);
     font-weight: 800;
+    box-shadow: 0 0 0 3px var(--color-white);
   }
   h3 {
     margin: 0 var(--space-3) var(--space-1);
@@ -80,5 +96,26 @@ const bilde = tjeneste.bilder.find((b) => !b.plassholder && b.src);
   }
   .tekst {
     margin: 0 var(--space-3);
+  }
+  .mer {
+    margin: auto var(--space-3) 0;
+    padding-top: var(--space-2);
+    color: var(--color-accent);
+    font-weight: 800;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kort,
+    .kort :global(.bilde img) {
+      transition: none;
+    }
+    .kort:hover,
+    .kort:focus-within {
+      transform: none;
+    }
+    .kort:hover :global(.bilde img) {
+      transform: none;
+    }
   }
 </style>

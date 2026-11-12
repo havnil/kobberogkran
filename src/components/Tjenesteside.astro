@@ -5,6 +5,7 @@ import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Brodsmuler from './Brodsmuler.astro';
 import Faq from './Faq.astro';
+import Illustrasjon from './Illustrasjon.astro';
 import Omrader from './Omrader.astro';
 import Sideboks from './Sideboks.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
@@ -15,6 +16,7 @@ import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath, serviceTrail, type ServiceEntry } from '../i18n/services';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
+import { tjenesteBilde } from '../lib/illustrasjon';
 import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd, SITE } from '../lib/jsonld';
 import { getTekster } from '../lib/tekster';
 import { telHref } from '../lib/telefon';
@@ -37,8 +39,8 @@ const jsonLd = [
   breadcrumbJsonLd(trail.map((ledd) => ({ name: ledd.name, url: `${SITE}${ledd.href ?? servicePath(locale, serviceSlugOf(entry))}` }))),
   faqJsonLd(tj.faq),
 ].filter((x): x is object => x !== null);
-// Placeholder images do not exist on disk: show a neutral block instead of a broken <img>.
-const bilde = tj.bilder.find((b) => !b.plassholder && b.src);
+// A real image when there is one; otherwise the drawn illustration, marked as a placeholder.
+const bilde = tjenesteBilde(tj);
 const andre = alle.filter((e) => e.data.translationKey !== tj.translationKey);
 const erBad = tj.translationKey === 'bad';
 const erTank = tj.translationKey === 'varmtvannstank';
@@ -57,6 +59,8 @@ const erTank = tj.translationKey === 'varmtvannstank';
         <a class="knapp knapp-brun" href="#skjema">{t.skjemaKnapp}</a>
       </div>
     </div>
+    <div class="hero-side">
+      <Illustrasjon class="bilde" src={bilde.src} width={1200} height={900} locale={locale} plassholder={bilde.plassholder} loading="eager" />
     {
       tj.fakta.length > 0 && (
         <div class="faktaboks">
@@ -72,15 +76,8 @@ const erTank = tj.translationKey === 'varmtvannstank';
         </div>
       )
     }
+    </div>
   </section>
-
-  {
-    bilde ? (
-      <img class="bilde" src={bilde.src} alt="" width="1200" height="600" />
-    ) : (
-      <div class="bilde" data-plassholder aria-hidden="true"></div>
-    )
-  }
 
   <div class="artikkel-rad">
     <article class="artikkel">
@@ -113,11 +110,11 @@ const erTank = tj.translationKey === 'varmtvannstank';
   <section class="seksjon" aria-labelledby="andre-tittel">
     <h2 id="andre-tittel">{s.tjeneste.andreTittel}</h2>
     <ol class="kort-liste">
-      {andre.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} />)}
+      {andre.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} locale={locale} />)}
     </ol>
   </section>
 
-  <Omrader tekst={{ tittel: s.tjeneste.omraderTittel }} omrade={firma.omrade} />
+  <Omrader locale={locale} tekst={{ tittel: s.tjeneste.omraderTittel }} omrade={firma.omrade} />
 
   <Skjemaseksjon locale={locale} tekst={tekster.forside.skjema} eyebrow={`${s.tjeneste.skjemaEyebrow} · ${tj.kundeTittel}`} tjeneste={tj.translationKey} />
 </BaseLayout>
@@ -142,12 +139,20 @@ const erTank = tj.translationKey === 'varmtvannstank';
     flex-wrap: wrap;
     gap: var(--space-2);
   }
+  .hero-side {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+  .hero-side :global(.bilde) {
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 18px 40px -28px rgb(74 36 18 / 0.6);
+  }
   .faktaboks {
     background: var(--color-brown);
     color: var(--color-cream);
     border-radius: var(--radius-card);
     padding: var(--space-3);
-    align-self: center;
   }
   .faktaboks h2 {
     margin: 0 0 var(--space-2);
@@ -165,14 +170,6 @@ const erTank = tj.translationKey === 'varmtvannstank';
   }
   dd {
     margin: 0;
-  }
-  .bilde {
-    display: block;
-    width: 100%;
-    aspect-ratio: 2 / 1;
-    object-fit: cover;
-    background: var(--color-sand);
-    border-radius: var(--radius-card);
   }
   .artikkel-rad {
     display: grid;

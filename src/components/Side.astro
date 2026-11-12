@@ -47,7 +47,7 @@ const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: en
     <section class="seksjon" aria-labelledby="tjenester-tittel">
       <h2 id="tjenester-tittel">{f.tjenester.tittel}</h2>
       <ol class="kort-liste">
-        {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} />)}
+        {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} locale={locale} />)}
       </ol>
     </section>
   )
@@ -69,7 +69,7 @@ const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: en
   )
 }
 
-{nokkel === 'omrader' && <Omrader tekst={f.omrader} omrade={firma.omrade} />}
+{nokkel === 'omrader' && <Omrader locale={locale} tekst={f.omrader} omrade={firma.omrade} />}
 
 {
   nokkel === 'om' && (

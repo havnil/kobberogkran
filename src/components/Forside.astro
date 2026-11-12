@@ -32,7 +32,7 @@ const f = tekster.forside;
 <section class="seksjon" aria-labelledby="tjenester-tittel">
   <h2 id="tjenester-tittel">{f.tjenester.tittel}</h2>
   <ol class="kort-liste">
-    {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} />)}
+    {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} locale={locale} />)}
   </ol>
 </section>
 
@@ -41,7 +41,7 @@ const f = tekster.forside;
 <PrisBlokk locale={locale} tekst={f.priser} priser={firma.priser} />
 <Steg tekst={f.steg} />
 <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />
-<Omrader tekst={f.omrader} omrade={firma.omrade} />
+<Omrader locale={locale} tekst={f.omrader} omrade={firma.omrade} />
 
 <Skjemaseksjon locale={locale} tekst={f.skjema} />
 

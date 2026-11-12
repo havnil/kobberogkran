@@ -3,6 +3,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import MobilBunnlinje from '../components/MobilBunnlinje.astro';
 import { getFirma } from '../lib/firma';
+import { erLansering } from '../lib/lansering';
 import { orgJsonLd } from '../lib/jsonld';
 import type { Alternate } from '../i18n/alternates';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
@@ -34,6 +35,8 @@ const absolute = (href: string) => new URL(href, Astro.site).href;
 // `<` is escaped so the JSON can never close the script element.
 const jsonLdText = (data: object) => JSON.stringify(data).replace(/</g, '\\u003c');
 const xDefault = alternates.find((alt) => alt.locale === DEFAULT_LOCALE);
+// Every build that is not for launch says plainly that texts, prices and illustrations are drafts.
+const utkast = !erLansering();
 ---
 
 <!doctype html>
@@ -62,6 +65,13 @@ const xDefault = alternates.find((alt) => alt.locale === DEFAULT_LOCALE);
   </head>
   <body>
     <a class="skip-link" href="#main">{ui[locale].skipLink}</a>
+    {
+      utkast && (
+        <p class="utkast-banner" role="note" data-plassholder>
+          {ui[locale].utkastBanner}
+        </p>
+      )
+    }
     <Header locale={locale} alternates={alternates} skjemaHref={skjemaHref} />
     <main id="main" class="container">
       <slot />

@@ -27,6 +27,10 @@ export interface UiStrings {
   /** Badges: the visible placeholder mark and the example testimonial mark. */
   plassholderMerke: string;
   eksempelMerke: string;
+  /** Small tag on a drawn placeholder illustration. */
+  illustrasjonMerke: string;
+  /** Top banner on every page of a build that is not for launch (LAUNCH is not true). */
+  utkastBanner: string;
   /** Footer line label: «Org.nr. <number> MVA». */
   orgnr: string;
   /** Breadcrumb navigation: accessible name and the first crumb. */
@@ -55,6 +59,8 @@ export const ui: Record<Locale, UiStrings> = {
     personvern: 'Personvern',
     plassholderMerke: 'Plassholder',
     eksempelMerke: 'Eksempel',
+    illustrasjonMerke: 'Illustrasjon',
+    utkastBanner: 'Utkast: tekster, priser og illustrasjoner er plassholdere og ikke godkjent.',
     orgnr: 'Org.nr.',
     brodsmuler: 'Brødsmuler',
     hjem: 'Hjem',
@@ -79,6 +85,8 @@ export const ui: Record<Locale, UiStrings> = {
     personvern: 'Privacy',
     plassholderMerke: 'Placeholder',
     eksempelMerke: 'Example',
+    illustrasjonMerke: 'Illustration',
+    utkastBanner: 'Draft: texts, prices and illustrations are placeholders and not approved.',
     orgnr: 'Org. no.',
     brodsmuler: 'Breadcrumbs',
     hjem: 'Home',

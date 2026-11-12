@@ -124,7 +124,7 @@ collections:
         fields: &tekstFelt
           - { name: kvittering, label: Kvittering, widget: text }
           - { name: taptAnrop, label: Melding ved tapt anrop, widget: text }
-          - { name: whatsappHilsen, label: 'WhatsApp-hilsen (bruk {tjeneste} og {kilde})', widget: text }
+          - { name: whatsappHilsen, label: 'WhatsApp-hilsen (bruk {tjeneste} og {kilde}; tekst i [ ] vises bare hvis feltet inni er fylt ut) PLASSHOLDER: hjelpetekst, eier godkjenner ordlyd', widget: text }
           - name: forside
             label: Forsiden
             widget: object

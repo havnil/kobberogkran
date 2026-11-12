@@ -1,7 +1,7 @@
 {
   "kvittering": "[EN] Thanks, we have received your request.",
   "taptAnrop": "[EN] We saw that you called. Send a request or chat on WhatsApp.",
-  "whatsappHilsen": "[EN] Hi! I need help with {tjeneste}. (From: {kilde})",
+  "whatsappHilsen": "[EN] Hi! I need help[ with {tjeneste}].[ (From: {kilde})]",
   "forside": {
     "hero": {
       "stedslinje": "[EN] Arbeidstittel for stedslinje",

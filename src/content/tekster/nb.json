@@ -1,7 +1,7 @@
 {
   "kvittering": "PLASSHOLDER: Takk, vi har mottatt forespørselen din.",
   "taptAnrop": "PLASSHOLDER: Vi så at du ringte. Send en forespørsel eller chat på WhatsApp.",
-  "whatsappHilsen": "PLASSHOLDER: Hei! Jeg trenger hjelp med {tjeneste}. (Fra: {kilde})",
+  "whatsappHilsen": "PLASSHOLDER: Hei! Jeg trenger hjelp[ med {tjeneste}].[ (Fra: {kilde})]",
   "forside": {
     "hero": {
       "stedslinje": "PLASSHOLDER: Arbeidstittel for stedslinje",

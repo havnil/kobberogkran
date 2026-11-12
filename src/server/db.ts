@@ -152,3 +152,107 @@ export async function sisteSamtykke(
     .first<{ gitt: number }>();
   return rad ? rad.gitt === 1 : null;
 }
+
+export type ForesporselStatus = 'ny' | 'sortert' | 'varslet' | 'lukket';
+
+/**
+ * Formen på `svar_json` fra steg 2 (oppgave 8 eier skjemaet og må følge denne).
+ * Alt er valgfritt; det som ikke finnes, regnes som manglende.
+ * - `felles`: de felles spørsmålene (vann, avløp, byggeår, adkomst, kontaktform)
+ * - `tjenesteSvar`: spørsmålene for den valgte tjenesten
+ * - `bildeMerker`: hva de opplastede bildene viser, f.eks. `typeskilt`, `tank`, `pumpe`
+ */
+export interface SvarJson {
+  felles?: Record<string, unknown>;
+  tjenesteSvar?: Record<string, unknown>;
+  bildeMerker?: string[];
+  [annet: string]: unknown;
+}
+
+export interface Foresporsel {
+  id: string;
+  tjeneste: string;
+  hast: string | null;
+  stedTekst: string | null;
+  lat: number | null;
+  lon: number | null;
+  kjoretidMin: number | null;
+  beskrivelse: string | null;
+  /** Tolket `svar_json`; null når det mangler eller ikke er gyldig JSON-objekt. */
+  svar: SvarJson | null;
+  kilde: string | null;
+  status: ForesporselStatus;
+  opprettet: string;
+  kunde: { navn: string | null; telefon: string; epost: string | null };
+  bilder: { id: string; r2Nokkel: string }[];
+}
+
+function tolkSvar(json: string | null): SvarJson | null {
+  if (!json) return null;
+  try {
+    const v: unknown = JSON.parse(json);
+    return v && typeof v === 'object' && !Array.isArray(v) ? (v as SvarJson) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Forespørselen med kunde og bilder, eller null hvis den ikke finnes. */
+export async function hentForesporsel(db: D1Database, id: string): Promise<Foresporsel | null> {
+  const rad = await db
+    .prepare(
+      `SELECT f.id, f.tjeneste, f.hast, f.sted_tekst, f.lat, f.lon, f.kjoretid_min, f.beskrivelse,
+              f.svar_json, f.kilde, f.status, f.opprettet,
+              k.navn AS kunde_navn, k.telefon AS kunde_telefon, k.epost AS kunde_epost
+         FROM foresporsler f JOIN kunder k ON k.id = f.kunde_id
+        WHERE f.id = ?`,
+    )
+    .bind(id)
+    .first<{
+      id: string;
+      tjeneste: string;
+      hast: string | null;
+      sted_tekst: string | null;
+      lat: number | null;
+      lon: number | null;
+      kjoretid_min: number | null;
+      beskrivelse: string | null;
+      svar_json: string | null;
+      kilde: string | null;
+      status: ForesporselStatus;
+      opprettet: string;
+      kunde_navn: string | null;
+      kunde_telefon: string;
+      kunde_epost: string | null;
+    }>();
+  if (!rad) return null;
+  const bilder = await db
+    .prepare('SELECT id, r2_nokkel FROM bilder WHERE foresporsel_id = ? ORDER BY opprettet, rowid')
+    .bind(id)
+    .all<{ id: string; r2_nokkel: string }>();
+  return {
+    id: rad.id,
+    tjeneste: rad.tjeneste,
+    hast: rad.hast,
+    stedTekst: rad.sted_tekst,
+    lat: rad.lat,
+    lon: rad.lon,
+    kjoretidMin: rad.kjoretid_min,
+    beskrivelse: rad.beskrivelse,
+    svar: tolkSvar(rad.svar_json),
+    kilde: rad.kilde,
+    status: rad.status,
+    opprettet: rad.opprettet,
+    kunde: { navn: rad.kunde_navn, telefon: rad.kunde_telefon, epost: rad.kunde_epost },
+    bilder: bilder.results.map((b) => ({ id: b.id, r2Nokkel: b.r2_nokkel })),
+  };
+}
+
+/** Returnerer true hvis forespørselen fantes og fikk ny status. */
+export async function settStatus(db: D1Database, id: string, status: ForesporselStatus): Promise<boolean> {
+  const r = await db
+    .prepare('UPDATE foresporsler SET status = ?, oppdatert = ? WHERE id = ?')
+    .bind(status, na(), id)
+    .run();
+  return (r.meta.changes ?? 0) > 0;
+}

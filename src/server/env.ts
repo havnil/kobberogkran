@@ -13,4 +13,11 @@ export interface Env {
   TURNSTILE_SECRET?: string;
   SKJEMA_HMAC?: string;
   ANTHROPIC_API_KEY?: string;
+  // Varsel til Eirik (vars i wrangler.jsonc). Uten disse logges varsel_feil og status blir 'sortert'.
+  /** Eiriks e-postadresse. Må være en verifisert mottaker i Email Routing. */
+  VARSEL_TIL?: string;
+  /** Avsender, på et domene med Email Routing, f.eks. varsel@kobberogkran.no. */
+  VARSEL_FRA?: string;
+  /** Grunnadresse for bildelenker i varselet. Standard: https://kobberogkran.no */
+  NETTSTED_URL?: string;
 }

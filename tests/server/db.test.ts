@@ -3,11 +3,13 @@ import { Miniflare } from 'miniflare';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { D1Database } from '@cloudflare/workers-types';
 import {
+  hentForesporsel,
   leggTilBilde,
   loggHendelse,
   oppdaterSteg2,
   opprettForesporsel,
   registrerSamtykke,
+  settStatus,
   sisteSamtykke,
   type ForesporselInput,
 } from '../../src/server/db';
@@ -197,5 +199,53 @@ describe('oppdaterSteg2, leggTilBilde, loggHendelse', () => {
     const rad = await db.prepare('SELECT type, data_json FROM hendelser WHERE foresporsel_id = ?').bind(r.id).first<{ type: string; data_json: string }>();
     expect(rad?.type).toBe('varslet');
     expect(JSON.parse(rad!.data_json)).toEqual({ kanal: 'epost' });
+  });
+});
+
+describe('hentForesporsel og settStatus', () => {
+  it('gir null for ukjent id', async () => {
+    expect(await hentForesporsel(db, 'finnes-ikke')).toBeNull();
+  });
+
+  it('returnerer raden med kunde, tolket svar og bilder', async () => {
+    const r = await opprettForesporsel(
+      db,
+      input({ epost: 'a@b.no', stedTekst: 'Hemnes', lat: 59.9, lon: 11.4, kjoretidMin: 5, beskrivelse: 'Drypper', kilde: 'qr' }),
+      'k',
+    );
+    await oppdaterSteg2(db, r.id, { felles: { vann: 'brønn' }, bildeMerker: ['typeskilt'] });
+    await leggTilBilde(db, r.id, 'bilder/a.jpg');
+    const f = await hentForesporsel(db, r.id);
+    expect(f).toMatchObject({
+      id: r.id,
+      tjeneste: 'rorlegger',
+      hast: 'snart',
+      stedTekst: 'Hemnes',
+      lat: 59.9,
+      lon: 11.4,
+      kjoretidMin: 5,
+      beskrivelse: 'Drypper',
+      kilde: 'qr',
+      status: 'ny',
+      svar: { felles: { vann: 'brønn' }, bildeMerker: ['typeskilt'] },
+      kunde: { navn: 'Test', telefon: '+4799999999', epost: 'a@b.no' },
+    });
+    expect(f!.bilder).toHaveLength(1);
+    expect(f!.bilder[0].r2Nokkel).toBe('bilder/a.jpg');
+    expect(typeof f!.bilder[0].id).toBe('string');
+  });
+
+  it('gir svar null når svar_json mangler eller er ugyldig', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    expect((await hentForesporsel(db, r.id))!.svar).toBeNull();
+    await db.prepare('UPDATE foresporsler SET svar_json = ? WHERE id = ?').bind('{ikke json', r.id).run();
+    expect((await hentForesporsel(db, r.id))!.svar).toBeNull();
+  });
+
+  it('settStatus oppdaterer status og gir false for ukjent id', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    expect(await settStatus(db, r.id, 'sortert')).toBe(true);
+    expect((await hentForesporsel(db, r.id))!.status).toBe('sortert');
+    expect(await settStatus(db, 'finnes-ikke', 'varslet')).toBe(false);
   });
 });

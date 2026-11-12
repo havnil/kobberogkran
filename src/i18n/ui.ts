@@ -18,6 +18,8 @@ export interface UiStrings {
   whatsapp: string;
   /** Text of the request-form button. Placeholder until the owner picks the final wording. */
   skjemaKnapp: string;
+  /** Accessible name of the button that opens the services submenu. */
+  visUndermeny: string;
   meny: string;
   lukk: string;
   vilkar: string;
@@ -40,6 +42,7 @@ export const ui: Record<Locale, UiStrings> = {
     ring: 'Ring',
     whatsapp: 'WhatsApp',
     skjemaKnapp: 'PLASSHOLDER: Send forespørsel',
+    visUndermeny: 'PLASSHOLDER: Vis tjenester',
     meny: 'Meny',
     lukk: 'Lukk',
     vilkar: 'Vilkår',
@@ -59,6 +62,7 @@ export const ui: Record<Locale, UiStrings> = {
     ring: 'Call',
     whatsapp: 'WhatsApp',
     skjemaKnapp: '[EN] PLASSHOLDER: Send forespørsel',
+    visUndermeny: '[EN] Show services',
     meny: 'Menu',
     lukk: 'Close',
     vilkar: 'Terms',

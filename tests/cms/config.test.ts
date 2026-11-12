@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
+import { firmaSchema } from '../../src/lib/firma';
+import { omtaleSchema, tekstSchema, tjenesteSchema } from '../../src/lib/innhold';
 
 type Field = { name: string; widget?: string; i18n?: boolean | string; default?: string };
 type Collection = { name: string; folder?: string; fields: Field[] };
@@ -74,8 +76,25 @@ describe('Sveltia CMS collections for services, texts, company and testimonials'
     expect(JSON.stringify(config.collections)).toContain('Plassholder (blokkerer lansering)');
   });
 
-  it('stores tekster per locale and omtale as a folder', () => {
-    expect(col('tekster').files[0].file).toContain('{{locale}}');
+  it('has one non-i18n file entry per language for tekster', () => {
+    const t = col('tekster');
+    expect(t.i18n ?? false).toBe(false);
+    const files = t.files as { name: string; file: string; fields: Field[] }[];
+    expect(files.map((f) => f.file)).toEqual(['src/content/tekster/nb.json', 'src/content/tekster/en.json']);
+    expect(files[1].fields).toEqual(files[0].fields);
+  });
+
+  it('stores omtale as a folder', () => {
     expect(col('omtale').folder).toBe('src/content/omtale');
+  });
+
+  it('CMS field names match the Zod schema keys (no drift)', () => {
+    const names = (fields: Field[]) => fields.map((f) => f.name).sort();
+    const keys = (schema: { shape: object }) => Object.keys(schema.shape).sort();
+    const tj = col('tjenester').fields.map((f: Field) => f.name).filter((n: string) => n !== 'body');
+    expect(tj.sort()).toEqual(keys(tjenesteSchema));
+    expect(names(col('tekster').files[0].fields)).toEqual(keys(tekstSchema));
+    expect(names(col('firma').files[0].fields[0].fields)).toEqual(keys(firmaSchema));
+    expect(names(col('omtale').fields)).toEqual(keys(omtaleSchema));
   });
 });

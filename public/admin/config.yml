@@ -113,21 +113,20 @@ collections:
 
   - name: tekster
     label: Faste tekster
-    # One JSON file per language: src/content/tekster/nb.json and en.json.
+    # Plain file collection (no CMS i18n): one JSON file per language, same fields.
+    i18n: false
     files:
-      - name: tekster
-        label: Faste tekster (kvittering, «Det lekker nå», skjema)
-        file: 'src/content/tekster/{{locale}}.json'
+      - name: tekster_nb
+        label: Tekster (norsk)
+        file: src/content/tekster/nb.json
         format: json
-        i18n: true
-        fields:
-          - { name: kvittering, label: Kvittering, widget: text, i18n: true }
-          - { name: taptAnrop, label: Melding ved tapt anrop, widget: text, i18n: true }
-          - { name: whatsappHilsen, label: 'WhatsApp-hilsen (bruk {tjeneste} og {kilde})', widget: text, i18n: true }
+        fields: &tekstFelt
+          - { name: kvittering, label: Kvittering, widget: text }
+          - { name: taptAnrop, label: Melding ved tapt anrop, widget: text }
+          - { name: whatsappHilsen, label: 'WhatsApp-hilsen (bruk {tjeneste} og {kilde})', widget: text }
           - name: lekkerNaa
             label: Det lekker nå
             widget: object
-            i18n: true
             fields:
               - { name: tittel, label: Tittel, widget: string }
               - { name: punkter, label: Punkter, widget: list, field: { name: punkt, label: Punkt, widget: string } }
@@ -135,7 +134,6 @@ collections:
           - name: skjema
             label: Skjema
             widget: object
-            i18n: true
             fields:
               - { name: hva, label: Hva gjelder det?, widget: string }
               - { name: haster, label: Hvor haster det?, widget: string }
@@ -151,6 +149,11 @@ collections:
               - { name: beskrivelse, label: Beskrivelse, widget: string }
               - { name: samtykkePaminnelser, label: Samtykke til servicepåminnelser, widget: string }
               - { name: send, label: Send-knapp, widget: string }
+      - name: tekster_en
+        label: Tekster (English)
+        file: src/content/tekster/en.json
+        format: json
+        fields: *tekstFelt
 
   - name: firma
     label: Firmadata

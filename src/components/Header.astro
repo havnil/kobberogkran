@@ -66,7 +66,7 @@ const current = Astro.url.pathname;
                     type="button"
                     aria-expanded="false"
                     aria-controls="undermeny-tjenester"
-                    aria-label={t.nav.tjenester}
+                    aria-label={t.visUndermeny}
                   >
                     <span aria-hidden="true">▾</span>
                   </button>
@@ -239,6 +239,15 @@ const current = Astro.url.pathname;
 
   .undermeny a {
     font-weight: 400;
+  }
+
+  .undermeny-knapp span {
+    display: inline-block;
+    transition: transform 0.15s;
+  }
+
+  .undermeny-knapp[aria-expanded='true'] span {
+    transform: rotate(180deg);
   }
 
   :global(html.js) .undermeny-knapp {

@@ -18,6 +18,7 @@ import type { PageEntry } from '../i18n/pages';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
 import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
+import { launchVerdi } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
 import { telHref } from '../lib/telefon';
 
@@ -30,7 +31,7 @@ const { locale, entry } = Astro.props;
 const nokkel = entry.data.translationKey;
 const [firma, tekster, { Content }] = await Promise.all([getFirma(), getTekster(locale), render(entry)]);
 const tjenester = nokkel === 'tjenester' ? await getServices(locale) : [];
-const synlig = nokkel === 'om' ? synligeOmtale(await getOmtale(), visEksempler(import.meta.env.PROD, process.env.LAUNCH)) : [];
+const synlig = nokkel === 'om' ? synligeOmtale(await getOmtale(), visEksempler(import.meta.env.PROD, launchVerdi())) : [];
 const f = tekster.forside;
 const s = tekster.sider;
 const t = ui[locale];

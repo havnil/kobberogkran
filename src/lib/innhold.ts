@@ -219,6 +219,10 @@ export const tekstSchema = z.object({
     }),
     /** Shown without JavaScript (the form needs Turnstile), followed by phone and WhatsApp. */
     utenJs: z.string(),
+    /** Consent to a reply on WhatsApp (step 1, not pre-ticked). */
+    samtykkeWhatsapp: z.string(),
+    /** Screen reader status for the address suggestions. Placeholder: {antall}. */
+    forslagAntall: z.string(),
   }),
   /** Takkesiden etter skjemaet uten JavaScript, og siden for å sende flere bilder senere. */
   skjemaSvar: z.object({

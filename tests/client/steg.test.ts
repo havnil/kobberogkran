@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { feilNokkel, lesSteg1, sendSteg1, sendSteg2, sjekkSteg1 } from '../../src/client/skjema/steg';
+import { feilNokkel, lagSteg2, lesSteg1, sendSteg1, sendSteg2, sjekkSteg1 } from '../../src/client/skjema/steg';
 import { validerSteg1 } from '../../src/server/validering';
 
 function skjema(ekstra = '') {
@@ -129,5 +129,24 @@ describe('feilNokkel', () => {
     expect(feilNokkel('nettverk')).toBe('nettverk');
     expect(feilNokkel('serverfeil')).toBe('server');
     expect(feilNokkel('ikke_konfigurert')).toBe('server');
+  });
+});
+
+describe('lagSteg2', () => {
+  const tom = { felles: {}, tjenesteSvar: {} };
+
+  it('sender ikke tomme felt, og ingenting når steg 2 er tomt', () => {
+    expect(lagSteg2({ beskrivelse: '  ', hvorHorte: '', paaminnelser: false, ...tom })).toBeNull();
+  });
+
+  it('samtykke til påminnelser sendes bare når boksen er krysset av (aldri false)', () => {
+    expect(lagSteg2({ beskrivelse: 'Drypper', hvorHorte: '', paaminnelser: false, ...tom })).toEqual({ beskrivelse: 'Drypper' });
+    expect(lagSteg2({ beskrivelse: '', hvorHorte: '', paaminnelser: true, ...tom })).toEqual({ samtykker: { paaminnelser: true } });
+  });
+
+  it('tar med svar, hvorHorte og WhatsApp-samtykke når de finnes', () => {
+    expect(
+      lagSteg2({ beskrivelse: '', hvorHorte: 'google', paaminnelser: false, whatsapp: true, felles: { vann: 'bronn' }, tjenesteSvar: {} }),
+    ).toEqual({ hvorHorte: 'google', felles: { vann: 'bronn' }, samtykker: { whatsapp: true } });
   });
 });

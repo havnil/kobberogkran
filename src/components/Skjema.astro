@@ -7,7 +7,8 @@
 // Turnstile is the only third-party script, and only loaded on pages with this form. The site key is
 // read at build time from PUBLIC_TURNSTILE_SITE_KEY; without it, Cloudflare's test key is used, but
 // never in a launch build (LAUNCH=true), which fails instead. See docs/runbooks/nettside-eiersteg.md.
-// Without JavaScript Turnstile cannot run, so a <noscript> note offers phone and WhatsApp instead.
+// Without JavaScript Turnstile cannot run: the forms are hidden (`html:not(.js)`) and a <noscript>
+// note offers phone and WhatsApp instead.
 import LekkerNaa from './LekkerNaa.astro';
 import Plassholder from './Plassholder.astro';
 import WhatsAppKnapp from './WhatsAppKnapp.astro';
@@ -16,6 +17,7 @@ import { getServices } from '../i18n/services';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
 import { telHref } from '../lib/telefon';
+import { erLansering } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
 import { alleSporsmal, feltnavn, FELLES, HVOR_HORTE, valgNokkel, type Sporsmal } from '../client/skjema/sporsmal';
 import { BILDETYPER, HAST, MAKS_BILDER, TJENESTER } from '../server/validering';
@@ -33,9 +35,7 @@ const t = tekster.skjema;
 /** Cloudflare's always-pass test key. Never used in a launch build. */
 const TURNSTILE_TESTNOKKEL = '1x00000000000000000000AA';
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
-// LAUNCH is read via import.meta.env: prerendering runs in workerd, where process.env lacks it.
-const launch = String(import.meta.env.LAUNCH ?? process.env.LAUNCH ?? '');
-if (!siteKey && launch === 'true') {
+if (!siteKey && erLansering()) {
   throw new Error('PUBLIC_TURNSTILE_SITE_KEY mangler i en lanseringsbygg (LAUNCH=true). Se docs/runbooks/nettside-eiersteg.md.');
 }
 const turnstileNokkel = siteKey || TURNSTILE_TESTNOKKEL;
@@ -70,10 +70,14 @@ const klientTekster = {
   bildeFrakoblet: t.bildeFrakoblet,
   bildeFeilet: t.bildeFeilet,
   bildeForMange: t.bildeForMange,
+  forslagAntall: t.forslagAntall,
 };
 const telefon = firma.telefon.verdi;
 ---
 
+<script is:inline>
+  document.documentElement.classList.add('js');
+</script>
 <div
   class="skjema"
   data-skjema-rot
@@ -141,6 +145,7 @@ const telefon = firma.telefon.verdi;
           <ul id="skjema-sted-forslag" class="forslag" role="listbox" aria-label={t.adresse} hidden></ul>
         </div>
         <p class="hjelp" id="hjelp-sted">{t.stedHjelp}</p>
+        <p class="visuelt-skjult" data-forslag-status role="status"></p>
         <p class="feil" id="feil-sted" hidden></p>
       </div>
       <p class="posisjon">
@@ -198,6 +203,11 @@ const telefon = firma.telefon.verdi;
       </div>
     </fieldset>
 
+    <label class="valg-rad samtykke">
+      <input type="checkbox" name="samtykkeWhatsapp" value="ja" />
+      <span>{t.samtykkeWhatsapp}</span>
+    </label>
+
     <div class="turnstile" id="felt-turnstileToken" tabindex="-1">
       <div class="cf-turnstile" data-sitekey={turnstileNokkel} data-language={locale === 'nb' ? 'nb' : 'en'}></div>
       <p class="feil" id="feil-turnstileToken" hidden></p>
@@ -216,6 +226,7 @@ const telefon = firma.telefon.verdi;
   <section class="kvittering" data-kvittering tabindex="-1" aria-labelledby="kvittering-tittel" hidden>
     <h3 id="kvittering-tittel">{t.kvitteringTittel}</h3>
     <p>{kvittering}</p>
+    <div data-lekker-kvittering></div>
   </section>
 
   <form class="steg" data-steg2 novalidate hidden>
@@ -236,7 +247,8 @@ const telefon = firma.telefon.verdi;
         <label for="skjema-bilder">{t.bilder}</label>
         <input id="skjema-bilder" type="file" accept={accept} multiple data-bildefelt />
       </div>
-      <ul class="bilder" data-bildeliste aria-live="polite"></ul>
+      <ul class="bilder" data-bildeliste></ul>
+      <p class="visuelt-skjult" data-bilde-status role="status"></p>
     </fieldset>
 
     <div class="felt">
@@ -488,6 +500,20 @@ const telefon = firma.telefon.verdi;
   }
   .kvittering h3 {
     margin-top: 0;
+  }
+  :global(html:not(.js)) .steg {
+    display: none;
+  }
+  .visuelt-skjult {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
   .honning {
     position: absolute;

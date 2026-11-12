@@ -228,7 +228,9 @@
       "nettverk": "PLASSHOLDER: Fikk ikke kontakt. Sjekk nettet og prøv igjen, eller ring oss:",
       "server": "PLASSHOLDER: Noe gikk galt hos oss. Prøv igjen, eller ring oss:"
     },
-    "utenJs": "PLASSHOLDER: Skjemaet trenger JavaScript. Ring oss eller send en melding på WhatsApp i stedet:"
+    "utenJs": "PLASSHOLDER: Skjemaet trenger JavaScript. Ring oss eller send en melding på WhatsApp i stedet:",
+    "samtykkeWhatsapp": "PLASSHOLDER: Jeg vil gjerne få svar på WhatsApp",
+    "forslagAntall": "PLASSHOLDER: {antall} adresseforslag. Bruk piltastene for å velge."
   },
   "skjemaSvar": {
     "takkTittel": "PLASSHOLDER: Takk!",

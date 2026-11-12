@@ -115,3 +115,32 @@ export function feilNokkel(kode: string): 'mangler' | 'ugyldig' | 'forLang' | 't
       return 'server';
   }
 }
+
+export interface Steg2Inn {
+  beskrivelse: string;
+  hvorHorte: string;
+  felles: Record<string, string>;
+  tjenesteSvar: Record<string, string>;
+  /** Avkrysset for servicepåminnelser. */
+  paaminnelser: boolean;
+  /** WhatsApp-samtykket fra steg 1, når det ikke allerede er lagret. */
+  whatsapp?: boolean;
+}
+
+/**
+ * Kroppen til PATCH i steg 2 uten tomme felt, eller null når det ikke er noe å sende. Samtykker
+ * sendes bare som `true`: en boks som ikke er krysset av, trekker aldri tilbake et samtykke.
+ */
+export function lagSteg2(i: Steg2Inn): Data | null {
+  const d: Data = {};
+  const beskrivelse = i.beskrivelse.trim();
+  if (beskrivelse) d.beskrivelse = beskrivelse;
+  if (i.hvorHorte) d.hvorHorte = i.hvorHorte;
+  if (Object.keys(i.felles).length) d.felles = i.felles;
+  if (Object.keys(i.tjenesteSvar).length) d.tjenesteSvar = i.tjenesteSvar;
+  const samtykker: Record<string, true> = {};
+  if (i.paaminnelser) samtykker.paaminnelser = true;
+  if (i.whatsapp) samtykker.whatsapp = true;
+  if (Object.keys(samtykker).length) d.samtykker = samtykker;
+  return Object.keys(d).length ? d : null;
+}

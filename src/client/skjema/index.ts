@@ -5,7 +5,7 @@ import { MAKS_BILDER } from '../../server/validering';
 import { Opplaster, type Jobb } from './opplasting';
 import { adresseVed, koblAdressefelt } from './sted';
 import { erSynlig, samleSvar, sporsmalFor } from './sporsmal';
-import { feilNokkel, lesSteg1, sendSteg1, sendSteg2, sjekkSteg1, type FeltFeil } from './steg';
+import { feilNokkel, lagSteg2, lesSteg1, sendSteg1, sendSteg2, sjekkSteg1, type FeltFeil } from './steg';
 
 interface Tekster {
   feil: Record<'mangler' | 'ugyldig' | 'forLang' | 'turnstile' | 'nettverk' | 'server', string>;
@@ -19,6 +19,7 @@ interface Tekster {
   bildeFrakoblet: string;
   bildeFeilet: string;
   bildeForMange: string;
+  forslagAntall: string;
 }
 
 declare global {
@@ -142,7 +143,16 @@ function start(rot: HTMLElement) {
   const lat = felt('lat')!;
   const lon = felt('lon')!;
   const stedInput = felt('sted')!;
-  koblAdressefelt({ input: stedInput, liste: steg1.querySelector<HTMLElement>('#skjema-sted-forslag')!, lat, lon });
+  const forslagStatus = steg1.querySelector<HTMLElement>('[data-forslag-status]');
+  koblAdressefelt({
+    input: stedInput,
+    liste: steg1.querySelector<HTMLElement>('#skjema-sted-forslag')!,
+    lat,
+    lon,
+    onAntall: (n) => {
+      if (forslagStatus) forslagStatus.textContent = n > 0 ? t.forslagAntall.replace('{antall}', String(n)) : '';
+    },
+  });
 
   const posKnapp = steg1.querySelector<HTMLButtonElement>('[data-posisjon]');
   const posStatus = steg1.querySelector<HTMLElement>('[data-posisjon-status]');
@@ -222,14 +232,19 @@ function start(rot: HTMLElement) {
       visFeil([{ felt: svar.felt && svar.felt !== 'idemNokkel' ? svar.felt : 'skjema', feil: svar.feil }]);
       return;
     }
-    visSteg2(svar.id, svar.token, String(data.tjeneste), String(data.hast), String(data.locale));
+    visSteg2(svar.id, svar.token, String(data.tjeneste), String(data.hast), String(data.locale), felt('samtykkeWhatsapp')?.checked === true);
   });
 
   // --- Steg 2 ---
 
-  function visSteg2(id: string, token: string, tjeneste: string, hastVerdi: string, locale: string) {
+  function visSteg2(id: string, token: string, tjeneste: string, hastVerdi: string, locale: string, whatsapp: boolean) {
     steg1.hidden = true;
     const kvittering = rot!.querySelector<HTMLElement>('[data-kvittering]')!;
+    // Lekker det, står boksen med ringeknappen igjen i kvitteringen.
+    if (hastVerdi === 'lekker-naa') {
+      kvittering.querySelector('[data-lekker-kvittering]')?.append(lekker);
+      lekker.hidden = false;
+    }
     kvittering.hidden = false;
     steg2.hidden = false;
     kvittering.focus();
@@ -245,8 +260,18 @@ function start(rot: HTMLElement) {
     steg2.addEventListener('change', oppdater);
     oppdater();
 
+    // WhatsApp-samtykket fra steg 1 lagres straks (API-et tar samtykker i steg 2). Feiler det, sendes
+    // det på nytt med steg 2.
+    let whatsappIgjen = whatsapp;
+    if (whatsapp) {
+      void sendSteg2(id, token, { samtykker: { whatsapp: true } }).then((r) => {
+        if (r.ok) whatsappIgjen = false;
+      });
+    }
+
     // Bildene lastes opp i bakgrunnen; innsendingen av steg 2 venter aldri på dem.
     const liste = steg2.querySelector<HTMLElement>('[data-bildeliste]')!;
+    const bildeStatus = steg2.querySelector<HTMLElement>('[data-bilde-status]');
     const rader = new Map<number, HTMLLIElement>();
     const statusTekst: Record<Jobb['status'], string> = {
       venter: t.bildeLaster,
@@ -269,6 +294,8 @@ function start(rot: HTMLElement) {
         }
         li.textContent = `${jobb.fil.name}: ${statusTekst[jobb.status]}`;
         li.dataset.status = jobb.status;
+        // Skjermlesere får bare ferdig og feilet, ikke hvert mellomsteg.
+        if (bildeStatus && (jobb.status === 'ok' || jobb.status === 'feilet')) bildeStatus.textContent = li.textContent;
       },
     });
     let antall = 0;
@@ -294,20 +321,26 @@ function start(rot: HTMLElement) {
     steg2.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (sender2) return;
-      sender2 = true;
       feil2.hidden = true;
-      status2.textContent = t.sender;
       const fd = new FormData(steg2);
-      const { felles, tjenesteSvar } = samleSvar(steg2, sporsmal);
-      const svar = await sendSteg2(id, token, {
+      const data = lagSteg2({
         beskrivelse: String(fd.get('beskrivelse') ?? ''),
-        felles,
-        tjenesteSvar,
         hvorHorte: String(fd.get('hvorHorte') ?? ''),
-        samtykker: { paaminnelser: fd.get('paaminnelser') === 'on' },
+        ...samleSvar(steg2, sporsmal),
+        paaminnelser: fd.get('paaminnelser') === 'on',
+        whatsapp: whatsappIgjen,
       });
+      // Ingenting å sende (bildene går for seg): ikke noe kall.
+      if (!data) {
+        status2.textContent = t.steg2Ok;
+        return;
+      }
+      sender2 = true;
+      status2.textContent = t.sender;
+      const svar = await sendSteg2(id, token, data);
       sender2 = false;
       if (svar.ok) {
+        whatsappIgjen = false;
         status2.textContent = t.steg2Ok;
       } else {
         status2.textContent = '';

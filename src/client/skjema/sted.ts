@@ -132,6 +132,8 @@ export interface AdressefeltValg {
   lon: HTMLInputElement;
   sok?: (tekst: string, signal: AbortSignal) => Promise<Adresseforslag[]>;
   onVelg?: (a: Adresseforslag) => void;
+  /** Antall forslag etter hvert søk, for å melde det i en statusregion. */
+  onAntall?: (antall: number) => void;
 }
 
 /**
@@ -208,6 +210,7 @@ export function koblAdressefelt(v: AdressefeltValg): void {
     liste.hidden = !apen;
     input.setAttribute('aria-expanded', String(apen));
     input.removeAttribute('aria-activedescendant');
+    v.onAntall?.(nye.length);
   };
 
   input.addEventListener('input', () => {

@@ -13,6 +13,7 @@ import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { getFirma } from '../lib/firma';
 import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
+import { launchVerdi } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
 
 interface Props {
@@ -21,8 +22,8 @@ interface Props {
 
 const { locale } = Astro.props;
 const [firma, tekster, tjenester, omtale] = await Promise.all([getFirma(), getTekster(locale), getServices(locale), getOmtale()]);
-// `process.env.LAUNCH` is read at build time (the page is static); see src/lib/omtale.ts.
-const synlig = synligeOmtale(omtale, visEksempler(import.meta.env.PROD, process.env.LAUNCH));
+// `LAUNCH` is read at build time via import.meta.env (see src/lib/lansering.ts).
+const synlig = synligeOmtale(omtale, visEksempler(import.meta.env.PROD, launchVerdi()));
 const f = tekster.forside;
 ---
 

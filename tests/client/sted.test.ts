@@ -179,6 +179,14 @@ describe('koblAdressefelt (combobox)', () => {
     expect(liste.hidden).toBe(true);
   });
 
+  it('melder antall forslag (for skjermlesere)', async () => {
+    const onAntall = vi.fn();
+    koblAdressefelt({ input, liste, lat, lon, onAntall, sok: async () => [{ tekst: 'A 1', lat: 1, lon: 2 }, { tekst: 'B', lat: 1, lon: 2 }] });
+    skriv('Sto');
+    await vi.advanceTimersByTimeAsync(260);
+    expect(onAntall).toHaveBeenLastCalledWith(2);
+  });
+
   it('feil i søket lukker listen stille', async () => {
     koblAdressefelt({ input, liste, lat, lon, sok: async () => Promise.reject(new Error('nede')) });
     skriv('Storgata');

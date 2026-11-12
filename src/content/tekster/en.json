@@ -228,7 +228,9 @@
       "nettverk": "[EN] No connection. Check your network and try again, or call us:",
       "server": "[EN] Something went wrong on our side. Try again, or call us:"
     },
-    "utenJs": "[EN] The form needs JavaScript. Call us or send a WhatsApp message instead:"
+    "utenJs": "[EN] The form needs JavaScript. Call us or send a WhatsApp message instead:",
+    "samtykkeWhatsapp": "[EN] I would like a reply on WhatsApp",
+    "forslagAntall": "[EN] {antall} address suggestions. Use the arrow keys to choose."
   },
   "skjemaSvar": {
     "takkTittel": "[EN] Thank you!",

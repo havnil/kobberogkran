@@ -362,6 +362,8 @@ collections:
                   - { name: nettverk, label: Ingen kontakt, widget: string }
                   - { name: server, label: Feil hos oss, widget: string }
               - { name: utenJs, label: Uten JavaScript, widget: text }
+              - { name: samtykkeWhatsapp, label: Samtykke til svar på WhatsApp, widget: string }
+              - { name: forslagAntall, label: "Antall adresseforslag (skjermleser, {antall})", widget: string }
           - name: skjemaSvar
             label: Takk og send bilder
             widget: object

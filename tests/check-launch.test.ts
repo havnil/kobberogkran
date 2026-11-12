@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { findPlaceholders } from '../scripts/check-launch.mjs';
 
@@ -44,6 +44,47 @@ describe('findPlaceholders', () => {
   it('scans nested directories', () => {
     html('en/index.html', '<span data-plassholder>x</span>');
     expect(findPlaceholders(join(root, 'dist/client'), [])).toHaveLength(1);
+  });
+});
+
+describe('text markers', () => {
+  const content = (rel: string, body: string) => {
+    const p = join(root, 'src/content', rel);
+    mkdirSync(dirname(p), { recursive: true });
+    writeFileSync(p, body);
+    return p;
+  };
+  const dist = () => join(root, 'dist/client');
+
+  it('flags PLASSHOLDER in markdown and in built HTML text', () => {
+    const md = content('pages/nb/x.md', '---\ntitle: PLASSHOLDER: Tittel\n---\n');
+    html('index.html', '<h1>PLASSHOLDER: Tittel</h1>');
+    const hits = findPlaceholders(dist(), [md]);
+    expect(hits).toHaveLength(2);
+    expect(hits[0]).toMatch(/index\.html:1/);
+    expect(hits[1]).toMatch(/x\.md:2/);
+  });
+
+  it('flags a [EN] prefix in English content and English HTML only', () => {
+    const en = content('pages/en/x.md', '---\ntitle: "[EN] Title"\n---\n[EN] Body\n');
+    const nb = content('pages/nb/x.md', '---\ntitle: "[EN] Title"\n---\n');
+    html('en/index.html', '<h1>[EN] Title</h1>');
+    html('index.html', '<h1>[EN] Title</h1>');
+    const hits = findPlaceholders(dist(), [en, nb]).map((h) => h.replaceAll('\\', '/'));
+    expect(hits).toHaveLength(3);
+    expect(hits.filter((h) => /dist\/client\/en\/index\.html:1/.test(h))).toHaveLength(1);
+    expect(hits.some((h) => /pages\/nb\//.test(h))).toBe(false);
+    expect(hits.some((h) => /dist\/client\/index\.html/.test(h))).toBe(false);
+  });
+
+  it('flags [EN] at the start of a JSON text value in English data', () => {
+    const en = content('pages/en/d.json', '{ "t": "[EN] Title" }');
+    expect(findPlaceholders(dist(), [en])).toHaveLength(1);
+  });
+
+  it('ignores [data-plassholder] in CSS', () => {
+    html('index.html', '<style>[data-plassholder]{outline:1px solid}</style><p>ren</p>');
+    expect(findPlaceholders(dist(), [])).toEqual([]);
   });
 });
 

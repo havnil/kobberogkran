@@ -46,3 +46,36 @@ describe('Sveltia CMS config', () => {
     expect(config.public_folder).toBe('/images/uploads');
   });
 });
+
+describe('Sveltia CMS collections for services, texts, company and testimonials', () => {
+  const col = (name: string) => config.collections.find((c: { name: string }) => c.name === name);
+
+  it('has all collections', () => {
+    for (const n of ['pages', 'tjenester', 'tekster', 'firma', 'omtale']) expect(col(n), n).toBeDefined();
+  });
+
+  it('translates tjenester like pages, with canonical_slug from the top-level i18n', () => {
+    expect(col('tjenester').folder).toBe('src/content/tjenester');
+    expect(col('tjenester').i18n).toBe(true);
+    expect(config.i18n.canonical_slug.key).toBe('translationKey');
+    const names = col('tjenester').fields.map((f: Field) => f.name);
+    for (const n of ['title', 'kundeTittel', 'fagord', 'nummer', 'kort', 'fakta', 'faq', 'sesong', 'bilder', 'translationKey', 'locale'])
+      expect(names).toContain(n);
+  });
+
+  it('keeps firma as a non-i18n file collection', () => {
+    const f = col('firma');
+    expect(f.files[0].file).toBe('src/content/firma/firma.json');
+    expect(f.i18n ?? false).toBe(false);
+    expect(f.files[0].i18n ?? false).toBe(false);
+  });
+
+  it('labels placeholder flags as a boolean widget', () => {
+    expect(JSON.stringify(config.collections)).toContain('Plassholder (blokkerer lansering)');
+  });
+
+  it('stores tekster per locale and omtale as a folder', () => {
+    expect(col('tekster').files[0].file).toContain('{{locale}}');
+    expect(col('omtale').folder).toBe('src/content/omtale');
+  });
+});

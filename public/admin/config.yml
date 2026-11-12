@@ -60,3 +60,145 @@ collections:
         label: Innhold
         widget: markdown
         i18n: true
+
+  - name: tjenester
+    label: Tjenester
+    label_singular: Tjeneste
+    folder: src/content/tjenester
+    extension: md
+    format: frontmatter
+    # The five services are fixed; new ones need code changes.
+    create: false
+    i18n: true
+    slug: '{{title | localize}}'
+    summary: '{{nummer}}. {{title}}'
+    fields:
+      - { name: title, label: Tittel, widget: string, i18n: true }
+      - { name: kundeTittel, label: Tittel i kundens ord, widget: string, i18n: true }
+      - { name: fagord, label: Fagord (undertittel), widget: string, i18n: true }
+      - { name: nummer, label: Nummer (1-5), widget: number, value_type: int, min: 1, max: 5, i18n: duplicate }
+      - { name: kort, label: Kort tekst på kortet, widget: text, i18n: true }
+      - name: fakta
+        label: Fakta
+        widget: list
+        i18n: true
+        fields:
+          - { name: tall, label: Tall eller stikkord, widget: string }
+          - { name: tekst, label: Tekst, widget: string }
+      - name: faq
+        label: Spørsmål og svar
+        widget: list
+        i18n: true
+        fields:
+          - { name: sporsmal, label: Spørsmål, widget: string }
+          - { name: svar, label: Svar, widget: text }
+      - name: sesong
+        label: Sesongtekst (hytte)
+        widget: object
+        required: false
+        i18n: true
+        fields:
+          - { name: host, label: Høst og vinter, widget: string }
+          - { name: var, label: Vår og sommer, widget: string }
+      - name: bilder
+        label: Bilder
+        widget: list
+        i18n: duplicate
+        fields:
+          - { name: src, label: Bilde, widget: image }
+          - { name: plassholder, label: Plassholder (blokkerer lansering), widget: boolean, default: true }
+      - { name: translationKey, label: Oversettelsesnøkkel, widget: hidden, i18n: duplicate }
+      - { name: locale, label: Språk, widget: hidden, default: '{{locale}}', i18n: true }
+      - { name: body, label: Innhold, widget: markdown, i18n: true }
+
+  - name: tekster
+    label: Faste tekster
+    # One JSON file per language: src/content/tekster/nb.json and en.json.
+    files:
+      - name: tekster
+        label: Faste tekster (kvittering, «Det lekker nå», skjema)
+        file: 'src/content/tekster/{{locale}}.json'
+        format: json
+        i18n: true
+        fields:
+          - { name: kvittering, label: Kvittering, widget: text, i18n: true }
+          - { name: taptAnrop, label: Melding ved tapt anrop, widget: text, i18n: true }
+          - { name: whatsappHilsen, label: 'WhatsApp-hilsen (bruk {tjeneste} og {kilde})', widget: text, i18n: true }
+          - name: lekkerNaa
+            label: Det lekker nå
+            widget: object
+            i18n: true
+            fields:
+              - { name: tittel, label: Tittel, widget: string }
+              - { name: punkter, label: Punkter, widget: list, field: { name: punkt, label: Punkt, widget: string } }
+              - { name: ingenDognvakt, label: Ærlig om døgnvakt, widget: text }
+          - name: skjema
+            label: Skjema
+            widget: object
+            i18n: true
+            fields:
+              - { name: hva, label: Hva gjelder det?, widget: string }
+              - { name: haster, label: Hvor haster det?, widget: string }
+              - { name: hasterLekkerNaa, label: Haster - lekker nå, widget: string }
+              - { name: hasterSnart, label: Haster - snart, widget: string }
+              - { name: hasterKanPlanlegges, label: Haster - kan planlegges, widget: string }
+              - { name: adresse, label: Adresse, widget: string }
+              - { name: bruketMinPosisjon, label: Bruk min posisjon, widget: string }
+              - { name: navn, label: Navn, widget: string }
+              - { name: telefon, label: Telefon, widget: string }
+              - { name: epost, label: E-post, widget: string }
+              - { name: bilder, label: Bilder, widget: string }
+              - { name: beskrivelse, label: Beskrivelse, widget: string }
+              - { name: samtykkePaminnelser, label: Samtykke til servicepåminnelser, widget: string }
+              - { name: send, label: Send-knapp, widget: string }
+
+  - name: firma
+    label: Firmadata
+    files:
+      - name: firma
+        label: Firmadata (telefon, priser, områder)
+        file: src/content/firma/firma.json
+        format: json
+        i18n: false
+        fields:
+          - name: firma
+            label: Firma
+            widget: object
+            fields:
+              - { name: navn, label: Navn, widget: string }
+              - { name: juridiskNavn, label: Juridisk navn, widget: string }
+              - { name: telefon, label: Telefon, widget: object, fields: &verdiStr [{ name: verdi, label: Verdi, widget: string }, { name: plassholder, label: Plassholder (blokkerer lansering), widget: boolean }] }
+              - { name: whatsapp, label: WhatsApp, widget: object, fields: *verdiStr }
+              - { name: epost, label: E-post, widget: object, fields: *verdiStr }
+              - { name: orgnr, label: Org.nr., widget: object, fields: *verdiStr }
+              - { name: adresse, label: Adresse, widget: object, fields: *verdiStr }
+              - name: priser
+                label: Priser (kr inkl. mva)
+                widget: object
+                fields:
+                  - { name: timepris, label: Timepris, widget: object, fields: &verdiNum [{ name: verdi, label: Verdi, widget: number, value_type: int }, { name: plassholder, label: Plassholder (blokkerer lansering), widget: boolean }] }
+                  - { name: servicebil, label: Servicebil, widget: object, fields: *verdiNum }
+                  - { name: forbruk, label: Forbruk, widget: object, fields: *verdiNum }
+                  - { name: varmtvannstankArbeid, label: Varmtvannstank - fastpris på arbeid, widget: object, fields: *verdiNum }
+                  - { name: varmtvannstankTypiskTotal, label: Varmtvannstank - typisk totalpris, widget: object, fields: *verdiNum }
+              - name: omrade
+                label: Område
+                widget: object
+                fields:
+                  - { name: steder, label: Steder, widget: list, field: { name: sted, label: Sted, widget: string } }
+                  - { name: maksKjoretidMin, label: Maks kjøretid (min), widget: object, fields: *verdiNum }
+
+  - name: omtale
+    label: Omtale
+    label_singular: Omtale
+    folder: src/content/omtale
+    extension: json
+    format: json
+    create: true
+    # Only entries with «Ekte» ticked are ever shown on the site.
+    summary: '{{type}}: {{tekst}}'
+    fields:
+      - { name: type, label: Type, widget: select, options: [godkjenning, referanse, anmeldelse] }
+      - { name: tekst, label: Tekst, widget: text }
+      - { name: navn, label: Navn, widget: string, required: false }
+      - { name: ekte, label: Ekte (ikke plassholder), widget: boolean, default: false }

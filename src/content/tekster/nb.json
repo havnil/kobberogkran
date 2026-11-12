@@ -1,0 +1,32 @@
+{
+  "kvittering": "PLASSHOLDER: Takk, vi har mottatt forespørselen din.",
+  "taptAnrop": "PLASSHOLDER: Vi så at du ringte. Send en forespørsel eller chat på WhatsApp.",
+  "whatsappHilsen": "PLASSHOLDER: Hei! Jeg trenger hjelp med {tjeneste}. (Fra: {kilde})",
+  "lekkerNaa": {
+    "tittel": "PLASSHOLDER: Det lekker nå",
+    "punkter": [
+      "PLASSHOLDER: Steng hovedstoppekranen, og si hvor den pleier å sitte",
+      "PLASSHOLDER: Slå av strømmen til tanken",
+      "PLASSHOLDER: Tørk opp og ta bilder",
+      "PLASSHOLDER: Meld fra til forsikringen, som har egen skadevakt",
+      "PLASSHOLDER: Ring Eirik"
+    ],
+    "ingenDognvakt": "PLASSHOLDER: Eirik tar akutte oppdrag når han kan, men har ikke døgnvakt."
+  },
+  "skjema": {
+    "hva": "PLASSHOLDER: Hva gjelder det?",
+    "haster": "PLASSHOLDER: Hvor haster det?",
+    "hasterLekkerNaa": "PLASSHOLDER: Det lekker nå",
+    "hasterSnart": "PLASSHOLDER: Snart",
+    "hasterKanPlanlegges": "PLASSHOLDER: Kan planlegges",
+    "adresse": "PLASSHOLDER: Adresse",
+    "bruketMinPosisjon": "PLASSHOLDER: Bruk der jeg er nå",
+    "navn": "PLASSHOLDER: Navn",
+    "telefon": "PLASSHOLDER: Telefon",
+    "epost": "PLASSHOLDER: E-post (valgfritt)",
+    "bilder": "PLASSHOLDER: Bilder",
+    "beskrivelse": "PLASSHOLDER: Beskrivelse",
+    "samtykkePaminnelser": "PLASSHOLDER: Jeg vil ha servicepåminnelser",
+    "send": "PLASSHOLDER: Send forespørsel"
+  }
+}

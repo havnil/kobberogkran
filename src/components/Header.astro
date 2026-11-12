@@ -3,6 +3,7 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 import type { Alternate } from '../i18n/alternates';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
 import { navPath } from '../i18n/nav';
+import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
 import { telHref, waDigits } from '../lib/telefon';
@@ -16,7 +17,10 @@ const { locale, alternates } = Astro.props;
 const t = ui[locale];
 const firma = await getFirma();
 const home = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
-// Services has no submenu yet; the services collection adds it later.
+const tjenester = (await getServices(locale)).map((e) => ({
+  href: servicePath(locale, serviceSlugOf(e)),
+  label: e.data.kundeTittel,
+}));
 const items = [
   { href: navPath(locale, 'tjenester'), label: t.nav.tjenester },
   { href: navPath(locale, 'priser'), label: t.nav.priser },
@@ -51,10 +55,32 @@ const current = Astro.url.pathname;
       <ul>
         {
           items.map((item) => (
-            <li>
+            <li class={item.href === navPath(locale, 'tjenester') ? 'har-undermeny' : undefined}>
               <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
                 {item.label}
               </a>
+              {item.href === navPath(locale, 'tjenester') && (
+                <>
+                  <button
+                    class="undermeny-knapp"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="undermeny-tjenester"
+                    aria-label={t.nav.tjenester}
+                  >
+                    <span aria-hidden="true">▾</span>
+                  </button>
+                  <ul id="undermeny-tjenester" class="undermeny">
+                    {tjenester.map((s) => (
+                      <li>
+                        <a href={s.href} aria-current={current === s.href ? 'page' : undefined}>
+                          {s.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </li>
           ))
         }
@@ -87,7 +113,26 @@ const current = Astro.url.pathname;
     knapp.addEventListener('click', function () {
       sett(knapp.getAttribute('aria-expanded') !== 'true');
     });
+    var underKnapp = document.querySelector('.undermeny-knapp');
+    var under = document.getElementById('undermeny-tjenester');
+    function settUnder(apen) {
+      underKnapp.setAttribute('aria-expanded', apen ? 'true' : 'false');
+      under.classList.toggle('apen', apen);
+    }
+    if (underKnapp && under) {
+      underKnapp.addEventListener('click', function () {
+        settUnder(underKnapp.getAttribute('aria-expanded') !== 'true');
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.har-undermeny')) settUnder(false);
+      });
+    }
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && underKnapp && underKnapp.getAttribute('aria-expanded') === 'true') {
+        settUnder(false);
+        underKnapp.focus();
+        return;
+      }
       if (e.key === 'Escape' && knapp.getAttribute('aria-expanded') === 'true') {
         sett(false);
         knapp.focus();
@@ -183,6 +228,48 @@ const current = Astro.url.pathname;
     display: none;
   }
 
+  /* Submenu. Without JavaScript it is a plain list of links (always visible on mobile, on hover/focus on desktop). */
+  .undermeny-knapp {
+    display: none;
+  }
+
+  .undermeny {
+    margin-left: var(--space-3);
+  }
+
+  .undermeny a {
+    font-weight: 400;
+  }
+
+  :global(html.js) .undermeny-knapp {
+    display: inline-block;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-brown);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  :global(html.js) .har-undermeny {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  :global(html.js) .har-undermeny > a {
+    flex: 1;
+  }
+
+  :global(html.js) .undermeny {
+    flex-basis: 100%;
+  }
+
+  :global(html.js) .undermeny:not(.apen) {
+    display: none;
+  }
+
   @media (max-width: 719px) {
     .logo img {
       height: 2.25rem; /* set B: 191 px wide, above the 140 px minimum */
@@ -221,6 +308,42 @@ const current = Astro.url.pathname;
 
     .header-knapper {
       display: flex;
+    }
+
+    .har-undermeny,
+    :global(html.js) .har-undermeny {
+      position: relative;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+
+    .hovedmeny .undermeny,
+    :global(html.js) .hovedmeny .undermeny {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 50;
+      min-width: 16rem;
+      margin: 0;
+      padding: var(--space-1) var(--space-2);
+      background: var(--color-cream);
+      border: 1px solid var(--color-border-strong);
+      display: none;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* No JavaScript: open on hover or keyboard focus. */
+    .har-undermeny:hover .undermeny,
+    .har-undermeny:focus-within .undermeny,
+    :global(html.js) .hovedmeny .undermeny.apen {
+      display: flex;
+    }
+
+    :global(html.js) .har-undermeny:hover .undermeny:not(.apen),
+    :global(html.js) .har-undermeny:focus-within .undermeny:not(.apen) {
+      display: none;
     }
   }
 

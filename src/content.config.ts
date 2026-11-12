@@ -3,6 +3,7 @@ import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { LOCALES } from './i18n/locales';
 import { firmaSchema } from './lib/firma';
+import { omtaleSchema, tekstSchema, tjenesteSchema } from './lib/innhold';
 
 /**
  * Pages live in `src/content/pages/<locale>/<slug>.md`, so entry ids are `<locale>/<slug>`.
@@ -29,4 +30,26 @@ const firma = defineCollection({
   schema: firmaSchema,
 });
 
-export const collections = { pages, firma };
+/** The five services: `src/content/tjenester/<locale>/<slug>.md`, entry ids `<locale>/<slug>`. */
+const tjenester = defineCollection({
+  loader: glob({
+    pattern: '**/*.md',
+    base: './src/content/tjenester',
+    generateId: ({ entry }) => entry.replace(/\\/g, '/').replace(/\.md$/, ''),
+  }),
+  schema: tjenesteSchema,
+});
+
+/** UI texts, one JSON file per language (ids `nb`, `en`). */
+const tekster = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/tekster' }),
+  schema: tekstSchema,
+});
+
+/** Approvals, references and reviews. Only entries with `ekte: true` may be shown. */
+const omtale = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/omtale' }),
+  schema: omtaleSchema,
+});
+
+export const collections = { pages, firma, tjenester, tekster, omtale };

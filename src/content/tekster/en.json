@@ -1,0 +1,32 @@
+{
+  "kvittering": "[EN] Thanks, we have received your request.",
+  "taptAnrop": "[EN] We saw that you called. Send a request or chat on WhatsApp.",
+  "whatsappHilsen": "[EN] Hi! I need help with {tjeneste}. (From: {kilde})",
+  "lekkerNaa": {
+    "tittel": "[EN] It is leaking now",
+    "punkter": [
+      "[EN] Close the main stop valve, and where it usually is",
+      "[EN] Switch off the power to the tank",
+      "[EN] Dry up and take photos",
+      "[EN] Tell your insurer, who has its own damage line",
+      "[EN] Call Eirik"
+    ],
+    "ingenDognvakt": "[EN] Eirik takes urgent jobs when he can, but has no 24-hour service."
+  },
+  "skjema": {
+    "hva": "[EN] What is it about?",
+    "haster": "[EN] How urgent is it?",
+    "hasterLekkerNaa": "[EN] It is leaking now",
+    "hasterSnart": "[EN] Soon",
+    "hasterKanPlanlegges": "[EN] Can be planned",
+    "adresse": "[EN] Address",
+    "bruketMinPosisjon": "[EN] Use my current location",
+    "navn": "[EN] Name",
+    "telefon": "[EN] Phone",
+    "epost": "[EN] Email (optional)",
+    "bilder": "[EN] Photos",
+    "beskrivelse": "[EN] Description",
+    "samtykkePaminnelser": "[EN] I want service reminders",
+    "send": "[EN] Send request"
+  }
+}

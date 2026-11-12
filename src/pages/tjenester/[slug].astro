@@ -1,0 +1,24 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { servicePaths, type ServiceEntry } from '../../i18n/services';
+import type { Alternate } from '../../i18n/alternates';
+
+export async function getStaticPaths() {
+  return servicePaths('nb');
+}
+
+interface Props {
+  entry: ServiceEntry;
+  alternates: Alternate[];
+}
+
+// Minimal for now; the full service template is built on top of this.
+const { entry, alternates } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout locale="nb" title={entry.data.title} description={entry.data.kort} alternates={alternates}>
+  <h1>{entry.data.title}</h1>
+  <Content />
+</BaseLayout>

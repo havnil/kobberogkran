@@ -28,7 +28,7 @@
   --color-sand: #EFE6DC;          /* sections, cards */
   --color-white: #FFFFFF;
   --color-border: #E8DCCF;
-  --color-border-strong: #CDBBA9; /* form fields */
+  --color-border-strong: #CDBBA9; /* decorative dividers (1.86:1 on white: not for form fields) */
 
   /* Semantic aliases used by components */
   --color-bg: var(--color-cream);
@@ -36,6 +36,11 @@
   --color-muted: var(--color-brown-muted);
   --color-accent: var(--color-orange-dark);
   --color-accent-contrast: var(--color-white);
+  /* Text on orange surfaces (buttons, badges, numbers): 5.50:1 on --color-orange and 6.87:1 on
+     --color-orange-light. --color-brown would be only 4.41:1 on orange. */
+  --color-on-orange: var(--color-brown-dark);
+  /* Borders of form fields (WCAG 1.4.11, 3:1): 7.89:1 on white, 7.09:1 on cream, 6.40:1 on sand. */
+  --color-border-field: var(--color-brown-muted);
 
   /* Type */
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -53,5 +58,4 @@
   --space-5: 4rem;
 
   --content-width: 70rem;
-  --bunnlinje-hoyde: 4.5rem;
 }

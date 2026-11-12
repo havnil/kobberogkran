@@ -61,7 +61,7 @@ a {
   top: var(--space-2);
 }
 
-/* Buttons: orange surface with brown text, brown surface with cream text. */
+/* Buttons: orange surface with --color-on-orange text (5.50:1), brown surface with cream text. */
 .knapp {
   display: inline-flex;
   align-items: center;
@@ -75,7 +75,7 @@ a {
   text-decoration: none;
   cursor: pointer;
   background: var(--color-orange);
-  color: var(--color-brown);
+  color: var(--color-on-orange);
 }
 
 .knapp:hover {
@@ -107,7 +107,7 @@ a {
   padding: 0.1em 0.5em;
   border-radius: var(--radius-button);
   background: var(--color-orange);
-  color: var(--color-brown);
+  color: var(--color-on-orange);
   font-size: 0.7rem;
   font-weight: 800;
   text-transform: uppercase;

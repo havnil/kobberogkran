@@ -6,9 +6,10 @@ import {
   frigiVarselLaas,
   hentForesporsel,
   laasForVarsel,
-  leggTilBilde,
+  lagreSteg2,
+  leggTilBildeMaks,
+  leggTilBildeMerke,
   loggHendelse,
-  oppdaterSteg2,
   opprettForesporsel,
   registrerSamtykke,
   settStatus,
@@ -167,30 +168,14 @@ describe('samtykker', () => {
   });
 });
 
-describe('oppdaterSteg2, leggTilBilde, loggHendelse', () => {
-  it('lagrer svar som JSON og oppdaterer tidspunkt', async () => {
-    const r = await opprettForesporsel(db, input(), 'k');
-    const før = await db.prepare('SELECT oppdatert FROM foresporsler WHERE id = ?').bind(r.id).first<{ oppdatert: string }>();
-    await new Promise((res) => setTimeout(res, 5));
-    await oppdaterSteg2(db, r.id, { problem: 'lekkasje' });
-    const rad = await db.prepare('SELECT svar_json, oppdatert FROM foresporsler WHERE id = ?').bind(r.id).first<{ svar_json: string; oppdatert: string }>();
-    expect(JSON.parse(rad!.svar_json)).toEqual({ problem: 'lekkasje' });
-    expect(rad!.oppdatert > før!.oppdatert).toBe(true);
-  });
-
-  it('oppdaterSteg2 gir false for ukjent id', async () => {
-    expect(await oppdaterSteg2(db, 'finnes-ikke', {})).toBe(false);
-    const r = await opprettForesporsel(db, input(), 'k');
-    expect(await oppdaterSteg2(db, r.id, {})).toBe(true);
-  });
-
+describe('leggTilBildeMaks og loggHendelse', () => {
   it('avviser bilde med ukjent foresporsel_id (FK)', async () => {
-    await expect(leggTilBilde(db, 'finnes-ikke', 'x.jpg')).rejects.toThrow();
+    await expect(leggTilBildeMaks(db, 'finnes-ikke', 'b1', 'x.jpg', 10)).rejects.toThrow();
   });
 
   it('legger til bilde', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
-    await leggTilBilde(db, r.id, 'bilder/abc.jpg');
+    expect(await leggTilBildeMaks(db, r.id, 'b1', 'bilder/abc.jpg', 10)).toBe(true);
     const rad = await db.prepare('SELECT r2_nokkel FROM bilder WHERE foresporsel_id = ?').bind(r.id).first<{ r2_nokkel: string }>();
     expect(rad?.r2_nokkel).toBe('bilder/abc.jpg');
   });
@@ -212,11 +197,12 @@ describe('hentForesporsel og settStatus', () => {
   it('returnerer raden med kunde, tolket svar og bilder', async () => {
     const r = await opprettForesporsel(
       db,
-      input({ epost: 'a@b.no', stedTekst: 'Hemnes', lat: 59.9, lon: 11.4, kjoretidMin: 5, beskrivelse: 'Drypper', kilde: 'qr' }),
+      input({ epost: 'a@b.no', stedTekst: 'Hemnes', lat: 59.9, lon: 11.4, kjoretidMin: 5, kilde: 'qr' }),
       'k',
     );
-    await oppdaterSteg2(db, r.id, { felles: { vann: 'brønn' }, bildeMerker: ['typeskilt'] });
-    await leggTilBilde(db, r.id, 'bilder/a.jpg');
+    await lagreSteg2(db, r.id, 'Drypper', { felles: { vann: 'brønn' } });
+    await leggTilBildeMerke(db, r.id, 'typeskilt');
+    await leggTilBildeMaks(db, r.id, 'b1', 'bilder/a.jpg', 10);
     const f = await hentForesporsel(db, r.id);
     expect(f).toMatchObject({
       id: r.id,

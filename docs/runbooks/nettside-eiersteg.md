@@ -151,7 +151,29 @@ Bilder sendes ikke som vedlegg, men som signerte lenker som virker i 14 dager.
 3. Kontroller at `VARSEL_TIL`, `VARSEL_FRA` og `send_email` i steg 4 stemmer.
 
 Mangler `VARSEL_TIL` eller `VARSEL_FRA`, eller avviser e-posten meldingen, blir forespørselen
-stående med status `sortert`, og hendelsen `varsel_feil` logges i tabellen `hendelser`.
+stående med status `sortert`, og hendelsen `varsel_feil` logges i tabellen `hendelser`. Varselet
+prøves på nytt neste gang kunden sender noe (steg 2 eller et bilde). Sender kunden ingenting mer,
+blir det liggende til cron-jobben under er slått på.
+
+#### Cron for varsel som ikke gikk (før lansering, eier/utvikler)
+
+En Cron Trigger prøver varselet på nytt for forespørsler som har stått med status `ny` eller
+`sortert` i mer enn 5 minutter (og er under 7 dager gamle), høyst 10 per kjøring. Koden er klar:
+`sveipUvarslede` i `src/server/sveip.ts`, kalt fra `scheduled` i `src/worker.ts`. `src/worker.ts`
+bruker adapterens egen `fetch` (`@astrojs/cloudflare/handler`), så sidene virker som før. Slå den
+på med denne endringen i `wrangler.jsonc` (via PR, som steg 4):
+
+```jsonc
+"main": "./src/worker.ts",
+"triggers": {
+	"crons": ["*/10 * * * *"]
+},
+```
+
+`main` erstatter `"@astrojs/cloudflare/entrypoints/server"`. Adapteren leser `main` fra
+`wrangler.jsonc` og bygger den egne inngangen (prøvd lokalt med `npm run build`: `scheduled` er med
+i `dist/server/entry.mjs`). Etter deploy: Cloudflare → Workers → `kobberogkran` → **Triggers** viser
+cron-jobben, og loggen viser `{"hendelse":"sveip",…}` når den har prøvd noe.
 
 ### 8. Test AI-sorteringen en gang for ekte
 

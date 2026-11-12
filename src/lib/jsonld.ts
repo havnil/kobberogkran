@@ -3,8 +3,9 @@
 import type { Firma, Verdi } from './firma';
 import type { Tjeneste } from './innhold';
 import type { Locale } from '../i18n/locales';
+import { NETTSTED } from './nettsted';
 
-export const SITE = 'https://kobberogkran.no';
+export const SITE = NETTSTED;
 export const FIRMA_ID = `${SITE}/#firma`;
 
 /** Text that is still a working title (`PLASSHOLDER: ...` or `[EN] PLASSHOLDER: ...`). */

@@ -2,7 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 import type { D1Database } from '@cloudflare/workers-types';
 import type { Miniflare } from 'miniflare';
 import { startD1, nullstill } from './d1';
-import { hentForesporsel, leggTilBilde, oppdaterSteg2, opprettForesporsel, settStatus } from '../../src/server/db';
+import { hentForesporsel, lagreSteg2, leggTilBildeMaks, leggTilBildeMerke, opprettForesporsel, settStatus } from '../../src/server/db';
 import type { Env } from '../../src/server/env';
 import { EpostVarsler, kodEmne, lagMime, type Varsler } from '../../src/server/varsling';
 import { FalskSorterer } from '../../src/server/sortering/ai';
@@ -125,7 +125,12 @@ const env = (over: Partial<Env> = {}): Env =>
     ...over,
   }) as Env;
 
+/**
+ * Lagrer slik API-et gjør: steg 1 uten beskrivelse (opprettForesporsel), så beskrivelsen i steg 2
+ * (lagreSteg2). `beskrivelse: null` hopper over steg 2.
+ */
 const nyForesporsel = async (over: Record<string, unknown> = {}) => {
+  const { beskrivelse = 'Tanken lekker, har kjøpt delene selv.', ...steg1 } = over;
   const { id } = await opprettForesporsel(
     db,
     {
@@ -137,12 +142,12 @@ const nyForesporsel = async (over: Record<string, unknown> = {}) => {
       stedTekst: 'Storgata 1, Bjørkelangen',
       lat: 59.885,
       lon: 11.567,
-      beskrivelse: 'Tanken lekker, har kjøpt delene selv.',
       kilde: 'qr',
-      ...over,
-    },
+      ...steg1,
+    } as Parameters<typeof opprettForesporsel>[1],
     crypto.randomUUID(),
   );
+  if (typeof beskrivelse === 'string') await lagreSteg2(db, id, beskrivelse, {});
   return id;
 };
 
@@ -320,8 +325,8 @@ describe('sorterOgVarsle', () => {
 
   it('legger ved signerte, gyldige bildelenker', async () => {
     const id = await nyForesporsel();
-    await leggTilBilde(db, id, 'bilder/a.jpg');
-    await oppdaterSteg2(db, id, { bildeMerker: ['typeskilt'] });
+    await leggTilBildeMaks(db, id, crypto.randomUUID(), 'bilder/a.jpg', 10);
+    await leggTilBildeMerke(db, id, 'typeskilt');
     const { varsler, send } = falskVarsler();
     await sorterOgVarsle(env(), id, { sorterer: new FalskSorterer(aiSvar), varsler, naa });
     const tekst = send.mock.calls[0][2];
@@ -379,6 +384,25 @@ describe('AKUTT i emnet', () => {
 });
 
 describe('lagVarselTekst', () => {
+  it('viser «Mottatt» i norsk tid', async () => {
+    const id = await nyForesporsel();
+    const f = { ...(await hentForesporsel(db, id))!, opprettet: '2026-07-01T22:30:00.000Z' };
+    expect(lagVarselTekst(f, regelsjekk(f), null, [])).toContain('Mottatt: 02.07.2026 kl. 00:30');
+    const vinter = { ...f, opprettet: '2026-11-12T10:00:00.000Z' };
+    expect(lagVarselTekst(vinter, regelsjekk(vinter), null, [])).toContain('Mottatt: 12.11.2026 kl. 11:00');
+  });
+
+  it('viser svarene som lesbare linjer, ikke rå JSON', async () => {
+    const id = await nyForesporsel();
+    await lagreSteg2(db, id, undefined, { felles: { vann: 'kommunalt' }, tjenesteSvar: { etasje: 'kjeller' }, hvorHorte: 'nabo' });
+    const f = (await hentForesporsel(db, id))!;
+    const tekst = lagVarselTekst(f, regelsjekk(f), null, []);
+    expect(tekst).toContain('  vann: kommunalt');
+    expect(tekst).toContain('  etasje: kjeller');
+    expect(tekst).toContain('Hvor de hørte om oss: nabo');
+    expect(tekst).not.toContain('"felles"');
+  });
+
   it('viser «ukjent» kjøretid for hytte uten adresse', async () => {
     const id = await nyForesporsel({ stedTekst: 'Gnr 12 bnr 3, Setskog', lat: undefined, lon: undefined, tjeneste: 'hytte' });
     const f = (await hentForesporsel(db, id))!;

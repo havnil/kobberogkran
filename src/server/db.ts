@@ -13,7 +13,6 @@ export interface ForesporselInput {
   lon?: number;
   /** Null/utelatt betyr «ukjent». */
   kjoretidMin?: number;
-  beskrivelse?: string;
   kilde?: string;
   kundetype?: string;
   firmanavn?: string;
@@ -23,7 +22,8 @@ export interface ForesporselInput {
 const na = () => new Date().toISOString();
 
 /**
- * Oppretter en forespørsel, idempotent på `idemNokkel`.
+ * Oppretter en forespørsel (steg 1), idempotent på `idemNokkel`. Beskrivelsen og svarene kommer
+ * først i steg 2 (`lagreSteg2`), aldri her.
  *
  * `input.telefon` må være normalisert (E.164); den brukes som nøkkel for å
  * gjenbruke kunden. Idempotensen hviler på UNIQUE(idem_nokkel): to samtidige
@@ -70,8 +70,8 @@ export async function opprettForesporsel(
     .prepare(
       `INSERT INTO foresporsler
          (id, idem_nokkel, kunde_id, tjeneste, hast, sted_tekst, lat, lon,
-          kjoretid_min, beskrivelse, kilde, kundetype, firmanavn, orgnr, status, opprettet, oppdatert)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ny', ?, ?)
+          kjoretid_min, kilde, kundetype, firmanavn, orgnr, status, opprettet, oppdatert)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ny', ?, ?)
        ON CONFLICT(idem_nokkel) DO NOTHING`,
     )
     .bind(
@@ -84,7 +84,6 @@ export async function opprettForesporsel(
       input.lat ?? null,
       input.lon ?? null,
       input.kjoretidMin ?? null,
-      input.beskrivelse ?? null,
       input.kilde ?? null,
       input.kundetype ?? null,
       input.firmanavn ?? null,
@@ -102,22 +101,6 @@ export async function opprettForesporsel(
   return { id: rad.id, ny: rad.id === id };
 }
 
-/** Returnerer true hvis en forespørsel ble oppdatert. */
-export async function oppdaterSteg2(db: D1Database, id: string, svar: unknown): Promise<boolean> {
-  const r = await db
-    .prepare('UPDATE foresporsler SET svar_json = ?, oppdatert = ? WHERE id = ?')
-    .bind(JSON.stringify(svar), na(), id)
-    .run();
-  return (r.meta.changes ?? 0) > 0;
-}
-
-export async function leggTilBilde(db: D1Database, foresporselId: string, r2Nokkel: string): Promise<void> {
-  await db
-    .prepare('INSERT INTO bilder (id, foresporsel_id, r2_nokkel, opprettet) VALUES (?, ?, ?, ?)')
-    .bind(crypto.randomUUID(), foresporselId, r2Nokkel, na())
-    .run();
-}
-
 export async function loggHendelse(
   db: D1Database,
   foresporselId: string,
@@ -131,6 +114,25 @@ export async function loggHendelse(
 }
 
 export type SamtykkeType = 'whatsapp' | 'paaminnelser';
+
+/** Siste valg per samtykketype; typer kunden aldri har svart på, mangler. */
+export type Samtykker = Partial<Record<SamtykkeType, boolean>>;
+
+/** Kundens siste samtykker for forespørselens kunde (til varselet til Eirik). */
+export async function hentSamtykker(db: D1Database, foresporselId: string): Promise<Samtykker> {
+  const r = await db
+    .prepare(
+      `SELECT s.type, s.gitt FROM samtykker s
+         JOIN foresporsler f ON f.kunde_id = s.kunde_id
+        WHERE f.id = ?
+        ORDER BY s.opprettet, s.rowid`,
+    )
+    .bind(foresporselId)
+    .all<{ type: SamtykkeType; gitt: number }>();
+  const ut: Samtykker = {};
+  for (const rad of r.results) ut[rad.type] = rad.gitt === 1; // siste rad vinner
+  return ut;
+}
 
 /** Legger til en rad i samtykkehistorikken (append-only). */
 export async function registrerSamtykke(

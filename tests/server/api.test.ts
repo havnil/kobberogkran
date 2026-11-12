@@ -5,7 +5,6 @@ import type { Miniflare } from 'miniflare';
 import type { D1Database, R2Bucket } from '@cloudflare/workers-types';
 import { nullstill, startD1 } from './d1';
 import { hentForesporsel, opprettForesporsel, settStatus, sisteSamtykke } from '../../src/server/db';
-import { sorterOgVarsle } from '../../src/server/sortering/index';
 import type { Env } from '../../src/server/env';
 import type { Varsler } from '../../src/server/varsling';
 import { FalskKanal } from '../../src/server/kanaler/falsk';
@@ -904,15 +903,15 @@ describe('GET /api/bilde/:id', () => {
 describe('tillegg til Eirik etter varselet', () => {
   const tillegg = () => varsler.send.mock.calls.filter((c) => String(c[1]).startsWith('Tillegg'));
 
-  it('ingen tillegg mens status er ny (hovedvarselet tar det med)', async () => {
+  it('en opplasting mens status er ny gir hovedvarselet (med bildet), ikke et tillegg', async () => {
     const { id } = await opprettForesporsel(db, { telefon: '+4791234567', tjeneste: 'bad' }, 'idem-direkte-0000001');
     const token = await lagSkjemaToken(id, SKJEMA);
     expect((await lastOpp(id, token, JPEG)).status).toBe(201);
     await ferdig();
-    expect(varsler.send).not.toHaveBeenCalled();
-    await sorterOgVarsle(env, id, { sorterer, varsler, naa: () => naa });
     expect(varsler.send).toHaveBeenCalledTimes(1);
+    expect(String(varsler.send.mock.calls[0][1])).toMatch(/^Ny forespørsel/);
     expect(String(varsler.send.mock.calls[0][2])).toContain('/api/bilde/');
+    expect((await hentForesporsel(db, id))!.status).toBe('varslet');
     // En senere endring tar ikke med bildet på nytt.
     naa = new Date(naa.getTime() + 60_000);
     await patch(id, { beskrivelse: 'mer' }, token);
@@ -978,6 +977,126 @@ describe('tillegg til Eirik etter varselet', () => {
     expect(String(varsler.send.mock.calls[0][2])).not.toContain('/api/bilde/');
     expect(String(varsler.send.mock.calls[1][1])).toMatch(/^Tillegg/);
     expect(String(varsler.send.mock.calls[1][2])).toContain('/api/bilde/');
+  });
+
+  it('steg 2 etter varselet gir et tillegg med regelsjekk, AI-sammendrag og svarutkast (ikke rå JSON)', async () => {
+    const kall: { beskrivelse: string | null }[] = [];
+    let n = 0;
+    sorterer = {
+      sorter: async (f) => {
+        kall.push({ beskrivelse: f.beskrivelse });
+        n++;
+        return { sammendrag: `Sammendrag ${n}`, hast: 'snart', svarutkast: `Utkast ${n}` };
+      },
+    };
+    const { id, token } = await opprett({ tjeneste: 'varmtvannstank' });
+    await ferdig();
+    expect(varsler.send).toHaveBeenCalledTimes(1);
+    naa = new Date(naa.getTime() + 60_000);
+    const res = await patch(
+      id,
+      { beskrivelse: 'Har kjøpt tanken selv, skal bare montere den.', tjenesteSvar: { etasje: 'kjeller' } },
+      token,
+    );
+    expect(res.status).toBe(200);
+    await ferdig();
+    expect(tillegg()).toHaveLength(1);
+    const tekst = String(tillegg()[0][2]);
+    expect(tekst).toMatch(/Røde flagg: .*kjøpt delene selv/);
+    expect(tekst).toMatch(/Røde flagg: .*bare montere/);
+    expect(tekst).toMatch(/Mangler: .*typeskilt/);
+    expect(tekst).toContain('Sammendrag 2');
+    expect(tekst).toContain('Utkast – sendes ikke automatisk');
+    expect(tekst).toContain('Utkast 2');
+    expect(tekst).toContain('etasje: kjeller');
+    expect(tekst).not.toContain('"tjenesteSvar"');
+    // Én AI-kjøring for hovedvarselet og én for steg 2, og den andre så beskrivelsen.
+    expect(kall).toHaveLength(2);
+    expect(kall[1].beskrivelse).toContain('kjøpt tanken selv');
+  });
+
+  it('et tillegg med bare bilder kjører regelsjekken på nytt, men kaller ikke AI-en', async () => {
+    const sorter = vi.fn(async () => ({ sammendrag: 'Bytte tank', hast: 'snart' as const, svarutkast: 'Hei' }));
+    sorterer = { sorter };
+    const { id, token } = await opprett({ tjeneste: 'varmtvannstank' });
+    await ferdig();
+    expect((await lastOpp(id, token, JPEG, 'image/jpeg', '&merke=typeskilt')).status).toBe(201);
+    await ferdig();
+    expect(sorter).toHaveBeenCalledTimes(1);
+    const tekst = String(tillegg()[0][2]);
+    expect(tekst).toContain('REGELSJEKK');
+    expect(tekst).toMatch(/Mangler: (?!.*typeskilt).*tankbilde/);
+    expect(tekst).not.toContain('AI-SAMMENDRAG');
+  });
+
+  it('feilet AI i tillegget gir likevel tillegget med reglene', async () => {
+    let n = 0;
+    sorterer = {
+      sorter: async () => {
+        if (++n > 1) throw new Error('AI nede');
+        return { sammendrag: 'Bytte tank', hast: 'snart', svarutkast: 'Hei' };
+      },
+    };
+    const { id, token } = await opprett();
+    await ferdig();
+    naa = new Date(naa.getTime() + 60_000);
+    await patch(id, { beskrivelse: 'Betaler kontant' }, token);
+    await ferdig();
+    const tekst = String(tillegg()[0][2]);
+    expect(tekst).toMatch(/Røde flagg: .*kontant/);
+    expect(tekst).toMatch(/AI-sortering feilet/);
+    expect((await hendelser(id)).map((h) => h.type)).toContain('tillegg_sortering_feil');
+  });
+
+  it('feilet hovedvarsel sendes på nytt ved steg 2 (status sortert), med steg 2-innholdet', async () => {
+    varsler.send.mockImplementationOnce(async () => {
+      throw new Error('e-post nede');
+    });
+    const { id, token } = await opprett();
+    await ferdig();
+    expect((await hentForesporsel(db, id))!.status).toBe('sortert');
+    naa = new Date(naa.getTime() + 60_000);
+    expect((await patch(id, { beskrivelse: 'Det drypper fra ventilen' }, token)).status).toBe(200);
+    await ferdig();
+    expect(varsler.send).toHaveBeenCalledTimes(2);
+    expect(String(varsler.send.mock.calls[1][1])).toMatch(/^Ny forespørsel/);
+    expect(String(varsler.send.mock.calls[1][2])).toContain('Det drypper fra ventilen');
+    expect((await hentForesporsel(db, id))!.status).toBe('varslet');
+    expect(tillegg()).toHaveLength(0);
+  });
+
+  it('feilet hovedvarsel sendes på nytt ved en bildeopplasting', async () => {
+    varsler.send.mockImplementationOnce(async () => {
+      throw new Error('e-post nede');
+    });
+    const { id, token } = await opprett();
+    await ferdig();
+    naa = new Date(naa.getTime() + 60_000);
+    expect((await lastOpp(id, token, JPEG)).status).toBe(201);
+    await ferdig();
+    expect(varsler.send).toHaveBeenCalledTimes(2);
+    expect(String(varsler.send.mock.calls[1][1])).toMatch(/^Ny forespørsel/);
+    expect(String(varsler.send.mock.calls[1][2])).toContain('/api/bilde/');
+    expect((await hentForesporsel(db, id))!.status).toBe('varslet');
+  });
+
+  it('WhatsApp-samtykket rett etter steg 1 kommer i hovedvarselet, ikke som eget tillegg', async () => {
+    let slippAi!: () => void;
+    const aiPort = new Promise<void>((r) => (slippAi = r));
+    sorterer = {
+      sorter: async () => {
+        await aiPort;
+        return { sammendrag: 'Bytte tank', hast: 'snart', svarutkast: 'Hei' };
+      },
+    };
+    const { id, token } = await opprett();
+    await new Promise((r) => setTimeout(r, 50));
+    expect((await patch(id, { samtykker: { whatsapp: true } }, token)).status).toBe(200);
+    slippAi();
+    await ferdig();
+    expect(varsler.send).toHaveBeenCalledTimes(1);
+    expect(String(varsler.send.mock.calls[0][2])).toMatch(/SAMTYKKER[\s\S]*whatsapp: ja/);
+    expect(tillegg()).toHaveLength(0);
   });
 
   it('feilet tillegg prøves igjen ved neste endring', async () => {

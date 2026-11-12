@@ -26,6 +26,7 @@ import {
   opprettForesporsel,
   registrerSamtykke,
   sisteSamtykke,
+  type ForesporselStatus,
 } from './db';
 import type { Env, Kontekst } from './env';
 import { verifiserBildeLenke } from './bildelenke';
@@ -230,6 +231,19 @@ export async function haandterSteg1(request: Request, env: Env, ctx: Kontekst, d
   }
 }
 
+/**
+ * Etter en endring (steg 2, bilde eller samtykke). Er hovedvarselet ikke sendt ennå ('ny' eller
+ * 'sortert', f.eks. fordi e-posten feilet), prøves det på nytt her; låsen i sorterOgVarsle gjør det
+ * trygt mens en annen kjøring holder på. Deretter samles tillegg som vanlig (bare når 'varslet').
+ * Kaster aldri.
+ */
+async function etterEndring(env: Env, id: string, status: ForesporselStatus, deps: SkjemaDeps): Promise<void> {
+  if (status === 'ny' || status === 'sortert') {
+    await sorterOgVarsle(env, id, { sorterer: deps.sorterer, varsler: deps.varsler, naa: deps.naa });
+  }
+  await varsleTillegg(env, id, { samle: true }, deps);
+}
+
 /** Sortering og varsel til Eirik, og kvitteringen til kunden. Kaster aldri. */
 async function etterSteg1(env: Env, id: string, telefon: string, lenke: string, deps: SkjemaDeps): Promise<void> {
   const tillegg = { varsler: deps.varsler, naa: deps.naa, vent: deps.vent };
@@ -291,7 +305,7 @@ export async function haandterSteg2(
       await loggTillegg(env.DB, id, { hva: 'samtykke', type, gitt });
       endret = true;
     }
-    if (endret) ctx.waitUntil(varsleTillegg(env, id, { samle: true }, deps));
+    if (endret) ctx.waitUntil(etterEndring(env, id, f.status, deps));
     return json(200, { ok: true });
   } catch (e) {
     console.error(JSON.stringify({ hendelse: 'steg2_feilet', feil: feiltekst(e) }));
@@ -324,9 +338,11 @@ export async function haandterBildeOpplasting(
   if (!(await harTilgang(env, id, token))) return feilSvar(401, 'uautorisert');
 
   const db: D1Database = env.DB;
+  let status: ForesporselStatus;
   try {
     const f = await hentStatus(db, id);
     if (!f) return feilSvar(404, 'ikke_funnet');
+    status = f.status;
     if (f.status === 'lukket') return avvis(409, 'lukket');
     if ((await antallBilder(db, id)) >= MAKS_BILDER) return avvis(409, 'for_mange', 'bilde');
   } catch (e) {
@@ -403,7 +419,7 @@ export async function haandterBildeOpplasting(
     await env.BILDER.delete(nokkel).catch(() => {});
     return feilSvar(500, 'serverfeil');
   }
-  ctx.waitUntil(varsleTillegg(env, id, { samle: true }, deps));
+  ctx.waitUntil(etterEndring(env, id, status, deps));
   return html ? videre(`${tilbake()}&ok=1`) : json(201, { bildeId });
 }
 

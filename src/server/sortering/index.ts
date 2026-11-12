@@ -117,15 +117,18 @@ async function bildelenker(env: Env, f: Foresporsel, naa: Date): Promise<string[
   return Promise.all(f.bilder.map(async (b) => base + (await signerBildeLenke(b.id, env.SKJEMA_HMAC!, utloper))));
 }
 
-function hastFor(f: Foresporsel, ai: Sortering | null): string | null {
-  return ai?.hast ?? f.hast;
+/**
+ * AKUTT når kunden har valgt «Det lekker nå» (`lekker-naa`) eller AI-en mener det er akutt.
+ * AI-en kan bare oppgradere; den kan aldri nedgradere kundens eget valg, og uten AI gjelder kundens.
+ */
+export function erAkutt(f: Pick<Foresporsel, 'hast'>, ai: Sortering | null): boolean {
+  return f.hast === 'lekker-naa' || ai?.hast === 'akutt';
 }
 
 export function lagEmne(f: Foresporsel, ai: Sortering | null): string {
-  const hast = hastFor(f, ai);
   const helt = f.stedTekst?.replace(/\s+/g, ' ').trim() || 'ukjent sted';
   const sted = [...helt].length > EMNE_STED_MAKS ? `${[...helt].slice(0, EMNE_STED_MAKS - 1).join('')}…` : helt;
-  return `${hast === 'akutt' ? 'AKUTT – ' : ''}Ny forespørsel: ${f.tjeneste} – ${sted}`;
+  return `${erAkutt(f, ai) ? 'AKUTT – ' : ''}Ny forespørsel: ${f.tjeneste} – ${sted}`;
 }
 
 const liste = (xs: string[], tom: string) => (xs.length ? xs.join(', ') : tom);

@@ -133,7 +133,7 @@ const nyForesporsel = async (over: Record<string, unknown> = {}) => {
       navn: 'Kari Kunde',
       epost: 'kari@example.no',
       tjeneste: 'varmtvannstank',
-      hast: 'akutt',
+      hast: 'lekker-naa',
       stedTekst: 'Storgata 1, Bjørkelangen',
       lat: 59.885,
       lon: 11.567,
@@ -342,6 +342,39 @@ describe('lagEmne', () => {
     expect(emne).not.toContain('x'.repeat(60));
     expect(emne).toContain('x'.repeat(59) + '…');
     expect(emne.startsWith('AKUTT')).toBe(false);
+  });
+});
+
+describe('AKUTT i emnet', () => {
+  const emne = async (hast: string, ai: Parameters<typeof lagEmne>[1]) => {
+    const id = await nyForesporsel({ hast });
+    return lagEmne((await hentForesporsel(db, id))!, ai);
+  };
+  const ai = (hast: 'akutt' | 'snart' | 'planlegges') => ({ sammendrag: 's', hast, svarutkast: 'u' });
+
+  it('«Det lekker nå» gir AKUTT når AI-en er nede', async () => {
+    expect(await emne('lekker-naa', null)).toMatch(/^AKUTT – /);
+  });
+
+  it('AI-en kan ikke nedgradere kundens «Det lekker nå»', async () => {
+    expect(await emne('lekker-naa', ai('snart'))).toMatch(/^AKUTT – /);
+    expect(await emne('lekker-naa', ai('planlegges'))).toMatch(/^AKUTT – /);
+  });
+
+  it('AI-en kan oppgradere til AKUTT', async () => {
+    expect(await emne('snart', ai('akutt'))).toMatch(/^AKUTT – /);
+  });
+
+  it('snart og kan-planlegges uten AI-akutt gir ikke AKUTT', async () => {
+    expect(await emne('snart', null)).not.toMatch(/AKUTT/);
+    expect(await emne('kan-planlegges', ai('snart'))).not.toMatch(/AKUTT/);
+  });
+
+  it('hele flyten med AI nede gir AKUTT for «Det lekker nå»', async () => {
+    const id = await nyForesporsel({ hast: 'lekker-naa' });
+    const { varsler, send } = falskVarsler();
+    await sorterOgVarsle(env(), id, { sorterer: new FalskSorterer(new Error('AI nede')), varsler, naa });
+    expect(send.mock.calls[0][1]).toMatch(/^AKUTT – /);
   });
 });
 

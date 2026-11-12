@@ -1,0 +1,9 @@
+---
+import TakkSide from '../../components/TakkSide.astro';
+
+export const prerender = false;
+
+Astro.response.headers.set('Cache-Control', 'no-store');
+---
+
+<TakkSide locale="en" />

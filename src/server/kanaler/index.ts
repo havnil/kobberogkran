@@ -114,7 +114,7 @@ const MALFELT: Record<MalId, 'kvittering' | 'taptAnrop'> = { kvittering: 'kvitte
  * Variabler som alltid skal med i meldingen. Står ikke plassholderen i teksten fra CMS-et, legges
  * verdien (en lenke) til på egen linje, så meldingen ved tapt anrop alltid har begge lenkene.
  */
-const PAAKREVDE: Record<MalId, string[]> = { kvittering: [], tapt_anrop: ['skjemaLenke', 'whatsappLenke'] };
+const PAAKREVDE: Record<MalId, string[]> = { kvittering: ['sendBilderLenke'], tapt_anrop: ['skjemaLenke', 'whatsappLenke'] };
 
 /** Erstatter `{navn}` med verdien. Ukjente plassholdere står urørt. */
 export function fyllMal(mal: string, variabler: Record<string, string>): string {

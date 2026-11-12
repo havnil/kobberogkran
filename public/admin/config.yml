@@ -266,6 +266,20 @@ collections:
               - { name: beskrivelse, label: Beskrivelse, widget: string }
               - { name: samtykkePaminnelser, label: Samtykke til servicepåminnelser, widget: string }
               - { name: send, label: Send-knapp, widget: string }
+          - name: skjemaSvar
+            label: Takk og send bilder
+            widget: object
+            fields:
+              - { name: takkTittel, label: Takk – tittel, widget: string }
+              - { name: feilTittel, label: Feil i skjema – tittel, widget: string }
+              - { name: feilTekst, label: Feil i skjema – tekst, widget: text }
+              - { name: sendBilderTittel, label: Send bilder – tittel, widget: string }
+              - { name: sendBilderTekst, label: Send bilder – tekst, widget: text }
+              - { name: sendBilderSend, label: Send bilder – knapp, widget: string }
+              - { name: sendBilderOk, label: Send bilder – mottatt, widget: string }
+              - { name: sendBilderFeil, label: Send bilder – feil, widget: string }
+              - { name: ugyldigLenkeTittel, label: Ugyldig lenke – tittel, widget: string }
+              - { name: ugyldigLenkeTekst, label: Ugyldig lenke – tekst, widget: text }
       - name: tekster_en
         label: Tekster (English)
         file: src/content/tekster/en.json

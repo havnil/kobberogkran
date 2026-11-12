@@ -296,3 +296,126 @@ export async function frigiVarselLaas(db: D1Database, id: string, token: string)
     .bind(id, token)
     .run();
 }
+
+// --- Skjemaets API (oppgave 7) ---
+
+/** Forespørselen med denne idempotensnøkkelen og kundens telefon, eller null. */
+export async function finnForesporselForIdem(
+  db: D1Database,
+  idemNokkel: string,
+): Promise<{ id: string; telefon: string } | null> {
+  return db
+    .prepare(
+      `SELECT f.id, k.telefon FROM foresporsler f JOIN kunder k ON k.id = f.kunde_id WHERE f.idem_nokkel = ?`,
+    )
+    .bind(idemNokkel)
+    .first<{ id: string; telefon: string }>();
+}
+
+/** Status og kunde for en forespørsel, eller null hvis den ikke finnes. */
+export async function hentStatus(
+  db: D1Database,
+  id: string,
+): Promise<{ status: ForesporselStatus; kundeId: string } | null> {
+  const rad = await db
+    .prepare('SELECT status, kunde_id FROM foresporsler WHERE id = ?')
+    .bind(id)
+    .first<{ status: ForesporselStatus; kunde_id: string }>();
+  return rad ? { status: rad.status, kundeId: rad.kunde_id } : null;
+}
+
+/** Svarene fra steg 2 som kan settes. Bare nøklene som er med, erstattes; `bildeMerker` røres aldri. */
+export interface Steg2Svar {
+  felles?: Record<string, unknown>;
+  tjenesteSvar?: Record<string, unknown>;
+  hvorHorte?: string;
+}
+
+/**
+ * Lagrer steg 2. `beskrivelse` erstattes bare når den er med. Hver nøkkel i `svar` erstatter samme
+ * nøkkel i `svar_json`; andre nøkler (særlig `bildeMerker` fra bildeopplastingen) blir stående.
+ * Én UPDATE, så samtidige bildeopplastinger ikke mister merkene sine. Returnerer false for ukjent id.
+ */
+export async function lagreSteg2(
+  db: D1Database,
+  id: string,
+  beskrivelse: string | undefined,
+  svar: Steg2Svar,
+): Promise<boolean> {
+  const stier: string[] = [];
+  const verdier: unknown[] = [];
+  for (const nokkel of ['felles', 'tjenesteSvar'] as const) {
+    if (svar[nokkel] === undefined) continue;
+    stier.push(`'$.${nokkel}', json(?)`);
+    verdier.push(JSON.stringify(svar[nokkel]));
+  }
+  if (svar.hvorHorte !== undefined) {
+    stier.push(`'$.hvorHorte', ?`);
+    verdier.push(svar.hvorHorte);
+  }
+  const svarSql = stier.length ? `json_set(COALESCE(svar_json, '{}'), ${stier.join(', ')})` : 'svar_json';
+  const r = await db
+    .prepare(
+      `UPDATE foresporsler SET svar_json = ${svarSql}, beskrivelse = COALESCE(?, beskrivelse), oppdatert = ? WHERE id = ?`,
+    )
+    .bind(...verdier, beskrivelse ?? null, na(), id)
+    .run();
+  return (r.meta.changes ?? 0) > 0;
+}
+
+/**
+ * Legger til et bilde bare hvis forespørselen har færre enn `maks`. Én INSERT ... SELECT, så to
+ * samtidige opplastinger ikke kan passere grensen. Returnerer false når grensen er nådd.
+ */
+export async function leggTilBildeMaks(
+  db: D1Database,
+  foresporselId: string,
+  bildeId: string,
+  r2Nokkel: string,
+  maks: number,
+): Promise<boolean> {
+  const r = await db
+    .prepare(
+      `INSERT INTO bilder (id, foresporsel_id, r2_nokkel, opprettet)
+       SELECT ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM bilder WHERE foresporsel_id = ?) < ?`,
+    )
+    .bind(bildeId, foresporselId, r2Nokkel, na(), foresporselId, maks)
+    .run();
+  return r.meta.changes === 1;
+}
+
+export async function antallBilder(db: D1Database, foresporselId: string): Promise<number> {
+  const r = await db
+    .prepare('SELECT COUNT(*) AS n FROM bilder WHERE foresporsel_id = ?')
+    .bind(foresporselId)
+    .first<{ n: number }>();
+  return r?.n ?? 0;
+}
+
+/** Legger merket til `svar_json.bildeMerker` atomisk (én UPDATE). */
+export async function leggTilBildeMerke(db: D1Database, foresporselId: string, merke: string): Promise<void> {
+  await db
+    .prepare(
+      `UPDATE foresporsler SET svar_json = json_set(COALESCE(svar_json, '{}'), '$.bildeMerker',
+         json_insert(COALESCE(json_extract(svar_json, '$.bildeMerker'), '[]'), '$[#]', ?)), oppdatert = ?
+       WHERE id = ?`,
+    )
+    .bind(merke, na(), foresporselId)
+    .run();
+}
+
+/** R2-nøkkelen til et bilde, eller null. */
+export async function hentBildeNokkel(db: D1Database, bildeId: string): Promise<string | null> {
+  const r = await db.prepare('SELECT r2_nokkel FROM bilder WHERE id = ?').bind(bildeId).first<{ r2_nokkel: string }>();
+  return r?.r2_nokkel ?? null;
+}
+
+/**
+ * Høyeste rowid i `hendelser` (0 når tabellen er tom). Rowid øker for hver ny hendelse, så verdien
+ * markerer «alt logget til nå». Varselet til Eirik lagrer den som `dekket`, og tillegget sender bare
+ * det som er logget etterpå.
+ */
+export async function sisteHendelseRad(db: D1Database): Promise<number> {
+  const r = await db.prepare('SELECT COALESCE(MAX(rowid), 0) AS m FROM hendelser').first<{ m: number }>();
+  return r?.m ?? 0;
+}

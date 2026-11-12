@@ -1,0 +1,57 @@
+---
+// «Send flere bilder senere»: lenken i kvitteringen (`?id=…&token=…`). Tokenet sjekkes på serveren.
+// Gyldig lenke gir et enkelt skjema uten JavaScript som poster ett bilde til /api/bilde (svaret er
+// 303 tilbake hit med `ok=1` eller `feil=…`). Oppgave 8 bygger det ekte grensesnittet med steg 2.
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTekster } from '../lib/tekster';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+import type { Env } from '../server/env';
+import { verifiserSkjemaToken } from '../server/token';
+import { BILDETYPER } from '../server/validering';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const tekster = await getTekster(locale);
+const t = tekster.skjemaSvar;
+const id = Astro.url.searchParams.get('id') ?? '';
+const token = Astro.url.searchParams.get('token') ?? '';
+const hemmelighet = (env as Env | undefined)?.SKJEMA_HMAC;
+const gyldig = !!hemmelighet && (await verifiserSkjemaToken(id, token, hemmelighet));
+const ok = Astro.url.searchParams.get('ok') === '1';
+const feil = Astro.url.searchParams.has('feil');
+const tittel = gyldig ? t.sendBilderTittel : t.ugyldigLenkeTittel;
+const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`;
+---
+
+<BaseLayout locale={locale} title={`${tittel} – Kobber og Kran AS`} description={tittel} alternates={[]} noindex>
+  <section class="seksjon" data-send-bilder={gyldig ? 'gyldig' : 'ugyldig'}>
+    <h1>{tittel}</h1>
+    {
+      gyldig ? (
+        <>
+          <p>{t.sendBilderTekst}</p>
+          {ok && <p role="status">{t.sendBilderOk}</p>}
+          {feil && <p role="alert">{t.sendBilderFeil}</p>}
+          <form method="post" action={action} enctype="multipart/form-data">
+            <input type="hidden" name="locale" value={locale} />
+            <p>
+              <label for="bilde">{tekster.skjema.bilder}</label>
+              <input id="bilde" type="file" name="bilde" accept={[...BILDETYPER, '.heic'].join(',')} required />
+            </p>
+            <button type="submit">{t.sendBilderSend}</button>
+          </form>
+        </>
+      ) : (
+        <>
+          <p>{t.ugyldigLenkeTekst}</p>
+          <p><a href={locale === 'en' ? '/en/' : '/'}>{ui[locale].notFoundHomeLink}</a></p>
+        </>
+      )
+    }
+  </section>
+</BaseLayout>

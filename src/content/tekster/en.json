@@ -141,5 +141,17 @@
     "beskrivelse": "[EN] Description",
     "samtykkePaminnelser": "[EN] I want service reminders",
     "send": "[EN] Send request"
+  },
+  "skjemaSvar": {
+    "takkTittel": "[EN] Thank you!",
+    "feilTittel": "[EN] Something is missing in the form",
+    "feilTekst": "[EN] Go back and check the fields, or call us.",
+    "sendBilderTittel": "[EN] Send more photos",
+    "sendBilderTekst": "[EN] Here you can send more photos for your request.",
+    "sendBilderSend": "[EN] Send photo",
+    "sendBilderOk": "[EN] The photo was received. You can send another.",
+    "sendBilderFeil": "[EN] The photo did not arrive. Try again, or send it on WhatsApp.",
+    "ugyldigLenkeTittel": "[EN] The link does not work",
+    "ugyldigLenkeTekst": "[EN] The link is incomplete. Use the link in the message you received, or call us."
   }
 }

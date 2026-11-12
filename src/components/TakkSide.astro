@@ -1,0 +1,40 @@
+---
+// Takkesiden etter skjemaet uten JavaScript (POST /api/foresporsel svarer 303 hit).
+// Med `?feil=<kode>` vises en feilmelding i stedet. Teksten kommer fra `tekster`.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTekster } from '../lib/tekster';
+import { navPath } from '../i18n/nav';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const tekster = await getTekster(locale);
+const t = tekster.skjemaSvar;
+const feil = Astro.url.searchParams.has('feil');
+// Kvitteringen er en mal for meldingen; variabler som {sendBilderLenke} vises ikke her.
+const kvittering = tekster.kvittering.replace(/\{[A-Za-z][A-Za-z0-9]*\}/g, '').trim();
+const tittel = feil ? t.feilTittel : t.takkTittel;
+---
+
+<BaseLayout locale={locale} title={`${tittel} – Kobber og Kran AS`} description={tittel} alternates={[]} noindex>
+  <section class="seksjon" data-skjema-svar={feil ? 'feil' : 'takk'}>
+    <h1>{tittel}</h1>
+    {
+      feil ? (
+        <>
+          <p role="alert">{t.feilTekst}</p>
+          <p><a href={`${navPath(locale, 'kontakt')}#skjema`}>{tekster.forside.skjema.tittel}</a></p>
+        </>
+      ) : (
+        <>
+          <p role="status">{kvittering}</p>
+          <p><a href={locale === 'en' ? '/en/' : '/'}>{ui[locale].notFoundHomeLink}</a></p>
+        </>
+      )
+    }
+  </section>
+</BaseLayout>

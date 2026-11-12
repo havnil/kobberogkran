@@ -122,6 +122,19 @@ export const tekstSchema = z.object({
     samtykkePaminnelser: z.string(),
     send: z.string(),
   }),
+  /** Takkesiden etter skjemaet uten JavaScript, og siden for å sende flere bilder senere. */
+  skjemaSvar: z.object({
+    takkTittel: z.string(),
+    feilTittel: z.string(),
+    feilTekst: z.string(),
+    sendBilderTittel: z.string(),
+    sendBilderTekst: z.string(),
+    sendBilderSend: z.string(),
+    sendBilderOk: z.string(),
+    sendBilderFeil: z.string(),
+    ugyldigLenkeTittel: z.string(),
+    ugyldigLenkeTekst: z.string(),
+  }),
 });
 
 export const omtaleSchema = z.object({

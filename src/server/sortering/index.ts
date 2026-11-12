@@ -9,7 +9,7 @@
 //   Et nytt kall sender da på nytt, uten å kalle AI-en igjen (forrige sortering gjenbrukes).
 // - En forespørsel som allerede er 'varslet' eller 'lukket', varsles aldri igjen.
 import type { D1Database } from '@cloudflare/workers-types';
-import { frigiVarselLaas, hentForesporsel, laasForVarsel, loggHendelse, settStatus, type Foresporsel } from '../db';
+import { frigiVarselLaas, hentForesporsel, laasForVarsel, loggHendelse, settStatus, sisteHendelseRad, type Foresporsel } from '../db';
 import type { Env } from '../env';
 import { signerBildeLenke } from '../bildelenke';
 import { EpostVarsler, type Varsler } from '../varsling';
@@ -24,7 +24,7 @@ export interface SorterOgVarsleDeps {
 }
 
 const STANDARD_NETTSTED = 'https://kobberogkran.no';
-const BILDELENKE_GYLDIG_SEK = 14 * 24 * 60 * 60;
+export const BILDELENKE_GYLDIG_SEK = 14 * 24 * 60 * 60;
 const EMNE_STED_MAKS = 60;
 export const UTKAST_MERKE = 'Utkast – sendes ikke automatisk';
 
@@ -54,6 +54,10 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
   try {
     laas = await laasForVarsel(env.DB, id, naa());
     if (!laas) return; // varslet, lukket, ukjent id, eller en annen kjøring holder låsen
+    // Alt som er logget før lesingen, er med i varselet. Tillegg (bilder og steg 2) som logges
+    // etterpå, sendes som eget tillegg (se ../tillegg.ts). Leses før forespørselen, så et tillegg
+    // heller kommer med to ganger enn ingen.
+    const dekket = await sisteHendelseRad(env.DB);
     // Les etter at låsen er tatt, så status er den gjeldende.
     const f = await hentForesporsel(env.DB, id);
     if (!f || f.status === 'varslet' || f.status === 'lukket') return;
@@ -88,7 +92,7 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
     }
     // Sendt: sett status først, så en feil i loggingen ikke fører til ny sending.
     await settStatus(env.DB, id, 'varslet');
-    await loggTrygt(env.DB, id, 'varsel_ok', { kanal: 'epost' });
+    await loggTrygt(env.DB, id, 'varsel_ok', { kanal: 'epost', dekket });
   } catch (e) {
     // Aldri kast ut av waitUntil. Forespørselen er lagret; status 'ny'/'sortert' viser at varselet mangler.
     console.error('sorterOgVarsle feilet', id, feiltekst(e));

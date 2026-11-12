@@ -141,5 +141,17 @@
     "beskrivelse": "PLASSHOLDER: Beskrivelse",
     "samtykkePaminnelser": "PLASSHOLDER: Jeg vil ha servicepåminnelser",
     "send": "PLASSHOLDER: Send forespørsel"
+  },
+  "skjemaSvar": {
+    "takkTittel": "PLASSHOLDER: Takk!",
+    "feilTittel": "PLASSHOLDER: Noe mangler i skjemaet",
+    "feilTekst": "PLASSHOLDER: Gå tilbake og sjekk feltene, eller ring oss.",
+    "sendBilderTittel": "PLASSHOLDER: Send flere bilder",
+    "sendBilderTekst": "PLASSHOLDER: Her kan du sende flere bilder til forespørselen din.",
+    "sendBilderSend": "PLASSHOLDER: Send bildet",
+    "sendBilderOk": "PLASSHOLDER: Bildet er mottatt. Du kan sende ett til.",
+    "sendBilderFeil": "PLASSHOLDER: Bildet kom ikke fram. Prøv igjen, eller send det på WhatsApp.",
+    "ugyldigLenkeTittel": "PLASSHOLDER: Lenken virker ikke",
+    "ugyldigLenkeTekst": "PLASSHOLDER: Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring oss."
   }
 }

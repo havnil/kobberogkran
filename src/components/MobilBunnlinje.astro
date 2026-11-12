@@ -2,7 +2,8 @@
 import type { Locale } from '../i18n/locales';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
-import { telHref, waDigits } from '../lib/telefon';
+import WhatsAppKnapp from './WhatsAppKnapp.astro';
+import { telHref } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
@@ -16,7 +17,7 @@ const firma = await getFirma();
 
 <nav class="mobil-bunnlinje" aria-label={t.bunnlinje}>
   <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
-  <a class="knapp knapp-omriss knapp-wa" href={`https://wa.me/${waDigits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+  <WhatsAppKnapp class="knapp knapp-omriss knapp-wa" locale={locale}>{t.whatsapp}</WhatsAppKnapp>
   <a class="knapp knapp-brun" href={skjemaHref}>{t.skjemaKnapp}</a>
 </nav>
 

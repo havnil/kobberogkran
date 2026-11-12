@@ -1,0 +1,27 @@
+---
+// A WhatsApp link with the greeting from `tekster.whatsappHilsen`. `{tjeneste}` is the page's service (if any);
+// `{kilde}` is empty at build time and filled in by the script in BaseLayout from `?kilde=` in the URL.
+import type { Locale } from '../i18n/locales';
+import { getFirma } from '../lib/firma';
+import { getTekster } from '../lib/tekster';
+import { fyllHilsen, waLenke } from '../lib/whatsapp';
+
+interface Props extends astroHTML.JSX.AnchorHTMLAttributes {
+  locale: Locale;
+  /** Service name for `{tjeneste}`; leave out on pages that are not about one service. */
+  tjeneste?: string;
+}
+
+const { locale, tjeneste = '', ...attrs } = Astro.props;
+const [firma, tekster] = await Promise.all([getFirma(), getTekster(locale)]);
+const mal = tekster.whatsappHilsen;
+const href = waLenke(firma.whatsapp.verdi, fyllHilsen(mal, { tjeneste }));
+---
+
+<a
+  {...attrs}
+  href={href}
+  data-wa
+  data-wa-nummer={firma.whatsapp.verdi}
+  data-wa-mal={mal}
+  data-wa-tjeneste={tjeneste}><slot /></a>

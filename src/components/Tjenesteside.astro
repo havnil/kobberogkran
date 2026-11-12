@@ -103,7 +103,7 @@ const erTank = tj.translationKey === 'varmtvannstank';
         )
       }
     </article>
-    <Sideboks locale={locale} firma={firma} tittel={s.tjeneste.sideboksTittel} tekst={s.tjeneste.sideboksTekst} />
+    <Sideboks locale={locale} firma={firma} tittel={s.tjeneste.sideboksTittel} tekst={s.tjeneste.sideboksTekst} tjeneste={tj.kundeTittel} />
   </div>
 
   {erTank && <VarmtvannstankBlokk locale={locale} tekst={tekster.forside.varmtvann} priser={firma.priser} />}

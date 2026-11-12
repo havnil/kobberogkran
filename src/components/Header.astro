@@ -1,12 +1,13 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import WhatsAppKnapp from './WhatsAppKnapp.astro';
 import type { Alternate } from '../i18n/alternates';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
 import { navPath } from '../i18n/nav';
 import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
-import { telHref, waDigits } from '../lib/telefon';
+import { telHref } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
@@ -90,7 +91,7 @@ const current = Astro.url.pathname;
 
     <div class="header-knapper">
       <a class="knapp" href={telHref(firma.telefon.verdi)}><svg class="ikon" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.5.55 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.55 3.5a1 1 0 0 1-.25 1z"/></svg><span class="etikett">{t.ring}</span></a>
-      <a class="knapp knapp-omriss" href={`https://wa.me/${waDigits(firma.whatsapp.verdi)}`}><svg class="ikon" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M4 3h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H8l-4 4V4a1 1 0 0 1 1-1z"/></svg><span class="etikett">{t.whatsapp}</span></a>
+      <WhatsAppKnapp class="knapp knapp-omriss" locale={locale}><svg class="ikon" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M4 3h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H8l-4 4V4a1 1 0 0 1 1-1z"/></svg><span class="etikett">{t.whatsapp}</span></WhatsAppKnapp>
       <a class="knapp knapp-brun header-skjema" href={skjemaHref}>{t.skjemaKnapp}</a>
     </div>
 

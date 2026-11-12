@@ -1,20 +1,21 @@
 ---
 // The sticky side box: call, WhatsApp and a link to the request form (`#skjema`) on the same page.
-// The WhatsApp link is built here from the company data; a shared helper may replace it later.
 import Plassholder from './Plassholder.astro';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
 import { ui } from '../i18n/ui';
-import { telHref, waDigits } from '../lib/telefon';
+import WhatsAppKnapp from './WhatsAppKnapp.astro';
+import { telHref } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
   firma: Firma;
   tittel: string;
   tekst: string;
+  tjeneste?: string;
 }
 
-const { locale, firma, tittel, tekst } = Astro.props;
+const { locale, firma, tittel, tekst, tjeneste } = Astro.props;
 const t = ui[locale];
 ---
 
@@ -24,7 +25,7 @@ const t = ui[locale];
   <p>{tekst}</p>
   <div class="knapper">
     <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
-    <a class="knapp knapp-omriss" href={`https://wa.me/${waDigits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+    <WhatsAppKnapp class="knapp knapp-omriss" locale={locale} tjeneste={tjeneste}>{t.whatsapp}</WhatsAppKnapp>
     <a class="knapp knapp-brun" href="#skjema">{t.skjemaKnapp}</a>
   </div>
 </aside>

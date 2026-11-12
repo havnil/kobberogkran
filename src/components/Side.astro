@@ -8,6 +8,7 @@ import Omrader from './Omrader.astro';
 import Plassholder from './Plassholder.astro';
 import PrisBlokk from './PrisBlokk.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
+import WhatsAppKnapp from './WhatsAppKnapp.astro';
 import TjenesteKort from './TjenesteKort.astro';
 import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
 import type { Locale } from '../i18n/locales';
@@ -92,6 +93,7 @@ const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: en
           <dd><Plassholder verdi={firma.adresse} locale={locale} /></dd>
         </div>
       </dl>
+      <p><WhatsAppKnapp class="knapp knapp-omriss" locale={locale}>{t.whatsapp}</WhatsAppKnapp></p>
       <Skjemaseksjon tekst={f.skjema} />
     </>
   )

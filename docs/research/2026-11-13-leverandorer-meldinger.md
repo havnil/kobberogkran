@@ -2,9 +2,14 @@
 
 Dato: 2026-11-13. Gjelder oppgave 10. **Eieren velger.** Ingen ekte integrasjon i oppgave 11 og 12 før valget er tatt.
 Alt her er hentet fra leverandørenes egne sider der det var mulig. Det som ikke er bekreftet, er merket **(ubekreftet)**.
-Priser er eks. mva. i USD/EUR slik leverandøren oppgir dem. Regn grovt 10–11 kr per USD/EUR (antakelse). Prisene endres, så sjekk dem på kjøpsdagen.
+Priser er eks. mva. i USD/EUR slik leverandøren oppgir dem. Antakelse for omregning: 1 USD = 1 EUR = 11 kr (grovt). Summer i tabell 1 er vist i USD/EUR og i kr. Prisene endres, så sjekk dem på kjøpsdagen.
 
 ## 1. Kort anbefaling
+
+> **Risiko – test før kjøp.** Tre punkter er ubekreftet, og de kan endre valget:
+> 1. **Virtuelt nummer i WhatsApp Business-appen.** Det er ikke bekreftet at et virtuelt nummer fra Telnyx eller 46elks kan registreres i WhatsApp Business-appen (kravet for coexistence). Gjelder både anbefalingen og alternativet. **Billig test:** kjøp ett nummer (ca. 1 USD/mnd hos Telnyx), prøv å registrere det i Business-appen på Eiriks telefon (verifisering med SMS eller samtalekode, som kan videresendes), og vent med å trykke eller publisere nummeret til det er bekreftet. Feiler det, trengs et mobilabonnement til WhatsApp, eller to numre.
+> 2. **Coexistence uten partner.** Det er ubekreftet at en bedrift kan koble eget nummer til Cloud API med coexistence uten en leverandør (BSP/Tech Provider). Sannsynligvis trengs en partner (Telnyx eller 360dialog). Da faller "direkte Meta uten plattformavgift" bort.
+> 3. **Telnyx' pris for videresending til norsk mobil er ukjent.** Den står ikke på åpne sider, og den dominerer månedskostnaden.
 
 **Anbefalt: Telnyx for nummer, telefon og SMS. WhatsApp direkte på Meta Cloud API hvis eieren får til coexistence på eget oppsett, ellers via Telnyx. Claude Haiku 5.5 til sortering. Cloudflare e-post til Eirik.**
 
@@ -15,21 +20,21 @@ Priser er eks. mva. i USD/EUR slik leverandøren oppgir dem. Regn grovt 10–11 
 - Dyrere fast: nummer 11 EUR/mnd og WhatsApp fra 49 EUR/mnd.
 - Til gjengjeld enklere "alt i EU" og en WhatsApp-partner som er laget for coexistence.
 
-### Anslått månedskostnad ved lav bruk
+### Anslått månedskostnad ved lav bruk (Telnyx trolig billigst, videresendingspris ukjent)
 Forutsetning: 50 forespørsler, 40 tapte anrop, 100 utgående meldinger (de fleste WhatsApp, noen få SMS), ca. 150 min videresendt samtaletid.
 
 | Post | Anbefalt (Telnyx) | Alternativ (46elks + 360dialog) |
 | --- | --- | --- |
-| Nummer | ca. 1 USD | 11 EUR |
+| Nummer (Telnyx inkl. SMS-tillegg 0,10 USD) | ca. 1,1 USD | 11 EUR |
 | Videresending til norsk mobil (150 min) | **ukjent**: Norge-prisen står ikke på åpne sider. Gjetning 0,05–0,15 USD/min = 8–23 USD **(ubekreftet)** | 0,236 EUR/min = ca. 35 EUR (oppgitt for "calls to Norway mobile") |
 | WhatsApp-plattform | 0 (direkte Meta) eller 0,004 USD/melding via Telnyx = 0,4 USD | 49 EUR/mnd |
 | WhatsApp-maler (Metas pris, ca. 90 stk) | ca. 0,017 USD hver = ca. 1,5 USD (se 3.2) | samme |
-| SMS (ca. 10 stk) | ca. 0,07 USD hver = ca. 0,7 USD | 0,064 EUR hver = 0,64 EUR |
+| SMS (ca. 10 stk) | antatt ca. 0,07 USD hver (Telnyx' Norge-pris ikke funnet, hentet fra Twilio/marked) = ca. 0,7 USD **(antakelse)** | 0,064 EUR hver = 0,64 EUR |
 | AI (Haiku 5.5, 30–60 forespørsler) | under 0,05 USD | samme |
 | E-post til Eirik | 0 | 0 |
-| **Sum** | **ca. 12–27 USD (hovedsakelig videresending)** | **ca. 95–100 EUR** |
+| **Sum** | **ca. 12–27 USD = ca. 130–300 kr (videresendingsprisen er ukjent og dominerer)** | **ca. 97 EUR = ca. 1070 kr** |
 
-Videresendingen dominerer. Hvis Eirik får få samtaler gjennom nummeret, er Telnyx klart billigst. Be om Telnyx' prisliste for Norge før valget (se 4).
+Videresendingen dominerer. Telnyx er **trolig billigst**, men bare hvis videresendingsprisen til norsk mobil ligger nær gjetningen. Er den like høy som hos 46elks (ca. 0,24 EUR/min), er forskjellen i videresending liten, og forskjellen ligger i WhatsApp-avgiften på 49 EUR. Be om Telnyx' prisliste for Norge før valget (se 4).
 
 ## 2. Hva koden krever
 
@@ -46,7 +51,7 @@ Videresendingen dominerer. Hvis Eirik får få samtaler gjennom nummeret, er Tel
 | --- | --- | --- | --- | --- | --- |
 | **Telnyx** | Norske lokalnummer (områdekoder 23, 32, 38, 56, 75) fra 1 USD/mnd. Voice API 0,002 USD/min pluss SIP-trunk-avgift (ikke oppgitt for Norge). SMS på nummer: 0,10 USD/mnd ekstra. Porting støttes (FastPort). | Ikke bekreftet **(ubekreftet)**. Telnyx har EU-regioner, men jeg fant ingen side som lover EU-lagring av anropsdata. | Ja, REST + webhooks | TeXML `<Dial>` har `action`-callback med `DialCallStatus` = `completed`/`busy`/`no-answer`/`canceled`/`failed`. Oppringers nummer kommer med som vanlig. Webhooks signeres av Telnyx (ikke samme HMAC som koden forventer, så en liten adapter trengs) **(ubekreftet om TeXML-action er signert)**. Norske nummer krever sannsynligvis identitets-/firmadokumentasjon **(ubekreftet)**. | [Norge](https://telnyx.com/phone-numbers/norway.md), [nummerpriser](https://telnyx.com/pricing/numbers), [Voice API-pris](https://telnyx.com/pricing/voice-api), [TeXML Dial](https://developers.telnyx.com/docs/voice/programmable-voice/texml-verbs/dial), [call completed](https://developers.telnyx.com/api-reference/callbacks/texml-call-completed) |
 | **46elks** | Nummer 11 EUR/mnd (virtuelt, hvilke typer er uklart). Samtale til norsk mobil 0,236 EUR/startet min. Videresending til SIP 0,01 EUR/min. | Ikke oppgitt på prissiden **(ubekreftet)**. Selskapet er svensk (EU/EØS). | Ja, enkel HTTP-API, webhooks per anrop | Anropsflyt styres av JSON fra egen webhook. Eget "ikke besvart"-hendelse **ikke verifisert** i denne runden **(ubekreftet)**. | [Priser](https://46elks.com/pricing) |
-| **Twilio** | Internasjonale nummer fra 1,15 USD/mnd. Norge lokal/mobil må bestilles og krever identitetsdokumentasjon. Norge-prisen for lokalnummer og voice er ikke oppgitt på åpne sider. | Valg av region finnes, men ikke bekreftet for Norge-nummer **(ubekreftet)** | Ja | Ja, `<Dial>` action med `DialCallStatus`, samme modell som Telnyx (kjent fra Twilio, ikke åpnet i denne runden) **(ubekreftet)** | [SMS/priser Norge](https://twilio.com/sms/pricing/no), [regulatorisk](https://www.twilio.com/en-us/guidelines/no/regulatory), [porting](https://www.twilio.com/en-us/guidelines/no/porting) |
+| **Twilio** | Internasjonale nummer fra 1,15 USD/mnd. Norge lokal/mobil må bestilles og krever identitetsdokumentasjon. Norge-prisen for lokalnummer og voice er ikke oppgitt på åpne sider. | Valg av region finnes, men ikke bekreftet for Norge-nummer **(ubekreftet)** | Ja | **Ubekreftet:** antatt `<Dial>` action med `DialCallStatus` som hos Telnyx, men Twilios dokumentasjon er ikke åpnet i denne runden | [SMS/priser Norge](https://twilio.com/sms/pricing/no), [regulatorisk](https://www.twilio.com/en-us/guidelines/no/regulatory), [porting](https://www.twilio.com/en-us/guidelines/no/porting) |
 | **Telavox** (norsk/nordisk) | Kun tilbud, ingen åpen pris | EU (svensk) **(ubekreftet)** | Webhook finnes ("Personal webhooks") | Tapt anrop er en støttet trigger. Rettet mot bedriftsvekselen, ikke et API for ett lite nummer. | [Telavox webhooks](https://www.telavox.com/?p=25852) |
 | Phonero, Telenor, Telia | Ikke undersøkt i dybden. Bedriftsabonnement med eget API for tapte anrop er ikke funnet. | Norge | Uklart | Ikke funnet **(ubekreftet)** | Telia har kun SMS-bulk/RBM-sider, se 3.3 |
 
@@ -72,7 +77,7 @@ Vurdering: direkte Meta er billigst og passer koden, men onboarding er den ukjen
 
 | Kandidat | SMS Norge | RCS Norge | Avsender-ID | Kilder |
 | --- | --- | --- | --- | --- |
-| **Telnyx** | Norge-pris ikke funnet. Generell alfanumerisk avsender fra 0,033 USD/melding. | Ikke bekreftet | Norge krever **registrering** av alfanumerisk avsender (nivå 2-verifisering). En tredjepart sier ingen registrering. Telnyx' egen side gjelder. | [Telnyx Norge-regler](https://support.telnyx.com/en/articles/6560704-norway-sms-guidelines), [alfanumerisk](https://telnyx.com/products/alphanumeric-sender-id) |
+| **Telnyx** | Norge-pris ikke funnet (tabell 1 bruker 0,07 USD som **antakelse**). Generell alfanumerisk avsender fra 0,033 USD/melding. | Ikke bekreftet | Norge krever **registrering** av alfanumerisk avsender (nivå 2-verifisering). En tredjepart sier ingen registrering. Telnyx' egen side gjelder. | [Telnyx Norge-regler](https://support.telnyx.com/en/articles/6560704-norway-sms-guidelines), [alfanumerisk](https://telnyx.com/products/alphanumeric-sender-id) |
 | **46elks** | 0,064 EUR/del, API gratis | Ikke funnet | Ikke oppgitt på prissiden | [Priser](https://46elks.com/pricing) |
 | **Twilio** | 0,0697 USD/segment, alfanumerisk avsender gratis. Innkommende 0,0075 USD. | RCS Basic 0,0697 USD, RCS Single 0,1603 USD (oppgitt på prissiden) | Alfanumerisk gratis. Telenor blokkerer SMS med lenker uten godkjenning (allow-list) hos Twilio. | [Twilio Norge](https://twilio.com/sms/pricing/no), [Twilio SMS-regler](https://www.twilio.com/en-us/guidelines/no/sms) |
 | **LINK Mobility** | Ikke åpen pris. Anbefaler alfanumerisk avsender fordi Telenor tar ekstra for numerisk (0,34 NOK internasjonal, 0,04 NOK nasjonal). | RBM via Telia/Telenor, ikke undersøkt | [LINK sender-ID Norge](https://docs.linkmobility.com/regulatory-guidelines/sender-id/norway) | |

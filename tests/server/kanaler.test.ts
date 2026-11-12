@@ -14,6 +14,12 @@ import { FalskKanal } from '../../src/server/kanaler/falsk';
 import { opprettForesporsel } from '../../src/server/db';
 import type { Env } from '../../src/server/env';
 import { nullstill, startD1 } from './d1';
+import nbTekster from '../../src/content/tekster/nb.json';
+import enTekster from '../../src/content/tekster/en.json';
+
+/** Start of the receipt text in each language (before the first {variable}), independent of the wording. */
+const NB_KVITTERING = nbTekster.kvittering.split('{')[0];
+const EN_KVITTERING = enTekster.kvittering.split('{')[0];
 
 const mal: Mal = { id: 'tapt_anrop', variabler: { skjemaLenke: 'https://a', whatsappLenke: 'https://b' } };
 const TIL = '+4791234567';
@@ -115,16 +121,16 @@ describe('maltekst', () => {
 
   it('tekstForMal henter teksten fra tekster (nb som standard)', () => {
     const t = tekstForMal({ id: 'kvittering', variabler: {} });
-    expect(t).toContain('PLASSHOLDER');
+    expect(t).toContain(NB_KVITTERING);
   });
 
   it('tekstForMal på engelsk bruker en.json', () => {
-    expect(tekstForMal({ id: 'kvittering', variabler: {} }, 'en')).toContain('[EN]');
+    expect(tekstForMal({ id: 'kvittering', variabler: {} }, 'en')).toContain(EN_KVITTERING);
   });
 
   it('tekstForMal bruker malens locale (kundens språk) når det er satt', () => {
-    expect(tekstForMal({ id: 'kvittering', locale: 'en', variabler: {} })).toContain('[EN]');
-    expect(tekstForMal({ id: 'kvittering', locale: 'nb', variabler: {} })).toContain('PLASSHOLDER');
+    expect(tekstForMal({ id: 'kvittering', locale: 'en', variabler: {} })).toContain(EN_KVITTERING);
+    expect(tekstForMal({ id: 'kvittering', locale: 'nb', variabler: {} })).toContain(NB_KVITTERING);
   });
 
   it('tapt_anrop har alltid begge lenkene, også når malen mangler plassholderne', () => {

@@ -8,9 +8,12 @@
 // - PATCH /api/foresporsel/:id (steg 2), med `Authorization: Bearer <token>`.
 // - POST /api/bilde?id=…&token=… med bildet som kropp (image/*) eller multipart (feltet `bilde`).
 // - GET /api/bilde/:id?utloper=…&sig=… for Eiriks signerte, tidsbegrensede bildelenker.
-// Alle feilsvar er `{ feil, felt? }` (se validering.ts). Ingen sporing: ingen cookies, ingen IP lagres
+// Alle feilsvar er `{ feil, felt?, telefon }` (se validering.ts); `telefon` er firmaets nummer. Ingen sporing: ingen cookies, ingen IP lagres
 // (IP-en går bare til Turnstile).
 import type { D1Database } from '@cloudflare/workers-types';
+import firmaJson from '../content/firma/firma.json';
+import { firmaSchema } from '../lib/firma';
+import { fjernJpegMetadata, fjernPngMetadata } from './bildemetadata';
 import {
   antallBilder,
   finnForesporselForIdem,
@@ -19,6 +22,7 @@ import {
   lagreSteg2,
   leggTilBildeMaks,
   leggTilBildeMerke,
+  loggHendelse,
   opprettForesporsel,
   registrerSamtykke,
   sisteSamtykke,
@@ -68,10 +72,28 @@ const json = (status: number, data: unknown) =>
     status,
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
   });
-const feilSvar = (status: number, feil: Feilkode, felt?: string) => json(status, felt ? { feil, felt } : { feil });
+/** Firmaets telefonnummer slik det vises. Står i alle feilsvar. */
+export const FIRMA_TELEFON = firmaSchema.parse(firmaJson.firma).telefon.verdi;
+const feilSvar = (status: number, feil: Feilkode, felt?: string) =>
+  json(status, felt ? { feil, felt, telefon: FIRMA_TELEFON } : { feil, telefon: FIRMA_TELEFON });
 const videre = (sted: string) => new Response(null, { status: 303, headers: { location: sted, 'cache-control': 'no-store' } });
 const medFeil = (sti: string, feil: Feilkode, felt?: string) =>
   `${sti}${sti.includes('?') ? '&' : '?'}feil=${feil}${felt ? `&felt=${encodeURIComponent(felt)}` : ''}`;
+
+const tilHex = (b: ArrayBuffer | Uint8Array) =>
+  [...(b instanceof Uint8Array ? b : new Uint8Array(b))].map((x) => x.toString(16).padStart(2, '0')).join('');
+const sha256Hex = async (tekst: string) => tilHex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(tekst)));
+
+/**
+ * UUID (versjon 8, deterministisk) fra idempotensnøkkelen. Turnstile krever en UUID som
+ * `idempotency_key`; samme nøkkel gir samme UUID, så et samtidig gjentak kan verifisere samme token
+ * på nytt i stedet for å få `timeout-or-duplicate`.
+ */
+export async function turnstileIdempotens(idemNokkel: string): Promise<string> {
+  const h = await sha256Hex(`turnstile:${idemNokkel}`);
+  const variant = ((parseInt(h[16], 16) & 0x3) | 0x8).toString(16);
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-8${h.slice(13, 16)}-${variant}${h.slice(17, 20)}-${h.slice(20, 32)}`;
+}
 
 const tilfeldigHex = () => [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, '0')).join('');
 const feiltekst = (e: unknown) => (e instanceof Error ? e.message : String(e)).slice(0, 300);
@@ -153,22 +175,33 @@ export async function haandterSteg1(request: Request, env: Env, ctx: Kontekst, d
   const svar = (status: number, id: string, token: string) => (skjema ? videre(takk) : json(status, { id, token }));
 
   try {
+    // Et skjema uten JavaScript har ingen idemNokkel. Turnstile-tokenet er unikt per utfylling og
+    // følger med når kunden dobbeltklikker eller sender på nytt, så nøkkelen avledes av det.
+    const idem = d.idemNokkel ?? `skjema-${await sha256Hex(d.turnstileToken)}`;
+
     // Gjentak (dobbeltklikk, tilbake i nettleseren): samme svar, ingen ny rad, ingen ny kvittering.
     // Sjekkes før Turnstile, fordi Turnstile-tokenet er engangs og gjentaket har det samme tokenet.
-    if (d.idemNokkel) {
-      const finnes = await finnForesporselForIdem(env.DB, d.idemNokkel);
-      if (finnes) {
-        if (finnes.telefon !== d.telefon) return avvis(409, 'konflikt', 'idemNokkel');
-        return svar(200, finnes.id, await lagSkjemaToken(finnes.id, env.SKJEMA_HMAC));
-      }
-    }
+    const tidligere = async (): Promise<Response | null> => {
+      const finnes = await finnForesporselForIdem(env.DB, idem);
+      if (!finnes) return null;
+      if (finnes.telefon !== d.telefon) return avvis(409, 'konflikt', 'idemNokkel');
+      return svar(200, finnes.id, await lagSkjemaToken(finnes.id, env.SKJEMA_HMAC!));
+    };
+    const gjentak = await tidligere();
+    if (gjentak) return gjentak;
 
+    // Samme idempotency_key lar et samtidig gjentak verifisere samme token på nytt.
     const ts = await verifiserTurnstile(d.turnstileToken, env.TURNSTILE_SECRET, {
       ip: request.headers.get('cf-connecting-ip'),
+      idempotencyKey: await turnstileIdempotens(idem),
       fetch: deps.turnstileFetch,
     });
-    if (ts === 'feil') return avvis(503, 'utilgjengelig');
-    if (ts === 'avvist') return avvis(403, 'turnstile', 'turnstileToken');
+    if (ts !== 'ok') {
+      // Avvist fordi den første innsendingen nettopp brukte tokenet: den er lagret, så svaret er det samme.
+      const lagret = await tidligere();
+      if (lagret) return lagret;
+      return ts === 'feil' ? avvis(503, 'utilgjengelig') : avvis(403, 'turnstile', 'turnstileToken');
+    }
 
     const { id, ny } = await opprettForesporsel(
       env.DB,
@@ -182,8 +215,11 @@ export async function haandterSteg1(request: Request, env: Env, ctx: Kontekst, d
         lat: d.lat ?? undefined,
         lon: d.lon ?? undefined,
         kilde: d.kilde ?? undefined,
+        kundetype: d.kundetype,
+        firmanavn: d.firmanavn ?? undefined,
+        orgnr: d.orgnr ?? undefined,
       },
-      d.idemNokkel ?? `skjema-${crypto.randomUUID()}`,
+      idem,
     );
     const token = await lagSkjemaToken(id, env.SKJEMA_HMAC);
     if (ny) ctx.waitUntil(etterSteg1(env, id, d.telefon, sendBilderLenke(env.NETTSTED_URL, loc, id, token), deps));
@@ -238,6 +274,7 @@ export async function haandterSteg2(
   try {
     const f = await hentStatus(env.DB, id);
     if (!f) return feilSvar(404, 'ikke_funnet');
+    if (f.status === 'lukket') return feilSvar(409, 'lukket');
 
     let endret = false;
     if (d.beskrivelse !== undefined || d.felles || d.tjenesteSvar || d.hvorHorte !== undefined) {
@@ -288,7 +325,9 @@ export async function haandterBildeOpplasting(
 
   const db: D1Database = env.DB;
   try {
-    if (!(await hentStatus(db, id))) return feilSvar(404, 'ikke_funnet');
+    const f = await hentStatus(db, id);
+    if (!f) return feilSvar(404, 'ikke_funnet');
+    if (f.status === 'lukket') return avvis(409, 'lukket');
     if ((await antallBilder(db, id)) >= MAKS_BILDER) return avvis(409, 'for_mange', 'bilde');
   } catch (e) {
     console.error(JSON.stringify({ hendelse: 'bilde_feilet', feil: feiltekst(e) }));
@@ -308,7 +347,7 @@ export async function haandterBildeOpplasting(
   }
   if (!raw) return avvis(413, 'for_stor', 'bilde');
 
-  let bytes: Uint8Array;
+  let bytes: Uint8Array<ArrayBuffer>;
   if (multipart) {
     let fd: FormData;
     try {
@@ -328,6 +367,15 @@ export async function haandterBildeOpplasting(
   if (bytes.byteLength > MAKS_BILDE_BYTES) return avvis(413, 'for_stor', 'bilde');
   const type = bildetype(bytes);
   if (!type) return avvis(415, 'feil_type', 'bilde');
+  // Posisjonsdata og annen metadata fjernes før lagring (se bildemetadata.ts).
+  let metadataFjernet = true;
+  if (type === 'image/jpeg' || type === 'image/png') {
+    const renset = type === 'image/jpeg' ? fjernJpegMetadata(bytes) : fjernPngMetadata(bytes);
+    if (!renset) return avvis(415, 'feil_type', 'bilde');
+    bytes = renset;
+  } else {
+    metadataFjernet = false;
+  }
 
   const bildeId = crypto.randomUUID();
   const nokkel = `foresporsler/${id}/${bildeId}`;
@@ -337,15 +385,22 @@ export async function haandterBildeOpplasting(
     console.error(JSON.stringify({ hendelse: 'r2_feilet', feil: feiltekst(e) }));
     return avvis(503, 'utilgjengelig', 'bilde');
   }
+  let lagret = false;
   try {
     if (!(await leggTilBildeMaks(db, id, bildeId, nokkel, MAKS_BILDER))) {
       await env.BILDER.delete(nokkel).catch(() => {});
       return avvis(409, 'for_mange', 'bilde');
     }
+    lagret = true;
     if (merke) await leggTilBildeMerke(db, id, merke);
+    if (!metadataFjernet) await loggHendelse(db, id, 'bilde_metadata_ikke_fjernet', { bildeId, type });
+    // Sist: når tillegget er logget, er bildet ferdig mottatt.
     await loggTillegg(db, id, merke ? { hva: 'bilde', bildeId, merke } : { hva: 'bilde', bildeId });
   } catch (e) {
     console.error(JSON.stringify({ hendelse: 'bilde_feilet', feil: feiltekst(e) }));
+    // Rydd opp (så godt det går), så et nytt forsøk ikke etterlater foreldreløse filer eller rader.
+    if (lagret) await db.prepare('DELETE FROM bilder WHERE id = ?').bind(bildeId).run().catch(() => {});
+    await env.BILDER.delete(nokkel).catch(() => {});
     return feilSvar(500, 'serverfeil');
   }
   ctx.waitUntil(varsleTillegg(env, id, { samle: true }, deps));

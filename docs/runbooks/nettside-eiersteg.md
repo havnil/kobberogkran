@@ -100,3 +100,20 @@ Dette gjør eieren:
    varsel til Eirik. Samme nummer får høyst én melding per 30 minutter (tabellen `anrop`).
 3. Varselet til Eirik bruker samme oppsett som over (`VARSEL_TIL`, `VARSEL_FRA`, `EPOST`).
    `NETTSTED_URL` styrer også adressen i skjemalenken.
+
+## Skjemaet og bildene (oppgave 7)
+
+Hemmelighetene `TURNSTILE_SECRET` og `SKJEMA_HMAC` må være satt. Uten dem svarer skjemaets API
+503, altså stengt. Lenken i kvitteringen (`/send-bilder/?id=…&token=…`) utløper ikke. Roterer du
+`SKJEMA_HMAC`, slutter alle tidligere lenker og alle bildelenker til Eirik å virke.
+
+**Posisjonsdata i bilder. Ta dette med i personvernteksten.**
+
+- **JPEG og PNG:** serveren fjerner Exif, XMP og IPTC før lagring. Dette er stedet der
+  GPS-posisjonen ligger.
+- **HEIC (iPhone):** skjemaet med JavaScript gjør HEIC om til JPEG i nettleseren før opplasting,
+  så metadata fjernes også her.
+- **Kjent begrensning:** et HEIC- eller WebP-bilde som lastes opp uten JavaScript (siden for å
+  sende flere bilder senere), lagres **uendret**, med eventuell posisjon. Hendelsen
+  `bilde_metadata_ikke_fjernet` logges for bildet.
+- Bildene vises bare for Eirik via signerte lenker som utløper etter 14 dager.

@@ -143,7 +143,13 @@ export function lagVarselTekst(f: Foresporsel, regler: Regelsjekk, ai: Sortering
   l.push('KUNDE');
   l.push(`Navn: ${f.kunde.navn ?? '(ikke oppgitt)'}`);
   l.push(`Telefon: ${f.kunde.telefon}`);
-  l.push(`E-post: ${f.kunde.epost ?? '(ikke oppgitt)'}`, '');
+  l.push(`E-post: ${f.kunde.epost ?? '(ikke oppgitt)'}`);
+  if (f.kundetype === 'bedrift') {
+    l.push(`Bedrift: ${f.firmanavn ?? '(ikke oppgitt)'}, org.nr. ${f.orgnr ?? '(ikke oppgitt)'}`);
+  } else {
+    l.push('Kundetype: privat');
+  }
+  l.push('');
 
   l.push('JOBBEN');
   l.push(`Tjeneste: ${f.tjeneste}`);

@@ -15,6 +15,9 @@ export interface ForesporselInput {
   kjoretidMin?: number;
   beskrivelse?: string;
   kilde?: string;
+  kundetype?: string;
+  firmanavn?: string;
+  orgnr?: string;
 }
 
 const na = () => new Date().toISOString();
@@ -67,8 +70,8 @@ export async function opprettForesporsel(
     .prepare(
       `INSERT INTO foresporsler
          (id, idem_nokkel, kunde_id, tjeneste, hast, sted_tekst, lat, lon,
-          kjoretid_min, beskrivelse, kilde, status, opprettet, oppdatert)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ny', ?, ?)
+          kjoretid_min, beskrivelse, kilde, kundetype, firmanavn, orgnr, status, opprettet, oppdatert)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ny', ?, ?)
        ON CONFLICT(idem_nokkel) DO NOTHING`,
     )
     .bind(
@@ -83,6 +86,9 @@ export async function opprettForesporsel(
       input.kjoretidMin ?? null,
       input.beskrivelse ?? null,
       input.kilde ?? null,
+      input.kundetype ?? null,
+      input.firmanavn ?? null,
+      input.orgnr ?? null,
       tid,
       tid,
     )
@@ -181,6 +187,10 @@ export interface Foresporsel {
   /** Tolket `svar_json`; null når det mangler eller ikke er gyldig JSON-objekt. */
   svar: SvarJson | null;
   kilde: string | null;
+  /** 'privat' eller 'bedrift' (null for eldre rader og forespørsler uten skjema). */
+  kundetype: string | null;
+  firmanavn: string | null;
+  orgnr: string | null;
   status: ForesporselStatus;
   opprettet: string;
   kunde: { navn: string | null; telefon: string; epost: string | null };
@@ -202,7 +212,7 @@ export async function hentForesporsel(db: D1Database, id: string): Promise<Fores
   const rad = await db
     .prepare(
       `SELECT f.id, f.tjeneste, f.hast, f.sted_tekst, f.lat, f.lon, f.kjoretid_min, f.beskrivelse,
-              f.svar_json, f.kilde, f.status, f.opprettet,
+              f.svar_json, f.kilde, f.kundetype, f.firmanavn, f.orgnr, f.status, f.opprettet,
               k.navn AS kunde_navn, k.telefon AS kunde_telefon, k.epost AS kunde_epost
          FROM foresporsler f JOIN kunder k ON k.id = f.kunde_id
         WHERE f.id = ?`,
@@ -219,6 +229,9 @@ export async function hentForesporsel(db: D1Database, id: string): Promise<Fores
       beskrivelse: string | null;
       svar_json: string | null;
       kilde: string | null;
+      kundetype: string | null;
+      firmanavn: string | null;
+      orgnr: string | null;
       status: ForesporselStatus;
       opprettet: string;
       kunde_navn: string | null;
@@ -241,6 +254,9 @@ export async function hentForesporsel(db: D1Database, id: string): Promise<Fores
     beskrivelse: rad.beskrivelse,
     svar: tolkSvar(rad.svar_json),
     kilde: rad.kilde,
+    kundetype: rad.kundetype,
+    firmanavn: rad.firmanavn,
+    orgnr: rad.orgnr,
     status: rad.status,
     opprettet: rad.opprettet,
     kunde: { navn: rad.kunde_navn, telefon: rad.kunde_telefon, epost: rad.kunde_epost },

@@ -12,12 +12,14 @@ import { FalskKanal } from '../../src/server/kanaler/falsk';
 import { FalskSorterer, type Sorterer } from '../../src/server/sortering/ai';
 import { signerBildeLenke } from '../../src/server/bildelenke';
 import { lagSkjemaToken, verifiserSkjemaToken } from '../../src/server/token';
-import { normaliserTelefon, rensKilde, MAKS_BILDE_BYTES, MAKS_BILDER } from '../../src/server/validering';
+import { normaliserOrgnr, normaliserTelefon, rensKilde, MAKS_BILDE_BYTES, MAKS_BILDER } from '../../src/server/validering';
+import { fjernJpegMetadata, fjernPngMetadata } from '../../src/server/bildemetadata';
 import {
   haandterBildeOpplasting,
   haandterHentBilde,
   haandterSteg1,
   haandterSteg2,
+  FIRMA_TELEFON,
   type SkjemaDeps,
 } from '../../src/server/skjema';
 
@@ -46,8 +48,28 @@ class FalskR2 {
   }
 }
 
-const JPEG = Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0, 0x10, 0x4a, 0x46, 0x49, 0x46, 0, 1, 2, 3, 4, 5]);
-const PNG = Uint8Array.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0x0d, 0x49, 0x48, 0x44, 0x52]);
+const ascii = (t: string) => [...t].map((c) => c.charCodeAt(0));
+/** Segment med markør og lengde (lengden teller seg selv). */
+const segment = (markor: number, data: number[]) => [0xff, markor, ((data.length + 2) >> 8) & 0xff, (data.length + 2) & 0xff, ...data];
+const APP0 = segment(0xe0, [...ascii('JFIF'), 0, 1, 1, 0, 0, 1, 0, 1, 0, 0]);
+const DQT = segment(0xdb, [0, ...Array(64).fill(1)]);
+const SOS_OG_DATA = [...segment(0xda, [1, 1, 0, 0, 0x3f, 0]), 0x12, 0x34, 0xff, 0x00, 0x56, 0xff, 0xd0, 0x78];
+/** Exif med GPS-IFD-tag (0x8825) og «posisjon». */
+const EXIF = segment(0xe1, [...ascii('Exif'), 0, 0, ...ascii('MM'), 0, 0x2a, 0, 0, 0, 8, 0x88, 0x25, ...ascii('GPS 59.85N 11.56E')]);
+const XMP = segment(0xe1, [...ascii('http://ns.adobe.com/xap/1.0/'), 0, ...ascii('<x:xmpmeta/>')]);
+const lagJpeg = (...mellom: number[][]) => Uint8Array.from([0xff, 0xd8, ...APP0, ...mellom.flat(), ...DQT, ...SOS_OG_DATA, 0xff, 0xd9]);
+const JPEG = lagJpeg();
+const pngBit = (type: string, data: number[] = []) => [0, 0, (data.length >> 8) & 0xff, data.length & 0xff, ...ascii(type), ...data, 1, 2, 3, 4];
+const lagPng = (...mellom: number[][]) =>
+  Uint8Array.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, ...pngBit('IHDR', Array(13).fill(1)), ...mellom.flat(), ...pngBit('IDAT', [9, 9]), ...pngBit('IEND')]);
+const PNG = lagPng();
+const inneholder = (b: Uint8Array, t: number[]) => {
+  ytre: for (let i = 0; i + t.length <= b.length; i++) {
+    for (let j = 0; j < t.length; j++) if (b[i + j] !== t[j]) continue ytre;
+    return true;
+  }
+  return false;
+};
 const HEIC = Uint8Array.from([0, 0, 0, 0x18, 0x66, 0x74, 0x79, 0x70, 0x68, 0x65, 0x69, 0x63, 0, 0, 0, 0]);
 
 let mf: Miniflare;
@@ -191,6 +213,44 @@ describe('validering', () => {
   });
 });
 
+describe('orgnr', () => {
+  it('godtar gyldig kontrollsiffer (mod 11) og mellomrom', () => {
+    expect(normaliserOrgnr('974 760 673')).toBe('974760673');
+    expect(normaliserOrgnr('974760673')).toBe('974760673');
+  });
+  it('avviser feil kontrollsiffer, feil lengde og bokstaver', () => {
+    for (const n of ['974760674', '97476067', '9747606731', 'abcdefghi', '']) expect(normaliserOrgnr(n), n).toBeNull();
+  });
+});
+
+describe('bildemetadata', () => {
+  it('fjerner Exif (med GPS) og XMP fra JPEG, og beholder resten byte for byte', () => {
+    const med = lagJpeg(EXIF, XMP);
+    expect(inneholder(med, ascii('GPS'))).toBe(true);
+    const ut = fjernJpegMetadata(med)!;
+    expect(ut).not.toBeNull();
+    expect(inneholder(ut, [...ascii('Exif'), 0, 0])).toBe(false);
+    expect(inneholder(ut, ascii('GPS'))).toBe(false);
+    expect(inneholder(ut, ascii('xmpmeta'))).toBe(false);
+    // Strukturen er hel: SOI først, EOI sist, og det er nøyaktig JPEG-en uten metadata.
+    expect([ut[0], ut[1]]).toEqual([0xff, 0xd8]);
+    expect([ut[ut.length - 2], ut[ut.length - 1]]).toEqual([0xff, 0xd9]);
+    expect(ut).toEqual(JPEG);
+    // Uendret når det ikke er metadata.
+    expect(fjernJpegMetadata(JPEG)).toEqual(JPEG);
+  });
+
+  it('avviser ødelagt JPEG', () => {
+    expect(fjernJpegMetadata(Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0, 0x40, 1]))).toBeNull();
+    expect(fjernJpegMetadata(Uint8Array.from([0xff, 0xd8, 0x00]))).toBeNull();
+  });
+
+  it('fjerner eXIf og tekstbiter fra PNG', () => {
+    const med = lagPng(pngBit('eXIf', ascii('GPS')), pngBit('tEXt', ascii('Location')));
+    expect(fjernPngMetadata(med)).toEqual(PNG);
+  });
+});
+
 describe('token', () => {
   it('er HMAC-SHA256 hex av skjema:<id>, og verifiseres i konstant tid', async () => {
     const t = await lagSkjemaToken('abc', SKJEMA);
@@ -255,21 +315,21 @@ describe('POST /api/foresporsel (steg 1)', () => {
     await opprett();
     const res = await kjorSteg1(postJson(steg1({ telefon: '41234567' })));
     expect(res.status).toBe(409);
-    expect(await res.json()).toEqual({ feil: 'konflikt', felt: 'idemNokkel' });
+    expect(await res.json()).toEqual({ feil: 'konflikt', felt: 'idemNokkel', telefon: FIRMA_TELEFON });
   });
 
   it('manglende telefon gir 400 med felt telefon', async () => {
     const { telefon: _t, ...uten } = steg1();
     const res = await kjorSteg1(postJson(uten));
     expect(res.status).toBe(400);
-    expect(await res.json()).toEqual({ feil: 'mangler', felt: 'telefon' });
+    expect(await res.json()).toEqual({ feil: 'mangler', felt: 'telefon', telefon: FIRMA_TELEFON });
     expect(await antall('foresporsler')).toBe(0);
   });
 
   it('utenlandsk telefon gir 400 med felt telefon', async () => {
     const res = await kjorSteg1(postJson(steg1({ telefon: '+46 70 123 45 67' })));
     expect(res.status).toBe(400);
-    expect(await res.json()).toEqual({ feil: 'ugyldig', felt: 'telefon' });
+    expect(await res.json()).toEqual({ feil: 'ugyldig', felt: 'telefon', telefon: FIRMA_TELEFON });
   });
 
   it.each([
@@ -294,13 +354,13 @@ describe('POST /api/foresporsel (steg 1)', () => {
       new Request(`${BASE}/api/foresporsel`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{' }),
     );
     expect(res.status).toBe(400);
-    expect(await res.json()).toEqual({ feil: 'ugyldig_kropp' });
+    expect(await res.json()).toEqual({ feil: 'ugyldig_kropp', telefon: FIRMA_TELEFON });
   });
 
   it('kropp over 64 KB gir 413', async () => {
     const res = await kjorSteg1(postJson(steg1({ navn: 'x'.repeat(70_000) })));
     expect(res.status).toBe(413);
-    expect(await res.json()).toEqual({ feil: 'for_stor' });
+    expect(await res.json()).toEqual({ feil: 'for_stor', telefon: FIRMA_TELEFON });
   });
 
   it('utfylt honning gir 201 uten rad, uten kvittering og uten Turnstile', async () => {
@@ -323,13 +383,63 @@ describe('POST /api/foresporsel (steg 1)', () => {
     const form = init.body as URLSearchParams;
     expect(form.get('secret')).toBe(TURN);
     expect(form.get('response')).toBe('tt-ok');
+    // UUID avledet av idemNokkel, så et samtidig gjentak kan verifisere på nytt.
+    expect(form.get('idempotency_key')).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-8[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  });
+
+  it('samtidige gjentak med samme idemNokkel gir én rad, én kvittering og samme {id, token}', async () => {
+    const [a, b] = await Promise.all([kjorSteg1(postJson(steg1())), kjorSteg1(postJson(steg1()))]);
+    expect([a.status, b.status].sort()).toEqual([200, 201]);
+    expect(await a.json()).toEqual(await b.json());
+    await ferdig();
+    expect(await antall('foresporsler')).toBe(1);
+    expect(kvitteringer()).toHaveLength(1);
+    const nokler = turnstile.mock.calls.map((c) => (c[1] as { body: URLSearchParams }).body.get('idempotency_key'));
+    expect(new Set(nokler).size).toBe(1);
+  });
+
+  it('alle feilsvar har firmaets telefonnummer', async () => {
+    const svar = [
+      await kjorSteg1(postJson(steg1({ telefon: '' }))),
+      await kjorSteg1(postJson(steg1({ navn: 'x'.repeat(70_000) }))),
+      await patch('x', {}, 'f'.repeat(64)),
+    ];
+    env.TURNSTILE_SECRET = undefined;
+    svar.push(await kjorSteg1(postJson(steg1())));
+    for (const res of svar) expect(((await res.json()) as { telefon: string }).telefon).toBe(FIRMA_TELEFON);
+    expect(FIRMA_TELEFON).toBeTruthy();
+  });
+
+  it('bedrift lagrer firmanavn og org.nr., og varselet til Eirik viser dem', async () => {
+    const { id } = await opprett({ kundetype: 'bedrift', firmanavn: 'Gården AS', orgnr: '974 760 673' });
+    await ferdig();
+    const f = await hentForesporsel(db, id);
+    expect(f).toMatchObject({ kundetype: 'bedrift', firmanavn: 'Gården AS', orgnr: '974760673' });
+    expect(String(varsler.send.mock.calls[0][2])).toContain('Bedrift: Gården AS, org.nr. 974760673');
+  });
+
+  it('privat er standard og lagrer ikke firmafelt', async () => {
+    const { id } = await opprett({ firmanavn: 'Ignoreres AS', orgnr: '974760673' });
+    expect(await hentForesporsel(db, id)).toMatchObject({ kundetype: 'privat', firmanavn: null, orgnr: null });
+  });
+
+  it.each([
+    ['firmanavn', { kundetype: 'bedrift', orgnr: '974760673' }],
+    ['orgnr', { kundetype: 'bedrift', firmanavn: 'Gården AS', orgnr: '974760674' }],
+    ['orgnr', { kundetype: 'bedrift', firmanavn: 'Gården AS' }],
+    ['kundetype', { kundetype: 'offentlig' }],
+  ])('bedrift med ugyldig %s gir 400', async (felt, over) => {
+    const res = await kjorSteg1(postJson(steg1(over)));
+    expect(res.status).toBe(400);
+    expect(((await res.json()) as { felt: string }).felt).toBe(felt);
+    expect(await antall('foresporsler')).toBe(0);
   });
 
   it('avvist Turnstile gir 403 og ingen rad', async () => {
     turnstile.mockImplementation(async () => Response.json({ success: false, 'error-codes': ['invalid-input-response'] }));
     const res = await kjorSteg1(postJson(steg1()));
     expect(res.status).toBe(403);
-    expect(await res.json()).toEqual({ feil: 'turnstile', felt: 'turnstileToken' });
+    expect(await res.json()).toEqual({ feil: 'turnstile', felt: 'turnstileToken', telefon: FIRMA_TELEFON });
     expect(await antall('foresporsler')).toBe(0);
   });
 
@@ -346,7 +456,7 @@ describe('POST /api/foresporsel (steg 1)', () => {
     env.TURNSTILE_SECRET = undefined;
     const res = await kjorSteg1(postJson(steg1()));
     expect(res.status).toBe(503);
-    expect(await res.json()).toEqual({ feil: 'ikke_konfigurert' });
+    expect(await res.json()).toEqual({ feil: 'ikke_konfigurert', telefon: FIRMA_TELEFON });
     expect(await antall('foresporsler')).toBe(0);
   });
 
@@ -432,9 +542,45 @@ describe('POST /api/foresporsel (steg 1)', () => {
       expect(await antall('foresporsler')).toBe(0);
     });
 
-    it('uten idemNokkel gir to innsendinger to rader', async () => {
+    /** Som Cloudflare: et token kan bare verifiseres én gang, unntatt med samme idempotency_key. */
+    function ekteTurnstile() {
+      const brukt = new Map<string, string | null>();
+      turnstile.mockImplementation(async (_url: string, init: RequestInit) => {
+        const kropp = init.body as URLSearchParams;
+        const token = kropp.get('response')!;
+        const nokkel = kropp.get('idempotency_key');
+        if (brukt.has(token) && (nokkel === null || brukt.get(token) !== nokkel)) {
+          return Response.json({ success: false, 'error-codes': ['timeout-or-duplicate'] });
+        }
+        brukt.set(token, nokkel);
+        return Response.json({ success: true });
+      });
+    }
+
+    it('samme Turnstile-token to ganger (uten idemNokkel) gir én rad, én kvittering og 303 begge ganger', async () => {
+      ekteTurnstile();
+      const a = await kjorSteg1(skjemaPost(felt));
+      const b = await kjorSteg1(skjemaPost(felt));
+      expect([a.status, b.status]).toEqual([303, 303]);
+      expect(a.headers.get('location')).toBe('/takk/');
+      expect(b.headers.get('location')).toBe('/takk/');
+      await ferdig();
+      expect(await antall('foresporsler')).toBe(1);
+      expect(kvitteringer()).toHaveLength(1);
+    });
+
+    it('samtidig dobbeltinnsending uten JavaScript gir én rad og 303 til takkesiden begge ganger', async () => {
+      ekteTurnstile();
+      const [a, b] = await Promise.all([kjorSteg1(skjemaPost(felt)), kjorSteg1(skjemaPost(felt))]);
+      expect([a.headers.get('location'), b.headers.get('location')]).toEqual(['/takk/', '/takk/']);
+      await ferdig();
+      expect(await antall('foresporsler')).toBe(1);
+      expect(kvitteringer()).toHaveLength(1);
+    });
+
+    it('nytt Turnstile-token gir ny forespørsel', async () => {
       await kjorSteg1(skjemaPost(felt));
-      await kjorSteg1(skjemaPost(felt));
+      await kjorSteg1(skjemaPost({ ...felt, 'cf-turnstile-response': 'tt-annet' }));
       expect(await antall('foresporsler')).toBe(2);
     });
   });
@@ -445,7 +591,7 @@ describe('PATCH /api/foresporsel/:id (steg 2)', () => {
     const { id } = await opprett();
     const res = await patch(id, { beskrivelse: 'Lekker' }, 'f'.repeat(64));
     expect(res.status).toBe(401);
-    expect(await res.json()).toEqual({ feil: 'uautorisert' });
+    expect(await res.json()).toEqual({ feil: 'uautorisert', telefon: FIRMA_TELEFON });
   });
 
   it('manglende token gir 401, og token for en annen id gir 401', async () => {
@@ -509,6 +655,15 @@ describe('PATCH /api/foresporsel/:id (steg 2)', () => {
     }
   });
 
+  it('lukket forespørsel gir 409 med telefonnummeret', async () => {
+    const { id, token } = await opprett();
+    await ferdig();
+    await settStatus(db, id, 'lukket');
+    const res = await patch(id, { beskrivelse: 'x' }, token);
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({ feil: 'lukket', telefon: FIRMA_TELEFON });
+  });
+
   it('ukjent id med gyldig token gir 404', async () => {
     const token = await lagSkjemaToken('finnes-ikke', SKJEMA);
     expect((await patch('finnes-ikke', { beskrivelse: 'x' }, token)).status).toBe(404);
@@ -543,11 +698,67 @@ describe('POST /api/bilde', () => {
     expect(typer).toEqual(['image/heic', 'image/png']);
   });
 
+  it('fjerner Exif med GPS fra JPEG før lagring', async () => {
+    const { id, token } = await opprett();
+    const { bildeId } = (await (await lastOpp(id, token, lagJpeg(EXIF, XMP))).json()) as { bildeId: string };
+    const lagret = r2.objekter.get(`foresporsler/${id}/${bildeId}`)!.data;
+    expect(inneholder(lagret, [...ascii('Exif'), 0, 0])).toBe(false);
+    expect(lagret).toEqual(JPEG);
+    expect((await hendelser(id)).some((h) => h.type === 'bilde_metadata_ikke_fjernet')).toBe(false);
+  });
+
+  it('rå HEIC lagres uendret, og hendelsen bilde_metadata_ikke_fjernet logges', async () => {
+    const { id, token } = await opprett();
+    const { bildeId } = (await (await lastOpp(id, token, HEIC, 'image/heic')).json()) as { bildeId: string };
+    expect(r2.objekter.get(`foresporsler/${id}/${bildeId}`)!.data).toEqual(HEIC);
+    const h = (await hendelser(id)).find((x) => x.type === 'bilde_metadata_ikke_fjernet');
+    expect(JSON.parse(h!.data_json!)).toEqual({ bildeId, type: 'image/heic' });
+  });
+
+  it('ødelagt JPEG gir 415', async () => {
+    const { id, token } = await opprett();
+    expect((await lastOpp(id, token, Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0, 0x40, 1]))).status).toBe(415);
+  });
+
+  it('feiler databasen etter R2-lagringen, slettes objektet og raden', async () => {
+    const { id, token } = await opprett();
+    await ferdig();
+    const ekteDb = env.DB;
+    env.DB = new Proxy(ekteDb, {
+      get(maal, navn) {
+        if (navn === 'prepare') {
+          return (sql: string) => {
+            if (sql.includes('json_insert')) throw new Error('D1 nede');
+            return ekteDb.prepare(sql);
+          };
+        }
+        const v = Reflect.get(maal, navn);
+        return typeof v === 'function' ? v.bind(maal) : v;
+      },
+    });
+    const res = await lastOpp(id, token, JPEG, 'image/jpeg', '&merke=tank');
+    env.DB = ekteDb;
+    expect(res.status).toBe(500);
+    expect(((await res.json()) as { telefon: string }).telefon).toBe(FIRMA_TELEFON);
+    expect(r2.objekter.size).toBe(0);
+    expect(await antall('bilder')).toBe(0);
+  });
+
+  it('lukket forespørsel gir 409 og lagrer ingenting', async () => {
+    const { id, token } = await opprett();
+    await ferdig();
+    await settStatus(db, id, 'lukket');
+    const res = await lastOpp(id, token, JPEG);
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({ feil: 'lukket', telefon: FIRMA_TELEFON });
+    expect(r2.objekter.size).toBe(0);
+  });
+
   it('typen bestemmes av innholdet: tekst med image/jpeg gir 415', async () => {
     const { id, token } = await opprett();
     const res = await lastOpp(id, token, new TextEncoder().encode('<html>hei</html>'));
     expect(res.status).toBe(415);
-    expect(await res.json()).toEqual({ feil: 'feil_type', felt: 'bilde' });
+    expect(await res.json()).toEqual({ feil: 'feil_type', felt: 'bilde', telefon: FIRMA_TELEFON });
     expect(r2.objekter.size).toBe(0);
   });
 
@@ -563,7 +774,7 @@ describe('POST /api/bilde', () => {
     stor.set(JPEG);
     const res = await lastOpp(id, token, stor, 'image/jpeg', '', { 'content-length': String(stor.byteLength) });
     expect(res.status).toBe(413);
-    expect(await res.json()).toEqual({ feil: 'for_stor', felt: 'bilde' });
+    expect(await res.json()).toEqual({ feil: 'for_stor', felt: 'bilde', telefon: FIRMA_TELEFON });
     expect(r2.objekter.size).toBe(0);
     expect(await antall('bilder')).toBe(0);
   });
@@ -591,7 +802,7 @@ describe('POST /api/bilde', () => {
     for (let i = 0; i < MAKS_BILDER; i++) expect((await lastOpp(id, token, JPEG)).status).toBe(201);
     const res = await lastOpp(id, token, JPEG);
     expect(res.status).toBe(409);
-    expect(await res.json()).toEqual({ feil: 'for_mange', felt: 'bilde' });
+    expect(await res.json()).toEqual({ feil: 'for_mange', felt: 'bilde', telefon: FIRMA_TELEFON });
     expect(r2.objekter.size).toBe(MAKS_BILDER);
     expect(await antall('bilder')).toBe(MAKS_BILDER);
   });
@@ -632,7 +843,7 @@ describe('POST /api/bilde', () => {
     });
     const res = await lastOpp(id, token, strom);
     expect(res.status).toBe(400);
-    expect(await res.json()).toEqual({ feil: 'avbrutt', felt: 'bilde' });
+    expect(await res.json()).toEqual({ feil: 'avbrutt', felt: 'bilde', telefon: FIRMA_TELEFON });
     await ferdig();
     const f = await hentForesporsel(db, id);
     expect(['ny', 'sortert', 'varslet']).toContain(f!.status);
@@ -783,16 +994,5 @@ describe('tillegg til Eirik etter varselet', () => {
     const sendt = tillegg();
     expect(sendt).toHaveLength(2);
     expect(String(sendt[1][2]).match(/\/api\/bilde\//g)).toHaveLength(2);
-  });
-
-  it('lukket forespørsel gir ikke tillegg', async () => {
-    const { id, token } = await opprett();
-    await ferdig();
-    await settStatus(db, id, 'lukket');
-    await lastOpp(id, token, JPEG);
-    await ferdig();
-    expect(tillegg()).toHaveLength(0);
-    // Hendelsen er likevel logget.
-    expect((await hendelser(id)).some((h) => h.type === 'tillegg')).toBe(true);
   });
 });

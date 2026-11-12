@@ -10,11 +10,13 @@ export type TurnstileSvar = 'ok' | 'avvist' | 'feil';
 export async function verifiserTurnstile(
   token: string,
   hemmelighet: string,
-  valg: { ip?: string | null; fetch?: typeof fetch } = {},
+  valg: { ip?: string | null; idempotencyKey?: string; fetch?: typeof fetch } = {},
 ): Promise<TurnstileSvar> {
   const hent = valg.fetch ?? fetch;
   const kropp = new URLSearchParams({ secret: hemmelighet, response: token });
   if (valg.ip) kropp.set('remoteip', valg.ip);
+  // UUID vi lager selv. Et nytt forsøk med samme nøkkel regnes ikke som gjenbruk av tokenet.
+  if (valg.idempotencyKey) kropp.set('idempotency_key', valg.idempotencyKey);
   try {
     const res = await hent(SITEVERIFY_URL, {
       method: 'POST',

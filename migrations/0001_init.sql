@@ -23,6 +23,10 @@ CREATE TABLE foresporsler (
   beskrivelse TEXT,
   svar_json TEXT,
   kilde TEXT,
+  -- 'privat' eller 'bedrift'. Firmanavn og org.nr. (9 sifre) bare for bedrift.
+  kundetype TEXT,
+  firmanavn TEXT,
+  orgnr TEXT,
   status TEXT NOT NULL DEFAULT 'ny' CHECK (status IN ('ny', 'sortert', 'varslet', 'lukket')),
   -- Lås for sortering og varsel: ISO-tid da lånet utløper. NULL betyr ikke låst.
   varsel_laast_til TEXT,

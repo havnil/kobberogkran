@@ -4,6 +4,9 @@
 // 303 tilbake hit med `ok=1` eller `feil=…`). Oppgave 8 bygger det ekte grensesnittet med steg 2.
 import { env } from 'cloudflare:workers';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Plassholder from './Plassholder.astro';
+import { getFirma } from '../lib/firma';
+import { telHref } from '../lib/telefon';
 import { getTekster } from '../lib/tekster';
 import { ui } from '../i18n/ui';
 import type { Locale } from '../i18n/locales';
@@ -17,6 +20,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const tekster = await getTekster(locale);
+const firma = await getFirma();
 const t = tekster.skjemaSvar;
 const id = Astro.url.searchParams.get('id') ?? '';
 const token = Astro.url.searchParams.get('token') ?? '';
@@ -36,7 +40,12 @@ const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURICompone
         <>
           <p>{t.sendBilderTekst}</p>
           {ok && <p role="status">{t.sendBilderOk}</p>}
-          {feil && <p role="alert">{t.sendBilderFeil}</p>}
+          {feil && (
+            <p role="alert">
+              {t.sendBilderFeil}{' '}
+              <a href={telHref(firma.telefon.verdi)} data-telefon><Plassholder verdi={firma.telefon} locale={locale} /></a>
+            </p>
+          )}
           <form method="post" action={action} enctype="multipart/form-data">
             <input type="hidden" name="locale" value={locale} />
             <p>
@@ -48,7 +57,10 @@ const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURICompone
         </>
       ) : (
         <>
-          <p>{t.ugyldigLenkeTekst}</p>
+          <p role="alert">
+            {t.ugyldigLenkeTekst}{' '}
+            <a href={telHref(firma.telefon.verdi)} data-telefon><Plassholder verdi={firma.telefon} locale={locale} /></a>
+          </p>
           <p><a href={locale === 'en' ? '/en/' : '/'}>{ui[locale].notFoundHomeLink}</a></p>
         </>
       )

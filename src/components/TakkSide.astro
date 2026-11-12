@@ -2,6 +2,9 @@
 // Takkesiden etter skjemaet uten JavaScript (POST /api/foresporsel svarer 303 hit).
 // Med `?feil=<kode>` vises en feilmelding i stedet. Teksten kommer fra `tekster`.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Plassholder from './Plassholder.astro';
+import { getFirma } from '../lib/firma';
+import { telHref } from '../lib/telefon';
 import { getTekster } from '../lib/tekster';
 import { navPath } from '../i18n/nav';
 import { ui } from '../i18n/ui';
@@ -13,6 +16,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const tekster = await getTekster(locale);
+const firma = await getFirma();
 const t = tekster.skjemaSvar;
 const feil = Astro.url.searchParams.has('feil');
 // Kvitteringen er en mal for meldingen; variabler som {sendBilderLenke} vises ikke her.
@@ -26,7 +30,10 @@ const tittel = feil ? t.feilTittel : t.takkTittel;
     {
       feil ? (
         <>
-          <p role="alert">{t.feilTekst}</p>
+          <p role="alert">
+            {t.feilTekst}{' '}
+            <a href={telHref(firma.telefon.verdi)} data-telefon><Plassholder verdi={firma.telefon} locale={locale} /></a>
+          </p>
           <p><a href={`${navPath(locale, 'kontakt')}#skjema`}>{tekster.forside.skjema.tittel}</a></p>
         </>
       ) : (

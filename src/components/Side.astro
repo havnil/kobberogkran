@@ -94,7 +94,7 @@ const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: en
         </div>
       </dl>
       <p><WhatsAppKnapp class="knapp knapp-omriss" locale={locale}>{t.whatsapp}</WhatsAppKnapp></p>
-      <Skjemaseksjon tekst={f.skjema} />
+      <Skjemaseksjon locale={locale} tekst={f.skjema} />
     </>
   )
 }

@@ -5,6 +5,7 @@ import LekkerNaa from './LekkerNaa.astro';
 import Omrader from './Omrader.astro';
 import OmEirik from './OmEirik.astro';
 import PrisBlokk from './PrisBlokk.astro';
+import Skjemaseksjon from './Skjemaseksjon.astro';
 import Steg from './Steg.astro';
 import TjenesteKort from './TjenesteKort.astro';
 import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
@@ -41,11 +42,7 @@ const f = tekster.forside;
 <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />
 <Omrader tekst={f.omrader} omrade={firma.omrade} />
 
-<!-- Placeholder for the request form; it is built in a later task. -->
-<section class="seksjon" id="skjema" aria-labelledby="skjema-tittel">
-  <h2 id="skjema-tittel">{f.skjema.tittel}</h2>
-  <p>{f.skjema.merknad}</p>
-</section>
+<Skjemaseksjon locale={locale} tekst={f.skjema} />
 
 <style>
   h2 {

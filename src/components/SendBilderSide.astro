@@ -1,7 +1,8 @@
 ---
 // «Send flere bilder senere»: lenken i kvitteringen (`?id=…&token=…`). Tokenet sjekkes på serveren.
 // Gyldig lenke gir et enkelt skjema uten JavaScript som poster ett bilde til /api/bilde (svaret er
-// 303 tilbake hit med `ok=1` eller `feil=…`). Oppgave 8 bygger det ekte grensesnittet med steg 2.
+// 303 tilbake hit med `ok=1` eller `feil=…`). Med JavaScript brukes samme opplasting som skjemaet
+// (src/client/skjema/send-bilder.ts): flere bilder, klargjort i nettleseren, med nye forsøk.
 import { env } from 'cloudflare:workers';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Plassholder from './Plassholder.astro';
@@ -30,6 +31,8 @@ const ok = Astro.url.searchParams.get('ok') === '1';
 const feil = Astro.url.searchParams.has('feil');
 const tittel = gyldig ? t.sendBilderTittel : t.ugyldigLenkeTittel;
 const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`;
+const { bildeLaster, bildeOk, bildeFrakoblet, bildeFeilet } = tekster.skjema;
+const klientTekster = { bildeLaster, bildeOk, bildeFrakoblet, bildeFeilet };
 ---
 
 <BaseLayout locale={locale} title={`${tittel} – Kobber og Kran AS`} description={tittel} alternates={[]} noindex>
@@ -46,13 +49,23 @@ const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURICompone
               <a href={telHref(firma.telefon.verdi)} data-telefon><Plassholder verdi={firma.telefon} locale={locale} /></a>
             </p>
           )}
-          <form method="post" action={action} enctype="multipart/form-data">
+          <form
+            method="post"
+            action={action}
+            enctype="multipart/form-data"
+            data-send-bilder-skjema
+            data-id={id}
+            data-token={token}
+            data-locale={locale}
+            data-tekster={JSON.stringify(klientTekster)}
+          >
             <input type="hidden" name="locale" value={locale} />
             <p>
               <label for="bilde">{tekster.skjema.bilder}</label>
               <input id="bilde" type="file" name="bilde" accept={[...BILDETYPER, '.heic'].join(',')} required />
             </p>
             <button type="submit">{t.sendBilderSend}</button>
+            <ul data-bildeliste aria-live="polite"></ul>
           </form>
         </>
       ) : (
@@ -66,4 +79,7 @@ const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURICompone
       )
     }
   </section>
+  <script>
+    import '../client/skjema/send-bilder';
+  </script>
 </BaseLayout>

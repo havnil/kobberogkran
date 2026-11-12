@@ -1,21 +1,25 @@
 ---
-// Placeholder for the request form (built in a later task). `data-tjeneste` carries the
-// translationKey of the service to preselect; it is empty where no service is implied.
+// The request form section (`#skjema`) on the front page, the service pages and the contact page.
+// `tjeneste` is the translationKey of the service to preselect; empty where no service is implied.
+import Skjema from './Skjema.astro';
+import type { Locale } from '../i18n/locales';
 import type { Tekster } from '../lib/innhold';
 
 interface Props {
+  locale: Locale;
   tekst: Tekster['forside']['skjema'];
   eyebrow?: string;
   tjeneste?: string;
 }
 
-const { tekst, eyebrow, tjeneste = '' } = Astro.props;
+const { locale, tekst, eyebrow, tjeneste = '' } = Astro.props;
 ---
 
 <section class="seksjon" id="skjema" data-tjeneste={tjeneste} aria-labelledby="skjema-tittel">
   {eyebrow && <p class="eyebrow">{eyebrow}</p>}
   <h2 id="skjema-tittel">{tekst.tittel}</h2>
   <p>{tekst.merknad}</p>
+  <Skjema locale={locale} tjeneste={tjeneste} />
 </section>
 
 <style>

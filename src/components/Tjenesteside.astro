@@ -119,7 +119,7 @@ const erTank = tj.translationKey === 'varmtvannstank';
 
   <Omrader tekst={{ tittel: s.tjeneste.omraderTittel }} omrade={firma.omrade} />
 
-  <Skjemaseksjon tekst={tekster.forside.skjema} eyebrow={`${s.tjeneste.skjemaEyebrow} · ${tj.kundeTittel}`} tjeneste={tj.translationKey} />
+  <Skjemaseksjon locale={locale} tekst={tekster.forside.skjema} eyebrow={`${s.tjeneste.skjemaEyebrow} · ${tj.kundeTittel}`} tjeneste={tj.translationKey} />
 </BaseLayout>
 
 <style>

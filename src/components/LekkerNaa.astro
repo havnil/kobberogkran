@@ -9,14 +9,16 @@ interface Props {
   locale: Locale;
   tekst: Tekster['lekkerNaa'];
   firma: Firma;
+  /** Element id (the box is also copied into the form, which needs its own ids). */
+  id?: string;
 }
 
-const { locale, tekst, firma } = Astro.props;
+const { locale, tekst, firma, id = 'lekker-naa' } = Astro.props;
 const t = ui[locale];
 ---
 
-<section class="lekker-naa" id="lekker-naa" aria-labelledby="lekker-naa-tittel">
-  <h2 id="lekker-naa-tittel">{tekst.tittel}</h2>
+<section class="lekker-naa" id={id} aria-labelledby={`${id}-tittel`}>
+  <h2 id={`${id}-tittel`}>{tekst.tittel}</h2>
   <ol>
     {tekst.punkter.map((punkt) => <li>{punkt}</li>)}
   </ol>

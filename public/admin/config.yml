@@ -266,6 +266,102 @@ collections:
               - { name: beskrivelse, label: Beskrivelse, widget: string }
               - { name: samtykkePaminnelser, label: Samtykke til servicepåminnelser, widget: string }
               - { name: send, label: Send-knapp, widget: string }
+              - { name: tjenesteAnnet, label: Tjeneste - annet, widget: string }
+              - { name: stedTittel, label: Sted - overskrift, widget: string }
+              - { name: stedHjelp, label: Sted - hjelpetekst, widget: string }
+              - { name: stedUtenAdresse, label: Sted - hytte uten adresse, widget: string }
+              - { name: gnr, label: Gårdsnummer, widget: string }
+              - { name: bnr, label: Bruksnummer, widget: string }
+              - { name: posisjonHentes, label: Posisjon - henter, widget: string }
+              - { name: posisjonFunnet, label: Posisjon - funnet, widget: string }
+              - { name: posisjonFeilet, label: Posisjon - feilet, widget: string }
+              - { name: kundetype, label: Privat eller bedrift, widget: string }
+              - { name: kundetypePrivat, label: Kundetype - privat, widget: string }
+              - { name: kundetypeBedrift, label: Kundetype - bedrift, widget: string }
+              - { name: firmanavn, label: Firmanavn, widget: string }
+              - { name: orgnr, label: Org.nr., widget: string }
+              - { name: sender, label: Sender (status), widget: string }
+              - { name: kvitteringTittel, label: Kvittering - overskrift, widget: string }
+              - { name: steg2Tittel, label: Steg 2 - overskrift, widget: string }
+              - { name: steg2Ingress, label: Steg 2 - ingress, widget: text }
+              - { name: sporsmalTittel, label: Spørsmål - overskrift, widget: string }
+              - { name: sendSteg2, label: Steg 2 - send-knapp, widget: string }
+              - { name: steg2Ok, label: Steg 2 - mottatt, widget: string }
+              - { name: bildeLaster, label: Bilde - laster opp, widget: string }
+              - { name: bildeOk, label: Bilde - mottatt, widget: string }
+              - { name: bildeFrakoblet, label: Bilde - venter på nett, widget: string }
+              - { name: bildeFeilet, label: Bilde - kom ikke fram, widget: string }
+              - { name: bildeForMange, label: Bilde - for mange, widget: string }
+              - { name: hvorHorte, label: Hvor hørte du om oss?, widget: string }
+              - name: hvorHorteValg
+                label: Hvor hørte du om oss? - valg
+                widget: object
+                fields:
+                  - { name: google, label: Google, widget: string }
+                  - { name: anbefaling, label: Anbefaling, widget: string }
+                  - { name: sosialeMedier, label: Sosiale medier, widget: string }
+                  - { name: bilen, label: Bilen, widget: string }
+                  - { name: annet, label: Annet, widget: string }
+              - name: sporsmal
+                label: Spørsmål i steg 2
+                widget: object
+                fields:
+                  - { name: vann, label: Vann (felles), widget: string }
+                  - { name: avlop, label: Avløp (felles), widget: string }
+                  - { name: byggear, label: Byggeår (felles), widget: string }
+                  - { name: adkomst, label: Adkomst (felles), widget: string }
+                  - { name: kontaktform, label: SMS eller samtale (felles), widget: string }
+                  - { name: bildeTypeskilt, label: Varmtvannstank - bilde av typeskilt, widget: string }
+                  - { name: bildeTank, label: Varmtvannstank - bilde av tanken, widget: string }
+                  - { name: rom, label: Varmtvannstank - rom, widget: string }
+                  - { name: etasje, label: Varmtvannstank - etasje, widget: string }
+                  - { name: tilkobling, label: Varmtvannstank - tilkobling, widget: string }
+                  - { name: problem, label: Service - problem, widget: string }
+                  - { name: vannStengt, label: Lekkasje - vannet stengt, widget: string }
+                  - { name: fukt, label: Lekkasje - fukt, widget: string }
+                  - { name: forsikringMeldt, label: Lekkasje - meldt til forsikring, widget: string }
+                  - { name: antallAvlop, label: Tett avløp - antall, widget: string }
+                  - { name: bronntype, label: Brønn - type, widget: string }
+                  - { name: bildePumpe, label: Brønn - bilde av pumpe, widget: string }
+                  - { name: symptom, label: Brønn - symptom, widget: string }
+                  - { name: vannprove, label: Brønn - vannprøve, widget: string }
+                  - { name: maal, label: Bad - mål, widget: string }
+                  - { name: oppstart, label: Bad - oppstart, widget: string }
+                  - { name: egneHandverkere, label: Bad - egne håndverkere, widget: string }
+                  - { name: styregodkjenning, label: Bad - styregodkjenning, widget: string }
+              - name: valg
+                label: Svaralternativer
+                widget: object
+                fields:
+                  - { name: ja, label: Ja, widget: string }
+                  - { name: nei, label: Nei, widget: string }
+                  - { name: vetIkke, label: Vet ikke, widget: string }
+                  - { name: kommunalt, label: Kommunalt, widget: string }
+                  - { name: bronn, label: Brønn, widget: string }
+                  - { name: privat, label: Privat, widget: string }
+                  - { name: sms, label: SMS, widget: string }
+                  - { name: samtale, label: Samtale, widget: string }
+                  - { name: stikkontakt, label: Stikkontakt, widget: string }
+                  - { name: fast, label: Fast tilkoblet, widget: string }
+                  - { name: lekkasje, label: Lekkasje, widget: string }
+                  - { name: tettAvlop, label: Tett avløp, widget: string }
+                  - { name: annet, label: Annet, widget: string }
+                  - { name: ett, label: Ett, widget: string }
+                  - { name: flere, label: Flere, widget: string }
+                  - { name: borebronn, label: Borebrønn, widget: string }
+                  - { name: gravd, label: Gravd, widget: string }
+                  - { name: ikkeBorettslag, label: Ikke borettslag, widget: string }
+              - name: feil
+                label: Feilmeldinger (telefonnummeret legges til)
+                widget: object
+                fields:
+                  - { name: mangler, label: Mangler, widget: string }
+                  - { name: ugyldig, label: Ugyldig, widget: string }
+                  - { name: forLang, label: For lang, widget: string }
+                  - { name: turnstile, label: Robotsjekk, widget: string }
+                  - { name: nettverk, label: Ingen kontakt, widget: string }
+                  - { name: server, label: Feil hos oss, widget: string }
+              - { name: utenJs, label: Uten JavaScript, widget: text }
           - name: skjemaSvar
             label: Takk og send bilder
             widget: object

@@ -1,0 +1,512 @@
+---
+// The request form in two steps (spec, «Skjemaet»). Step 1 is a plain `<form method="post">` to the
+// API (src/server/skjema.ts) and is stored as soon as it is sent; step 2 (photos, description and the
+// questions per service) is optional and only reachable with JavaScript. All copy comes from
+// `tekster.skjema` (written by humans in the CMS). The client code is in src/client/skjema/.
+//
+// Turnstile is the only third-party script, and only loaded on pages with this form. The site key is
+// read at build time from PUBLIC_TURNSTILE_SITE_KEY; without it, Cloudflare's test key is used, but
+// never in a launch build (LAUNCH=true), which fails instead. See docs/runbooks/nettside-eiersteg.md.
+// Without JavaScript Turnstile cannot run, so a <noscript> note offers phone and WhatsApp instead.
+import LekkerNaa from './LekkerNaa.astro';
+import Plassholder from './Plassholder.astro';
+import WhatsAppKnapp from './WhatsAppKnapp.astro';
+import type { Locale } from '../i18n/locales';
+import { getServices } from '../i18n/services';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+import { telHref } from '../lib/telefon';
+import { getTekster } from '../lib/tekster';
+import { alleSporsmal, feltnavn, FELLES, HVOR_HORTE, valgNokkel, type Sporsmal } from '../client/skjema/sporsmal';
+import { BILDETYPER, HAST, MAKS_BILDER, TJENESTER } from '../server/validering';
+
+interface Props {
+  locale: Locale;
+  /** translationKey of the service to preselect. */
+  tjeneste?: string;
+}
+
+const { locale, tjeneste = '' } = Astro.props;
+const [tekster, firma, tjenester] = await Promise.all([getTekster(locale), getFirma(), getServices(locale)]);
+const t = tekster.skjema;
+
+/** Cloudflare's always-pass test key. Never used in a launch build. */
+const TURNSTILE_TESTNOKKEL = '1x00000000000000000000AA';
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
+// LAUNCH is read via import.meta.env: prerendering runs in workerd, where process.env lacks it.
+const launch = String(import.meta.env.LAUNCH ?? process.env.LAUNCH ?? '');
+if (!siteKey && launch === 'true') {
+  throw new Error('PUBLIC_TURNSTILE_SITE_KEY mangler i en lanseringsbygg (LAUNCH=true). Se docs/runbooks/nettside-eiersteg.md.');
+}
+const turnstileNokkel = siteKey || TURNSTILE_TESTNOKKEL;
+
+const tjenesteNavn = (k: string) => tjenester.find((e) => e.data.translationKey === k)?.data.kundeTittel ?? t.tjenesteAnnet;
+const forhandsvalgt = (TJENESTER as readonly string[]).includes(tjeneste) ? tjeneste : '';
+const hastNavn: Record<(typeof HAST)[number], string> = {
+  'lekker-naa': t.hasterLekkerNaa,
+  snart: t.hasterSnart,
+  'kan-planlegges': t.hasterKanPlanlegges,
+};
+// The receipt is a message template; variables such as {sendBilderLenke} are not shown on screen.
+const kvittering = tekster.kvittering.replace(/\{[A-Za-z][A-Za-z0-9]*\}/g, '').trim();
+const accept = [...BILDETYPER, '.heic', '.heif'].join(',');
+
+const sporsmalEtikett = (id: string) => (t.sporsmal as Record<string, string>)[id] ?? id;
+const valgEtikett = (v: string) => (t.valg as Record<string, string>)[valgNokkel(v)] ?? v;
+const alle: { sporsmal: Sporsmal; tjenester: string[] }[] = [...alleSporsmal(), ...FELLES.map((s) => ({ sporsmal: s, tjenester: [] }))];
+const bildeSporsmal = alle.filter((x) => x.sporsmal.type === 'bilde');
+const andreSporsmal = alle.filter((x) => x.sporsmal.type !== 'bilde');
+
+/** Texts the client script needs (status and errors). */
+const klientTekster = {
+  feil: t.feil,
+  sender: t.sender,
+  posisjonHentes: t.posisjonHentes,
+  posisjonFunnet: t.posisjonFunnet,
+  posisjonFeilet: t.posisjonFeilet,
+  steg2Ok: t.steg2Ok,
+  bildeLaster: t.bildeLaster,
+  bildeOk: t.bildeOk,
+  bildeFrakoblet: t.bildeFrakoblet,
+  bildeFeilet: t.bildeFeilet,
+  bildeForMange: t.bildeForMange,
+};
+const telefon = firma.telefon.verdi;
+---
+
+<div
+  class="skjema"
+  data-skjema-rot
+  data-tjeneste={forhandsvalgt}
+  data-tekster={JSON.stringify(klientTekster)}
+  data-telefon={telefon}
+  data-telefon-href={telHref(telefon)}
+  data-maks-bilder={MAKS_BILDER}
+>
+  <noscript>
+    <p class="uten-js">
+      {t.utenJs}{' '}
+      <a href={telHref(telefon)}><Plassholder verdi={firma.telefon} locale={locale} /></a>{' '}
+      <WhatsAppKnapp class="knapp knapp-omriss" locale={locale}>{ui[locale].whatsapp}</WhatsAppKnapp>
+    </p>
+  </noscript>
+
+  <form method="post" action="/api/foresporsel" class="steg" data-steg1>
+    <input type="hidden" name="locale" value={locale} />
+    <input type="hidden" name="kilde" value="" />
+    <input type="hidden" name="lat" value="" />
+    <input type="hidden" name="lon" value="" />
+    <div class="honning" aria-hidden="true">
+      <label>Ikke fyll ut <input name="honning" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <p class="feil samlet" id="feil-skjema" role="alert" hidden></p>
+
+    <fieldset class="gruppe" id="felt-tjeneste" tabindex="-1">
+      <legend>{t.hva}</legend>
+      <div class="valg">
+        {
+          TJENESTER.map((k) => (
+            <label class="valg-rad">
+              <input type="radio" name="tjeneste" value={k} checked={k === forhandsvalgt} required />
+              <span>{k === 'annet' ? t.tjenesteAnnet : tjenesteNavn(k)}</span>
+            </label>
+          ))
+        }
+      </div>
+      <p class="feil" id="feil-tjeneste" hidden></p>
+    </fieldset>
+
+    <fieldset class="gruppe" id="felt-hast" tabindex="-1">
+      <legend>{t.haster}</legend>
+      <div class="valg">
+        {
+          HAST.map((h) => (
+            <label class="valg-rad">
+              <input type="radio" name="hast" value={h} required />
+              <span>{hastNavn[h]}</span>
+            </label>
+          ))
+        }
+      </div>
+      <p class="feil" id="feil-hast" hidden></p>
+    </fieldset>
+
+    <fieldset class="gruppe">
+      <legend>{t.stedTittel}</legend>
+      <div class="felt">
+        <label for="skjema-sted">{t.adresse}</label>
+        <div class="combobox">
+          <input id="skjema-sted" name="sted" type="text" autocomplete="street-address" aria-describedby="hjelp-sted" maxlength="300" />
+          <ul id="skjema-sted-forslag" class="forslag" role="listbox" aria-label={t.adresse} hidden></ul>
+        </div>
+        <p class="hjelp" id="hjelp-sted">{t.stedHjelp}</p>
+        <p class="feil" id="feil-sted" hidden></p>
+      </div>
+      <p class="posisjon">
+        <button type="button" class="knapp knapp-omriss" data-posisjon hidden>{t.bruketMinPosisjon}</button>
+        <span class="posisjon-status" data-posisjon-status role="status"></span>
+      </p>
+      <details class="gnr-bnr">
+        <summary>{t.stedUtenAdresse}</summary>
+        <div class="to-kolonner">
+          <div class="felt">
+            <label for="skjema-gnr">{t.gnr}</label>
+            <input id="skjema-gnr" name="gnr" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" />
+          </div>
+          <div class="felt">
+            <label for="skjema-bnr">{t.bnr}</label>
+            <input id="skjema-bnr" name="bnr" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" />
+          </div>
+        </div>
+      </details>
+    </fieldset>
+
+    <div class="felt">
+      <label for="skjema-navn">{t.navn}</label>
+      <input id="skjema-navn" name="navn" type="text" autocomplete="name" required maxlength="200" />
+      <p class="feil" id="feil-navn" hidden></p>
+    </div>
+    <div class="felt">
+      <label for="skjema-telefon">{t.telefon}</label>
+      <input id="skjema-telefon" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required maxlength="30" />
+      <p class="feil" id="feil-telefon" hidden></p>
+    </div>
+    <div class="felt">
+      <label for="skjema-epost">{t.epost}</label>
+      <input id="skjema-epost" name="epost" type="email" autocomplete="email" maxlength="254" />
+      <p class="feil" id="feil-epost" hidden></p>
+    </div>
+
+    <fieldset class="gruppe" id="felt-kundetype" tabindex="-1">
+      <legend>{t.kundetype}</legend>
+      <div class="valg valg-rekke">
+        <label class="valg-rad"><input type="radio" name="kundetype" value="privat" checked /><span>{t.kundetypePrivat}</span></label>
+        <label class="valg-rad"><input type="radio" name="kundetype" value="bedrift" /><span>{t.kundetypeBedrift}</span></label>
+      </div>
+      <div class="bedrift" data-bedrift>
+        <div class="felt">
+          <label for="skjema-firmanavn">{t.firmanavn}</label>
+          <input id="skjema-firmanavn" name="firmanavn" type="text" autocomplete="organization" maxlength="200" />
+          <p class="feil" id="feil-firmanavn" hidden></p>
+        </div>
+        <div class="felt">
+          <label for="skjema-orgnr">{t.orgnr}</label>
+          <input id="skjema-orgnr" name="orgnr" type="text" inputmode="numeric" maxlength="11" />
+          <p class="feil" id="feil-orgnr" hidden></p>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="turnstile" id="felt-turnstileToken" tabindex="-1">
+      <div class="cf-turnstile" data-sitekey={turnstileNokkel} data-language={locale === 'nb' ? 'nb' : 'en'}></div>
+      <p class="feil" id="feil-turnstileToken" hidden></p>
+    </div>
+
+    <div class="lekker-plass" data-lekker-plass hidden>
+      <LekkerNaa locale={locale} tekst={tekster.lekkerNaa} firma={firma} id="lekker-naa-skjema" />
+    </div>
+
+    <p class="send">
+      <button type="submit" class="knapp">{t.send}</button>
+    </p>
+    <p class="status" data-status role="status"></p>
+  </form>
+
+  <section class="kvittering" data-kvittering tabindex="-1" aria-labelledby="kvittering-tittel" hidden>
+    <h3 id="kvittering-tittel">{t.kvitteringTittel}</h3>
+    <p>{kvittering}</p>
+  </section>
+
+  <form class="steg" data-steg2 novalidate hidden>
+    <h3>{t.steg2Tittel}</h3>
+    <p>{t.steg2Ingress}</p>
+
+    <fieldset class="gruppe">
+      <legend>{t.bilder}</legend>
+      {
+        bildeSporsmal.map(({ sporsmal: s, tjenester: tj }) => (
+          <div class="felt" data-sporsmal={s.id} data-tjenester={tj.join(' ')} hidden>
+            <label for={`skjema-${s.id}`}>{sporsmalEtikett(s.id)}</label>
+            <input id={`skjema-${s.id}`} type="file" accept={accept} multiple data-bildefelt data-merke={s.merke} />
+          </div>
+        ))
+      }
+      <div class="felt">
+        <label for="skjema-bilder">{t.bilder}</label>
+        <input id="skjema-bilder" type="file" accept={accept} multiple data-bildefelt />
+      </div>
+      <ul class="bilder" data-bildeliste aria-live="polite"></ul>
+    </fieldset>
+
+    <div class="felt">
+      <label for="skjema-beskrivelse">{t.beskrivelse}</label>
+      <textarea id="skjema-beskrivelse" name="beskrivelse" rows="4" maxlength="4000"></textarea>
+    </div>
+
+    <fieldset class="gruppe">
+      <legend>{t.sporsmalTittel}</legend>
+      {
+        andreSporsmal.map(({ sporsmal: s, tjenester: tj }) =>
+          s.type === 'valg' ? (
+            <fieldset class="sporsmal" data-sporsmal={s.id} data-tjenester={tj.join(' ')} hidden>
+              <legend>{sporsmalEtikett(s.id)}</legend>
+              <div class="valg valg-rekke">
+                {(s.valg ?? []).map((v) => (
+                  <label class="valg-rad">
+                    <input type="radio" name={feltnavn(s.id)} value={v} />
+                    <span>{valgEtikett(v)}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ) : (
+            <div class="felt" data-sporsmal={s.id} data-tjenester={tj.join(' ')} hidden>
+              <label for={`skjema-sp-${s.id}`}>{sporsmalEtikett(s.id)}</label>
+              <input id={`skjema-sp-${s.id}`} name={feltnavn(s.id)} type="text" maxlength="1000" />
+            </div>
+          ),
+        )
+      }
+    </fieldset>
+
+    <fieldset class="gruppe">
+      <legend>{t.hvorHorte}</legend>
+      <div class="valg">
+        {
+          HVOR_HORTE.map((v) => (
+            <label class="valg-rad">
+              <input type="radio" name="hvorHorte" value={v} />
+              <span>{(t.hvorHorteValg as Record<string, string>)[valgNokkel(v)]}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <label class="valg-rad samtykke">
+      <input type="checkbox" name="paaminnelser" />
+      <span>{t.samtykkePaminnelser}</span>
+    </label>
+
+    <p class="feil samlet" id="feil-steg2" role="alert" hidden></p>
+    <p class="send"><button type="submit" class="knapp">{t.sendSteg2}</button></p>
+    <p class="status" data-status2 role="status"></p>
+  </form>
+</div>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  import '../client/skjema/index';
+</script>
+
+<style>
+  .skjema {
+    max-width: 40rem;
+  }
+  /* `hidden` must win over the display rules below (grid, flex, .knapp). */
+  .skjema :global([hidden]) {
+    display: none !important;
+  }
+  .steg {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .gruppe,
+  .sporsmal {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .sporsmal + .sporsmal,
+  .gruppe .felt + .felt,
+  .sporsmal + .felt,
+  .felt + .sporsmal {
+    margin-top: var(--space-3);
+  }
+  legend {
+    padding: 0;
+    margin-bottom: var(--space-2);
+    font-weight: 800;
+  }
+  .gruppe > legend {
+    font-size: 1.125rem;
+  }
+  .felt {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .felt label {
+    font-weight: 600;
+  }
+  input[type='text'],
+  input[type='tel'],
+  input[type='email'],
+  textarea {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--color-border-strong);
+    border-radius: 10px;
+    background: var(--color-white);
+    color: var(--color-text);
+    font: inherit;
+  }
+  .felt > * {
+    min-width: 0;
+  }
+  input[type='file'] {
+    width: 100%;
+    max-width: 100%;
+    min-height: 2.75rem;
+    font: inherit;
+  }
+  input[aria-invalid='true'] {
+    border-color: var(--color-accent);
+  }
+  .valg {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .valg-rekke {
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  }
+  .valg-rad {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: 0.25rem 0.75rem;
+    border: 2px solid var(--color-border);
+    border-radius: 10px;
+    background: var(--color-white);
+    cursor: pointer;
+  }
+  .valg-rad:has(input:checked) {
+    border-color: var(--color-brown);
+  }
+  .valg-rad input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    flex: none;
+    accent-color: var(--color-brown);
+  }
+  .combobox {
+    position: relative;
+  }
+  .forslag {
+    position: absolute;
+    z-index: 20;
+    left: 0;
+    right: 0;
+    margin: 0.25rem 0 0;
+    padding: 0.25rem 0;
+    list-style: none;
+    background: var(--color-white);
+    border: 2px solid var(--color-border-strong);
+    border-radius: 10px;
+    max-height: 16rem;
+    overflow-y: auto;
+  }
+  .forslag :global([role='option']) {
+    padding: 0.625rem 0.75rem;
+    cursor: pointer;
+  }
+  .forslag :global([role='option'][aria-selected='true']),
+  .forslag :global([role='option']:hover) {
+    background: var(--color-sand);
+  }
+  .hjelp {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+  .posisjon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-2) 0 0;
+  }
+  .gnr-bnr {
+    margin-top: var(--space-2);
+  }
+  .gnr-bnr summary {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .to-kolonner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .bedrift {
+    margin-top: var(--space-3);
+  }
+  .feil {
+    margin: 0;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .samlet {
+    padding: var(--space-2) var(--space-3);
+    border: 2px solid var(--color-accent);
+    border-radius: 10px;
+    background: var(--color-white);
+  }
+  .status:empty,
+  .posisjon-status:empty {
+    display: none;
+  }
+  .send {
+    margin: 0;
+  }
+  .send .knapp {
+    width: 100%;
+  }
+  .bilder {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-1);
+  }
+  .bilder :global(li) {
+    overflow-wrap: anywhere;
+  }
+  .kvittering {
+    padding: var(--space-3);
+    border-radius: var(--radius-card);
+    background: var(--color-sand);
+    margin-bottom: var(--space-4);
+  }
+  .kvittering h3 {
+    margin-top: 0;
+  }
+  .honning {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .lekker-plass :global(.lekker-naa) {
+    margin-block: 0;
+  }
+  .uten-js {
+    padding: var(--space-3);
+    border-radius: var(--radius-card);
+    background: var(--color-sand);
+  }
+  @media (min-width: 720px) {
+    .send .knapp {
+      width: auto;
+    }
+  }
+</style>

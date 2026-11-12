@@ -117,3 +117,34 @@ Hemmelighetene `TURNSTILE_SECRET` og `SKJEMA_HMAC` må være satt. Uten dem svar
   sende flere bilder senere), lagres **uendret**, med eventuell posisjon. Hendelsen
   `bilde_metadata_ikke_fjernet` logges for bildet.
 - Bildene vises bare for Eirik via signerte lenker som utløper etter 14 dager.
+
+## Skjemaet i nettleseren (oppgave 8)
+
+**Turnstile-nøkkelen (site key) settes i bygget, ikke i `vars`.** Sidene med skjemaet er
+forhåndsrendret, så Worker-variabelen `TURNSTILE_SITE_KEY` når dem ikke. Eieren gjør dette:
+
+1. Opprett en Turnstile-widget i Cloudflare (Turnstile → Add widget) for `kobberogkran.no`
+   (og eventuelt preview-domenet). Modus «Managed».
+2. I Workers Builds (Settings → Build → Variables) legges **byggvariabelen**
+   `PUBLIC_TURNSTILE_SITE_KEY=<site key>`. Den er offentlig og havner i HTML-en.
+3. Hemmeligheten (`TURNSTILE_SECRET`) settes som før med `wrangler secret put`.
+
+Uten `PUBLIC_TURNSTILE_SITE_KEY` bruker bygget Cloudflares testnøkkel
+`1x00000000000000000000AA`, som alltid godkjennes. Den er bare for utvikling og det lukkede
+testmiljøet, og virker bare sammen med testhemmeligheten `1x0000000000000000000000000000000AA`.
+**En lanseringsbygg (`LAUNCH=true`) uten nøkkelen feiler**, så testnøkkelen kan aldri komme i
+produksjon. Lokalt: `npm run dev` bruker testnøkkelen; sett `TURNSTILE_SECRET` til testhemmeligheten
+i `.dev.vars` for å sende skjemaet lokalt.
+
+**Uten JavaScript** kan Turnstile ikke kjøre, og serveren avviser skjemaet. Skjemaet er fortsatt et
+vanlig `<form method="post">`, men en `<noscript>`-tekst (`tekster.skjema.utenJs`) viser telefon og
+WhatsApp i stedet.
+
+**Personvern (ta med i personvernteksten):**
+
+- Adresseforslagene hentes fra Kartverket (`ws.geonorge.no`). Det kunden skriver i adressefeltet
+  (fra 3 tegn), og posisjonen ved «Bruk der jeg er nå», sendes dit. Ingen andre data sendes.
+- Turnstile (Cloudflare) er det eneste tredjepartsskriptet, og lastes bare på sider med skjemaet.
+- Skjemaet lagrer ingenting i nettleseren (ingen cookies, localStorage eller sessionStorage).
+- Bildene gjøres om og skaleres i nettleseren (maks 2000 px, JPEG). Det fjerner all metadata, også
+  GPS-posisjonen. HEIC gjøres om til JPEG først.

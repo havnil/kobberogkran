@@ -3,6 +3,7 @@ import type { Locale } from '../i18n/locales';
 import { navPath } from '../i18n/nav';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
+import { telHref, waDigits } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
@@ -11,19 +12,19 @@ interface Props {
 const { locale } = Astro.props;
 const t = ui[locale];
 const firma = await getFirma();
-const digits = (value: string) => value.replace(/\D/g, '');
 ---
 
 <nav class="mobil-bunnlinje" aria-label={t.bunnlinje}>
-  <a class="knapp" href={`tel:${digits(firma.telefon.verdi)}`}>{t.ring}</a>
-  <a class="knapp knapp-omriss" href={`https://wa.me/${digits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+  <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
+  <a class="knapp knapp-omriss knapp-wa" href={`https://wa.me/${waDigits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
   <a class="knapp knapp-brun" href={navPath(locale, 'kontakt')}>{t.skjemaKnapp}</a>
 </nav>
 
 <style>
   .mobil-bunnlinje {
-    position: fixed;
-    inset: auto 0 0 0;
+    /* Sticky at the end of the page flow: stays at the bottom of the screen but never covers content. */
+    position: sticky;
+    bottom: 0;
     z-index: 50;
     display: flex;
     gap: var(--space-2);
@@ -38,11 +39,17 @@ const digits = (value: string) => value.replace(/\D/g, '');
     padding-inline: 0.5rem;
     text-align: center;
     line-height: 1.15;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    text-wrap: balance;
   }
 
   .mobil-bunnlinje :global(.knapp-brun) {
-    flex: 2;
+    flex: 2.2;
+  }
+
+  .mobil-bunnlinje :global(.knapp-wa) {
+    flex: 1.4;
+    white-space: nowrap;
   }
 
   @media (min-width: 1000px) {

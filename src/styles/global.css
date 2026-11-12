@@ -114,10 +114,3 @@ a {
   letter-spacing: 0.02em;
   vertical-align: middle;
 }
-
-/* Content below the fixed bottom bar must stay reachable. */
-@media (max-width: 999px) {
-  body {
-    padding-bottom: calc(var(--bunnlinje-hoyde) + env(safe-area-inset-bottom, 0px));
-  }
-}

@@ -5,6 +5,7 @@ import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
 import { navPath } from '../i18n/nav';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
+import { telHref, waDigits } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
@@ -14,7 +15,6 @@ interface Props {
 const { locale, alternates } = Astro.props;
 const t = ui[locale];
 const firma = await getFirma();
-const digits = (value: string) => value.replace(/\D/g, '');
 const home = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
 // Services has no submenu yet; the services collection adds it later.
 const items = [
@@ -62,8 +62,8 @@ const current = Astro.url.pathname;
     </nav>
 
     <div class="header-knapper">
-      <a class="knapp" href={`tel:${digits(firma.telefon.verdi)}`}>{t.ring}</a>
-      <a class="knapp knapp-omriss" href={`https://wa.me/${digits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+      <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
+      <a class="knapp knapp-omriss" href={`https://wa.me/${waDigits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
     </div>
 
     <div class="sprak">
@@ -97,7 +97,9 @@ const current = Astro.url.pathname;
 </script>
 
 <style>
+  /* Visual order equals DOM order: logo, menu button, nav, buttons, language. */
   .site-header {
+    position: relative;
     background: var(--color-cream);
     border-bottom: 1px solid var(--color-border);
   }
@@ -119,6 +121,10 @@ const current = Astro.url.pathname;
     display: block;
     height: 3.5rem; /* set A: 166 px wide, above the 160 px minimum */
     width: auto;
+  }
+
+  .hovedmeny {
+    flex-basis: 100%;
   }
 
   .hovedmeny ul {
@@ -144,12 +150,7 @@ const current = Astro.url.pathname;
     text-underline-offset: 0.25em;
   }
 
-  .sprak {
-    order: 1;
-  }
-
   .meny-knapp {
-    order: 2;
     min-height: 2.75rem;
     padding: 0.5rem 1rem;
     border: 2px solid var(--color-brown);
@@ -166,10 +167,16 @@ const current = Astro.url.pathname;
     gap: var(--space-2);
   }
 
-  /* Mobile: logo set B, menu behind a button. Without JavaScript the menu stays visible. */
-  .hovedmeny {
-    flex-basis: 100%;
-    order: 5;
+  /* With JavaScript the mobile menu is a dropdown under the header; without it the menu is a visible row. */
+  :global(html.js) .hovedmeny {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    padding-inline: var(--space-3);
+    background: var(--color-cream);
+    border-bottom: 1px solid var(--color-border-strong);
   }
 
   :global(html.js) .hovedmeny:not(.apen) {
@@ -187,29 +194,47 @@ const current = Astro.url.pathname;
       display: none;
     }
 
-    .sprak {
-      order: 0;
-    }
-
     .site-header-inner {
       flex-wrap: nowrap;
-      gap: var(--space-3);
+      gap: var(--space-2);
     }
 
     .hovedmeny,
+    :global(html.js) .hovedmeny,
     :global(html.js) .hovedmeny:not(.apen) {
       display: block;
+      position: static;
       flex-basis: auto;
-      order: 0;
+      padding: 0;
+      background: none;
+      border: 0;
     }
 
     .hovedmeny ul {
       flex-direction: row;
-      gap: var(--space-3);
+      gap: var(--space-2);
+    }
+
+    .hovedmeny a {
+      padding-inline: 0.4rem;
     }
 
     .header-knapper {
       display: flex;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .site-header-inner {
+      gap: var(--space-3);
+    }
+
+    .hovedmeny ul {
+      gap: var(--space-3);
+    }
+
+    .hovedmeny a {
+      padding-inline: 0.25rem;
     }
   }
 </style>

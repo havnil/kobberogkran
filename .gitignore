@@ -25,3 +25,4 @@ results.json
 
 # Claude Code worktrees
 .claude/worktrees/
+.superpowers/

@@ -13,6 +13,7 @@
     "check": "astro check",
     "test": "vitest run",
     "check:dist": "node scripts/check-dist.mjs",
+    "check:launch": "node scripts/check-launch.mjs",
     "generate-types": "wrangler types"
   },
   "dependencies": {

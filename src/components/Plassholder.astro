@@ -1,0 +1,19 @@
+---
+import type { Verdi } from '../lib/firma';
+
+interface Props {
+  verdi: Verdi<string | number>;
+}
+
+const { verdi } = Astro.props;
+---
+
+{
+  verdi.plassholder ? (
+    <span data-plassholder>
+      {verdi.verdi} <small class="plassholder-merke">Plassholder</small>
+    </span>
+  ) : (
+    verdi.verdi
+  )
+}

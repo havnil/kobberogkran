@@ -1,0 +1,22 @@
+{
+  "firma": {
+    "navn": "Kobber og Kran",
+    "juridiskNavn": "Kobber og Kran AS",
+    "telefon": { "verdi": "000 00 000", "plassholder": true },
+    "whatsapp": { "verdi": "+4700000000", "plassholder": true },
+    "epost": { "verdi": "post@kobberogkran.no", "plassholder": true },
+    "orgnr": { "verdi": "000 000 000", "plassholder": true },
+    "adresse": { "verdi": "Hemnes, 1970 Hemnes", "plassholder": true },
+    "priser": {
+      "timepris": { "verdi": 1125, "plassholder": true },
+      "servicebil": { "verdi": 625, "plassholder": true },
+      "forbruk": { "verdi": 125, "plassholder": true },
+      "varmtvannstankArbeid": { "verdi": 8125, "plassholder": true },
+      "varmtvannstankTypiskTotal": { "verdi": 18000, "plassholder": true }
+    },
+    "omrade": {
+      "steder": ["Hemnes", "Bjørkelangen", "Aurskog", "Løken", "Setskog", "Rømskog", "Lillestrøm"],
+      "maksKjoretidMin": { "verdi": 45, "plassholder": true }
+    }
+  }
+}

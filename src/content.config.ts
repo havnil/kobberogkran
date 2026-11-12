@@ -1,7 +1,8 @@
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { LOCALES } from './i18n/locales';
+import { firmaSchema } from './lib/firma';
 
 /**
  * Pages live in `src/content/pages/<locale>/<slug>.md`, so entry ids are `<locale>/<slug>`.
@@ -22,4 +23,10 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { pages };
+/** Company data: one entry, id `firma`. Edit `src/content/firma/firma.json`. */
+const firma = defineCollection({
+  loader: file('./src/content/firma/firma.json'),
+  schema: firmaSchema,
+});
+
+export const collections = { pages, firma };

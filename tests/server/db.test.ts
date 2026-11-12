@@ -7,6 +7,8 @@ import {
   loggHendelse,
   oppdaterSteg2,
   opprettForesporsel,
+  registrerSamtykke,
+  sisteSamtykke,
   type ForesporselInput,
 } from '../../src/server/db';
 
@@ -82,6 +84,20 @@ describe('opprettForesporsel', () => {
     expect(await tell('foresporsler')).toBe(2);
   });
 
+  it('fyller tom epost ved ny forespørsel fra samme kunde', async () => {
+    await opprettForesporsel(db, input(), 'a');
+    await opprettForesporsel(db, input({ epost: 'a@b.no', foretrukketKanal: 'epost' }), 'b');
+    const k = await db.prepare('SELECT epost, foretrukket_kanal, navn FROM kunder').first<{ epost: string; foretrukket_kanal: string; navn: string }>();
+    expect(k).toMatchObject({ epost: 'a@b.no', foretrukket_kanal: 'epost', navn: 'Test' });
+  });
+
+  it('sletter ikke eksisterende kundedata med null', async () => {
+    await opprettForesporsel(db, input({ epost: 'a@b.no' }), 'a');
+    await opprettForesporsel(db, input({ navn: undefined, epost: undefined }), 'b');
+    const k = await db.prepare('SELECT epost, navn FROM kunder').first<{ epost: string; navn: string }>();
+    expect(k).toMatchObject({ epost: 'a@b.no', navn: 'Test' });
+  });
+
   it('lager ulike kunder for ulike telefonnumre', async () => {
     await opprettForesporsel(db, input(), 'a');
     await opprettForesporsel(db, input({ telefon: '+4788888888' }), 'b');
@@ -119,6 +135,34 @@ describe('skjema', () => {
   });
 });
 
+describe('samtykker', () => {
+  const kundeId = async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    return (await db.prepare('SELECT kunde_id FROM foresporsler WHERE id = ?').bind(r.id).first<{ kunde_id: string }>())!.kunde_id;
+  };
+
+  it('gir null uten registrert samtykke', async () => {
+    expect(await sisteSamtykke(db, await kundeId(), 'whatsapp')).toBeNull();
+  });
+
+  it('returnerer siste og beholder historikken', async () => {
+    const id = await kundeId();
+    await registrerSamtykke(db, id, 'whatsapp', true, 'skjema');
+    await registrerSamtykke(db, id, 'whatsapp', false, 'stopp');
+    await registrerSamtykke(db, id, 'paaminnelser', true, 'skjema');
+    expect(await sisteSamtykke(db, id, 'whatsapp')).toBe(false);
+    expect(await sisteSamtykke(db, id, 'paaminnelser')).toBe(true);
+    expect(await tell('samtykker')).toBe(3);
+  });
+
+  it('avviser gitt utenfor 0 og 1', async () => {
+    const id = await kundeId();
+    await expect(
+      db.prepare('INSERT INTO samtykker (id, kunde_id, type, gitt, kilde, opprettet) VALUES (?,?,?,?,?,?)').bind('x', id, 'whatsapp', 2, 's', 'n').run(),
+    ).rejects.toThrow();
+  });
+});
+
 describe('oppdaterSteg2, leggTilBilde, loggHendelse', () => {
   it('lagrer svar som JSON og oppdaterer tidspunkt', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
@@ -128,6 +172,16 @@ describe('oppdaterSteg2, leggTilBilde, loggHendelse', () => {
     const rad = await db.prepare('SELECT svar_json, oppdatert FROM foresporsler WHERE id = ?').bind(r.id).first<{ svar_json: string; oppdatert: string }>();
     expect(JSON.parse(rad!.svar_json)).toEqual({ problem: 'lekkasje' });
     expect(rad!.oppdatert > før!.oppdatert).toBe(true);
+  });
+
+  it('oppdaterSteg2 gir false for ukjent id', async () => {
+    expect(await oppdaterSteg2(db, 'finnes-ikke', {})).toBe(false);
+    const r = await opprettForesporsel(db, input(), 'k');
+    expect(await oppdaterSteg2(db, r.id, {})).toBe(true);
+  });
+
+  it('avviser bilde med ukjent foresporsel_id (FK)', async () => {
+    await expect(leggTilBilde(db, 'finnes-ikke', 'x.jpg')).rejects.toThrow();
   });
 
   it('legger til bilde', async () => {

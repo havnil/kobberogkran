@@ -44,7 +44,7 @@ CREATE TABLE samtykker (
   id TEXT PRIMARY KEY,
   kunde_id TEXT NOT NULL REFERENCES kunder(id),
   type TEXT NOT NULL CHECK (type IN ('whatsapp', 'paaminnelser')),
-  gitt INTEGER NOT NULL,
+  gitt INTEGER NOT NULL CHECK (gitt IN (0, 1)),
   kilde TEXT,
   opprettet TEXT NOT NULL
 );

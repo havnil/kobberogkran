@@ -42,7 +42,10 @@ export async function opprettForesporsel(
     .prepare(
       `INSERT INTO kunder (id, telefon, navn, epost, foretrukket_kanal, opprettet)
        VALUES (?, ?, ?, ?, ?, ?)
-       ON CONFLICT(telefon) DO NOTHING`,
+       ON CONFLICT(telefon) DO UPDATE SET
+         navn = COALESCE(excluded.navn, kunder.navn),
+         epost = COALESCE(excluded.epost, kunder.epost),
+         foretrukket_kanal = COALESCE(excluded.foretrukket_kanal, kunder.foretrukket_kanal)`,
     )
     .bind(
       crypto.randomUUID(),
@@ -93,11 +96,13 @@ export async function opprettForesporsel(
   return { id: rad.id, ny: rad.id === id };
 }
 
-export async function oppdaterSteg2(db: D1Database, id: string, svar: unknown): Promise<void> {
-  await db
+/** Returnerer true hvis en forespørsel ble oppdatert. */
+export async function oppdaterSteg2(db: D1Database, id: string, svar: unknown): Promise<boolean> {
+  const r = await db
     .prepare('UPDATE foresporsler SET svar_json = ?, oppdatert = ? WHERE id = ?')
     .bind(JSON.stringify(svar), na(), id)
     .run();
+  return (r.meta.changes ?? 0) > 0;
 }
 
 export async function leggTilBilde(db: D1Database, foresporselId: string, r2Nokkel: string): Promise<void> {
@@ -117,4 +122,33 @@ export async function loggHendelse(
     .prepare('INSERT INTO hendelser (id, foresporsel_id, type, data_json, opprettet) VALUES (?, ?, ?, ?, ?)')
     .bind(crypto.randomUUID(), foresporselId, type, data === undefined ? null : JSON.stringify(data), na())
     .run();
+}
+
+export type SamtykkeType = 'whatsapp' | 'paaminnelser';
+
+/** Legger til en rad i samtykkehistorikken (append-only). */
+export async function registrerSamtykke(
+  db: D1Database,
+  kundeId: string,
+  type: SamtykkeType,
+  gitt: boolean,
+  kilde: string,
+): Promise<void> {
+  await db
+    .prepare('INSERT INTO samtykker (id, kunde_id, type, gitt, kilde, opprettet) VALUES (?, ?, ?, ?, ?, ?)')
+    .bind(crypto.randomUUID(), kundeId, type, gitt ? 1 : 0, kilde, na())
+    .run();
+}
+
+/** Siste registrerte samtykke for typen, eller null hvis ingen. */
+export async function sisteSamtykke(
+  db: D1Database,
+  kundeId: string,
+  type: SamtykkeType,
+): Promise<boolean | null> {
+  const rad = await db
+    .prepare('SELECT gitt FROM samtykker WHERE kunde_id = ? AND type = ? ORDER BY opprettet DESC, rowid DESC LIMIT 1')
+    .bind(kundeId, type)
+    .first<{ gitt: number }>();
+  return rad ? rad.gitt === 1 : null;
 }

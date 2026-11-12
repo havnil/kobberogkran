@@ -16,7 +16,8 @@ Requires Node 24 (`.nvmrc`).
 | --- | --- |
 | `npm ci` | Install the exact locked dependencies |
 | `npm run dev` | Local dev server |
-| `npm run build` | Build. Static output goes to `dist/client/`, server code to `dist/server/` |
+| `npm run build` | Build, then the launch gate (`check:launch`). Static output goes to `dist/client/`, server code to `dist/server/` |
+| `npm run check:launch` | Count placeholders in data and built HTML; with `LAUNCH=true` any hit fails (exit 1) |
 | `npm run preview` | Serve the built site locally |
 | `npm run check` | Type-check (`astro check`) |
 | `npm test` | Unit tests (Vitest, `tests/**`) |
@@ -31,6 +32,9 @@ This is what the required `ci` check runs, plus an offline link check on the bui
 | Path | Contents |
 | --- | --- |
 | `src/content/pages/<locale>/<slug>.md` | Page content (**content**) |
+| `src/content/firma/`, `tekster/`, `tjenester/`, `omtale/` | Company data, UI/form copy, services and reviews (**content**) |
+| `src/server/`, `src/client/`, `src/lib/` | Form API, sorting, notifications and channels (server); form scripts (client); shared helpers |
+| `migrations/` | D1 migrations. `0001` may only be edited before it is first applied; later changes are new files |
 | `src/i18n/` | Locales, localized paths, `hreflang` alternates, UI strings (`ui.ts`) |
 | `src/layouts/`, `src/components/` | Base layout and language switcher |
 | `src/pages/` | Routes: `[...slug].astro` (nb), `en/[...slug].astro`, and a 404 page per locale |
@@ -57,6 +61,8 @@ This is what the required `ci` check runs, plus an offline link check on the bui
   daily watchdog files a `needs-human` issue.
 - UI strings (the switcher label, the 404 text, the skip link) live in `src/i18n/ui.ts`
   and need a value for every locale.
+- Copy in `src/content/tekster`, `tjenester` and `firma` is content like pages: a human writes
+  or approves it. Agent-drafted text is marked `PLASSHOLDER:` (English: `[EN] `).
 - **Agents never write translation copy on their own.** Wording in either language,
   including alt text, is for a human to write or approve. You may draft wording when a
   human asks for it in the conversation, and the human reviews it.
@@ -85,6 +91,13 @@ An `auto-fix` PR is auto-merged only when `claude[bot]` opened it **and**
 touches content, the `auto-merge` workflow removes the `auto-fix` label, comments with
 the blocked files, and adds `needs-human`. PRs started with `@claude` are never
 auto-merged.
+
+## Launch gate
+
+`npm run build` ends with `scripts/check-launch.mjs`. Placeholders (`PLASSHOLDER`, `[EN] `,
+`data-plassholder`) are reported; a `LAUNCH=true` build without a real Turnstile key also fails. With `LAUNCH=true` (a Workers Builds build
+variable, set on launch day) any placeholder fails the build, so nothing deploys. Owner checklist:
+[`docs/runbooks/nettside-eiersteg.md`](docs/runbooks/nettside-eiersteg.md).
 
 ## What agents may never touch
 
@@ -135,6 +148,7 @@ read from `brand/` and never change it.
 
 - [`docs/runbooks/dns-migration.md`](docs/runbooks/dns-migration.md): move DNS from Uniweb to Cloudflare without breaking email
 - [`docs/runbooks/cloudflare-setup.md`](docs/runbooks/cloudflare-setup.md): connect the repo, domains, and the CMS login Worker
+- [`docs/runbooks/nettside-eiersteg.md`](docs/runbooks/nettside-eiersteg.md): D1, R2, Turnstile, secrets, vendors, texts and launch day for the form/notification site
 - [`docs/runbooks/github-setup.md`](docs/runbooks/github-setup.md): the Claude app, the token secret, adding a collaborator, the ruleset check
 - [`docs/runbooks/rollback.md`](docs/runbooks/rollback.md): undo a bad deploy
 - [`docs/runbooks/watchdog.md`](docs/runbooks/watchdog.md): checks, labels, pausing, the daily cap

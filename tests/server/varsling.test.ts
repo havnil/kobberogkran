@@ -6,7 +6,8 @@ import { hentForesporsel, leggTilBilde, oppdaterSteg2, opprettForesporsel, settS
 import type { Env } from '../../src/server/env';
 import { EpostVarsler, kodEmne, lagMime, type Varsler } from '../../src/server/varsling';
 import { FalskSorterer } from '../../src/server/sortering/ai';
-import { lagVarselTekst, sorterOgVarsle } from '../../src/server/sortering/index';
+import { lagEmne, lagVarselTekst, sorterOgVarsle } from '../../src/server/sortering/index';
+import type { Sorterer } from '../../src/server/sortering/ai';
 import { regelsjekk } from '../../src/server/sortering/regler';
 import { verifiserBildeLenke } from '../../src/server/bildelenke';
 
@@ -254,6 +255,61 @@ describe('sorterOgVarsle', () => {
     expect(send).not.toHaveBeenCalled();
   });
 
+  it('to parallelle kall gir nøyaktig én sending', async () => {
+    const id = await nyForesporsel();
+    const { varsler, send } = falskVarsler();
+    const treg: Sorterer = { sorter: () => new Promise((ok) => setTimeout(() => ok(aiSvar), 50)) };
+    await Promise.all([
+      sorterOgVarsle(env(), id, { sorterer: treg, varsler, naa }),
+      sorterOgVarsle(env(), id, { sorterer: treg, varsler, naa }),
+      sorterOgVarsle(env(), id, { sorterer: treg, varsler, naa }),
+    ]);
+    expect(send).toHaveBeenCalledTimes(1);
+    expect((await hentForesporsel(db, id))!.status).toBe('varslet');
+    expect((await hendelser(id)).filter((h) => h.type === 'sortering_ok')).toHaveLength(1);
+  });
+
+  it('en aktiv lås hindrer sending, en utløpt lås (krasjet holder) gjør det ikke', async () => {
+    const id = await nyForesporsel();
+    // En annen kjøring tok låsen og krasjet; lånet varer til 10:02.
+    await db.prepare('UPDATE foresporsler SET varsel_laast_til = ? WHERE id = ?').bind('2026-11-12T10:02:00.000Z', id).run();
+    const { varsler, send } = falskVarsler();
+    await sorterOgVarsle(env(), id, { sorterer: new FalskSorterer(aiSvar), varsler, naa: () => new Date('2026-11-12T10:01:00Z') });
+    expect(send).not.toHaveBeenCalled();
+    await sorterOgVarsle(env(), id, { sorterer: new FalskSorterer(aiSvar), varsler, naa: () => new Date('2026-11-12T10:03:00Z') });
+    expect(send).toHaveBeenCalledTimes(1);
+    expect((await hentForesporsel(db, id))!.status).toBe('varslet');
+  });
+
+  it('låsen frigis etter varsel_feil, så et nytt forsøk kan sende med en gang', async () => {
+    const id = await nyForesporsel();
+    await sorterOgVarsle(env(), id, { sorterer: new FalskSorterer(aiSvar), varsler: falskVarsler(new Error('x')).varsler, naa });
+    const rad = await db.prepare('SELECT varsel_laast_til FROM foresporsler WHERE id = ?').bind(id).first<{ varsel_laast_til: string | null }>();
+    expect(rad!.varsel_laast_til).toBeNull();
+  });
+
+  it('feiler loggingen av sortering_ok, brukes AI-svaret likevel', async () => {
+    const id = await nyForesporsel();
+    const feilendeDb = new Proxy(db, {
+      get(mål, navn, mottaker) {
+        if (navn !== 'prepare') return Reflect.get(mål, navn, mottaker);
+        return (sql: string) => {
+          const stmt = mål.prepare(sql);
+          if (!sql.includes('INSERT INTO hendelser')) return stmt;
+          return {
+            bind: (...args: unknown[]) =>
+              args[2] === 'sortering_ok' ? { run: () => Promise.reject(new Error('D1 nede')) } : stmt.bind(...args),
+          };
+        };
+      },
+    });
+    const { varsler, send } = falskVarsler();
+    await sorterOgVarsle(env({ DB: feilendeDb }), id, { sorterer: new FalskSorterer(aiSvar), varsler, naa });
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(send.mock.calls[0][2]).toContain(aiSvar.sammendrag);
+    expect((await hentForesporsel(db, id))!.status).toBe('varslet');
+  });
+
   it('lukket forespørsel varsles ikke', async () => {
     const id = await nyForesporsel();
     await settStatus(db, id, 'lukket');
@@ -275,6 +331,17 @@ describe('sorterOgVarsle', () => {
     const naaSek = Math.floor(naa().getTime() / 1000);
     expect(Number(utloper)).toBeGreaterThan(naaSek);
     expect(await verifiserBildeLenke(decodeURIComponent(bildeId), Number(utloper), sig, 'hemmelig', naaSek)).toBe(true);
+  });
+});
+
+describe('lagEmne', () => {
+  it('korter ned lang stedtekst til 60 tegn', async () => {
+    const id = await nyForesporsel({ stedTekst: 'x'.repeat(200), hast: 'snart' });
+    const f = (await hentForesporsel(db, id))!;
+    const emne = lagEmne(f, null);
+    expect(emne).not.toContain('x'.repeat(60));
+    expect(emne).toContain('x'.repeat(59) + '…');
+    expect(emne.startsWith('AKUTT')).toBe(false);
   });
 });
 

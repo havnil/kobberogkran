@@ -1,13 +1,15 @@
 // Sortering og varsel til Eirik. Kalles fra API-et i `ctx.waitUntil` (oppgave 7) og kaster aldri.
 //
 // Statusflyt: ny → sortert (AI og regler er kjørt) → varslet (e-post sendt).
+// - Hvert kall tar først en atomisk lås (`laasForVarsel`, lån på 2 min). Samtidige kall som ikke
+//   får låsen, gjør ingenting, så to parallelle kall gir nøyaktig én sending. Låsen frigis til slutt;
+//   krasjer kjøringen, utløper lånet, og et senere kall kan fortsette.
 // - Feiler AI-en (eller mangler ANTHROPIC_API_KEY), sendes varselet likevel med bare regler og rådata.
 // - Feiler varselet, blir status stående på 'sortert' og hendelsen 'varsel_feil' logges.
 //   Et nytt kall sender da på nytt, uten å kalle AI-en igjen (forrige sortering gjenbrukes).
-// - En forespørsel som allerede er 'varslet' eller 'lukket', varsles ikke igjen.
-//   Merk: to samtidige kall for samme 'ny' rad kan begge sende; kallende kode starter ett kall per forespørsel.
+// - En forespørsel som allerede er 'varslet' eller 'lukket', varsles aldri igjen.
 import type { D1Database } from '@cloudflare/workers-types';
-import { hentForesporsel, loggHendelse, settStatus, type Foresporsel } from '../db';
+import { frigiVarselLaas, hentForesporsel, laasForVarsel, loggHendelse, settStatus, type Foresporsel } from '../db';
 import type { Env } from '../env';
 import { signerBildeLenke } from '../bildelenke';
 import { EpostVarsler, type Varsler } from '../varsling';
@@ -23,6 +25,7 @@ export interface SorterOgVarsleDeps {
 
 const STANDARD_NETTSTED = 'https://kobberogkran.no';
 const BILDELENKE_GYLDIG_SEK = 14 * 24 * 60 * 60;
+const EMNE_STED_MAKS = 60;
 export const UTKAST_MERKE = 'Utkast – sendes ikke automatisk';
 
 const feiltekst = (e: unknown) => (e instanceof Error ? e.message : String(e)).slice(0, 500);
@@ -47,7 +50,11 @@ async function forrigeSortering(db: D1Database, id: string): Promise<Sortering |
 
 export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleDeps = {}): Promise<void> {
   const naa = deps.naa ?? (() => new Date());
+  let harLaas = false;
   try {
+    harLaas = await laasForVarsel(env.DB, id, naa());
+    if (!harLaas) return; // varslet, lukket, ukjent id, eller en annen kjøring holder låsen
+    // Les etter at låsen er tatt, så status er den gjeldende.
     const f = await hentForesporsel(env.DB, id);
     if (!f || f.status === 'varslet' || f.status === 'lukket') return;
 
@@ -60,11 +67,12 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
       const sorterer = deps.sorterer ?? new ClaudeSorterer(env.ANTHROPIC_API_KEY);
       try {
         ai = await sorterer.sorter(f, regler);
-        await loggHendelse(env.DB, id, 'sortering_ok', ai);
       } catch (e) {
         ai = null;
-        await loggHendelse(env.DB, id, 'sortering_feil', { feil: feiltekst(e) });
+        await loggTrygt(env.DB, id, 'sortering_feil', { feil: feiltekst(e) });
       }
+      // Feiler loggingen, brukes AI-svaret likevel i varselet.
+      if (ai) await loggTrygt(env.DB, id, 'sortering_ok', ai);
       await settStatus(env.DB, id, 'sortert');
     }
 
@@ -74,14 +82,27 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
       if (!til || !varsler) throw new Error('VARSEL_TIL eller VARSEL_FRA er ikke satt');
       const lenker = await bildelenker(env, f, naa());
       await varsler.send(til, lagEmne(f, ai), lagVarselTekst(f, regler, ai, lenker));
-      await loggHendelse(env.DB, id, 'varsel_ok', { kanal: 'epost' });
-      await settStatus(env.DB, id, 'varslet');
     } catch (e) {
-      await loggHendelse(env.DB, id, 'varsel_feil', { kanal: 'epost', feil: feiltekst(e) });
+      await loggTrygt(env.DB, id, 'varsel_feil', { kanal: 'epost', feil: feiltekst(e) });
+      return;
     }
+    // Sendt: sett status først, så en feil i loggingen ikke fører til ny sending.
+    await settStatus(env.DB, id, 'varslet');
+    await loggTrygt(env.DB, id, 'varsel_ok', { kanal: 'epost' });
   } catch (e) {
-    // Aldri kast ut av waitUntil. Forespørselen er lagret; watchdog/eier ser status 'ny'/'sortert'.
+    // Aldri kast ut av waitUntil. Forespørselen er lagret; status 'ny'/'sortert' viser at varselet mangler.
     console.error('sorterOgVarsle feilet', id, feiltekst(e));
+  } finally {
+    if (harLaas) await frigiVarselLaas(env.DB, id).catch((e) => console.error('frigiVarselLaas feilet', id, feiltekst(e)));
+  }
+}
+
+/** Logger en hendelse uten å kaste; en feil i loggingen skal ikke stoppe varselet. */
+async function loggTrygt(db: D1Database, id: string, type: string, data: unknown): Promise<void> {
+  try {
+    await loggHendelse(db, id, type, data);
+  } catch (e) {
+    console.error('loggHendelse feilet', id, type, feiltekst(e));
   }
 }
 
@@ -98,7 +119,8 @@ function hastFor(f: Foresporsel, ai: Sortering | null): string | null {
 
 export function lagEmne(f: Foresporsel, ai: Sortering | null): string {
   const hast = hastFor(f, ai);
-  const sted = f.stedTekst?.trim() || 'ukjent sted';
+  const helt = f.stedTekst?.replace(/\s+/g, ' ').trim() || 'ukjent sted';
+  const sted = [...helt].length > EMNE_STED_MAKS ? `${[...helt].slice(0, EMNE_STED_MAKS - 1).join('')}…` : helt;
   return `${hast === 'akutt' ? 'AKUTT – ' : ''}Ny forespørsel: ${f.tjeneste} – ${sted}`;
 }
 

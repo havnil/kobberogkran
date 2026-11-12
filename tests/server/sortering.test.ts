@@ -139,6 +139,41 @@ describe('regelsjekk', () => {
 });
 
 describe('lagBrukermelding', () => {
+  it('fjerner telefon og e-post som kunden har skrevet i fritekst', () => {
+    const f = foresporsel({
+      beskrivelse: 'Ring meg på 912 34 567 eller +47 91234567, evt. kari@example.no. Annen tlf 99887766.',
+      stedTekst: 'Storgata 1, ring 0047 412 34 567',
+      svar: { felles: { adkomst: 'Naboen har nøkkel, tlf 41 23 45 67, ola.nordmann@epost.no' }, tjenesteSvar: { rom: 'kjeller' } },
+    });
+    const tekst = lagBrukermelding(f, regelsjekk(f));
+    for (const forbudt of ['912 34 567', '91234567', '99887766', '412 34 567', '41 23 45 67', 'kari@example.no', 'ola.nordmann@epost.no', '@']) {
+      expect(tekst).not.toContain(forbudt);
+    }
+    expect(tekst).toContain('[telefon]');
+    expect(tekst).toContain('[e-post]');
+    expect(tekst).toContain('kjeller');
+    expect(tekst).toContain('Storgata 1');
+  });
+
+  it('beholder årstall, gårds- og bruksnummer og org.nr.', () => {
+    const f = foresporsel({ beskrivelse: 'Bygget 1985, gnr 12 bnr 3, org.nr. 123 456 789, tank 200 liter.' });
+    const tekst = lagBrukermelding(f, regelsjekk(f));
+    expect(tekst).toContain('1985');
+    expect(tekst).toContain('gnr 12 bnr 3');
+    expect(tekst).toContain('123 456 789');
+  });
+
+  it('sender bare hvitelistede nøkler fra svar', () => {
+    const f = foresporsel({
+      svar: { felles: { vann: 'brønn' }, tjenesteSvar: { rom: 'bad' }, bildeMerker: ['typeskilt'], telefon: '+4791234567', hemmelig: 'x-y-z' },
+    });
+    const tekst = lagBrukermelding(f, regelsjekk(f));
+    expect(tekst).toContain('brønn');
+    expect(tekst).toContain('typeskilt');
+    expect(tekst).not.toContain('x-y-z');
+    expect(tekst).not.toContain('"telefon"');
+  });
+
   it('sender aldri telefon, e-post eller navn til modellen', () => {
     const f = foresporsel({ svar: { felles: { vann: 'brønn' } } });
     const tekst = lagBrukermelding(f, regelsjekk(f));

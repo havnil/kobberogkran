@@ -24,6 +24,8 @@ CREATE TABLE foresporsler (
   svar_json TEXT,
   kilde TEXT,
   status TEXT NOT NULL DEFAULT 'ny' CHECK (status IN ('ny', 'sortert', 'varslet', 'lukket')),
+  -- Lås for sortering og varsel: ISO-tid da lånet utløper. NULL betyr ikke låst.
+  varsel_laast_til TEXT,
   opprettet TEXT NOT NULL,
   oppdatert TEXT NOT NULL
 );

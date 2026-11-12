@@ -27,6 +27,9 @@ export class FalskSorterer implements Sorterer {
 
 export const MODELL = 'claude-haiku-5-5';
 const API_URL = 'https://api.anthropic.com/v1/messages';
+// Versjon 2026-10-21 avviser temperature/top_p/top_k (sendes ikke). Strukturert svar via
+// output_config.format (json_schema) og output_config.effort støttes av claude-haiku-5-5.
+// Se https://platform.claude.com/docs/en/api/migration-2026-10-21
 const API_VERSJON = '2026-10-21';
 
 const SYSTEM = `Du sorterer forespørsler til Kobber og Kran AS, et rørleggerfirma i Hemnes (Aurskog-Høland). Eier og rørlegger er Eirik.
@@ -52,23 +55,53 @@ const JSON_SKJEMA = {
   additionalProperties: false,
 } as const;
 
+const EPOST = /[\p{L}\d._%+-]+@[\p{L}\d-]+(?:\.[\p{L}\d-]+)*\.\p{L}{2,}/gu;
+/** +47/0047 fulgt av 8 sifre, med mellomrom, punktum eller bindestrek mellom. */
+const TELEFON_LAND = /(?:\+|00)\s*47[\s.-]*\d(?:[\s.-]?\d){7}(?!\d)/g;
+/** Nøyaktig 8 sifre (norsk nummer), ikke del av et lengre tall som org.nr. */
+const TELEFON = /(?<![\d+])\d(?:[\s.-]?\d){7}(?!\d)/g;
+
+/** Fjerner e-postadresser og telefonnumre som kunden har skrevet i fritekst. */
+export function skrubb(tekst: string): string {
+  return tekst.replace(EPOST, '[e-post]').replace(TELEFON_LAND, '[telefon]').replace(TELEFON, '[telefon]');
+}
+
+const skrubbDypt = (v: unknown): unknown => {
+  if (typeof v === 'string') return skrubb(v);
+  if (Array.isArray(v)) return v.map(skrubbDypt);
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, skrubbDypt(x)]));
+  return v;
+};
+
+/** Bare de kjente nøklene i svaret (hviteliste), med fritekst skrubbet. */
+function svarForModell(svar: Foresporsel['svar']): Record<string, unknown> | null {
+  if (!svar) return null;
+  const ut: Record<string, unknown> = {};
+  for (const k of ['felles', 'tjenesteSvar', 'bildeMerker'] as const) {
+    if (svar[k] !== undefined) ut[k] = skrubbDypt(svar[k]);
+  }
+  return Object.keys(ut).length ? ut : null;
+}
+
 /**
- * Teksten modellen får. Inneholder aldri kundens navn, telefon eller e-post.
+ * Teksten modellen får. Inneholder aldri kundens navn, telefon eller e-post: kontaktfeltene
+ * sendes ikke, og telefonnumre og e-postadresser i fritekst skrubbes bort.
  */
 export function lagBrukermelding(f: Foresporsel, regler: Regelsjekk): string {
   const kjoretid = f.kjoretidMin ?? kjoretidMin(f.lat, f.lon);
+  const svar = svarForModell(f.svar);
   const linjer = [
     `Tjeneste: ${f.tjeneste}`,
     `Kundens hast: ${f.hast ?? 'ikke oppgitt'}`,
-    `Sted (tekst): ${f.stedTekst ?? 'ikke oppgitt'}`,
+    `Sted (tekst): ${f.stedTekst ? skrubb(f.stedTekst) : 'ikke oppgitt'}`,
     `Kjøretid fra Hemnes: ${kjoretid == null ? 'ukjent' : `ca. ${kjoretid} min`}`,
     `Antall bilder: ${f.bilder.length}`,
     '',
     'Beskrivelse fra kunden:',
-    f.beskrivelse?.trim() || '(ingen)',
+    f.beskrivelse?.trim() ? skrubb(f.beskrivelse.trim()) : '(ingen)',
     '',
     'Svar fra skjemaet (JSON):',
-    f.svar ? JSON.stringify(f.svar) : '(ingen)',
+    svar ? JSON.stringify(svar) : '(ingen)',
     '',
     'Regelsjekk (JSON):',
     JSON.stringify(regler),

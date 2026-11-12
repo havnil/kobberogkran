@@ -256,3 +256,32 @@ export async function settStatus(db: D1Database, id: string, status: Foresporsel
     .run();
   return (r.meta.changes ?? 0) > 0;
 }
+
+/** Standard leietid for varsellåsen. Dekker AI-kallet (maks 20 s) og sendingen med god margin. */
+export const VARSEL_LAAS_MS = 2 * 60 * 1000;
+
+/**
+ * Tar låsen for sortering og varsel atomisk. Gir true bare for én av flere samtidige kall.
+ * Låsen kan tas når status er 'ny' eller 'sortert' og ingen har et gyldig lån.
+ * Et lån fra en kjøring som krasjet, utløper etter `leieMs`, slik at et senere forsøk kan fortsette.
+ */
+export async function laasForVarsel(
+  db: D1Database,
+  id: string,
+  naa: Date,
+  leieMs: number = VARSEL_LAAS_MS,
+): Promise<boolean> {
+  const r = await db
+    .prepare(
+      `UPDATE foresporsler SET varsel_laast_til = ?
+        WHERE id = ? AND status IN ('ny', 'sortert')
+          AND (varsel_laast_til IS NULL OR varsel_laast_til < ?)`,
+    )
+    .bind(new Date(naa.getTime() + leieMs).toISOString(), id, naa.toISOString())
+    .run();
+  return r.meta.changes === 1;
+}
+
+export async function frigiVarselLaas(db: D1Database, id: string): Promise<void> {
+  await db.prepare('UPDATE foresporsler SET varsel_laast_til = NULL WHERE id = ?').bind(id).run();
+}

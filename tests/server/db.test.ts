@@ -3,7 +3,9 @@ import { Miniflare } from 'miniflare';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { D1Database } from '@cloudflare/workers-types';
 import {
+  frigiVarselLaas,
   hentForesporsel,
+  laasForVarsel,
   leggTilBilde,
   loggHendelse,
   oppdaterSteg2,
@@ -247,5 +249,45 @@ describe('hentForesporsel og settStatus', () => {
     expect(await settStatus(db, r.id, 'sortert')).toBe(true);
     expect((await hentForesporsel(db, r.id))!.status).toBe('sortert');
     expect(await settStatus(db, 'finnes-ikke', 'varslet')).toBe(false);
+  });
+});
+
+describe('laasForVarsel', () => {
+  const t0 = new Date('2026-11-12T10:00:00.000Z');
+  const om = (ms: number) => new Date(t0.getTime() + ms);
+
+  it('bare én av flere samtidige får låsen', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    const res = await Promise.all(Array.from({ length: 5 }, () => laasForVarsel(db, r.id, t0)));
+    expect(res.filter(Boolean)).toHaveLength(1);
+  });
+
+  it('låsen utløper etter leietiden', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    expect(await laasForVarsel(db, r.id, t0, 120_000)).toBe(true);
+    expect(await laasForVarsel(db, r.id, om(119_000), 120_000)).toBe(false);
+    expect(await laasForVarsel(db, r.id, om(121_000), 120_000)).toBe(true);
+  });
+
+  it('frigitt lås kan tas igjen', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    expect(await laasForVarsel(db, r.id, t0)).toBe(true);
+    await frigiVarselLaas(db, r.id);
+    expect(await laasForVarsel(db, r.id, t0)).toBe(true);
+  });
+
+  it('varslet, lukket og ukjent id gir ingen lås', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    await settStatus(db, r.id, 'varslet');
+    expect(await laasForVarsel(db, r.id, t0)).toBe(false);
+    await settStatus(db, r.id, 'lukket');
+    expect(await laasForVarsel(db, r.id, t0)).toBe(false);
+    expect(await laasForVarsel(db, 'finnes-ikke', t0)).toBe(false);
+  });
+
+  it('sortert kan låses (nytt forsøk etter varsel_feil)', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    await settStatus(db, r.id, 'sortert');
+    expect(await laasForVarsel(db, r.id, t0)).toBe(true);
   });
 });

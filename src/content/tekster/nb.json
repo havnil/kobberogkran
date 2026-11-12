@@ -1,248 +1,274 @@
 {
-  "kvittering": "PLASSHOLDER: Takk, vi har mottatt forespørselen din.",
-  "taptAnrop": "PLASSHOLDER: Vi så at du ringte. Send en forespørsel eller chat på WhatsApp.",
-  "whatsappHilsen": "PLASSHOLDER: Hei! Jeg trenger hjelp[ med {tjeneste}].[ (Fra: {kilde})]",
+  "utkast": {
+    "plassholder": true,
+    "merknad": "AI-utkast skrevet med simulerte personaer. Må leses og godkjennes av et menneske."
+  },
+  "kvittering": "Takk! Forespørselen din er kommet fram til Eirik i Kobber og Kran. Han ser på den og tar kontakt. Vil du sende flere bilder, kan du bruke denne lenken: {sendBilderLenke} Lekker det nå? Steng hovedstoppekranen og ring.",
+  "taptAnrop": "Hei, dette er Kobber og Kran. Eirik fikk ikke tatt telefonen akkurat nå. Send gjerne en kort forespørsel med bilde, så har han det han trenger når han ringer tilbake: {skjemaLenke} Eller skriv på WhatsApp: {whatsappLenke}",
+  "whatsappHilsen": "Hei Eirik! Jeg trenger hjelp av en rørlegger.[ Det gjelder: {tjeneste}.][ (Fra: {kilde})]",
   "forside": {
     "hero": {
-      "stedslinje": "PLASSHOLDER: Arbeidstittel for stedslinje",
-      "tittel": "PLASSHOLDER: Arbeidstittel for stor tittel",
-      "ingress": "PLASSHOLDER: Arbeidstittel for én setning om posisjonen",
+      "stedslinje": "Kobber og Kran · Hemnes · Aurskog-Høland",
+      "tittel": "Rørlegger på Hemnes og i Aurskog-Høland",
+      "ingress": "Bygdas egen rørlegger: du snakker med Eirik selv, får pris før jobben starter, og han kommer når det er avtalt.",
       "lover": [
-        "PLASSHOLDER: Løfte 1",
-        "PLASSHOLDER: Løfte 2",
-        "PLASSHOLDER: Løfte 3"
+        "Pris før jobben starter",
+        "Kommer når det er avtalt",
+        "Du har med Eirik å gjøre hele veien"
       ]
     },
     "tjenester": {
-      "tittel": "PLASSHOLDER: Hva trenger du hjelp med?"
+      "tittel": "Hva trenger du hjelp med?"
     },
     "varmtvann": {
-      "tittel": "PLASSHOLDER: Fastpris på varmtvannstank",
-      "arbeidMerke": "PLASSHOLDER: arbeid",
-      "typiskTotalMerke": "PLASSHOLDER: typisk totalpris",
-      "medTittel": "PLASSHOLDER: Med i prisen",
+      "tittel": "Fastpris på bytte av varmtvannstank",
+      "arbeidMerke": "fastpris på arbeidet",
+      "typiskTotalMerke": "typisk totalpris med ny tank",
+      "medTittel": "Med i fastprisen",
       "med": [
-        "PLASSHOLDER: Punkt med"
+        "Tømming og frakobling av den gamle tanken",
+        "Montering av ny tank på samme sted",
+        "Montering av sikkerhetsventil og blandeventil som hører til tanken",
+        "Tilkobling av vann og trykkprøving",
+        "Bortkjøring av den gamle tanken",
+        "FDV-dokumentasjon på det som er montert"
       ],
-      "ikkeMedTittel": "PLASSHOLDER: Ikke med",
+      "ikkeMedTittel": "Ikke med i fastprisen",
       "ikkeMed": [
-        "PLASSHOLDER: Punkt ikke med"
+        "Selve tanken og deler (kommer i tillegg)",
+        "Flytting av tanken til et annet sted",
+        "Nytt sluk eller lekkasjesikring etter dagens krav",
+        "Elektriker, hvis tanken skal fast tilkobles",
+        "Vanskelig adkomst, for eksempel trang kjeller eller krypkjeller"
       ]
     },
     "priser": {
-      "tittel": "PLASSHOLDER: Priser i korte trekk",
-      "timepris": "PLASSHOLDER: Timepris",
-      "servicebil": "PLASSHOLDER: Servicebil per oppdrag",
-      "forbruk": "PLASSHOLDER: Forbruksmateriell",
-      "regneeksempel": "PLASSHOLDER: Regneeksempel: 1 time + servicebil + forbruk",
-      "delerNote": "PLASSHOLDER: pluss deler"
+      "tittel": "Priser i korte trekk",
+      "timepris": "Timepris",
+      "servicebil": "Servicebil per oppdrag",
+      "forbruk": "Forbruksmateriell per oppdrag",
+      "regneeksempel": "Eksempel: en jobb på én time, med servicebil og forbruksmateriell",
+      "delerNote": "Pluss deler. Alle priser er med mva."
     },
     "steg": {
-      "tittel": "PLASSHOLDER: Slik bestiller du",
+      "tittel": "Slik bestiller du",
       "steg": [
         {
-          "tittel": "PLASSHOLDER: Steg 1",
-          "tekst": "PLASSHOLDER: Tekst steg 1"
+          "tittel": "Ring eller send forespørsel",
+          "tekst": "Fortell kort hva det gjelder og hvor. Et bilde av problemet sparer ofte en befaring."
         },
         {
-          "tittel": "PLASSHOLDER: Steg 2",
-          "tekst": "PLASSHOLDER: Tekst steg 2"
+          "tittel": "Eirik ser på det og gir pris",
+          "tekst": "Du får vite om det blir timepris, prisoverslag eller fastpris, og dere avtaler tidspunkt."
         },
         {
-          "tittel": "PLASSHOLDER: Steg 3",
-          "tekst": "PLASSHOLDER: Tekst steg 3"
+          "tittel": "Jobben blir gjort og dokumentert",
+          "tekst": "Eirik kommer når det er avtalt, rydder etter seg og gir deg dokumentasjon på det som er gjort."
         }
       ]
     },
     "omEirik": {
-      "tittel": "PLASSHOLDER: Om Eirik",
-      "tekst": "PLASSHOLDER: Kort om Eirik og tilknytningen til stedet",
-      "godkjenningerTittel": "PLASSHOLDER: Godkjenninger",
-      "anmeldelserTittel": "PLASSHOLDER: Anmeldelser"
+      "tittel": "Om Eirik",
+      "tekst": "Kobber og Kran er et lite rørleggerfirma på Hemnes, med Eirik som eier og rørlegger. Ringer du, er det Eirik du snakker med, og det er han som kommer. Han kjenner bygda, brønnene, hyttene og vintrene her, og vil være den du ringer neste gang også.",
+      "godkjenningerTittel": "Godkjenninger",
+      "anmeldelserTittel": "Dette sier kundene"
     },
     "dokumentasjon": {
-      "tittel": "PLASSHOLDER: Dokumentasjon",
+      "tittel": "Du får dokumentasjon",
       "punkter": [
-        "PLASSHOLDER: FDV-dokumentasjon",
-        "PLASSHOLDER: Dokumentasjon for våtrom"
+        "FDV-dokumentasjon (forvaltning, drift og vedlikehold) på det som monteres, til boligmappa og forsikringen",
+        "Dokumentasjon på rørleggerarbeidet i våtrom, med bilder underveis av det som skjules i vegg og gulv",
+        "Bilder før og etter jobben, hvis du ønsker det"
       ]
     },
     "omrader": {
-      "tittel": "PLASSHOLDER: Områder vi dekker"
+      "tittel": "Her jobber vi"
     },
     "skjema": {
-      "tittel": "PLASSHOLDER: Send forespørsel",
-      "merknad": "PLASSHOLDER: Ingress til skjemaet"
+      "tittel": "Send forespørsel",
+      "merknad": "Det tar et halvt minutt. Fortell hva det gjelder, hvor jobben er og hvordan Eirik når deg. Bilder kan du legge til etterpå, og e-post er valgfritt. Lekker det nå? Steng vannet og ring heller."
     }
   },
   "sider": {
     "tjeneste": {
-      "faktaTittel": "PLASSHOLDER: Fakta",
-      "sideboksTittel": "PLASSHOLDER: Raskeste vei",
-      "sideboksTekst": "PLASSHOLDER: Ring, skriv på WhatsApp eller send en forespørsel",
-      "faqTittel": "PLASSHOLDER: Det folk lurer på",
-      "andreTittel": "PLASSHOLDER: Andre tjenester",
-      "omraderTittel": "PLASSHOLDER: Her kjører vi",
-      "skjemaEyebrow": "PLASSHOLDER: Forespørsel"
+      "faktaTittel": "Kort fortalt",
+      "sideboksTittel": "Raskeste vei til hjelp",
+      "sideboksTekst": "Ring Eirik, skriv på WhatsApp, eller send en forespørsel med bilde. Lekker det nå, steng hovedstoppekranen først.",
+      "faqTittel": "Det folk lurer på",
+      "andreTittel": "Andre ting Eirik hjelper med",
+      "omraderTittel": "Her jobber vi",
+      "skjemaEyebrow": "Forespørsel"
     },
     "priser": {
-      "kveldHelgNavn": "PLASSHOLDER: Kveld og helg",
-      "kveldHelgVerdi": "PLASSHOLDER: etter avtale",
-      "mvaNote": "PLASSHOLDER: Alle priser er oppgitt med mva."
+      "kveldHelgNavn": "Kveld og helg",
+      "kveldHelgVerdi": "etter avtale",
+      "mvaNote": "Alle priser er oppgitt med 25 % mva. Bedrifter får faktura med mva spesifisert."
     },
     "bad": {
-      "prosessTittel": "PLASSHOLDER: Slik går det til",
+      "prosessTittel": "Slik går det til",
       "prosess": [
         {
-          "tittel": "PLASSHOLDER: Steg 1",
-          "tekst": "PLASSHOLDER: Tekst steg 1"
+          "tittel": "Forespørsel med bilder og mål",
+          "tekst": "Send bilder av badet slik det er i dag, omtrentlige mål og hva du ønsker deg. Bor du i borettslag, sjekk med styret tidlig."
         },
         {
-          "tittel": "PLASSHOLDER: Steg 2",
-          "tekst": "PLASSHOLDER: Tekst steg 2"
+          "tittel": "Befaring",
+          "tekst": "Eirik ser på badet, rørene og avløpet, og hva som må til for at badet blir tett og etter dagens krav."
         },
         {
-          "tittel": "PLASSHOLDER: Steg 3",
-          "tekst": "PLASSHOLDER: Tekst steg 3"
+          "tittel": "Skriftlig tilbud",
+          "tekst": "Du får et skriftlig tilbud på rørleggerdelen, med fastpris eller prisoverslag, og hvem som gjør hva hvis elektriker og flislegger er med."
+        },
+        {
+          "tittel": "Plan og oppstart",
+          "tekst": "Dere avtaler oppstart og rekkefølge. Eirik koordinerer med de andre håndverkerne, så du slipper å være prosjektleder."
+        },
+        {
+          "tittel": "Arbeid og kontroll",
+          "tekst": "Rørene legges, membran og sluk kontrolleres, og det tas bilder av alt som skjules før veggene lukkes."
+        },
+        {
+          "tittel": "Ferdig og dokumentert",
+          "tekst": "Utstyret monteres og testes. Du får FDV-dokumentasjon og dokumentasjon på rørleggerarbeidet i våtrommet."
         }
       ],
-      "ansvarTittel": "PLASSHOLDER: Eirik har ansvaret mot kunden",
-      "ansvar": "PLASSHOLDER: Beskrivelse av ansvaret og de faste partnerne"
+      "ansvarTittel": "Eirik har ansvaret mot deg",
+      "ansvar": "Når elektriker og flislegger er med gjennom Kobber og Kran, er det Eirik du har avtalen med. Du har én å ringe og én å forholde deg til hvis noe ikke blir som avtalt. Har du egne håndverkere, avtaler dere skriftlig hvem som har ansvaret for hva før arbeidet starter."
     },
     "kontakt": {
-      "telefonNavn": "PLASSHOLDER: Telefon",
-      "epostNavn": "PLASSHOLDER: E-post",
-      "adresseNavn": "PLASSHOLDER: Adresse"
+      "telefonNavn": "Telefon og WhatsApp",
+      "epostNavn": "E-post",
+      "adresseNavn": "Adresse"
     }
   },
   "lekkerNaa": {
-    "tittel": "PLASSHOLDER: Det lekker nå",
+    "tittel": "Lekker det nå?",
     "punkter": [
-      "PLASSHOLDER: Steng hovedstoppekranen, og si hvor den pleier å sitte",
-      "PLASSHOLDER: Slå av strømmen til tanken",
-      "PLASSHOLDER: Tørk opp og ta bilder",
-      "PLASSHOLDER: Meld fra til forsikringen, som har egen skadevakt",
-      "PLASSHOLDER: Ring Eirik"
+      "Steng hovedstoppekranen. Den sitter som regel der vannet kommer inn i huset: i kjelleren, i vaskerommet, under kjøkkenbenken eller ved varmtvannstanken. Har du brønn, kan du også slå av pumpa.",
+      "Slå av strømmen til varmtvannstanken i sikringsskapet, hvis tanken lekker eller vannet er stengt.",
+      "Tørk opp det du kan, og ta bilder av skaden og av det som lekker.",
+      "Meld fra til forsikringsselskapet. De fleste har egen skadevakt som kan komme og tørke ut.",
+      "Ring Eirik."
     ],
-    "ingenDognvakt": "PLASSHOLDER: Eirik tar akutte oppdrag når han kan, men har ikke døgnvakt."
+    "ingenDognvakt": "Eirik tar akutte oppdrag når han kan, men Kobber og Kran har ikke døgnvakt. Når han ikke svarer, er forsikringens skadevakt den raskeste hjelpen."
   },
   "skjema": {
-    "hva": "PLASSHOLDER: Hva gjelder det?",
-    "haster": "PLASSHOLDER: Hvor haster det?",
-    "hasterLekkerNaa": "PLASSHOLDER: Det lekker nå",
-    "hasterSnart": "PLASSHOLDER: Snart",
-    "hasterKanPlanlegges": "PLASSHOLDER: Kan planlegges",
-    "adresse": "PLASSHOLDER: Adresse",
-    "bruketMinPosisjon": "PLASSHOLDER: Bruk der jeg er nå",
-    "navn": "PLASSHOLDER: Navn",
-    "telefon": "PLASSHOLDER: Telefon",
-    "epost": "PLASSHOLDER: E-post (valgfritt)",
-    "bilder": "PLASSHOLDER: Bilder",
-    "beskrivelse": "PLASSHOLDER: Beskrivelse",
-    "samtykkePaminnelser": "PLASSHOLDER: Jeg vil ha servicepåminnelser",
-    "send": "PLASSHOLDER: Send forespørsel",
-    "tjenesteAnnet": "PLASSHOLDER: Annet",
-    "stedTittel": "PLASSHOLDER: Hvor er jobben?",
-    "stedHjelp": "PLASSHOLDER: Skriv adressen, eller beskriv stedet hvis hytta ikke har adresse.",
-    "stedUtenAdresse": "PLASSHOLDER: Hytte uten adresse? Oppgi gårds- og bruksnummer",
-    "gnr": "PLASSHOLDER: Gårdsnummer",
-    "bnr": "PLASSHOLDER: Bruksnummer",
-    "posisjonHentes": "PLASSHOLDER: Henter posisjonen din …",
-    "posisjonFunnet": "PLASSHOLDER: Posisjonen er lagt inn.",
-    "posisjonFeilet": "PLASSHOLDER: Fant ikke posisjonen. Skriv adressen i stedet.",
-    "kundetype": "PLASSHOLDER: Er du privatkunde eller bedrift?",
-    "kundetypePrivat": "PLASSHOLDER: Privat",
-    "kundetypeBedrift": "PLASSHOLDER: Bedrift",
-    "firmanavn": "PLASSHOLDER: Firmanavn",
-    "orgnr": "PLASSHOLDER: Org.nr.",
-    "sender": "PLASSHOLDER: Sender …",
-    "kvitteringTittel": "PLASSHOLDER: Forespørselen er sendt",
-    "kvitteringLenke": "PLASSHOLDER: Vil du sende flere bilder senere? Bruk denne lenken:",
-    "steg2Tittel": "PLASSHOLDER: Vil du fortelle mer? (valgfritt)",
-    "steg2Ingress": "PLASSHOLDER: Bilder og svar gjør det lettere å forberede jobben. Du kan hoppe over dette.",
-    "sporsmalTittel": "PLASSHOLDER: Om jobben",
-    "sendSteg2": "PLASSHOLDER: Send tillegget",
-    "steg2Ok": "PLASSHOLDER: Takk, tillegget er mottatt.",
-    "bildeLaster": "PLASSHOLDER: Laster opp …",
-    "bildeOk": "PLASSHOLDER: Bildet er mottatt.",
-    "bildeFrakoblet": "PLASSHOLDER: Venter på nett …",
-    "bildeFeilet": "PLASSHOLDER: Bildet kom ikke fram – du kan sende det senere fra lenken i kvitteringen over",
-    "bildeForMange": "PLASSHOLDER: Du kan sende høyst 8 bilder her. Send resten fra lenken i meldingen.",
-    "hvorHorte": "PLASSHOLDER: Hvor hørte du om oss? (valgfritt)",
+    "hva": "Hva gjelder det?",
+    "haster": "Hvor fort trenger du hjelp?",
+    "hasterLekkerNaa": "Det lekker nå",
+    "hasterSnart": "Snart, i løpet av noen dager",
+    "hasterKanPlanlegges": "Det kan planlegges",
+    "adresse": "Adresse",
+    "bruketMinPosisjon": "Bruk der jeg er nå",
+    "navn": "Navn",
+    "telefon": "Telefon",
+    "epost": "E-post (valgfritt)",
+    "bilder": "Bilder",
+    "beskrivelse": "Beskriv kort hva som har skjedd eller hva du ønsker",
+    "samtykkePaminnelser": "Ja takk, send meg en påminnelse når det er tid for service eller sesongarbeid (for eksempel vinterstengning av hytta). Du kan si nei takk når som helst.",
+    "send": "Send forespørsel",
+    "tjenesteAnnet": "Noe annet",
+    "stedTittel": "Hvor er jobben?",
+    "stedHjelp": "Skriv adressen, eller trykk «Bruk der jeg er nå» hvis du står der. Har hytta ingen adresse, kan du beskrive veien.",
+    "stedUtenAdresse": "Hytte uten adresse? Oppgi gårds- og bruksnummer",
+    "gnr": "Gårdsnummer (gnr.)",
+    "bnr": "Bruksnummer (bnr.)",
+    "posisjonHentes": "Henter posisjonen din …",
+    "posisjonFunnet": "Posisjonen er lagt inn.",
+    "posisjonFeilet": "Fant ikke posisjonen. Skriv adressen eller beskriv stedet i stedet.",
+    "kundetype": "Er du privatkunde eller bedrift?",
+    "kundetypePrivat": "Privat",
+    "kundetypeBedrift": "Bedrift, borettslag eller sameie",
+    "firmanavn": "Navn på bedriften",
+    "orgnr": "Organisasjonsnummer",
+    "sender": "Sender …",
+    "kvitteringTittel": "Takk, forespørselen er sendt",
+    "kvitteringLenke": "Vil du sende flere bilder senere? Bruk denne lenken:",
+    "steg2Tittel": "Vil du fortelle litt mer? (valgfritt)",
+    "steg2Ingress": "Forespørselen er allerede sendt. Bilder og noen korte svar gjør at Eirik kan ta med riktige deler og gi bedre pris. Du kan hoppe over alt her.",
+    "sporsmalTittel": "Om huset og jobben",
+    "sendSteg2": "Send tillegget",
+    "steg2Ok": "Takk, tillegget er kommet fram.",
+    "bildeLaster": "Laster opp …",
+    "bildeOk": "Bildet er kommet fram.",
+    "bildeFrakoblet": "Venter på nett …",
+    "bildeFeilet": "Bildet kom ikke fram. Du kan sende det senere fra lenken i kvitteringen over.",
+    "bildeForMange": "Du kan sende høyst 8 bilder her. Send resten fra lenken i kvitteringen.",
+    "hvorHorte": "Hvor hørte du om oss? (valgfritt)",
     "hvorHorteValg": {
-      "google": "PLASSHOLDER: Google",
-      "anbefaling": "PLASSHOLDER: Anbefalt av noen",
-      "sosialeMedier": "PLASSHOLDER: Sosiale medier",
-      "bilen": "PLASSHOLDER: Så bilen",
-      "annet": "PLASSHOLDER: Annet"
+      "google": "Google",
+      "anbefaling": "Anbefalt av noen",
+      "sosialeMedier": "Facebook eller andre sosiale medier",
+      "bilen": "Så bilen",
+      "annet": "Annet"
     },
     "sporsmal": {
-      "vann": "PLASSHOLDER: Kommunalt vann eller brønn?",
-      "avlop": "PLASSHOLDER: Kommunalt eller privat avløp?",
-      "byggear": "PLASSHOLDER: Omtrentlig byggeår",
-      "adkomst": "PLASSHOLDER: Adkomst og tilgang (nøkkel, brøytet vei)",
-      "kontaktform": "PLASSHOLDER: Vil du helst ha SMS eller en samtale?",
-      "bildeTypeskilt": "PLASSHOLDER: Bilde av typeskiltet på tanken",
-      "bildeTank": "PLASSHOLDER: Bilde av tanken med gulvet rundt",
-      "rom": "PLASSHOLDER: Hvilket rom står tanken i?",
-      "etasje": "PLASSHOLDER: Hvilken etasje?",
-      "tilkobling": "PLASSHOLDER: Står tanken i stikkontakt, eller er den fast tilkoblet?",
-      "problem": "PLASSHOLDER: Hva er problemet?",
-      "vannStengt": "PLASSHOLDER: Er vannet stengt?",
-      "fukt": "PLASSHOLDER: Er det fukt eller vann på gulv eller vegger?",
-      "forsikringMeldt": "PLASSHOLDER: Er saken meldt til forsikringen?",
-      "antallAvlop": "PLASSHOLDER: Gjelder det ett eller flere avløp?",
-      "bronntype": "PLASSHOLDER: Borebrønn eller gravd brønn?",
-      "bildePumpe": "PLASSHOLDER: Bilde av pumpen og trykktanken",
-      "symptom": "PLASSHOLDER: Hva merker du? (for eksempel lavt trykk eller dårlig vann)",
-      "vannprove": "PLASSHOLDER: Er det tatt vannprøve?",
-      "maal": "PLASSHOLDER: Omtrentlige mål på badet",
-      "oppstart": "PLASSHOLDER: Ønsket oppstart",
-      "egneHandverkere": "PLASSHOLDER: Har du egne håndverkere (for eksempel flislegger)?",
-      "styregodkjenning": "PLASSHOLDER: Har styret godkjent (borettslag)?"
+      "vann": "Har du kommunalt vann eller brønn?",
+      "avlop": "Er avløpet kommunalt eller privat (septiktank, minirenseanlegg)?",
+      "byggear": "Omtrent når er huset eller hytta bygget?",
+      "adkomst": "Adkomst og tilgang: er veien brøytet, er noen hjemme, eller hvor ligger nøkkelen?",
+      "kontaktform": "Vil du helst ha SMS eller en telefonsamtale?",
+      "bildeTypeskilt": "Bilde av typeskiltet på tanken (klistremerket med liter og effekt)",
+      "bildeTank": "Bilde av tanken og gulvet rundt (så Eirik ser sluk og eventuell vannstopper)",
+      "rom": "Hvilket rom står tanken i?",
+      "etasje": "Hvilken etasje? (kjeller, 1. etasje …)",
+      "tilkobling": "Står tanken i stikkontakt, eller er den fast tilkoblet?",
+      "problem": "Hva er problemet?",
+      "vannStengt": "Har du stengt vannet?",
+      "fukt": "Er det fukt eller vann i gulv eller vegger?",
+      "forsikringMeldt": "Har du meldt fra til forsikringen?",
+      "antallAvlop": "Gjelder det ett avløp eller flere?",
+      "bronntype": "Er det borebrønn eller gravd brønn?",
+      "bildePumpe": "Bilde av pumpa og trykktanken",
+      "symptom": "Hva merker du? (for eksempel lavt trykk, brunt vann, lukt, eller at pumpa går hele tida)",
+      "vannprove": "Er det tatt vannprøve?",
+      "maal": "Omtrentlige mål på badet",
+      "oppstart": "Når ønsker du å starte?",
+      "egneHandverkere": "Har du egne håndverkere (for eksempel flislegger eller elektriker)?",
+      "styregodkjenning": "Har styret godkjent arbeidet (borettslag eller sameie)?"
     },
     "valg": {
-      "ja": "PLASSHOLDER: Ja",
-      "nei": "PLASSHOLDER: Nei",
-      "vetIkke": "PLASSHOLDER: Vet ikke",
-      "kommunalt": "PLASSHOLDER: Kommunalt",
-      "bronn": "PLASSHOLDER: Brønn",
-      "privat": "PLASSHOLDER: Privat",
-      "sms": "PLASSHOLDER: SMS",
-      "samtale": "PLASSHOLDER: Samtale",
-      "stikkontakt": "PLASSHOLDER: Stikkontakt",
-      "fast": "PLASSHOLDER: Fast tilkoblet",
-      "lekkasje": "PLASSHOLDER: Lekkasje",
-      "tettAvlop": "PLASSHOLDER: Tett avløp",
-      "annet": "PLASSHOLDER: Annet",
-      "ett": "PLASSHOLDER: Ett",
-      "flere": "PLASSHOLDER: Flere",
-      "borebronn": "PLASSHOLDER: Borebrønn",
-      "gravd": "PLASSHOLDER: Gravd",
-      "ikkeBorettslag": "PLASSHOLDER: Ikke borettslag"
+      "ja": "Ja",
+      "nei": "Nei",
+      "vetIkke": "Vet ikke",
+      "kommunalt": "Kommunalt",
+      "bronn": "Brønn",
+      "privat": "Privat",
+      "sms": "SMS",
+      "samtale": "Samtale",
+      "stikkontakt": "Stikkontakt",
+      "fast": "Fast tilkoblet",
+      "lekkasje": "Det drypper eller lekker",
+      "tettAvlop": "Tett vask, sluk eller do",
+      "annet": "Noe annet",
+      "ett": "Ett",
+      "flere": "Flere",
+      "borebronn": "Borebrønn",
+      "gravd": "Gravd brønn",
+      "ikkeBorettslag": "Ikke borettslag eller sameie"
     },
     "feil": {
-      "mangler": "PLASSHOLDER: Dette feltet må fylles ut. Du kan også ringe oss:",
-      "ugyldig": "PLASSHOLDER: Sjekk det du har skrevet her. Du kan også ringe oss:",
-      "forLang": "PLASSHOLDER: Teksten er for lang. Du kan også ringe oss:",
-      "turnstile": "PLASSHOLDER: Vi fikk ikke bekreftet at du ikke er en robot. Prøv igjen, eller ring oss:",
-      "nettverk": "PLASSHOLDER: Fikk ikke kontakt. Sjekk nettet og prøv igjen, eller ring oss:",
-      "server": "PLASSHOLDER: Noe gikk galt hos oss. Prøv igjen, eller ring oss:"
+      "mangler": "Fyll ut dette feltet. Du kan også ringe:",
+      "ugyldig": "Sjekk det du har skrevet her. Du kan også ringe:",
+      "forLang": "Teksten er for lang. Kort den ned, eller ring:",
+      "turnstile": "Vi fikk ikke bekreftet at du ikke er en robot. Prøv igjen, eller ring:",
+      "nettverk": "Fikk ikke kontakt. Sjekk nettet og prøv igjen, eller ring:",
+      "server": "Noe gikk galt hos oss. Prøv igjen om litt, eller ring:"
     },
-    "utenJs": "PLASSHOLDER: Skjemaet trenger JavaScript. Ring oss eller send en melding på WhatsApp i stedet:",
-    "samtykkeWhatsapp": "PLASSHOLDER: Jeg vil gjerne få svar på WhatsApp",
-    "forslagAntall": "PLASSHOLDER: {antall} adresseforslag. Bruk piltastene for å velge."
+    "utenJs": "Skjemaet trenger JavaScript for å virke. Ring eller send en melding på WhatsApp i stedet:",
+    "samtykkeWhatsapp": "Jeg vil gjerne få svar på WhatsApp",
+    "forslagAntall": "{antall} adresseforslag. Bruk piltastene for å velge."
   },
   "skjemaSvar": {
-    "takkTittel": "PLASSHOLDER: Takk!",
-    "feilTittel": "PLASSHOLDER: Noe mangler i skjemaet",
-    "feilTekst": "PLASSHOLDER: Gå tilbake og sjekk feltene, eller ring oss.",
-    "sendBilderTittel": "PLASSHOLDER: Send flere bilder",
-    "sendBilderTekst": "PLASSHOLDER: Her kan du sende flere bilder til forespørselen din.",
-    "sendBilderSend": "PLASSHOLDER: Send bildet",
-    "sendBilderOk": "PLASSHOLDER: Bildet er mottatt. Du kan sende ett til.",
-    "sendBilderFeil": "PLASSHOLDER: Bildet kom ikke fram. Prøv igjen, eller send det på WhatsApp.",
-    "ugyldigLenkeTittel": "PLASSHOLDER: Lenken virker ikke",
-    "ugyldigLenkeTekst": "PLASSHOLDER: Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring oss."
+    "takkTittel": "Takk! Forespørselen er sendt",
+    "feilTittel": "Noe mangler i skjemaet",
+    "feilTekst": "Gå tilbake og sjekk feltene som er merket, eller ring Eirik.",
+    "sendBilderTittel": "Send flere bilder",
+    "sendBilderTekst": "Her kan du legge til flere bilder i forespørselen din. Ta gjerne ett bilde på avstand og ett nært, og ett av typeskiltet hvis det finnes.",
+    "sendBilderSend": "Send bildet",
+    "sendBilderOk": "Bildet er kommet fram. Du kan sende ett til.",
+    "sendBilderFeil": "Bildet kom ikke fram. Prøv igjen, eller send det på WhatsApp.",
+    "ugyldigLenkeTittel": "Lenken virker ikke",
+    "ugyldigLenkeTekst": "Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring Eirik."
   }
 }

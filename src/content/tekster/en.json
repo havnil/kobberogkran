@@ -1,248 +1,274 @@
 {
-  "kvittering": "[EN] Thanks, we have received your request.",
-  "taptAnrop": "[EN] We saw that you called. Send a request or chat on WhatsApp.",
-  "whatsappHilsen": "[EN] Hi! I need help[ with {tjeneste}].[ (From: {kilde})]",
+  "utkast": {
+    "plassholder": true,
+    "merknad": "AI draft written with simulated personas. Must be read and approved by a human."
+  },
+  "kvittering": "Thank you! Your request has reached Eirik at Kobber og Kran. He will look at it and get in touch. To send more photos, use this link: {sendBilderLenke} Is water leaking right now? Turn off the main stopcock and call.",
+  "taptAnrop": "Hi, this is Kobber og Kran. Eirik couldn't take your call just now. Feel free to send a short request with a photo, so he has what he needs when he calls back: {skjemaLenke} Or write on WhatsApp: {whatsappLenke}",
+  "whatsappHilsen": "Hi Eirik! I need help from a plumber.[ It's about: {tjeneste}.][ (From: {kilde})]",
   "forside": {
     "hero": {
-      "stedslinje": "[EN] Arbeidstittel for stedslinje",
-      "tittel": "[EN] Arbeidstittel for stor tittel",
-      "ingress": "[EN] Arbeidstittel for én setning om posisjonen",
+      "stedslinje": "Kobber og Kran · Hemnes · Aurskog-Høland",
+      "tittel": "Plumber in Hemnes and Aurskog-Høland",
+      "ingress": "Your local plumber: you talk to Eirik himself, get a price before the job starts, and he turns up when agreed.",
       "lover": [
-        "[EN] Løfte 1",
-        "[EN] Løfte 2",
-        "[EN] Løfte 3"
+        "A price before the job starts",
+        "Turns up when agreed",
+        "You deal with Eirik all the way"
       ]
     },
     "tjenester": {
-      "tittel": "[EN] Hva trenger du hjelp med?"
+      "tittel": "What do you need help with?"
     },
     "varmtvann": {
-      "tittel": "[EN] Fastpris på varmtvannstank",
-      "arbeidMerke": "[EN] arbeid",
-      "typiskTotalMerke": "[EN] typisk totalpris",
-      "medTittel": "[EN] Med i prisen",
+      "tittel": "Fixed price for replacing a water heater",
+      "arbeidMerke": "fixed price for the work",
+      "typiskTotalMerke": "typical total with a new tank",
+      "medTittel": "Included in the fixed price",
       "med": [
-        "[EN] Punkt med"
+        "Draining and disconnecting the old tank",
+        "Fitting the new tank in the same place",
+        "Fitting the safety valve and mixing valve that go with the tank",
+        "Connecting the water and pressure testing",
+        "Taking the old tank away",
+        "Documentation (FDV) for what is installed"
       ],
-      "ikkeMedTittel": "[EN] Ikke med",
+      "ikkeMedTittel": "Not included in the fixed price",
       "ikkeMed": [
-        "[EN] Punkt ikke med"
+        "The tank itself and parts (charged on top)",
+        "Moving the tank to a different place",
+        "A new floor drain or leak protection to current standards",
+        "An electrician, if the tank is to be hard-wired",
+        "Difficult access, such as a cramped cellar or crawl space"
       ]
     },
     "priser": {
-      "tittel": "[EN] Priser i korte trekk",
-      "timepris": "[EN] Timepris",
-      "servicebil": "[EN] Servicebil per oppdrag",
-      "forbruk": "[EN] Forbruksmateriell",
-      "regneeksempel": "[EN] Regneeksempel: 1 time + servicebil + forbruk",
-      "delerNote": "[EN] pluss deler"
+      "tittel": "Prices at a glance",
+      "timepris": "Hourly rate",
+      "servicebil": "Service van per visit",
+      "forbruk": "Consumables per visit",
+      "regneeksempel": "Example: a one-hour job, with service van and consumables",
+      "delerNote": "Plus parts. All prices include VAT."
     },
     "steg": {
-      "tittel": "[EN] Slik bestiller du",
+      "tittel": "How to book",
       "steg": [
         {
-          "tittel": "[EN] Steg 1",
-          "tekst": "[EN] Tekst steg 1"
+          "tittel": "Call or send a request",
+          "tekst": "Say briefly what it is and where. A photo of the problem often saves a site visit."
         },
         {
-          "tittel": "[EN] Steg 2",
-          "tekst": "[EN] Tekst steg 2"
+          "tittel": "Eirik looks at it and gives you a price",
+          "tekst": "You find out whether it is an hourly rate, an estimate or a fixed price, and you agree on a time."
         },
         {
-          "tittel": "[EN] Steg 3",
-          "tekst": "[EN] Tekst steg 3"
+          "tittel": "The job is done and documented",
+          "tekst": "Eirik turns up when agreed, tidies up after himself and gives you documentation of the work."
         }
       ]
     },
     "omEirik": {
-      "tittel": "[EN] Om Eirik",
-      "tekst": "[EN] Kort om Eirik og tilknytningen til stedet",
-      "godkjenningerTittel": "[EN] Godkjenninger",
-      "anmeldelserTittel": "[EN] Anmeldelser"
+      "tittel": "About Eirik",
+      "tekst": "Kobber og Kran is a small plumbing firm in Hemnes, owned and run by Eirik, who is also the plumber. When you call, you talk to Eirik, and he is the one who comes. He knows the village, the wells, the cabins and the winters here, and wants to be the one you call next time too.",
+      "godkjenningerTittel": "Approvals",
+      "anmeldelserTittel": "What customers say"
     },
     "dokumentasjon": {
-      "tittel": "[EN] Dokumentasjon",
+      "tittel": "You get documentation",
       "punkter": [
-        "[EN] FDV-dokumentasjon",
-        "[EN] Dokumentasjon for våtrom"
+        "FDV documentation (operation and maintenance) for what is installed, for your home records and your insurer",
+        "Documentation of the plumbing work in wet rooms, with photos of everything hidden in walls and floors",
+        "Before and after photos of the job, if you want them"
       ]
     },
     "omrader": {
-      "tittel": "[EN] Områder vi dekker"
+      "tittel": "Where we work"
     },
     "skjema": {
-      "tittel": "[EN] Send forespørsel",
-      "merknad": "[EN] Intro to the form"
+      "tittel": "Send a request",
+      "merknad": "It takes half a minute. Tell us what it is, where the job is and how Eirik can reach you. You can add photos afterwards, and e-mail is optional. Leaking right now? Turn off the water and call instead."
     }
   },
   "sider": {
     "tjeneste": {
-      "faktaTittel": "[EN] PLASSHOLDER: Fakta",
-      "sideboksTittel": "[EN] PLASSHOLDER: Raskeste vei",
-      "sideboksTekst": "[EN] PLASSHOLDER: Ring, skriv på WhatsApp eller send en forespørsel",
-      "faqTittel": "[EN] PLASSHOLDER: Det folk lurer på",
-      "andreTittel": "[EN] PLASSHOLDER: Andre tjenester",
-      "omraderTittel": "[EN] PLASSHOLDER: Her kjører vi",
-      "skjemaEyebrow": "[EN] PLASSHOLDER: Forespørsel"
+      "faktaTittel": "In short",
+      "sideboksTittel": "Quickest way to get help",
+      "sideboksTekst": "Call Eirik, write on WhatsApp, or send a request with a photo. If water is leaking now, turn off the main stopcock first.",
+      "faqTittel": "Common questions",
+      "andreTittel": "Other things Eirik can help with",
+      "omraderTittel": "Where we work",
+      "skjemaEyebrow": "Request"
     },
     "priser": {
-      "kveldHelgNavn": "[EN] PLASSHOLDER: Kveld og helg",
-      "kveldHelgVerdi": "[EN] PLASSHOLDER: etter avtale",
-      "mvaNote": "[EN] PLASSHOLDER: Alle priser er oppgitt med mva."
+      "kveldHelgNavn": "Evenings and weekends",
+      "kveldHelgVerdi": "by arrangement",
+      "mvaNote": "All prices include 25% VAT. Businesses get an invoice with VAT shown separately."
     },
     "bad": {
-      "prosessTittel": "[EN] PLASSHOLDER: Slik går det til",
+      "prosessTittel": "How it works",
       "prosess": [
         {
-          "tittel": "[EN] PLASSHOLDER: Steg 1",
-          "tekst": "[EN] PLASSHOLDER: Tekst steg 1"
+          "tittel": "Request with photos and measurements",
+          "tekst": "Send photos of the bathroom as it is today, rough measurements and what you would like. If you live in a housing co-operative, check with the board early."
         },
         {
-          "tittel": "[EN] PLASSHOLDER: Steg 2",
-          "tekst": "[EN] PLASSHOLDER: Tekst steg 2"
+          "tittel": "Site visit",
+          "tekst": "Eirik looks at the bathroom, the pipes and the drain, and what it takes to make the room watertight and up to current standards."
         },
         {
-          "tittel": "[EN] PLASSHOLDER: Steg 3",
-          "tekst": "[EN] PLASSHOLDER: Tekst steg 3"
+          "tittel": "Written offer",
+          "tekst": "You get a written offer for the plumbing, as a fixed price or an estimate, stating who does what if an electrician and a tiler are involved."
+        },
+        {
+          "tittel": "Plan and start date",
+          "tekst": "You agree on a start date and the order of work. Eirik coordinates with the other tradespeople, so you don't have to be the project manager."
+        },
+        {
+          "tittel": "Work and checks",
+          "tekst": "The pipes go in, the membrane and drain are checked, and everything that will be hidden is photographed before the walls are closed."
+        },
+        {
+          "tittel": "Finished and documented",
+          "tekst": "The fittings are installed and tested. You get FDV documentation and documentation of the plumbing work in the wet room."
         }
       ],
-      "ansvarTittel": "[EN] PLASSHOLDER: Eirik har ansvaret mot kunden",
-      "ansvar": "[EN] PLASSHOLDER: Beskrivelse av ansvaret og de faste partnerne"
+      "ansvarTittel": "Eirik is responsible to you",
+      "ansvar": "When an electrician and a tiler work through Kobber og Kran, your agreement is with Eirik. You have one person to call and one person to deal with if something is not as agreed. If you bring your own tradespeople, you agree in writing who is responsible for what before work starts."
     },
     "kontakt": {
-      "telefonNavn": "[EN] PLASSHOLDER: Telefon",
-      "epostNavn": "[EN] PLASSHOLDER: E-post",
-      "adresseNavn": "[EN] PLASSHOLDER: Adresse"
+      "telefonNavn": "Phone and WhatsApp",
+      "epostNavn": "E-mail",
+      "adresseNavn": "Address"
     }
   },
   "lekkerNaa": {
-    "tittel": "[EN] It is leaking now",
+    "tittel": "Leaking right now?",
     "punkter": [
-      "[EN] Close the main stop valve, and where it usually is",
-      "[EN] Switch off the power to the tank",
-      "[EN] Dry up and take photos",
-      "[EN] Tell your insurer, who has its own damage line",
-      "[EN] Call Eirik"
+      "Turn off the main stopcock. It is usually where the water comes into the house: in the cellar, the utility room, under the kitchen sink or by the water heater. If you have a well, you can also switch off the pump.",
+      "Switch off the power to the water heater at the fuse box if the tank is leaking or the water is turned off.",
+      "Mop up what you can, and take photos of the damage and of what is leaking.",
+      "Report it to your insurer. Most have their own emergency service that can come and dry things out.",
+      "Call Eirik."
     ],
-    "ingenDognvakt": "[EN] Eirik takes urgent jobs when he can, but has no 24-hour service."
+    "ingenDognvakt": "Eirik takes urgent jobs when he can, but Kobber og Kran does not have a 24-hour emergency service. If he can't answer, your insurer's emergency service is the quickest help."
   },
   "skjema": {
-    "hva": "[EN] What is it about?",
-    "haster": "[EN] How urgent is it?",
-    "hasterLekkerNaa": "[EN] It is leaking now",
-    "hasterSnart": "[EN] Soon",
-    "hasterKanPlanlegges": "[EN] Can be planned",
-    "adresse": "[EN] Address",
-    "bruketMinPosisjon": "[EN] Use my current location",
-    "navn": "[EN] Name",
-    "telefon": "[EN] Phone",
-    "epost": "[EN] Email (optional)",
-    "bilder": "[EN] Photos",
-    "beskrivelse": "[EN] Description",
-    "samtykkePaminnelser": "[EN] I want service reminders",
-    "send": "[EN] Send request",
-    "tjenesteAnnet": "[EN] Other",
-    "stedTittel": "[EN] Where is the job?",
-    "stedHjelp": "[EN] Type the address, or describe the place if the cabin has no address.",
-    "stedUtenAdresse": "[EN] Cabin without an address? Enter the farm and title number",
-    "gnr": "[EN] Farm number (gnr.)",
-    "bnr": "[EN] Title number (bnr.)",
-    "posisjonHentes": "[EN] Getting your location …",
-    "posisjonFunnet": "[EN] Your location has been added.",
-    "posisjonFeilet": "[EN] Could not find your location. Type the address instead.",
-    "kundetype": "[EN] Are you a private customer or a business?",
-    "kundetypePrivat": "[EN] Private",
-    "kundetypeBedrift": "[EN] Business",
-    "firmanavn": "[EN] Company name",
-    "orgnr": "[EN] Organisation number",
-    "sender": "[EN] Sending …",
-    "kvitteringTittel": "[EN] Your request has been sent",
-    "kvitteringLenke": "[EN] Want to send more photos later? Use this link:",
-    "steg2Tittel": "[EN] Want to tell us more? (optional)",
-    "steg2Ingress": "[EN] Photos and answers make it easier to prepare the job. You can skip this.",
-    "sporsmalTittel": "[EN] About the job",
-    "sendSteg2": "[EN] Send the extra details",
-    "steg2Ok": "[EN] Thanks, the extra details have been received.",
-    "bildeLaster": "[EN] Uploading …",
-    "bildeOk": "[EN] The photo has been received.",
-    "bildeFrakoblet": "[EN] Waiting for a connection …",
-    "bildeFeilet": "[EN] The photo did not arrive – you can send it later from the link in the receipt above",
-    "bildeForMange": "[EN] You can send at most 8 photos here. Send the rest from the link in the message.",
-    "hvorHorte": "[EN] Where did you hear about us? (optional)",
+    "hva": "What is it about?",
+    "haster": "How soon do you need help?",
+    "hasterLekkerNaa": "It is leaking now",
+    "hasterSnart": "Soon, within a few days",
+    "hasterKanPlanlegges": "It can be planned",
+    "adresse": "Address",
+    "bruketMinPosisjon": "Use where I am now",
+    "navn": "Name",
+    "telefon": "Phone",
+    "epost": "E-mail (optional)",
+    "bilder": "Photos",
+    "beskrivelse": "Briefly describe what has happened or what you would like",
+    "samtykkePaminnelser": "Yes please, remind me when it is time for a service or seasonal work (such as shutting down the cabin for winter). You can say no thanks at any time.",
+    "send": "Send request",
+    "tjenesteAnnet": "Something else",
+    "stedTittel": "Where is the job?",
+    "stedHjelp": "Type the address, or tap “Use where I am now” if you are there. If the cabin has no address, you can describe the way there.",
+    "stedUtenAdresse": "Cabin without an address? Give the farm and title number (gnr./bnr.)",
+    "gnr": "Farm number (gnr.)",
+    "bnr": "Title number (bnr.)",
+    "posisjonHentes": "Finding your location …",
+    "posisjonFunnet": "Your location has been added.",
+    "posisjonFeilet": "Couldn't find your location. Type the address or describe the place instead.",
+    "kundetype": "Are you a private customer or a business?",
+    "kundetypePrivat": "Private",
+    "kundetypeBedrift": "Business, housing co-op or owners' association",
+    "firmanavn": "Business name",
+    "orgnr": "Organisation number",
+    "sender": "Sending …",
+    "kvitteringTittel": "Thank you, your request has been sent",
+    "kvitteringLenke": "Want to send more photos later? Use this link:",
+    "steg2Tittel": "Want to tell us a bit more? (optional)",
+    "steg2Ingress": "Your request has already been sent. Photos and a few short answers help Eirik bring the right parts and give a better price. You can skip all of this.",
+    "sporsmalTittel": "About the house and the job",
+    "sendSteg2": "Send the extra details",
+    "steg2Ok": "Thank you, the extra details have arrived.",
+    "bildeLaster": "Uploading …",
+    "bildeOk": "The photo has arrived.",
+    "bildeFrakoblet": "Waiting for a connection …",
+    "bildeFeilet": "The photo didn't arrive. You can send it later from the link in the receipt above.",
+    "bildeForMange": "You can send up to 8 photos here. Send the rest from the link in the receipt.",
+    "hvorHorte": "How did you hear about us? (optional)",
     "hvorHorteValg": {
-      "google": "[EN] Google",
-      "anbefaling": "[EN] Recommended by someone",
-      "sosialeMedier": "[EN] Social media",
-      "bilen": "[EN] Saw the van",
-      "annet": "[EN] Other"
+      "google": "Google",
+      "anbefaling": "Someone recommended you",
+      "sosialeMedier": "Facebook or other social media",
+      "bilen": "Saw the van",
+      "annet": "Other"
     },
     "sporsmal": {
-      "vann": "[EN] Municipal water or a well?",
-      "avlop": "[EN] Municipal or private sewage?",
-      "byggear": "[EN] Approximate year built",
-      "adkomst": "[EN] Access (key, ploughed road)",
-      "kontaktform": "[EN] Do you prefer a text message or a call?",
-      "bildeTypeskilt": "[EN] Photo of the rating plate on the water heater",
-      "bildeTank": "[EN] Photo of the water heater and the floor around it",
-      "rom": "[EN] Which room is the water heater in?",
-      "etasje": "[EN] Which floor?",
-      "tilkobling": "[EN] Is the water heater plugged in, or permanently connected?",
-      "problem": "[EN] What is the problem?",
-      "vannStengt": "[EN] Is the water turned off?",
-      "fukt": "[EN] Is there moisture or water on the floor or walls?",
-      "forsikringMeldt": "[EN] Have you reported it to your insurer?",
-      "antallAvlop": "[EN] One drain or several?",
-      "bronntype": "[EN] Drilled or dug well?",
-      "bildePumpe": "[EN] Photo of the pump and the pressure tank",
-      "symptom": "[EN] What are you noticing? (for example low pressure or poor water)",
-      "vannprove": "[EN] Has a water sample been taken?",
-      "maal": "[EN] Approximate size of the bathroom",
-      "oppstart": "[EN] Preferred start",
-      "egneHandverkere": "[EN] Do you have your own tradespeople (for example a tiler)?",
-      "styregodkjenning": "[EN] Has the board approved it (housing cooperative)?"
+      "vann": "Do you have mains water or a well?",
+      "avlop": "Is the drain on the public sewer or private (septic tank, small treatment plant)?",
+      "byggear": "Roughly when was the house or cabin built?",
+      "adkomst": "Access: is the road cleared of snow, will someone be home, or where is the key?",
+      "kontaktform": "Would you rather have a text message or a phone call?",
+      "bildeTypeskilt": "Photo of the rating plate on the tank (the label showing litres and power)",
+      "bildeTank": "Photo of the tank and the floor around it (so Eirik can see the drain and any leak stop)",
+      "rom": "Which room is the tank in?",
+      "etasje": "Which floor? (cellar, ground floor …)",
+      "tilkobling": "Is the tank plugged into a socket, or hard-wired?",
+      "problem": "What is the problem?",
+      "vannStengt": "Have you turned off the water?",
+      "fukt": "Is there damp or water in the floor or walls?",
+      "forsikringMeldt": "Have you reported it to your insurer?",
+      "antallAvlop": "Is it one drain or several?",
+      "bronntype": "Is it a drilled well or a dug well?",
+      "bildePumpe": "Photo of the pump and the pressure tank",
+      "symptom": "What do you notice? (for example low pressure, brown water, a smell, or the pump running all the time)",
+      "vannprove": "Has the water been tested?",
+      "maal": "Rough measurements of the bathroom",
+      "oppstart": "When would you like to start?",
+      "egneHandverkere": "Do you have your own tradespeople (for example a tiler or electrician)?",
+      "styregodkjenning": "Has the board approved the work (housing co-op or owners' association)?"
     },
     "valg": {
-      "ja": "[EN] Yes",
-      "nei": "[EN] No",
-      "vetIkke": "[EN] Don't know",
-      "kommunalt": "[EN] Municipal",
-      "bronn": "[EN] Well",
-      "privat": "[EN] Private",
-      "sms": "[EN] Text message",
-      "samtale": "[EN] Call",
-      "stikkontakt": "[EN] Plugged in",
-      "fast": "[EN] Permanently connected",
-      "lekkasje": "[EN] Leak",
-      "tettAvlop": "[EN] Blocked drain",
-      "annet": "[EN] Other",
-      "ett": "[EN] One",
-      "flere": "[EN] Several",
-      "borebronn": "[EN] Drilled",
-      "gravd": "[EN] Dug",
-      "ikkeBorettslag": "[EN] Not a housing cooperative"
+      "ja": "Yes",
+      "nei": "No",
+      "vetIkke": "Don't know",
+      "kommunalt": "Public / mains",
+      "bronn": "Well",
+      "privat": "Private",
+      "sms": "Text message",
+      "samtale": "Phone call",
+      "stikkontakt": "Socket",
+      "fast": "Hard-wired",
+      "lekkasje": "Dripping or leaking",
+      "tettAvlop": "Blocked sink, drain or toilet",
+      "annet": "Something else",
+      "ett": "One",
+      "flere": "Several",
+      "borebronn": "Drilled well",
+      "gravd": "Dug well",
+      "ikkeBorettslag": "Not a housing co-op or owners' association"
     },
     "feil": {
-      "mangler": "[EN] Please fill in this field. You can also call us:",
-      "ugyldig": "[EN] Please check what you typed here. You can also call us:",
-      "forLang": "[EN] The text is too long. You can also call us:",
-      "turnstile": "[EN] We could not confirm that you are not a robot. Try again, or call us:",
-      "nettverk": "[EN] No connection. Check your network and try again, or call us:",
-      "server": "[EN] Something went wrong on our side. Try again, or call us:"
+      "mangler": "Please fill in this field. You can also call:",
+      "ugyldig": "Please check what you have written here. You can also call:",
+      "forLang": "The text is too long. Shorten it, or call:",
+      "turnstile": "We couldn't confirm that you are not a robot. Try again, or call:",
+      "nettverk": "Couldn't connect. Check your connection and try again, or call:",
+      "server": "Something went wrong on our side. Try again in a moment, or call:"
     },
-    "utenJs": "[EN] The form needs JavaScript. Call us or send a WhatsApp message instead:",
-    "samtykkeWhatsapp": "[EN] I would like a reply on WhatsApp",
-    "forslagAntall": "[EN] {antall} address suggestions. Use the arrow keys to choose."
+    "utenJs": "The form needs JavaScript to work. Call or send a WhatsApp message instead:",
+    "samtykkeWhatsapp": "I'd like to get a reply on WhatsApp",
+    "forslagAntall": "{antall} address suggestions. Use the arrow keys to choose."
   },
   "skjemaSvar": {
-    "takkTittel": "[EN] Thank you!",
-    "feilTittel": "[EN] Something is missing in the form",
-    "feilTekst": "[EN] Go back and check the fields, or call us.",
-    "sendBilderTittel": "[EN] Send more photos",
-    "sendBilderTekst": "[EN] Here you can send more photos for your request.",
-    "sendBilderSend": "[EN] Send photo",
-    "sendBilderOk": "[EN] The photo was received. You can send another.",
-    "sendBilderFeil": "[EN] The photo did not arrive. Try again, or send it on WhatsApp.",
-    "ugyldigLenkeTittel": "[EN] The link does not work",
-    "ugyldigLenkeTekst": "[EN] The link is incomplete. Use the link in the message you received, or call us."
+    "takkTittel": "Thank you! Your request has been sent",
+    "feilTittel": "Something is missing in the form",
+    "feilTekst": "Go back and check the marked fields, or call Eirik.",
+    "sendBilderTittel": "Send more photos",
+    "sendBilderTekst": "Here you can add more photos to your request. One from a distance and one close up is ideal, plus the rating plate if there is one.",
+    "sendBilderSend": "Send the photo",
+    "sendBilderOk": "The photo has arrived. You can send another one.",
+    "sendBilderFeil": "The photo didn't arrive. Try again, or send it on WhatsApp.",
+    "ugyldigLenkeTittel": "The link doesn't work",
+    "ugyldigLenkeTekst": "The link is incomplete. Use the link in the message you received, or call Eirik."
   }
 }

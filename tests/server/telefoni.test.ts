@@ -173,6 +173,32 @@ describe('POST /api/telefoni/ubesvart', () => {
     expect(await db.prepare('SELECT melding_kanal FROM anrop').first('melding_kanal')).toBeNull();
   });
 
+  it('når D1 feiler: 200, ingen melding, men Eirik varsles om anropet', async () => {
+    env = {
+      ...env,
+      DB: {
+        prepare() {
+          throw new Error('D1 nede');
+        },
+      },
+    } as unknown as Env;
+    const res = await kjor(await anrop({ fra: FRA }));
+    expect(res.status).toBe(200);
+    await ferdig();
+    expect(sendinger()).toBe(0);
+    expect(varsler.send).toHaveBeenCalledTimes(1);
+    const [, emne, tekst] = varsler.send.mock.calls[0];
+    expect(emne + tekst).toContain(FRA);
+    expect(tekst).toMatch(/ikke sendt/i);
+  });
+
+  it('for stor kropp gir 413', async () => {
+    const res = await kjor(await anrop({ fra: FRA, fyll: 'x'.repeat(70 * 1024) }));
+    expect(res.status).toBe(413);
+    await ferdig();
+    expect(sendinger()).toBe(0);
+  });
+
   it('svarer 200 selv om varselet til Eirik feiler', async () => {
     varsler.send.mockRejectedValue(new Error('e-post nede'));
     const res = await kjor(await anrop({ fra: FRA }));

@@ -4,14 +4,15 @@
 // Flyt:
 // 1. Kroppen leses én gang som bytes og verifiseres (`TelefoniVerifiserer`). Standard er
 //    HMAC-SHA256 av kroppen med TELEFONI_WEBHOOK_SECRET, hex i `X-Signatur`. Feil gir 401;
-//    uten hemmelighet avvises alt med 503.
+//    uten hemmelighet avvises alt med 503. Kropp over 64 KB gir 413.
 // 2. `TelefoniAdapter` tolker kroppen. Standard er `{ fra: E.164, tidspunkt? }`. Leverandørspesifikke
 //    adaptere kommer når leverandøren er valgt (oppgave 10).
 // 3. Skjult eller ugyldig nummer: ingen melding, bare varsel til Eirik.
 // 4. Ellers: én atomisk, betinget INSERT i `anrop` sørger for at samme nummer bare får én melding
 //    per 30 minutter, også når to webhooker kommer samtidig. Bare den som fikk satt inn raden, sender
 //    den faste malen `tapt_anrop` (WhatsApp → RCS → SMS) med lenke til skjemaet og til WhatsApp.
-// 5. Eirik varsles om hvert tapte anrop, også de som ikke utløser ny melding.
+// 5. Eirik varsles om hvert tapte anrop, også de som ikke utløser ny melding. Feiler D1 under
+//    reservasjonen, svares 200 uten melding til kunden, og Eirik får beskjed om anropet.
 // Svaret til leverandøren kommer straks; sending og varsel skjer i `waitUntil`. Ingen AI er involvert.
 import firmaJson from '../content/firma/firma.json';
 import nbJson from '../content/tekster/nb.json';
@@ -20,6 +21,7 @@ import { tekstSchema } from '../lib/innhold';
 import { fyllHilsen, waLenke } from '../lib/whatsapp';
 import type { Env, Kontekst } from './env';
 import { verifiserHmacHex } from './hmac';
+import { forStor, lesBegrensetKropp } from './kropp';
 import { lagKanaler, sendMedReserve, type Kanal, type SendResultat } from './kanaler/index';
 import { varsleEirik, type Varsler } from './varsling';
 
@@ -127,8 +129,9 @@ export async function haandterUbesvartAnrop(
     console.error(JSON.stringify({ hendelse: 'telefoni_webhook_ikke_konfigurert' }));
     return new Response('Not configured', { status: 503 });
   }
-  // Kroppen leses én gang; signaturen gjelder de nøyaktige bytene.
-  const raw = await request.arrayBuffer();
+  // Kroppen leses én gang (maks 64 KB); signaturen gjelder de nøyaktige bytene.
+  const raw = await lesBegrensetKropp(request);
+  if (!raw) return forStor();
   if (!(await verifiserer.verifiser(request.headers, raw))) return new Response('Unauthorized', { status: 401 });
 
   let json: unknown;
@@ -157,7 +160,26 @@ export async function haandterUbesvartAnrop(
   }
 
   const fra = anrop.fra;
-  const radId = await reserverMelding(env.DB, fra, naa);
+  // Feiler D1 her, svarer vi likevel 200: et nytt forsøk fra leverandøren kunne gitt en sen eller
+  // dobbel melding og flere varsler. I stedet får Eirik beskjed om anropet, uten melding til kunden.
+  let radId: string | null;
+  try {
+    radId = await reserverMelding(env.DB, fra, naa);
+  } catch (e) {
+    console.error(JSON.stringify({ hendelse: 'tapt_anrop_db_feil', feil: String(e).slice(0, 300) }));
+    ctx.waitUntil(
+      varsleEirik(
+        env,
+        deps.varsler,
+        `Tapt anrop fra ${fra}`,
+        `Tapt anrop fra ${fra} (${tid}).
+Melding ikke sendt: databasen feilet, så systemet kunne ikke sjekke ` +
+          'om nummeret nylig har fått melding. Ring tilbake eller send melding selv.',
+        'tapt_anrop',
+      ),
+    );
+    return new Response('ok', { status: 200 });
+  }
   ctx.waitUntil(
     (async () => {
       // Eirik skal varsles uansett hva som skjer med meldingen til innringeren.

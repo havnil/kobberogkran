@@ -85,24 +85,30 @@ describe('GET /api/whatsapp/webhook (verifisering)', () => {
   const url = (q: string) => new URL(`https://kobberogkran.no/api/whatsapp/webhook?${q}`);
 
   it('riktig token gir 200 og hub.challenge', async () => {
-    const res = haandterWhatsappGet(url(`hub.mode=subscribe&hub.verify_token=${TOKEN}&hub.challenge=12345`), env);
+    const res = await haandterWhatsappGet(url(`hub.mode=subscribe&hub.verify_token=${TOKEN}&hub.challenge=12345`), env);
     expect(res.status).toBe(200);
     expect(await res.text()).toBe('12345');
   });
 
-  it('feil token gir 403', () => {
-    expect(haandterWhatsappGet(url('hub.mode=subscribe&hub.verify_token=feil&hub.challenge=1'), env).status).toBe(403);
+  it('feil token gir 403', async () => {
+    expect((await haandterWhatsappGet(url('hub.mode=subscribe&hub.verify_token=feil&hub.challenge=1'), env)).status).toBe(403);
   });
 
-  it('feil mode gir 403', () => {
-    expect(haandterWhatsappGet(url(`hub.mode=unsubscribe&hub.verify_token=${TOKEN}&hub.challenge=1`), env).status).toBe(
+  it('token med annen lengde gir 403', async () => {
+    expect((await haandterWhatsappGet(url(`hub.mode=subscribe&hub.verify_token=${TOKEN}x&hub.challenge=1`), env)).status).toBe(
       403,
     );
   });
 
-  it('uten konfigurert token gir 403, også for tomt token', () => {
+  it('feil mode gir 403', async () => {
+    expect((await haandterWhatsappGet(url(`hub.mode=unsubscribe&hub.verify_token=${TOKEN}&hub.challenge=1`), env)).status).toBe(
+      403,
+    );
+  });
+
+  it('uten konfigurert token gir 403, også for tomt token', async () => {
     env = { ...env, WHATSAPP_VERIFY_TOKEN: undefined };
-    expect(haandterWhatsappGet(url('hub.mode=subscribe&hub.verify_token=&hub.challenge=1'), env).status).toBe(403);
+    expect((await haandterWhatsappGet(url('hub.mode=subscribe&hub.verify_token=&hub.challenge=1'), env)).status).toBe(403);
   });
 });
 
@@ -145,6 +151,39 @@ describe('POST /api/whatsapp/webhook', () => {
     await Promise.all(ventende);
     expect(varsler.send.mock.calls[0][2]).toContain('image');
     expect(kanaler.every((k) => k.kall.length === 0)).toBe(true);
+  });
+
+  it.each(['reaction', 'system'])('meldingstypen %s gir ikke varsel', async (type) => {
+    const res = await kjor(await post(meldingKropp({ type, [type]: { emoji: '👍', body: 'x' } })));
+    expect(res.status).toBe(200);
+    await Promise.all(ventende);
+    expect(varsler.send).not.toHaveBeenCalled();
+  });
+
+  it('for stor kropp gir 413 (Content-Length)', async () => {
+    const tekst = meldingKropp({ type: 'text', text: { body: 'x'.repeat(70 * 1024) } });
+    const res = await kjor(await post(tekst));
+    expect(res.status).toBe(413);
+    expect(varsler.send).not.toHaveBeenCalled();
+  });
+
+  it('for stor kropp uten Content-Length gir 413 (strøm)', async () => {
+    const del = new TextEncoder().encode('x'.repeat(16 * 1024));
+    let n = 0;
+    const strom = new ReadableStream<Uint8Array>({
+      pull(c) {
+        if (n++ < 10) c.enqueue(del);
+        else c.close();
+      },
+    });
+    const req = new Request('https://kobberogkran.no/api/whatsapp/webhook', {
+      method: 'POST',
+      headers: { 'x-hub-signature-256': 'sha256=' + '0'.repeat(64) },
+      body: strom,
+      duplex: 'half',
+    } as RequestInit);
+    expect((await kjor(req)).status).toBe(413);
+    expect(n).toBeLessThan(10);
   });
 
   it('statusoppdateringer uten meldinger gir 200 og ingen varsel', async () => {

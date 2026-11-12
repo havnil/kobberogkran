@@ -81,7 +81,9 @@ Content (needs a human, never auto-merged):
 Agent guardrails (also need a human, never auto-merged): `CLAUDE.md`, `AGENTS.md`,
 `.claude/`, `scripts/automerge/`, `scripts/watchdog/`, `.github/prompts/`,
 `.github/dependabot.yml`, the `auto-merge`, `claude`, `claude-watchdog` and `watchdog-*`
-workflows, and `wrangler.jsonc` (production routes and domains).
+workflows, `wrangler.jsonc` (production routes and domains), and the safety-critical code:
+`scripts/` (all of it), `migrations/`, `src/server/`, `src/pages/api/`, `src/lib/lansering.ts`
+and `src/i18n/ui.ts`.
 
 Technical (an agent may fix it): broken links, build or type errors, dependency
 patch/minor updates, workflow or config errors.

@@ -24,7 +24,9 @@ content), prices, legal text, translations, DNS, email, anything under `src/cont
 `public/images/`, `public/admin/` or `brand/`, media anywhere under `public/`, your own
 guardrails (`CLAUDE.md`, `AGENTS.md`, `.claude/`, `scripts/automerge/`, `scripts/watchdog/`,
 `.github/prompts/`, `.github/dependabot.yml`, the `auto-merge`, `claude`, `claude-watchdog`
-and `watchdog-*` workflows), `wrangler.jsonc`, and anything you are unsure about.
+and `watchdog-*` workflows), `wrangler.jsonc`, the safety-critical code (`scripts/`,
+`migrations/`, `src/server/`, `src/pages/api/`, `src/lib/lansering.ts`, `src/i18n/ui.ts`),
+and anything you are unsure about.
 
 ## If it is purely technical
 

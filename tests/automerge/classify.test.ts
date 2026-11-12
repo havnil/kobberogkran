@@ -72,6 +72,24 @@ describe('classifyPaths', () => {
     }
   });
 
+  it('blocks the safety-critical server, migration, script and launch paths', () => {
+    const guards = [
+      'scripts/check-launch.mjs',
+      'scripts/check-dist.mjs',
+      'migrations/0001_init.sql',
+      'src/server/skjema.ts',
+      'src/server/sortering/ai.ts',
+      'src/pages/api/foresporsel.ts',
+      'src/pages/api/bilde/[id].ts',
+      'src/lib/lansering.ts',
+      'src/i18n/ui.ts',
+      'wrangler.jsonc',
+    ];
+    for (const path of guards) {
+      expect(classifyPaths(['package.json', path]), path).toEqual({ allowed: false, blocked: [path] });
+    }
+  });
+
   it('blocks media anywhere under public/', () => {
     for (const path of ['public/favicon.svg', 'public/og.png', 'public/fonts/brand.woff2', 'public/icon.ICO', 'public/a/b.jpeg', 'public/x.webp']) {
       expect(classifyPaths([path]).allowed, path).toBe(false);
@@ -83,7 +101,7 @@ describe('classifyPaths', () => {
   });
 
   it('does not treat similarly named files as guardrails', () => {
-    expect(classifyPaths(['docs/CLAUDE.md.bak', 'src/favicon.svg.ts', 'scripts/watchdogs.md']).allowed).toBe(true);
+    expect(classifyPaths(['docs/CLAUDE.md.bak', 'src/favicon.svg.ts', 'src/serverless.md', 'src/lib/lanseringer.ts']).allowed).toBe(true);
   });
 
   it('still allows other workflow fixes', () => {

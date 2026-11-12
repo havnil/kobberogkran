@@ -13,7 +13,8 @@ export const BLOCKED_PREFIXES = ['src/content/', 'public/images/', 'public/admin
  * The agent's own guardrails: its instructions, the workflows and scripts that decide what
  * it is dispatched to and what may merge, and production routing. An agent PR must never
  * change them without a human, so a change here also blocks auto-merge. Other workflow
- * fixes (e.g. ci.yml) stay technical.
+ * fixes (e.g. ci.yml) stay technical. `scripts/` covers `scripts/automerge/` and
+ * `scripts/watchdog/` too; they stay listed so the intent is explicit.
  */
 export const GUARD_PREFIXES = [
   'CLAUDE.md',
@@ -28,6 +29,14 @@ export const GUARD_PREFIXES = [
   '.github/prompts/',
   '.github/dependabot.yml',
   'wrangler.jsonc',
+  // Safety-critical code: the form API, notifications and AI sorting, the database schema,
+  // the build and launch checks, the launch flag and the UI strings (customer-facing copy).
+  'scripts/',
+  'migrations/',
+  'src/server/',
+  'src/pages/api/',
+  'src/lib/lansering.ts',
+  'src/i18n/ui.ts',
 ];
 
 /** Media served from public/ (favicon, fonts, images outside uploads) is brand content. */

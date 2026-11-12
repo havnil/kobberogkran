@@ -56,9 +56,9 @@ export const forsideSchema = z.object({
     tekst: z.string(),
     godkjenningerTittel: z.string(),
     anmeldelserTittel: z.string(),
-    /** Badge on example testimonials (shown outside production only). */
-    eksempelMerke: z.string(),
   }),
+  /** Documentation (FDV and wet room) shown under «Om Eirik». */
+  dokumentasjon: z.object({ tittel: z.string(), punkter: z.array(z.string()) }),
   omrader: z.object({ tittel: z.string() }),
   skjema: z.object({ tittel: z.string(), merknad: z.string() }),
 });

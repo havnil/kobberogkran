@@ -24,6 +24,9 @@ export interface UiStrings {
   lukk: string;
   vilkar: string;
   personvern: string;
+  /** Badges: the visible placeholder mark and the example testimonial mark. */
+  plassholderMerke: string;
+  eksempelMerke: string;
   /** Footer line label: «Org.nr. <number> MVA». */
   orgnr: string;
 }
@@ -47,6 +50,8 @@ export const ui: Record<Locale, UiStrings> = {
     lukk: 'Lukk',
     vilkar: 'Vilkår',
     personvern: 'Personvern',
+    plassholderMerke: 'Plassholder',
+    eksempelMerke: 'Eksempel',
     orgnr: 'Org.nr.',
   },
   en: {
@@ -67,6 +72,8 @@ export const ui: Record<Locale, UiStrings> = {
     lukk: 'Close',
     vilkar: 'Terms',
     personvern: 'Privacy',
+    plassholderMerke: 'Placeholder',
+    eksempelMerke: 'Example',
     orgnr: 'Org. no.',
   },
 };

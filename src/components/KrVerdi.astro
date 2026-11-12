@@ -2,6 +2,7 @@
 // A price formatted as «1 875 kr». Placeholder prices get the visible placeholder mark.
 import type { Verdi } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 import { formatKr } from '../lib/priser';
 
 interface Props {
@@ -16,7 +17,7 @@ const tekst = formatKr(verdi.verdi, locale);
 {
   verdi.plassholder ? (
     <span data-plassholder>
-      {tekst} <small class="plassholder-merke">Plassholder</small>
+      {tekst} <small class="plassholder-merke">{ui[locale].plassholderMerke}</small>
     </span>
   ) : (
     tekst

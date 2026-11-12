@@ -1,13 +1,18 @@
 ---
 import type { Tekster, Omtale } from '../lib/innhold';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 
 interface Props {
+  locale: Locale;
   tekst: Tekster['forside']['omEirik'];
+  dokumentasjon: Tekster['forside']['dokumentasjon'];
   /** Already filtered: only entries that may be shown. */
   omtale: Omtale[];
 }
 
-const { tekst, omtale } = Astro.props;
+const { locale, tekst, dokumentasjon, omtale } = Astro.props;
+const eksempelMerke = ui[locale].eksempelMerke;
 const godkjenninger = omtale.filter((o) => o.type === 'godkjenning');
 const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
 ---
@@ -18,6 +23,15 @@ const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
     <h2 id="om-eirik-tittel">{tekst.tittel}</h2>
     <p>{tekst.tekst}</p>
 
+    {dokumentasjon.punkter.length > 0 && <h3>{dokumentasjon.tittel}</h3>}
+    {
+      dokumentasjon.punkter.length > 0 && (
+        <ul class="dokumentasjon">
+          {dokumentasjon.punkter.map((p) => <li>{p}</li>)}
+        </ul>
+      )
+    }
+
     {godkjenninger.length > 0 && <h3>{tekst.godkjenningerTittel}</h3>}
     {
       godkjenninger.length > 0 && (
@@ -25,7 +39,7 @@ const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
           {godkjenninger.map((o) => (
             <li>
               {o.tekst}
-              {!o.ekte && <small class="eksempel-merke">{tekst.eksempelMerke}</small>}
+              {!o.ekte && <small class="eksempel-merke">{eksempelMerke}</small>}
             </li>
           ))}
         </ul>
@@ -40,7 +54,7 @@ const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
             <li>
               <blockquote>{o.tekst}</blockquote>
               {o.navn && <p class="navn">{o.navn}</p>}
-              {!o.ekte && <small class="eksempel-merke">{tekst.eksempelMerke}</small>}
+              {!o.ekte && <small class="eksempel-merke">{eksempelMerke}</small>}
             </li>
           ))}
         </ul>
@@ -79,6 +93,10 @@ const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
     border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
     padding: var(--space-2) var(--space-3);
+  }
+  .dokumentasjon {
+    margin: 0;
+    padding-left: 1.25rem;
   }
   blockquote {
     margin: 0;

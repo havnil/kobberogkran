@@ -58,8 +58,14 @@
       "tittel": "PLASSHOLDER: Om Eirik",
       "tekst": "PLASSHOLDER: Kort om Eirik og tilknytningen til stedet",
       "godkjenningerTittel": "PLASSHOLDER: Godkjenninger",
-      "anmeldelserTittel": "PLASSHOLDER: Anmeldelser",
-      "eksempelMerke": "PLASSHOLDER: Eksempel"
+      "anmeldelserTittel": "PLASSHOLDER: Anmeldelser"
+    },
+    "dokumentasjon": {
+      "tittel": "PLASSHOLDER: Dokumentasjon",
+      "punkter": [
+        "PLASSHOLDER: FDV-dokumentasjon",
+        "PLASSHOLDER: Dokumentasjon for våtrom"
+      ]
     },
     "omrader": {
       "tittel": "PLASSHOLDER: Områder vi dekker"

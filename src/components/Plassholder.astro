@@ -1,17 +1,20 @@
 ---
 import type { Verdi } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 
 interface Props {
   verdi: Verdi<string | number>;
+  locale: Locale;
 }
 
-const { verdi } = Astro.props;
+const { verdi, locale } = Astro.props;
 ---
 
 {
   verdi.plassholder ? (
     <span data-plassholder>
-      {verdi.verdi} <small class="plassholder-merke">Plassholder</small>
+      {verdi.verdi} <small class="plassholder-merke">{ui[locale].plassholderMerke}</small>
     </span>
   ) : (
     verdi.verdi

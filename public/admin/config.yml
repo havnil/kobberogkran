@@ -58,6 +58,7 @@ collections:
         i18n: true
       - name: body
         label: Innhold
+        hint: Gjelder ikke forsiden. Forsiden henter teksten fra «Faste tekster», så innholdet her vises ikke der.
         widget: markdown
         i18n: true
 
@@ -181,7 +182,12 @@ collections:
                   - { name: tekst, label: Tekst, widget: text }
                   - { name: godkjenningerTittel, label: Tittel - godkjenninger, widget: string }
                   - { name: anmeldelserTittel, label: Tittel - anmeldelser, widget: string }
-                  - { name: eksempelMerke, label: Merke på eksempler (vises bare utenfor produksjon), widget: string }
+              - name: dokumentasjon
+                label: Dokumentasjon (FDV og våtrom)
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: punkter, label: Punkter, widget: list, field: { name: punkt, label: Punkt, widget: string } }
               - name: omrader
                 label: Områder
                 widget: object

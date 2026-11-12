@@ -58,8 +58,14 @@
       "tittel": "[EN] Om Eirik",
       "tekst": "[EN] Kort om Eirik og tilknytningen til stedet",
       "godkjenningerTittel": "[EN] Godkjenninger",
-      "anmeldelserTittel": "[EN] Anmeldelser",
-      "eksempelMerke": "[EN] Eksempel"
+      "anmeldelserTittel": "[EN] Anmeldelser"
+    },
+    "dokumentasjon": {
+      "tittel": "[EN] Dokumentasjon",
+      "punkter": [
+        "[EN] FDV-dokumentasjon",
+        "[EN] Dokumentasjon for våtrom"
+      ]
     },
     "omrader": {
       "tittel": "[EN] Områder vi dekker"

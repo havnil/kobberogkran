@@ -19,16 +19,16 @@ const firma = await getFirma();
     <img class="footer-logo" src="/logo/kobber-og-kran-a-paa-brun.svg" alt="" />
     <address>
       <strong>{firma.juridiskNavn}</strong><br />
-      <Plassholder verdi={firma.adresse} /><br />
+      <Plassholder verdi={firma.adresse} locale={locale} /><br />
       {
         firma.epost.plassholder ? (
-          <Plassholder verdi={firma.epost} />
+          <Plassholder verdi={firma.epost} locale={locale} />
         ) : (
           <a href={`mailto:${firma.epost.verdi}`}>{firma.epost.verdi}</a>
         )
       }
     </address>
-    <p>{t.orgnr} <Plassholder verdi={firma.orgnr} /> MVA</p>
+    <p>{t.orgnr} <Plassholder verdi={firma.orgnr} locale={locale} /> MVA</p>
     <ul class="footer-lenker">
       <li><a href={navPath(locale, 'vilkar')}>{t.vilkar}</a></li>
       <li><a href={navPath(locale, 'personvern')}>{t.personvern}</a></li>

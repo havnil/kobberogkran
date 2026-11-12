@@ -2,8 +2,8 @@
 //
 // Statusflyt: ny → sortert (AI og regler er kjørt) → varslet (e-post sendt).
 // - Hvert kall tar først en atomisk lås (`laasForVarsel`, lån på 2 min). Samtidige kall som ikke
-//   får låsen, gjør ingenting, så to parallelle kall gir nøyaktig én sending. Låsen frigis til slutt;
-//   krasjer kjøringen, utløper lånet, og et senere kall kan fortsette.
+//   får låsen, gjør ingenting, så to parallelle kall gir nøyaktig én sending. Låsen frigis til slutt
+//   med eierskapssjekk (token); krasjer kjøringen, utløper lånet, og et senere kall kan fortsette.
 // - Feiler AI-en (eller mangler ANTHROPIC_API_KEY), sendes varselet likevel med bare regler og rådata.
 // - Feiler varselet, blir status stående på 'sortert' og hendelsen 'varsel_feil' logges.
 //   Et nytt kall sender da på nytt, uten å kalle AI-en igjen (forrige sortering gjenbrukes).
@@ -50,10 +50,10 @@ async function forrigeSortering(db: D1Database, id: string): Promise<Sortering |
 
 export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleDeps = {}): Promise<void> {
   const naa = deps.naa ?? (() => new Date());
-  let harLaas = false;
+  let laas: string | null = null;
   try {
-    harLaas = await laasForVarsel(env.DB, id, naa());
-    if (!harLaas) return; // varslet, lukket, ukjent id, eller en annen kjøring holder låsen
+    laas = await laasForVarsel(env.DB, id, naa());
+    if (!laas) return; // varslet, lukket, ukjent id, eller en annen kjøring holder låsen
     // Les etter at låsen er tatt, så status er den gjeldende.
     const f = await hentForesporsel(env.DB, id);
     if (!f || f.status === 'varslet' || f.status === 'lukket') return;
@@ -93,7 +93,7 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
     // Aldri kast ut av waitUntil. Forespørselen er lagret; status 'ny'/'sortert' viser at varselet mangler.
     console.error('sorterOgVarsle feilet', id, feiltekst(e));
   } finally {
-    if (harLaas) await frigiVarselLaas(env.DB, id).catch((e) => console.error('frigiVarselLaas feilet', id, feiltekst(e)));
+    if (laas) await frigiVarselLaas(env.DB, id, laas).catch((e) => console.error('frigiVarselLaas feilet', id, feiltekst(e)));
   }
 }
 

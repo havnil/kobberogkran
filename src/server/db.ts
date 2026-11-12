@@ -261,27 +261,38 @@ export async function settStatus(db: D1Database, id: string, status: Foresporsel
 export const VARSEL_LAAS_MS = 2 * 60 * 1000;
 
 /**
- * Tar låsen for sortering og varsel atomisk. Gir true bare for én av flere samtidige kall.
- * Låsen kan tas når status er 'ny' eller 'sortert' og ingen har et gyldig lån.
+ * Tar låsen for sortering og varsel atomisk. Bare ett av flere samtidige kall får et token;
+ * de andre får null. Låsen kan tas når status er 'ny' eller 'sortert' og ingen har et gyldig lån.
  * Et lån fra en kjøring som krasjet, utløper etter `leieMs`, slik at et senere forsøk kan fortsette.
+ *
+ * Tokenet er `<utløp ISO>|<uuid>` og lagres i `varsel_laast_til`. Utløpet er de første 24 tegnene
+ * (`toISOString()` har alltid fast lengde). Bruk tokenet når låsen frigis.
  */
 export async function laasForVarsel(
   db: D1Database,
   id: string,
   naa: Date,
   leieMs: number = VARSEL_LAAS_MS,
-): Promise<boolean> {
+): Promise<string | null> {
+  const token = `${new Date(naa.getTime() + leieMs).toISOString()}|${crypto.randomUUID()}`;
   const r = await db
     .prepare(
       `UPDATE foresporsler SET varsel_laast_til = ?
         WHERE id = ? AND status IN ('ny', 'sortert')
-          AND (varsel_laast_til IS NULL OR varsel_laast_til < ?)`,
+          AND (varsel_laast_til IS NULL OR substr(varsel_laast_til, 1, 24) < ?)`,
     )
-    .bind(new Date(naa.getTime() + leieMs).toISOString(), id, naa.toISOString())
+    .bind(token, id, naa.toISOString())
     .run();
-  return r.meta.changes === 1;
+  return r.meta.changes === 1 ? token : null;
 }
 
-export async function frigiVarselLaas(db: D1Database, id: string): Promise<void> {
-  await db.prepare('UPDATE foresporsler SET varsel_laast_til = NULL WHERE id = ?').bind(id).run();
+/**
+ * Frigir låsen bare hvis den fortsatt er vår. En holder som overskred lånet, kan dermed ikke
+ * fjerne låsen til en nyere holder.
+ */
+export async function frigiVarselLaas(db: D1Database, id: string, token: string): Promise<void> {
+  await db
+    .prepare('UPDATE foresporsler SET varsel_laast_til = NULL WHERE id = ? AND varsel_laast_til = ?')
+    .bind(id, token)
+    .run();
 }

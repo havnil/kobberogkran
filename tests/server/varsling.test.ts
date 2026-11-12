@@ -272,7 +272,7 @@ describe('sorterOgVarsle', () => {
   it('en aktiv lås hindrer sending, en utløpt lås (krasjet holder) gjør det ikke', async () => {
     const id = await nyForesporsel();
     // En annen kjøring tok låsen og krasjet; lånet varer til 10:02.
-    await db.prepare('UPDATE foresporsler SET varsel_laast_til = ? WHERE id = ?').bind('2026-11-12T10:02:00.000Z', id).run();
+    await db.prepare('UPDATE foresporsler SET varsel_laast_til = ? WHERE id = ?').bind('2026-11-12T10:02:00.000Z|krasjet-holder', id).run();
     const { varsler, send } = falskVarsler();
     await sorterOgVarsle(env(), id, { sorterer: new FalskSorterer(aiSvar), varsler, naa: () => new Date('2026-11-12T10:01:00Z') });
     expect(send).not.toHaveBeenCalled();

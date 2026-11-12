@@ -259,35 +259,56 @@ describe('laasForVarsel', () => {
   it('bare én av flere samtidige får låsen', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
     const res = await Promise.all(Array.from({ length: 5 }, () => laasForVarsel(db, r.id, t0)));
-    expect(res.filter(Boolean)).toHaveLength(1);
+    expect(res.filter((t) => t !== null)).toHaveLength(1);
   });
 
   it('låsen utløper etter leietiden', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
-    expect(await laasForVarsel(db, r.id, t0, 120_000)).toBe(true);
-    expect(await laasForVarsel(db, r.id, om(119_000), 120_000)).toBe(false);
-    expect(await laasForVarsel(db, r.id, om(121_000), 120_000)).toBe(true);
+    expect(await laasForVarsel(db, r.id, t0, 120_000)).toEqual(expect.any(String));
+    expect(await laasForVarsel(db, r.id, om(119_000), 120_000)).toBeNull();
+    expect(await laasForVarsel(db, r.id, om(121_000), 120_000)).toEqual(expect.any(String));
   });
 
   it('frigitt lås kan tas igjen', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
-    expect(await laasForVarsel(db, r.id, t0)).toBe(true);
-    await frigiVarselLaas(db, r.id);
-    expect(await laasForVarsel(db, r.id, t0)).toBe(true);
+    const token = await laasForVarsel(db, r.id, t0);
+    expect(token).toEqual(expect.any(String));
+    await frigiVarselLaas(db, r.id, token!);
+    expect(await laasForVarsel(db, r.id, t0)).toEqual(expect.any(String));
+  });
+
+  it('en holder som overskred lånet, kan ikke frigi den nye holderens lås', async () => {
+    const r = await opprettForesporsel(db, input(), 'k');
+    const a = await laasForVarsel(db, r.id, t0, 120_000);
+    const b = await laasForVarsel(db, r.id, om(121_000), 120_000);
+    expect(a).not.toBeNull();
+    expect(b).not.toBeNull();
+    expect(b).not.toBe(a);
+    await frigiVarselLaas(db, r.id, a!);
+    // Bs lås står fortsatt: et tredje forsøk før Bs lån utløper feiler.
+    expect(await laasForVarsel(db, r.id, om(122_000), 120_000)).toBeNull();
+    await frigiVarselLaas(db, r.id, b!);
+    expect(await laasForVarsel(db, r.id, om(122_000), 120_000)).not.toBeNull();
+  });
+
+  it('to lås-tokener med samme utløpstid er ulike', async () => {
+    const r1 = await opprettForesporsel(db, input(), 'k1');
+    const r2 = await opprettForesporsel(db, input(), 'k2');
+    expect(await laasForVarsel(db, r1.id, t0)).not.toBe(await laasForVarsel(db, r2.id, t0));
   });
 
   it('varslet, lukket og ukjent id gir ingen lås', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
     await settStatus(db, r.id, 'varslet');
-    expect(await laasForVarsel(db, r.id, t0)).toBe(false);
+    expect(await laasForVarsel(db, r.id, t0)).toBeNull();
     await settStatus(db, r.id, 'lukket');
-    expect(await laasForVarsel(db, r.id, t0)).toBe(false);
-    expect(await laasForVarsel(db, 'finnes-ikke', t0)).toBe(false);
+    expect(await laasForVarsel(db, r.id, t0)).toBeNull();
+    expect(await laasForVarsel(db, 'finnes-ikke', t0)).toBeNull();
   });
 
   it('sortert kan låses (nytt forsøk etter varsel_feil)', async () => {
     const r = await opprettForesporsel(db, input(), 'k');
     await settStatus(db, r.id, 'sortert');
-    expect(await laasForVarsel(db, r.id, t0)).toBe(true);
+    expect(await laasForVarsel(db, r.id, t0)).toEqual(expect.any(String));
   });
 });

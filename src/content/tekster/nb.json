@@ -157,6 +157,7 @@
     "orgnr": "PLASSHOLDER: Org.nr.",
     "sender": "PLASSHOLDER: Sender …",
     "kvitteringTittel": "PLASSHOLDER: Forespørselen er sendt",
+    "kvitteringLenke": "PLASSHOLDER: Vil du sende flere bilder senere? Bruk denne lenken:",
     "steg2Tittel": "PLASSHOLDER: Vil du fortelle mer? (valgfritt)",
     "steg2Ingress": "PLASSHOLDER: Bilder og svar gjør det lettere å forberede jobben. Du kan hoppe over dette.",
     "sporsmalTittel": "PLASSHOLDER: Om jobben",
@@ -165,7 +166,7 @@
     "bildeLaster": "PLASSHOLDER: Laster opp …",
     "bildeOk": "PLASSHOLDER: Bildet er mottatt.",
     "bildeFrakoblet": "PLASSHOLDER: Venter på nett …",
-    "bildeFeilet": "PLASSHOLDER: Bildet kom ikke fram – du kan sende det senere fra lenken i meldingen",
+    "bildeFeilet": "PLASSHOLDER: Bildet kom ikke fram – du kan sende det senere fra lenken i kvitteringen over",
     "bildeForMange": "PLASSHOLDER: Du kan sende høyst 8 bilder her. Send resten fra lenken i meldingen.",
     "hvorHorte": "PLASSHOLDER: Hvor hørte du om oss? (valgfritt)",
     "hvorHorteValg": {

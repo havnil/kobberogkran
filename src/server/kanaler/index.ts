@@ -20,6 +20,11 @@ export type Locale = 'nb' | 'en';
 
 export interface Mal {
   id: MalId;
+  /**
+   * Kundens språk (skjemaets locale). Standard 'nb'. For tapt anrop er språket ukjent (bare et
+   * nummer), så den sendes på norsk.
+   */
+  locale?: Locale;
   variabler: Record<string, string>;
 }
 
@@ -85,6 +90,10 @@ export async function sendMedReserve(
     forsok.push(svar.ok ? { kanal: kanal.navn, ok: true } : { kanal: kanal.navn, ok: false, feil: svar.feil });
     if (svar.ok) return { kanal: kanal.navn, forsok };
   }
+  if (!forsok.length) {
+    // Synlig i Workers-loggen også: ingen kanal er satt opp, så kunden får ingen melding.
+    console.warn(JSON.stringify({ hendelse: 'ingen_kanal', mal: mal.id }));
+  }
   try {
     await logg(forsok.length ? 'melding_feilet' : 'melding_ingen_kanal', { mal: mal.id, forsok });
   } catch (e) {
@@ -123,8 +132,8 @@ export function fyllMal(mal: string, variabler: Record<string, string>): string 
   );
 }
 
-/** Den godkjente teksten for malen, med variablene fylt inn. */
-export function tekstForMal(mal: Mal, locale: Locale = 'nb'): string {
+/** Den godkjente teksten for malen, med variablene fylt inn, på malens språk (eller `locale`). */
+export function tekstForMal(mal: Mal, locale: Locale = mal.locale ?? 'nb'): string {
   const grunn = tekster(locale)[MALFELT[mal.id]];
   const mangler = PAAKREVDE[mal.id].filter((navn) => !grunn.includes(`{${navn}}`) && mal.variabler[navn]);
   return [fyllMal(grunn, mal.variabler).trim(), ...mangler.map((navn) => mal.variabler[navn])].join('\n');

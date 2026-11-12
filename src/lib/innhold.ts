@@ -141,6 +141,11 @@ export const tekstSchema = z.object({
     sender: z.string(),
     /** Heading over the receipt (`kvittering`) shown after step 1. Never promises a time. */
     kvitteringTittel: z.string(),
+    /**
+     * Shown with the link for sending more photos later, under the receipt on screen, when
+     * `kvittering` has no `{sendBilderLenke}` (then the link stands where the variable is).
+     */
+    kvitteringLenke: z.string(),
     steg2Tittel: z.string(),
     steg2Ingress: z.string(),
     sporsmalTittel: z.string(),

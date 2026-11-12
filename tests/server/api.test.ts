@@ -290,6 +290,28 @@ describe('POST /api/foresporsel (steg 1)', () => {
     expect((await hentForesporsel(db, id))!.status).toBe('varslet');
   });
 
+  it('uten meldingskanal står det i varselet til Eirik at kunden ikke fikk kvittering', async () => {
+    kanaler = [];
+    const { id } = await opprett();
+    await ferdig();
+    expect(varsler.send).toHaveBeenCalledTimes(1);
+    expect(String(varsler.send.mock.calls[0][2])).toContain('Kunden fikk IKKE kvittering (ingen kanal satt opp)');
+    expect((await hendelser(id)).map((h) => h.type)).toContain('melding_ingen_kanal');
+  });
+
+  it('når alle kanalene feiler, står det i varselet til Eirik', async () => {
+    kanaler = [new FalskKanal('whatsapp', { ok: false }), new FalskKanal('sms', { kast: true })];
+    await opprett();
+    await ferdig();
+    expect(String(varsler.send.mock.calls[0][2])).toContain('Kunden fikk IKKE kvittering (alle kanalene feilet)');
+  });
+
+  it('sendt kvittering gir ingen slik linje', async () => {
+    await opprett();
+    await ferdig();
+    expect(String(varsler.send.mock.calls[0][2])).not.toContain('IKKE kvittering');
+  });
+
   it('engelsk skjema lenker til /en/send-photos/', async () => {
     const { id, token } = await opprett({ locale: 'en' });
     await ferdig();

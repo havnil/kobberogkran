@@ -157,6 +157,7 @@
     "orgnr": "[EN] Organisation number",
     "sender": "[EN] Sending …",
     "kvitteringTittel": "[EN] Your request has been sent",
+    "kvitteringLenke": "[EN] Want to send more photos later? Use this link:",
     "steg2Tittel": "[EN] Want to tell us more? (optional)",
     "steg2Ingress": "[EN] Photos and answers make it easier to prepare the job. You can skip this.",
     "sporsmalTittel": "[EN] About the job",
@@ -165,7 +166,7 @@
     "bildeLaster": "[EN] Uploading …",
     "bildeOk": "[EN] The photo has been received.",
     "bildeFrakoblet": "[EN] Waiting for a connection …",
-    "bildeFeilet": "[EN] The photo did not arrive – you can send it later from the link in the message",
+    "bildeFeilet": "[EN] The photo did not arrive – you can send it later from the link in the receipt above",
     "bildeForMange": "[EN] You can send at most 8 photos here. Send the rest from the link in the message.",
     "hvorHorte": "[EN] Where did you hear about us? (optional)",
     "hvorHorteValg": {

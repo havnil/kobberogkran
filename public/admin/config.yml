@@ -282,6 +282,7 @@ collections:
               - { name: orgnr, label: Org.nr., widget: string }
               - { name: sender, label: Sender (status), widget: string }
               - { name: kvitteringTittel, label: Kvittering - overskrift, widget: string }
+              - { name: kvitteringLenke, label: Kvittering - tekst før lenken for flere bilder, widget: string }
               - { name: steg2Tittel, label: Steg 2 - overskrift, widget: string }
               - { name: steg2Ingress, label: Steg 2 - ingress, widget: text }
               - { name: sporsmalTittel, label: Spørsmål - overskrift, widget: string }

@@ -197,7 +197,9 @@ Forslaget med priser og risiko står i
 3. Når leverandørene er valgt, må en utvikler legge til leverandøradapterne: kanalene
    (`Kanal`-implementasjoner for WhatsApp, RCS og SMS) og adapteren for telefoniens format og
    signatur. **Til det er gjort sendes ingen melding til kunden** (`lagKanaler` gir en tom
-   liste). Eirik får likevel varsel om hvert tapte anrop.
+   liste). Eirik får likevel varsel om hvert tapte anrop. Kunden ser lenken for å sende flere
+   bilder senere i kvitteringen på skjermen, og varselet til Eirik sier «Kunden fikk IKKE
+   kvittering (ingen kanal satt opp)». Workers-loggen viser `{"hendelse":"ingen_kanal",…}`.
 
 Webhookene avviser alt til hemmelighetene er satt:
 
@@ -294,5 +296,8 @@ Gjør dette når alt over er ferdig:
 5. **Slå på overvåking:** `WATCHDOG_ENABLED=true` og pek Grok Bot på siden. Se
    [cloudflare-setup.md](cloudflare-setup.md) seksjon 4 og [watchdog.md](watchdog.md).
 6. Send en siste testforespørsel på `https://kobberogkran.no` og kontroller varselet til Eirik.
+   **Står det «Kunden fikk IKKE kvittering (ingen kanal satt opp)», er ingen meldingskanal koblet
+   til** (steg 9): kundene får da ingen kvittering og ingen melding ved tapt anrop. Avgjør bevisst
+   om dere likevel lanserer (kunden ser fortsatt kvitteringen og lenken på skjermen).
 
 Feiler noe etter lansering, se [rollback.md](rollback.md).

@@ -33,6 +33,11 @@ export interface SorterOgVarsleDeps {
   sorterer?: Sorterer;
   varsler?: Varsler;
   naa?: () => Date;
+  /**
+   * Kvitteringen til kunden (fra API-et), som går samtidig med AI-en. Varselet venter på den før
+   * sending, så hendelsene for en kvittering som ikke kom fram, er logget og kan vises for Eirik.
+   */
+  kvittering?: Promise<unknown>;
 }
 
 export const BILDELENKE_GYLDIG_SEK = 14 * 24 * 60 * 60;
@@ -96,9 +101,12 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
     // hvilke samtykke-tillegg varselet har tatt med (se ../tillegg.ts).
     let samtykkeDekket = dekket;
     let samtykker: Samtykker = {};
+    let kvittering: KvitteringStatus = null;
+    if (deps.kvittering) await deps.kvittering.catch(() => {});
     try {
       samtykkeDekket = await sisteHendelseRad(env.DB);
       samtykker = await hentSamtykker(env.DB, id);
+      kvittering = await kvitteringStatus(env.DB, id);
     } catch (e) {
       samtykkeDekket = dekket;
       console.error('hentSamtykker feilet', id, feiltekst(e));
@@ -109,7 +117,7 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
       const varsler = deps.varsler ?? (env.VARSEL_FRA ? new EpostVarsler(env.EPOST, env.VARSEL_FRA) : null);
       if (!til || !varsler) throw new Error('VARSEL_TIL eller VARSEL_FRA er ikke satt');
       const lenker = await bildelenker(env, f, naa());
-      await varsler.send(til, lagEmne(f, ai), lagVarselTekst(f, regler, ai, lenker, samtykker));
+      await varsler.send(til, lagEmne(f, ai), lagVarselTekst(f, regler, ai, lenker, samtykker, kvittering));
     } catch (e) {
       await loggTrygt(env.DB, id, 'varsel_feil', { kanal: 'epost', feil: feiltekst(e) });
       return;
@@ -123,6 +131,23 @@ export async function sorterOgVarsle(env: Env, id: string, deps: SorterOgVarsleD
   } finally {
     if (laas) await frigiVarselLaas(env.DB, id, laas).catch((e) => console.error('frigiVarselLaas feilet', id, feiltekst(e)));
   }
+}
+
+/** Hvorfor kunden ikke fikk kvitteringen, eller null når ingen feil er logget. */
+export type KvitteringStatus = 'ingen_kanal' | 'feilet' | null;
+
+async function kvitteringStatus(db: D1Database, id: string): Promise<KvitteringStatus> {
+  const rad = await db
+    .prepare(
+      `SELECT type FROM hendelser
+        WHERE foresporsel_id = ? AND type IN ('melding_ingen_kanal', 'melding_feilet')
+          AND json_extract(data_json, '$.mal') = 'kvittering'
+        ORDER BY rowid DESC LIMIT 1`,
+    )
+    .bind(id)
+    .first<{ type: string }>();
+  if (!rad) return null;
+  return rad.type === 'melding_ingen_kanal' ? 'ingen_kanal' : 'feilet';
 }
 
 /** Logger en hendelse uten å kaste; en feil i loggingen skal ikke stoppe varselet. */
@@ -239,6 +264,7 @@ export function lagVarselTekst(
   ai: Sortering | null,
   lenker: string[],
   samtykker: Samtykker = {},
+  kvittering: KvitteringStatus = null,
 ): string {
   const kjoretid = f.kjoretidMin ?? kjoretidMin(f.lat, f.lon);
   const utenfor = regler.utenforOmrade == null ? 'ukjent' : regler.utenforOmrade ? 'JA' : 'nei';
@@ -249,6 +275,8 @@ export function lagVarselTekst(
   l.push(`Navn: ${f.kunde.navn ?? '(ikke oppgitt)'}`);
   l.push(`Telefon: ${f.kunde.telefon}`);
   l.push(`E-post: ${f.kunde.epost ?? '(ikke oppgitt)'}`);
+  if (kvittering === 'ingen_kanal') l.push('Kunden fikk IKKE kvittering (ingen kanal satt opp)');
+  if (kvittering === 'feilet') l.push('Kunden fikk IKKE kvittering (alle kanalene feilet)');
   if (f.kundetype === 'bedrift') {
     l.push(`Bedrift: ${f.firmanavn ?? '(ikke oppgitt)'}, org.nr. ${f.orgnr ?? '(ikke oppgitt)'}`);
   } else {

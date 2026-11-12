@@ -1,5 +1,6 @@
 // Skjemaet i nettleseren (Skjema.astro). Ingenting lagres i nettleseren: ingen cookies, ingen
 // localStorage eller sessionStorage. `idemNokkel` lages her (crypto.randomUUID), aldri i HTML-en.
+import { sendBilderLenke } from '../../lib/skjemaSider';
 import { renKilde } from '../../lib/whatsapp';
 import { MAKS_BILDER } from '../../server/validering';
 import { Opplaster, type Jobb } from './opplasting';
@@ -245,6 +246,13 @@ function start(rot: HTMLElement) {
       kvittering.querySelector('[data-lekker-kvittering]')?.append(lekker);
       lekker.hidden = false;
     }
+    // Lenken for å sende flere bilder senere (samme lenke som i kvitteringen på melding). Den står
+    // her fordi kunden kanskje ikke får noen melding (ingen kanal satt opp, eller sendingen feilet).
+    const lenke = sendBilderLenke(location.origin, locale === 'en' ? 'en' : 'nb', id, token);
+    kvittering.querySelectorAll<HTMLAnchorElement>('[data-send-bilder-lenke]').forEach((a) => {
+      a.href = lenke;
+      a.textContent = lenke;
+    });
     kvittering.hidden = false;
     steg2.hidden = false;
     kvittering.focus();

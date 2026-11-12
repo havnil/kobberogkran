@@ -21,6 +21,7 @@ import { erLansering } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
 import { alleSporsmal, feltnavn, FELLES, HVOR_HORTE, valgNokkel, type Sporsmal } from '../client/skjema/sporsmal';
 import { BILDETYPER, HAST, MAKS_BILDER, TJENESTER } from '../server/validering';
+import { delKvittering } from '../lib/skjemaSider';
 
 interface Props {
   locale: Locale;
@@ -47,8 +48,11 @@ const hastNavn: Record<(typeof HAST)[number], string> = {
   snart: t.hasterSnart,
   'kan-planlegges': t.hasterKanPlanlegges,
 };
-// The receipt is a message template; variables such as {sendBilderLenke} are not shown on screen.
-const kvittering = tekster.kvittering.replace(/\{[A-Za-z][A-Za-z0-9]*\}/g, '').trim();
+// The receipt is a message template. On screen the link for sending more photos later (built in the
+// browser from id and token, see src/client/skjema/index.ts) stands where {sendBilderLenke} is, or on
+// its own line after `kvitteringLenke` when the template has no such variable. Other variables are
+// removed. The link works even when no message channel is set up yet.
+const kvittering = delKvittering(tekster.kvittering);
 const accept = [...BILDETYPER, '.heic', '.heif'].join(',');
 
 const sporsmalEtikett = (id: string) => (t.sporsmal as Record<string, string>)[id] ?? id;
@@ -225,7 +229,22 @@ const telefon = firma.telefon.verdi;
 
   <section class="kvittering" data-kvittering tabindex="-1" aria-labelledby="kvittering-tittel" hidden>
     <h3 id="kvittering-tittel">{t.kvitteringTittel}</h3>
-    <p>{kvittering}</p>
+    {
+      kvittering.harLenke ? (
+        <p>
+          {kvittering.for}
+          <a class="send-bilder-lenke" data-send-bilder-lenke href="" />
+          {kvittering.etter}
+        </p>
+      ) : (
+        <>
+          <p>{kvittering.for}</p>
+          <p>
+            {t.kvitteringLenke} <a class="send-bilder-lenke" data-send-bilder-lenke href="" />
+          </p>
+        </>
+      )
+    }
     <div data-lekker-kvittering></div>
   </section>
 
@@ -315,6 +334,9 @@ const telefon = firma.telefon.verdi;
 <style>
   .skjema {
     max-width: 40rem;
+  }
+  .send-bilder-lenke {
+    overflow-wrap: anywhere;
   }
   /* `hidden` must win over the display rules below (grid, flex, .knapp). */
   .skjema :global([hidden]) {

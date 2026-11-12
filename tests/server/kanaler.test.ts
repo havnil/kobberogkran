@@ -122,6 +122,11 @@ describe('maltekst', () => {
     expect(tekstForMal({ id: 'kvittering', variabler: {} }, 'en')).toContain('[EN]');
   });
 
+  it('tekstForMal bruker malens locale (kundens språk) når det er satt', () => {
+    expect(tekstForMal({ id: 'kvittering', locale: 'en', variabler: {} })).toContain('[EN]');
+    expect(tekstForMal({ id: 'kvittering', locale: 'nb', variabler: {} })).toContain('PLASSHOLDER');
+  });
+
   it('tapt_anrop har alltid begge lenkene, også når malen mangler plassholderne', () => {
     const t = tekstForMal(mal);
     expect(t).toContain('https://a');

@@ -48,6 +48,8 @@ import {
   type SkjemaLocale,
 } from './validering';
 import type { Varsler } from './varsling';
+import { nettstedUrl } from '../lib/nettsted';
+import { SIDER, sendBilderLenke } from '../lib/skjemaSider';
 
 export interface SkjemaDeps {
   kanaler?: Kanal[];
@@ -58,15 +60,10 @@ export interface SkjemaDeps {
   vent?: (ms: number) => Promise<void>;
 }
 
-const STANDARD_NETTSTED = 'https://kobberogkran.no';
 /** Plass til multipart-grenser og -headere rundt bildet. */
 const MULTIPART_TILLEGG = 64 * 1024;
 
-/** Stiene til sidene skjemaet sender kunden til. */
-export const SIDER = {
-  takk: { nb: '/takk/', en: '/en/thanks/' },
-  sendBilder: { nb: '/send-bilder/', en: '/en/send-photos/' },
-} as const;
+export { SIDER };
 
 const json = (status: number, data: unknown) =>
   new Response(JSON.stringify(data), {
@@ -142,10 +139,6 @@ function fraSkjema(f: Record<string, unknown>): Record<string, unknown> {
 
 const locale = (v: unknown): SkjemaLocale => (v === 'en' ? 'en' : 'nb');
 
-export function sendBilderLenke(nettstedUrl: string | undefined, loc: SkjemaLocale, id: string, token: string): string {
-  const base = (nettstedUrl || STANDARD_NETTSTED).replace(/\/+$/, '');
-  return `${base}${SIDER.sendBilder[loc]}?id=${encodeURIComponent(id)}&token=${token}`;
-}
 
 // --- Steg 1 ---
 
@@ -223,7 +216,7 @@ export async function haandterSteg1(request: Request, env: Env, ctx: Kontekst, d
       idem,
     );
     const token = await lagSkjemaToken(id, env.SKJEMA_HMAC);
-    if (ny) ctx.waitUntil(etterSteg1(env, id, d.telefon, sendBilderLenke(env.NETTSTED_URL, loc, id, token), deps));
+    if (ny) ctx.waitUntil(etterSteg1(env, id, d.telefon, loc, sendBilderLenke(nettstedUrl(env), loc, id, token), deps));
     return svar(ny ? 201 : 200, id, token);
   } catch (e) {
     console.error(JSON.stringify({ hendelse: 'steg1_feilet', feil: feiltekst(e) }));
@@ -244,19 +237,26 @@ async function etterEndring(env: Env, id: string, status: ForesporselStatus, dep
   await varsleTillegg(env, id, { samle: true }, deps);
 }
 
-/** Sortering og varsel til Eirik, og kvitteringen til kunden. Kaster aldri. */
-async function etterSteg1(env: Env, id: string, telefon: string, lenke: string, deps: SkjemaDeps): Promise<void> {
-  const tillegg = { varsler: deps.varsler, naa: deps.naa, vent: deps.vent };
+/**
+ * Sortering og varsel til Eirik, og kvitteringen til kunden. Kaster aldri.
+ * Kvitteringen og AI-sorteringen går samtidig; varselet venter på kvitteringen før det sendes, så
+ * Eirik ser om kunden ikke fikk den (hendelsene 'melding_ingen_kanal' og 'melding_feilet').
+ */
+async function etterSteg1(env: Env, id: string, telefon: string, loc: SkjemaLocale, lenke: string, deps: SkjemaDeps): Promise<void> {
+  const tillegg = { varsler: deps.varsler, sorterer: deps.sorterer, naa: deps.naa, vent: deps.vent };
+  const kvittering = sendMedReserve(
+    deps.kanaler ?? lagKanaler(env),
+    telefon,
+    { id: 'kvittering', locale: loc, variabler: { sendBilderLenke: lenke } },
+    { logg: hendelseLogger(env.DB, id) },
+  ).catch((e) => {
+    console.error(JSON.stringify({ hendelse: 'kvittering_feilet', feil: feiltekst(e) }));
+  });
   await Promise.all([
-    sorterOgVarsle(env, id, { sorterer: deps.sorterer, varsler: deps.varsler, naa: deps.naa })
+    sorterOgVarsle(env, id, { sorterer: deps.sorterer, varsler: deps.varsler, naa: deps.naa, kvittering })
       // Det som kom inn mens AI-en sorterte, sendes som tillegg rett etter varselet.
       .then(() => varsleTillegg(env, id, { samle: false }, tillegg)),
-    sendMedReserve(
-      deps.kanaler ?? lagKanaler(env),
-      telefon,
-      { id: 'kvittering', variabler: { sendBilderLenke: lenke } },
-      { logg: hendelseLogger(env.DB, id) },
-    ).catch((e) => console.error(JSON.stringify({ hendelse: 'kvittering_feilet', feil: feiltekst(e) }))),
+    kvittering,
   ]);
 }
 

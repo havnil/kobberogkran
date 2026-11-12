@@ -10,7 +10,7 @@ Kobber og Kran AS er en ny enmanns rørleggerbedrift på Hemnes i Aurskog-Hølan
 
 Det langsiktige målet er å gjøre det så enkelt som mulig for Eirik å drive firmaet ved å bruke AI fullt ut: til salg, kundeoppfølging og til å holde seg oppdatert. Det skjer i to prosjekter:
 
-1. **Nettsiden (dette dokumentet).** Den skal skaffe de første kundene og ta imot forespørsler ferdig sortert. I tillegg tar den imot tapte anrop.
+1. **Nettsiden (dette dokumentet).** Den skal skaffe de første kundene og ta imot forespørsler ferdig sortert. I tillegg fanger den opp tapte anrop og tilbyr WhatsApp-chat.
 2. **AI-kontoret (senere, eget design).** Tilbud, ordre og faktura, purring, anmeldelses-SMS etter jobb, servicepåminnelser, Google-profilen og en assistent som kjenner forretningsplanen.
 
 Nettsiden bygges slik at AI-kontoret kan bygge videre på de samme dataene.
@@ -49,7 +49,7 @@ Nettsiden bygges slik at AI-kontoret kan bygge videre på de samme dataene.
 3. **Plassholdere** brukes for alt ekte innhold: telefon, godkjenninger, jobber, referanser og anmeldelser.
    - Plassholderne merkes tydelig, og lansering blokkeres så lenge de finnes.
    - Bildene er realistiske eksempler som eieren lager i Grok Imagine ut fra beskrivelser vi skriver. De merkes som plassholdere.
-4. **SMS ved tapt anrop** er med i dette prosjektet.
+4. **Melding ved tapt anrop** er med i dette prosjektet, via WhatsApp, RCS og SMS som reserve. Nettsiden får WhatsApp-chat. Eirik får et nytt nummer.
 5. **Den engelske versjonen speiler hele siden.** Tekstene skrives eller godkjennes av et menneske.
 6. **Siden er ikke live** før eieren sier fra. Til da er test-adressen stengt bak Cloudflare Access, og domenet er ikke koblet på.
 
@@ -78,7 +78,7 @@ Stedssider (`/rorlegger-<sted>/`) lages ikke ved lansering. De gir tynt innhold 
 **Meny:**
 - Kun egne sider, ingen hopp til steder på forsiden.
 - På desktop: logo · Tjenester ▾ · Priser · Områder · Om Eirik · Kontakt · telefonknapp · knapp til skjemaet · NB/EN.
-- På mobil: logo og ringeikon øverst, og en **fast bunnlinje med «Ring» og skjemaknappen**.
+- På mobil: logo og ringeikon øverst, og en **fast bunnlinje med «Ring», «WhatsApp» og skjemaknappen**.
 
 ## Forsiden
 
@@ -176,7 +176,7 @@ Den sier ærlig at Eirik tar akutte oppdrag når han kan, men ikke har døgnvakt
 
 **Annet:**
 - Privatkunde er forhåndsvalgt. Bedrift gir felt for firmanavn og org.nr. Det automatiske oppslaget i Brønnøysundregistrene fra kimkran.no venter.
-- Kvitteringen vises på skjermen og sendes på SMS, med lenke for å sende flere bilder senere. Den lover ingen tid. Alle SMS-tekster er faste og godkjent.
+- Kvitteringen vises på skjermen og sendes på WhatsApp, RCS eller SMS, med lenke for å sende flere bilder senere. Den lover ingen tid. Alle SMS-tekster er faste og godkjent.
 - Spam stoppes med et skjult felt for roboter (honningfelt) og Cloudflare Turnstile.
 - Feilmeldinger står ved feltet og inneholder alltid telefonnummeret.
 
@@ -194,9 +194,37 @@ Når en forespørsel kommer inn, lager AI-en et sammendrag for Eirik. Det inneho
 
 Sammendraget, de originale svarene og bildene går bare til Eirik. Forespørselen lagres strukturert, slik at AI-kontoret senere kan bruke den. Lagres skal jobbtype, sted, koordinater, hast, status og kilde.
 
+## Meldingskanaler: WhatsApp først, RCS, SMS som reserve (eiers beslutning)
+
+Eirik får et **nytt bedriftsnummer**, som brukes til telefon, WhatsApp og SMS. Budsjett er ikke satt ennå.
+
+- **WhatsApp Business er hovedkanalen.**
+  - Nettsiden har en «Chat på WhatsApp»-knapp på forsiden, tjenestesidene og kontaktsiden, og i bunnlinjen på mobil ved siden av «Ring». Knappen åpner WhatsApp med en ferdig hilsen som inneholder tjenesten og kilden.
+  - Nummeret kjører WhatsApp Business-appen på Eiriks telefon og WhatsApp Business Platform (Cloud API) samtidig. Meta kaller dette «coexistence». Da kan Eirik chatte selv i appen, mens systemet sender faste maler.
+- **Automatiske meldinger:** kvittering og melding ved tapt anrop sendes som **godkjente WhatsApp-maler** når kunden kan nås på WhatsApp. Ellers sendes de som **RCS**, og deretter som **SMS**.
+  - Teksten er den samme i alle kanaler og er godkjent av eieren.
+  - AI skriver aldri fritt til kunden. Svar fra kunder går til Eirik.
+- **RCS** vurderes av byggeren. I 2026 støtter Telenor og Telia det, og omtrent 20 % av mottakerne i Norge kan nås. Støtten på iPhone er usikker. Er det dyrt eller tungvint å få til ved lansering, kan RCS komme senere, med SMS som reserve.
+- **Samtykke:** at kunden vil ha meldinger på WhatsApp registreres i skjemaet eller oppstår når kunden selv har startet chatten. Det skilles fra samtykke til servicepåminnelser.
+
 ## Tapte anrop
 
-Når et anrop til bedriftsnummeret ikke blir besvart, får den som ringte en fast, godkjent SMS med lenke til skjemaet. Lenken har riktig kilde (`?kilde=tapt-anrop`). Eirik får beskjed om det tapte anropet sammen med forespørslene. Ingen AI snakker med kunden på telefonen i denne fasen.
+Bedriftsnummeret går via en telefonitjeneste som melder fra om ubesvarte anrop. Anropet settes over til Eiriks mobil. Når et anrop ikke blir besvart, får den som ringte en fast, godkjent melding på WhatsApp, RCS eller SMS, i den rekkefølgen. Meldingen har lenke til skjemaet (`?kilde=tapt-anrop`) og til WhatsApp-chat. Eirik får beskjed om det tapte anropet sammen med forespørslene. Ingen AI snakker med kunden på telefonen i denne fasen.
+
+Hvis anrop direkte i WhatsApp ikke kan meldes til systemet, gjelder løsningen for tapte anrop bare vanlige telefonanrop. Det må verifiseres i Metas dokumentasjon.
+
+## Redigering i CMS (eiers beslutning)
+
+Følgende kan endres i Sveltia CMS på begge språk, uten kode:
+- firmadata (navn, telefon, WhatsApp-nummer, org.nr., adresse, e-post)
+- priser og område
+- spørsmål og svar per tjeneste
+- fakta i faktaboksene
+- boksen «Det lekker nå»
+- teksten i kvitteringen og meldingen ved tapt anrop
+- godkjenninger, referanser og anmeldelser, med feltet «vis bare når ekte»
+
+Sidene, de strukturerte dataene for Google og lanseringssperren leser fra de samme datafilene. Skjemaets spørsmål per tjeneste ligger i kode.
 
 ## Måling uten sporing
 
@@ -224,7 +252,7 @@ Når et anrop til bedriftsnummeret ikke blir besvart, får den som ringte en fas
 
 Bygger på grunnmuren: Astro statisk på Cloudflare Workers, nb og en, Sveltia CMS.
 
-- **Server:** skjema, AI-sortering, SMS og tapte anrop kjører på Workers. Data lagres i D1 og bilder i R2, i Europa. Alt sendes til Eirik bare på kanaler han selv har satt opp.
+- **Server:** skjema, AI-sortering, meldinger og tapte anrop kjører på Workers. Data lagres i D1 og bilder i R2, i Europa. Alt sendes til Eirik bare på kanaler han selv har satt opp.
 - **Strukturerte data for Google:** typen `Plumber` med `areaServed`, `WebPage`, `Service`, `BreadcrumbList` og `FAQPage`. Ingen `aggregateRating`.
 - **Bilder og fonter:** Astro `<Image>` med `srcset`, og preload av bare de fontvektene som brukes.
 - **Tilgjengelighet:** WCAG 2.1 AA.
@@ -240,7 +268,12 @@ Bygger på grunnmuren: Astro statisk på Cloudflare Workers, nb og en, Sveltia C
 
 ## Overlatt til byggeren
 
-- Valg av SMS-leverandør og løsning for tapte anrop: norsk nummer eller videresending, kostnad, at data lagres i EU, og hvordan det kobles mot mobilabonnementet Eirik får.
+- Valg av leverandører for det nye nummeret og meldingene:
+  - telefonitjeneste med melding om tapte anrop og videresending til mobilen
+  - WhatsApp-leverandør (direkte Cloud API eller en BSP som støtter coexistence)
+  - RCS- og SMS-leverandør (for eksempel en nordisk aggregator)
+  - data lagres i EU
+  - byggeren legger fram kostnad, eieren bestemmer.
 - Valg av AI-modell og leverandør til sorteringen, innenfor en lav fast månedskostnad.
 - Kanal for beskjed til Eirik: SMS, e-post eller begge.
 - Lagringstid for forespørsler og bilder, beskrevet i personvernerklæringen.
@@ -250,7 +283,7 @@ Bygger på grunnmuren: Astro statisk på Cloudflare Workers, nb og en, Sveltia C
 ## Utkast som må skrives eller godkjennes av et menneske
 
 - Alle tekster på begge språk
-- SMS-tekstene: kvittering og tapt anrop
+- Meldingsmalene: kvittering og tapt anrop (WhatsApp-maler må også godkjennes av Meta)
 - Boksen «Det lekker nå»
 - Vilkårssiden
 - Personvernerklæringen

@@ -67,3 +67,36 @@ Dette gjør eieren (DNS, e-post og Cloudflare-innstillinger er bare for eieren):
 
 Mangler `VARSEL_TIL` eller `VARSEL_FRA`, eller avviser e-posten meldingen, blir forespørselen
 stående med status `sortert`, og hendelsen `varsel_feil` logges i tabellen `hendelser`.
+
+## Meldingskanaler og tapte anrop (oppgave 12)
+
+Kunden får bare faste maler: `kvittering` og `tapt_anrop`. Teksten redigeres i CMS-et
+(`tekster.kvittering` og `tekster.taptAnrop`). Systemet prøver WhatsApp, så RCS, så SMS. Ingen
+ekte kanal er koblet til ennå: de kommer når leverandørene er valgt (oppgave 10). Til da sendes
+ingen melding til kunden, men Eirik får fortsatt varsel om hvert tapte anrop.
+
+I teksten for tapt anrop kan eieren plassere `{skjemaLenke}` (skjemaet med `?kilde=tapt-anrop`)
+og `{whatsappLenke}` (wa.me med ferdig hilsen). Står de ikke i teksten, legges lenkene til
+nederst, hver på egen linje.
+
+Webhookene avviser alt til hemmelighetene er satt (`wrangler secret put <NAVN>`):
+
+| Hemmelighet | Hva | Uten den |
+| --- | --- | --- |
+| `WHATSAPP_VERIFY_TOKEN` | Et tilfeldig token som eieren velger og skriver inn som «Verify token» i Meta-appen | Verifiseringen (GET) gir 403 |
+| `WHATSAPP_APP_SECRET` | «App Secret» fra Meta-appen (App settings → Basic). Signerer `X-Hub-Signature-256` | POST gir 503 |
+| `TELEFONI_WEBHOOK_SECRET` | Delt hemmelighet med telefonitjenesten. HMAC-SHA256 av kroppen, hex, i `X-Signatur` | POST gir 503 |
+
+Dette gjør eieren:
+
+1. **WhatsApp:** I Meta-appen (WhatsApp → Configuration) settes callback-URL til
+   `https://kobberogkran.no/api/whatsapp/webhook` og samme verify token som i
+   `WHATSAPP_VERIFY_TOKEN`. Abonner på feltet `messages`. Inngående meldinger sendes som varsel til
+   Eirik og besvares aldri automatisk; Eirik svarer selv i WhatsApp Business-appen.
+2. **Telefoni:** Telefonitjenesten skal sende `POST https://kobberogkran.no/api/telefoni/ubesvart`
+   med JSON `{ "fra": "+47...", "tidspunkt": "<ISO 8601, valgfritt>" }` og header
+   `X-Signatur: <hex av HMAC-SHA256(kropp, TELEFONI_WEBHOOK_SECRET)>`. Kan leverandøren ikke dette
+   formatet, lages en egen adapter når leverandøren er valgt. Skjult nummer gir ingen melding, bare
+   varsel til Eirik. Samme nummer får høyst én melding per 30 minutter (tabellen `anrop`).
+3. Varselet til Eirik bruker samme oppsett som over (`VARSEL_TIL`, `VARSEL_FRA`, `EPOST`).
+   `NETTSTED_URL` styrer også adressen i skjemalenken.

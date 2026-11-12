@@ -35,7 +35,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  for (const t of ['hendelser', 'samtykker', 'bilder', 'foresporsler', 'kunder']) {
+  for (const t of ['anrop', 'hendelser', 'samtykker', 'bilder', 'foresporsler', 'kunder']) {
     await db.exec(`DROP TABLE IF EXISTS ${t}`);
   }
   const uten = migrering.replace(/^--.*$/gm, '');

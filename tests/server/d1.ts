@@ -17,7 +17,7 @@ export async function startD1(): Promise<{ mf: Miniflare; db: D1Database }> {
 
 /** Sletter alle tabeller og kjører migreringen på nytt. */
 export async function nullstill(db: D1Database): Promise<void> {
-  for (const t of ['hendelser', 'samtykker', 'bilder', 'foresporsler', 'kunder']) {
+  for (const t of ['anrop', 'hendelser', 'samtykker', 'bilder', 'foresporsler', 'kunder']) {
     await db.exec(`DROP TABLE IF EXISTS ${t}`);
   }
   const uten = migrering.replace(/^--.*$/gm, '');

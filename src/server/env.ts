@@ -18,6 +18,18 @@ export interface Env {
   VARSEL_TIL?: string;
   /** Avsender, på et domene med Email Routing, f.eks. varsel@kobberogkran.no. */
   VARSEL_FRA?: string;
-  /** Grunnadresse for bildelenker i varselet. Standard: https://kobberogkran.no */
+  /** Grunnadresse for bildelenker i varselet og skjemalenken ved tapt anrop. Standard: https://kobberogkran.no */
   NETTSTED_URL?: string;
+  // Meldingskanaler og tapte anrop (oppgave 12). Hemmeligheter; uten dem avvises webhookene.
+  /** Tokenet Meta sender ved verifisering av WhatsApp-webhooken (`hub.verify_token`). */
+  WHATSAPP_VERIFY_TOKEN?: string;
+  /** App Secret fra Meta-appen. Signerer POST-kroppen (`X-Hub-Signature-256`). */
+  WHATSAPP_APP_SECRET?: string;
+  /** Delt hemmelighet med telefonitjenesten. HMAC-SHA256 av kroppen, hex, i `X-Signatur`. */
+  TELEFONI_WEBHOOK_SECRET?: string;
+}
+
+/** Det route-ene trenger fra Workers' ExecutionContext (`Astro.locals.cfContext`). */
+export interface Kontekst {
+  waitUntil(p: Promise<unknown>): void;
 }

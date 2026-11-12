@@ -2,6 +2,7 @@
 // Meldingen bygges som enkel MIME (ren tekst, UTF-8) uten ny avhengighet. Ingen vedlegg:
 // bilder når Eirik som signerte, tidsbegrensede lenker (se bildelenke.ts).
 import type { EmailMessage, SendEmail } from '@cloudflare/workers-types';
+import type { Env } from './env';
 
 export interface Vedlegg {
   filnavn: string;
@@ -103,5 +104,30 @@ export class EpostVarsler implements Varsler {
       meldingsId: `<${crypto.randomUUID()}@${domene}>`,
     });
     await this.binding.send(await this.lagMelding(this.fra, til, raw));
+  }
+}
+
+/**
+ * Sender et internt varsel til Eirik (VARSEL_TIL) og kaster aldri. Uten `varsler` brukes
+ * e-post via EPOST/VARSEL_FRA. Returnerer false når varselet ikke kunne sendes (det logges, uten
+ * innholdet, siden det kan inneholde personopplysninger).
+ */
+export async function varsleEirik(
+  env: Pick<Env, 'EPOST' | 'VARSEL_TIL' | 'VARSEL_FRA'>,
+  varsler: Varsler | undefined,
+  emne: string,
+  tekst: string,
+  hendelse: string,
+): Promise<boolean> {
+  try {
+    const til = env.VARSEL_TIL;
+    const v = varsler ?? (env.VARSEL_FRA && env.EPOST ? new EpostVarsler(env.EPOST, env.VARSEL_FRA) : null);
+    if (!til || !v) throw new Error('VARSEL_TIL eller VARSEL_FRA er ikke satt');
+    await v.send(til, emne, tekst);
+    return true;
+  } catch (e) {
+    const feil = (e instanceof Error ? e.message : String(e)).slice(0, 300);
+    console.error(JSON.stringify({ hendelse: `${hendelse}_varsel_feil`, feil }));
+    return false;
   }
 }

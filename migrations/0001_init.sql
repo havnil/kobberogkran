@@ -62,3 +62,15 @@ CREATE TABLE hendelser (
 );
 
 CREATE INDEX idx_hendelser_foresporsel ON hendelser(foresporsel_id);
+
+-- Ubesvarte anrop som utløste (et forsøk på) melding til innringeren. Én rad per melding:
+-- et nytt anrop fra samme nummer innen 30 minutter gir ingen ny rad og ingen ny melding.
+-- melding_kanal er kanalen som lyktes ('whatsapp', 'rcs', 'sms'), eller NULL hvis ingen gjorde det.
+CREATE TABLE anrop (
+  id TEXT PRIMARY KEY,
+  fra TEXT NOT NULL,
+  opprettet TEXT NOT NULL,
+  melding_kanal TEXT
+);
+
+CREATE INDEX idx_anrop_fra_opprettet ON anrop(fra, opprettet);

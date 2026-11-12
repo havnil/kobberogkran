@@ -1,6 +1,7 @@
 {
   "type": "referanse",
-  "tekst": "PLASSHOLDER: Eksempel på referanse",
-  "navn": "PLASSHOLDER: Navn",
-  "ekte": false
+  "tekst": "Vinterstengning og åpning av hytte ved Setskog, med frostsikring av vannposten ute.",
+  "navn": "Hytteeier, Setskog",
+  "ekte": false,
+  "plassholder": true
 }

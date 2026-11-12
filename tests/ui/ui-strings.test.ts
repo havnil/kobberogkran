@@ -33,8 +33,8 @@ describe('ui strings', () => {
     }
   });
 
-  it('uses the placeholder form button text', () => {
-    expect(ui.nb.skjemaKnapp).toBe('PLASSHOLDER: Send forespørsel');
-    expect(ui.en.skjemaKnapp).toMatch(/^\[EN\] /);
+  it('uses «Send forespørsel», not «Få pris», on the form button', () => {
+    expect(ui.nb.skjemaKnapp).toBe('Send forespørsel');
+    expect(ui.en.skjemaKnapp).toBe('Send request');
   });
 });

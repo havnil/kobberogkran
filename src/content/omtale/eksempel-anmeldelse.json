@@ -1,6 +1,7 @@
 {
   "type": "anmeldelse",
-  "tekst": "PLASSHOLDER: Eksempel på anmeldelse",
-  "navn": "PLASSHOLDER: Navn",
-  "ekte": false
+  "tekst": "Tanken begynte å lekke en fredag. Eirik forklarte hvordan vi stengte vannet, kom etter avtale og byttet den på en formiddag. Ryddig, og vi fikk papirene på mail etterpå.",
+  "navn": "Huseier på Hemnes",
+  "ekte": false,
+  "plassholder": true
 }

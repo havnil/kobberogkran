@@ -1,5 +1,6 @@
 {
   "type": "godkjenning",
-  "tekst": "PLASSHOLDER: Eksempel på godkjenning",
-  "ekte": false
+  "tekst": "Våtromsgodkjenning (kommer når den er på plass)",
+  "ekte": false,
+  "plassholder": true
 }

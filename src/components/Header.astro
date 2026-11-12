@@ -1,0 +1,215 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import type { Alternate } from '../i18n/alternates';
+import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
+import { navPath } from '../i18n/nav';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+
+interface Props {
+  locale: Locale;
+  alternates: Alternate[];
+}
+
+const { locale, alternates } = Astro.props;
+const t = ui[locale];
+const firma = await getFirma();
+const digits = (value: string) => value.replace(/\D/g, '');
+const home = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
+// Services has no submenu yet; the services collection adds it later.
+const items = [
+  { href: navPath(locale, 'tjenester'), label: t.nav.tjenester },
+  { href: navPath(locale, 'priser'), label: t.nav.priser },
+  { href: navPath(locale, 'omrader'), label: t.nav.omrader },
+  { href: navPath(locale, 'om'), label: t.nav.om },
+  { href: navPath(locale, 'kontakt'), label: t.nav.kontakt },
+];
+const current = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="site-header-inner container">
+    <a class="logo" href={home} aria-label={firma.navn}>
+      <picture>
+        <source media="(max-width: 719px)" srcset="/logo/kobber-og-kran-b.svg" />
+        <img src="/logo/kobber-og-kran-a.svg" alt="" />
+      </picture>
+    </a>
+
+    <button
+      class="meny-knapp"
+      type="button"
+      aria-expanded="false"
+      aria-controls="hovedmeny"
+      data-apne={t.meny}
+      data-lukk={t.lukk}
+    >
+      <span class="meny-knapp-tekst">{t.meny}</span>
+    </button>
+
+    <nav id="hovedmeny" class="hovedmeny" aria-label={t.hovedmeny}>
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="header-knapper">
+      <a class="knapp" href={`tel:${digits(firma.telefon.verdi)}`}>{t.ring}</a>
+      <a class="knapp knapp-omriss" href={`https://wa.me/${digits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+    </div>
+
+    <div class="sprak">
+      <LanguageSwitcher locale={locale} alternates={alternates} />
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var knapp = document.querySelector('.meny-knapp');
+    var meny = document.getElementById('hovedmeny');
+    if (!knapp || !meny) return;
+    document.documentElement.classList.add('js');
+    var tekst = knapp.querySelector('.meny-knapp-tekst');
+    function sett(apen) {
+      knapp.setAttribute('aria-expanded', apen ? 'true' : 'false');
+      meny.classList.toggle('apen', apen);
+      tekst.textContent = apen ? knapp.getAttribute('data-lukk') : knapp.getAttribute('data-apne');
+    }
+    knapp.addEventListener('click', function () {
+      sett(knapp.getAttribute('aria-expanded') !== 'true');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && knapp.getAttribute('aria-expanded') === 'true') {
+        sett(false);
+        knapp.focus();
+      }
+    });
+  })();
+</script>
+
+<style>
+  .site-header {
+    background: var(--color-cream);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    padding-block: var(--space-2);
+  }
+
+  .logo {
+    display: block;
+    margin-right: auto;
+  }
+
+  .logo img {
+    display: block;
+    height: 3.5rem; /* set A: 166 px wide, above the 160 px minimum */
+    width: auto;
+  }
+
+  .hovedmeny ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hovedmeny a {
+    display: block;
+    padding: 0.75rem 0.25rem;
+    color: var(--color-brown);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .hovedmeny a:hover,
+  .hovedmeny a[aria-current='page'] {
+    color: var(--color-orange-dark);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .sprak {
+    order: 1;
+  }
+
+  .meny-knapp {
+    order: 2;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--color-brown);
+    border-radius: var(--radius-button);
+    background: transparent;
+    color: var(--color-brown);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .header-knapper {
+    display: none;
+    gap: var(--space-2);
+  }
+
+  /* Mobile: logo set B, menu behind a button. Without JavaScript the menu stays visible. */
+  .hovedmeny {
+    flex-basis: 100%;
+    order: 5;
+  }
+
+  :global(html.js) .hovedmeny:not(.apen) {
+    display: none;
+  }
+
+  @media (max-width: 719px) {
+    .logo img {
+      height: 2.25rem; /* set B: 191 px wide, above the 140 px minimum */
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .meny-knapp {
+      display: none;
+    }
+
+    .sprak {
+      order: 0;
+    }
+
+    .site-header-inner {
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+    }
+
+    .hovedmeny,
+    :global(html.js) .hovedmeny:not(.apen) {
+      display: block;
+      flex-basis: auto;
+      order: 0;
+    }
+
+    .hovedmeny ul {
+      flex-direction: row;
+      gap: var(--space-3);
+    }
+
+    .header-knapper {
+      display: flex;
+    }
+  }
+</style>

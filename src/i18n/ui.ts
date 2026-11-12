@@ -9,6 +9,21 @@ export interface UiStrings {
   notFoundText: string;
   notFoundHomeLink: string;
   skipLink: string;
+  /** Accessible names for the navigation landmarks. */
+  hovedmeny: string;
+  bunnlinje: string;
+  /** Short menu labels. */
+  nav: { tjenester: string; priser: string; omrader: string; om: string; kontakt: string };
+  ring: string;
+  whatsapp: string;
+  /** Text of the request-form button. Placeholder until the owner picks the final wording. */
+  skjemaKnapp: string;
+  meny: string;
+  lukk: string;
+  vilkar: string;
+  personvern: string;
+  /** Footer line label: «Org.nr. <number> MVA». */
+  orgnr: string;
 }
 
 export const ui: Record<Locale, UiStrings> = {
@@ -19,6 +34,17 @@ export const ui: Record<Locale, UiStrings> = {
     notFoundText: 'Siden du leter etter finnes ikke, eller den er flyttet.',
     notFoundHomeLink: 'Gå til forsiden',
     skipLink: 'Hopp til innholdet',
+    hovedmeny: 'Hovedmeny',
+    bunnlinje: 'Hurtigvalg',
+    nav: { tjenester: 'Tjenester', priser: 'Priser', omrader: 'Områder', om: 'Om Eirik', kontakt: 'Kontakt' },
+    ring: 'Ring',
+    whatsapp: 'WhatsApp',
+    skjemaKnapp: 'PLASSHOLDER: Send forespørsel',
+    meny: 'Meny',
+    lukk: 'Lukk',
+    vilkar: 'Vilkår',
+    personvern: 'Personvern',
+    orgnr: 'Org.nr.',
   },
   en: {
     switcherLabel: 'Choose language',
@@ -27,5 +53,16 @@ export const ui: Record<Locale, UiStrings> = {
     notFoundText: 'The page you are looking for does not exist, or it has moved.',
     notFoundHomeLink: 'Go to the home page',
     skipLink: 'Skip to content',
+    hovedmeny: 'Main menu',
+    bunnlinje: 'Quick actions',
+    nav: { tjenester: 'Services', priser: 'Prices', omrader: 'Areas', om: 'About Eirik', kontakt: 'Contact' },
+    ring: 'Call',
+    whatsapp: 'WhatsApp',
+    skjemaKnapp: '[EN] PLASSHOLDER: Send forespørsel',
+    meny: 'Menu',
+    lukk: 'Close',
+    vilkar: 'Terms',
+    personvern: 'Privacy',
+    orgnr: 'Org. no.',
   },
 };

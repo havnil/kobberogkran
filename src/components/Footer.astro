@@ -1,0 +1,86 @@
+---
+import Plassholder from './Plassholder.astro';
+import type { Locale } from '../i18n/locales';
+import { navPath } from '../i18n/nav';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+const firma = await getFirma();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <img class="footer-logo" src="/logo/kobber-og-kran-a-paa-brun.svg" alt="" />
+    <address>
+      <strong>{firma.juridiskNavn}</strong><br />
+      <Plassholder verdi={firma.adresse} /><br />
+      {
+        firma.epost.plassholder ? (
+          <Plassholder verdi={firma.epost} />
+        ) : (
+          <a href={`mailto:${firma.epost.verdi}`}>{firma.epost.verdi}</a>
+        )
+      }
+    </address>
+    <p>{t.orgnr} <Plassholder verdi={firma.orgnr} /> MVA</p>
+    <ul class="footer-lenker">
+      <li><a href={navPath(locale, 'vilkar')}>{t.vilkar}</a></li>
+      <li><a href={navPath(locale, 'personvern')}>{t.personvern}</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-5);
+    background: var(--color-brown);
+    color: var(--color-cream);
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+  }
+
+  .footer-logo {
+    height: 3.5rem;
+    width: auto;
+    justify-self: start;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: var(--color-cream);
+  }
+
+  a:hover {
+    color: var(--color-orange-light);
+  }
+
+  a:focus-visible {
+    outline-color: var(--color-cream);
+  }
+
+  .footer-lenker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

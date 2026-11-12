@@ -26,8 +26,9 @@ function expectContains(file, needles) {
   }
 }
 
-expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"']);
-expectContains('en/index.html', ['lang="en"']);
+const chrome = ['class="mobil-bunnlinje"', 'href="tel:', 'href="https://wa.me/'];
+expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"', ...chrome]);
+expectContains('en/index.html', ['lang="en"', ...chrome]);
 expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);
 read('sitemap-index.xml');

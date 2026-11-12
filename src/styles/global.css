@@ -11,18 +11,34 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
-  line-height: 1.5;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  width: 100%;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-heading);
-  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 a {
   color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brown);
+  outline-offset: 2px;
 }
 
 .container {
@@ -31,23 +47,77 @@ a {
   padding: var(--space-3);
 }
 
-.site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
-}
-
 .skip-link {
   position: absolute;
   left: var(--space-3);
   top: -100%;
+  z-index: 100;
   padding: var(--space-2) var(--space-3);
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
+  background: var(--color-brown);
+  color: var(--color-cream);
 }
 
 .skip-link:focus {
   top: var(--space-2);
+}
+
+/* Buttons: orange surface with brown text, brown surface with cream text. */
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-button);
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--color-orange);
+  color: var(--color-brown);
+}
+
+.knapp:hover {
+  background: var(--color-orange-light);
+}
+
+.knapp-brun {
+  background: var(--color-brown);
+  color: var(--color-cream);
+}
+
+.knapp-brun:hover {
+  background: var(--color-brown-dark);
+}
+
+.knapp-omriss {
+  background: transparent;
+  border-color: var(--color-brown);
+  color: var(--color-brown);
+}
+
+.knapp-omriss:hover {
+  background: var(--color-sand);
+}
+
+/* Badge from <Plassholder>: small, visible, brand colours. */
+.plassholder-merke {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  border-radius: var(--radius-button);
+  background: var(--color-orange);
+  color: var(--color-brown);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+/* Content below the fixed bottom bar must stay reachable. */
+@media (max-width: 999px) {
+  body {
+    padding-bottom: calc(var(--bunnlinje-hoyde) + env(safe-area-inset-bottom, 0px));
+  }
 }

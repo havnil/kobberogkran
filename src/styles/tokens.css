@@ -1,18 +1,50 @@
 /*
- * Design tokens. These are neutral placeholders: the branding phase replaces the
- * values with the real colours, fonts and spacing from `brand/`. Components use
- * only these custom properties, so branding changes happen in this one file.
+ * Design tokens, from `brand/farger/tokens.css`. Components use only these custom
+ * properties. Contrast is measured against WCAG 2.1 AA: 4.5:1 for body text, 3:1 for
+ * large text and graphics.
  */
-:root {
-  --color-bg: #ffffff;
-  --color-text: #1f1f1f;
-  --color-muted: #5c5c5c;
-  --color-accent: #8a4b2a;
-  --color-accent-contrast: #ffffff;
-  --color-border: #d9d9d9;
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; src: url("/fonts/inter/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; src: url("/fonts/inter/inter-latin-ext-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; src: url("/fonts/inter/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; src: url("/fonts/inter/inter-latin-ext-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; src: url("/fonts/inter/inter-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; src: url("/fonts/inter/inter-latin-ext-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 900; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; src: url("/fonts/inter/inter-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 900; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; src: url("/fonts/inter/inter-latin-ext-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; src: url("/fonts/rubik/rubik-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; src: url("/fonts/rubik/rubik-latin-ext-800-normal.woff2") format("woff2"); }
 
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-heading: var(--font-body);
+:root {
+  /* Brand colours */
+  --color-orange: #F26A0F;        /* mark, surfaces, buttons with brown text. Not body text on white (3.1:1) */
+  --color-orange-dark: #A84508;   /* orange text and links on light backgrounds */
+  --color-orange-light: #F7883F;  /* orange text on brown */
+  --color-brown: #4A2412;         /* all text, dark surfaces */
+  --color-brown-dark: #2E170B;    /* hover on dark surfaces */
+  --color-brown-muted: #6B4A38;   /* secondary text (7.1:1 on cream) */
+
+  /* Backgrounds */
+  --color-cream: #F7F2EC;         /* default page background */
+  --color-sand: #EFE6DC;          /* sections, cards */
+  --color-white: #FFFFFF;
+  --color-border: #E8DCCF;
+  --color-border-strong: #CDBBA9; /* form fields */
+
+  /* Semantic aliases used by components */
+  --color-bg: var(--color-cream);
+  --color-text: var(--color-brown);
+  --color-muted: var(--color-brown-muted);
+  --color-accent: var(--color-orange-dark);
+  --color-accent-contrast: var(--color-white);
+
+  /* Type */
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Inter", system-ui, sans-serif;  /* weight 800-900, letter-spacing -0.02em */
+  --font-brand: "Rubik", "Inter", sans-serif;      /* only the set B wordmark and large uppercase titles */
+
+  /* Shape */
+  --radius-card: 18px;
+  --radius-button: 999px;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -20,5 +52,6 @@
   --space-4: 2rem;
   --space-5: 4rem;
 
-  --content-width: 60rem;
+  --content-width: 70rem;
+  --bunnlinje-hoyde: 4.5rem;
 }

@@ -1,0 +1,53 @@
+---
+import type { Locale } from '../i18n/locales';
+import { navPath } from '../i18n/nav';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+const firma = await getFirma();
+const digits = (value: string) => value.replace(/\D/g, '');
+---
+
+<nav class="mobil-bunnlinje" aria-label={t.bunnlinje}>
+  <a class="knapp" href={`tel:${digits(firma.telefon.verdi)}`}>{t.ring}</a>
+  <a class="knapp knapp-omriss" href={`https://wa.me/${digits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+  <a class="knapp knapp-brun" href={navPath(locale, 'kontakt')}>{t.skjemaKnapp}</a>
+</nav>
+
+<style>
+  .mobil-bunnlinje {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 50;
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+    background: var(--color-cream);
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .mobil-bunnlinje :global(.knapp) {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 0.5rem;
+    text-align: center;
+    line-height: 1.15;
+    font-size: 0.875rem;
+  }
+
+  .mobil-bunnlinje :global(.knapp-brun) {
+    flex: 2;
+  }
+
+  @media (min-width: 1000px) {
+    .mobil-bunnlinje {
+      display: none;
+    }
+  }
+</style>

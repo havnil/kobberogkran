@@ -2,6 +2,73 @@
   "kvittering": "PLASSHOLDER: Takk, vi har mottatt forespørselen din.",
   "taptAnrop": "PLASSHOLDER: Vi så at du ringte. Send en forespørsel eller chat på WhatsApp.",
   "whatsappHilsen": "PLASSHOLDER: Hei! Jeg trenger hjelp med {tjeneste}. (Fra: {kilde})",
+  "forside": {
+    "hero": {
+      "stedslinje": "PLASSHOLDER: Arbeidstittel for stedslinje",
+      "tittel": "PLASSHOLDER: Arbeidstittel for stor tittel",
+      "ingress": "PLASSHOLDER: Arbeidstittel for én setning om posisjonen",
+      "lover": [
+        "PLASSHOLDER: Løfte 1",
+        "PLASSHOLDER: Løfte 2",
+        "PLASSHOLDER: Løfte 3"
+      ]
+    },
+    "tjenester": {
+      "tittel": "PLASSHOLDER: Hva trenger du hjelp med?"
+    },
+    "varmtvann": {
+      "tittel": "PLASSHOLDER: Fastpris på varmtvannstank",
+      "arbeidMerke": "PLASSHOLDER: arbeid",
+      "typiskTotalMerke": "PLASSHOLDER: typisk totalpris",
+      "medTittel": "PLASSHOLDER: Med i prisen",
+      "med": [
+        "PLASSHOLDER: Punkt med"
+      ],
+      "ikkeMedTittel": "PLASSHOLDER: Ikke med",
+      "ikkeMed": [
+        "PLASSHOLDER: Punkt ikke med"
+      ]
+    },
+    "priser": {
+      "tittel": "PLASSHOLDER: Priser i korte trekk",
+      "timepris": "PLASSHOLDER: Timepris",
+      "servicebil": "PLASSHOLDER: Servicebil per oppdrag",
+      "forbruk": "PLASSHOLDER: Forbruksmateriell",
+      "regneeksempel": "PLASSHOLDER: Regneeksempel: 1 time + servicebil + forbruk",
+      "delerNote": "PLASSHOLDER: pluss deler"
+    },
+    "steg": {
+      "tittel": "PLASSHOLDER: Slik bestiller du",
+      "steg": [
+        {
+          "tittel": "PLASSHOLDER: Steg 1",
+          "tekst": "PLASSHOLDER: Tekst steg 1"
+        },
+        {
+          "tittel": "PLASSHOLDER: Steg 2",
+          "tekst": "PLASSHOLDER: Tekst steg 2"
+        },
+        {
+          "tittel": "PLASSHOLDER: Steg 3",
+          "tekst": "PLASSHOLDER: Tekst steg 3"
+        }
+      ]
+    },
+    "omEirik": {
+      "tittel": "PLASSHOLDER: Om Eirik",
+      "tekst": "PLASSHOLDER: Kort om Eirik og tilknytningen til stedet",
+      "godkjenningerTittel": "PLASSHOLDER: Godkjenninger",
+      "anmeldelserTittel": "PLASSHOLDER: Anmeldelser",
+      "eksempelMerke": "PLASSHOLDER: Eksempel"
+    },
+    "omrader": {
+      "tittel": "PLASSHOLDER: Områder vi dekker"
+    },
+    "skjema": {
+      "tittel": "PLASSHOLDER: Send forespørsel",
+      "merknad": "PLASSHOLDER: Skjemaet kommer"
+    }
+  },
   "lekkerNaa": {
     "tittel": "PLASSHOLDER: Det lekker nå",
     "punkter": [

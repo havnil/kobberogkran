@@ -19,11 +19,56 @@ export const tjenesteSchema = z.object({
   locale: z.enum(['nb', 'en']),
 });
 
+const stegSchema = z.object({ tittel: z.string(), tekst: z.string() });
+
+/** Copy for the front page sections. Working titles from the spec until a human writes the final text. */
+export const forsideSchema = z.object({
+  hero: z.object({
+    /** Small place line above the big title. */
+    stedslinje: z.string(),
+    tittel: z.string(),
+    ingress: z.string(),
+    /** The three promises in the fact box. */
+    lover: z.array(z.string()),
+  }),
+  tjenester: z.object({ tittel: z.string() }),
+  varmtvann: z.object({
+    tittel: z.string(),
+    /** Label on the big fixed price: «arbeid». */
+    arbeidMerke: z.string(),
+    typiskTotalMerke: z.string(),
+    medTittel: z.string(),
+    med: z.array(z.string()),
+    ikkeMedTittel: z.string(),
+    ikkeMed: z.array(z.string()),
+  }),
+  priser: z.object({
+    tittel: z.string(),
+    timepris: z.string(),
+    servicebil: z.string(),
+    forbruk: z.string(),
+    regneeksempel: z.string(),
+    delerNote: z.string(),
+  }),
+  steg: z.object({ tittel: z.string(), steg: z.array(stegSchema) }),
+  omEirik: z.object({
+    tittel: z.string(),
+    tekst: z.string(),
+    godkjenningerTittel: z.string(),
+    anmeldelserTittel: z.string(),
+    /** Badge on example testimonials (shown outside production only). */
+    eksempelMerke: z.string(),
+  }),
+  omrader: z.object({ tittel: z.string() }),
+  skjema: z.object({ tittel: z.string(), merknad: z.string() }),
+});
+
 export const tekstSchema = z.object({
   kvittering: z.string(),
   taptAnrop: z.string(),
   /** Template for the WhatsApp greeting. Placeholders: {tjeneste}, {kilde}. */
   whatsappHilsen: z.string(),
+  forside: forsideSchema,
   lekkerNaa: z.object({
     tittel: z.string(),
     punkter: z.array(z.string()),

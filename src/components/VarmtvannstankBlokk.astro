@@ -1,0 +1,91 @@
+---
+import KrVerdi from './KrVerdi.astro';
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['varmtvann'];
+  priser: Firma['priser'];
+}
+
+const { locale, tekst, priser } = Astro.props;
+---
+
+<section class="seksjon varmtvann" aria-labelledby="varmtvann-tittel">
+  <h2 id="varmtvann-tittel">{tekst.tittel}</h2>
+  <div class="tall">
+    <div class="pris">
+      <p class="stort"><KrVerdi verdi={priser.varmtvannstankArbeid} locale={locale} /></p>
+      <p class="merke">{tekst.arbeidMerke}</p>
+    </div>
+    <div class="pris">
+      <p class="stort sekundar"><KrVerdi verdi={priser.varmtvannstankTypiskTotal} locale={locale} /></p>
+      <p class="merke">{tekst.typiskTotalMerke}</p>
+    </div>
+  </div>
+  <div class="lister">
+    <div>
+      <h3>{tekst.medTittel}</h3>
+      <ul>{tekst.med.map((p) => <li>{p}</li>)}</ul>
+    </div>
+    <div>
+      <h3>{tekst.ikkeMedTittel}</h3>
+      <ul>{tekst.ikkeMed.map((p) => <li>{p}</li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .varmtvann {
+    background: var(--color-sand);
+    border-radius: var(--radius-card);
+    padding: var(--space-4) var(--space-3);
+  }
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  .tall {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  .stort {
+    margin: 0;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: clamp(2.25rem, 8vw, 3.75rem);
+    line-height: 1.1;
+  }
+  .sekundar {
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
+  }
+  .merke {
+    margin: 0;
+    color: var(--color-muted);
+    font-weight: 600;
+  }
+  .lister {
+    display: grid;
+    gap: var(--space-3);
+  }
+  h3 {
+    margin: 0 0 var(--space-2);
+    font-size: 1.125rem;
+  }
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  @media (min-width: 720px) {
+    .varmtvann {
+      padding: var(--space-4);
+    }
+    .lister {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

@@ -114,3 +114,17 @@ a {
   letter-spacing: 0.02em;
   vertical-align: middle;
 }
+
+/* Front page sections */
+.seksjon {
+  margin-block: var(--space-5);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-2);
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 0.9375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

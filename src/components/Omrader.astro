@@ -1,0 +1,39 @@
+---
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+
+interface Props {
+  tekst: Tekster['forside']['omrader'];
+  omrade: Firma['omrade'];
+}
+
+const { tekst, omrade } = Astro.props;
+---
+
+<section class="seksjon" aria-labelledby="omrader-tittel">
+  <h2 id="omrader-tittel">{tekst.tittel}</h2>
+  <ul>
+    {omrade.steder.map((sted) => <li>{sted}</li>)}
+  </ul>
+</section>
+
+<style>
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  li {
+    padding: 0.35rem 1rem;
+    border-radius: var(--radius-button);
+    background: var(--color-sand);
+    font-weight: 600;
+  }
+</style>

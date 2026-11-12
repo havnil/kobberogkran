@@ -1,0 +1,99 @@
+---
+import KrVerdi from './KrVerdi.astro';
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { formatKr, regneeksempel } from '../lib/priser';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['priser'];
+  priser: Firma['priser'];
+}
+
+const { locale, tekst, priser } = Astro.props;
+const eksempel = regneeksempel(priser);
+const eksempelErPlassholder = [priser.timepris, priser.servicebil, priser.forbruk].some((p) => p.plassholder);
+---
+
+<section class="seksjon" aria-labelledby="priser-tittel">
+  <h2 id="priser-tittel">{tekst.tittel}</h2>
+  <div class="rutenett">
+    <dl>
+      <div><dt>{tekst.timepris}</dt><dd><KrVerdi verdi={priser.timepris} locale={locale} /></dd></div>
+      <div><dt>{tekst.servicebil}</dt><dd><KrVerdi verdi={priser.servicebil} locale={locale} /></dd></div>
+      <div><dt>{tekst.forbruk}</dt><dd><KrVerdi verdi={priser.forbruk} locale={locale} /></dd></div>
+    </dl>
+    <div class="eksempel">
+      <p>{tekst.regneeksempel}</p>
+      <p class="eksempel-sum">
+        {
+          eksempelErPlassholder ? (
+            <span data-plassholder>
+              {formatKr(eksempel, locale)} <small class="plassholder-merke">Plassholder</small>
+            </span>
+          ) : (
+            formatKr(eksempel, locale)
+          )
+        }
+      </p>
+      <p>{tekst.delerNote}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  .rutenett {
+    display: grid;
+    gap: var(--space-3);
+  }
+  dl {
+    margin: 0;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-2) var(--space-3);
+  }
+  dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  dl > div:last-child {
+    border-bottom: 0;
+  }
+  dt {
+    color: var(--color-muted);
+  }
+  dd {
+    margin: 0;
+    font-weight: 800;
+    text-align: right;
+  }
+  .eksempel {
+    background: var(--color-brown);
+    color: var(--color-cream);
+    border-radius: var(--radius-card);
+    padding: var(--space-3);
+  }
+  .eksempel p {
+    margin: 0;
+  }
+  .eksempel-sum {
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: clamp(2rem, 7vw, 3rem);
+    line-height: 1.2;
+  }
+  @media (min-width: 720px) {
+    .rutenett {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

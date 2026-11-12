@@ -1,0 +1,84 @@
+---
+import type { Tjeneste } from '../lib/innhold';
+import { aktivSesong } from '../lib/priser';
+
+interface Props {
+  href: string;
+  tjeneste: Tjeneste;
+}
+
+const { href, tjeneste } = Astro.props;
+// The cabin card swaps text with the season when the page is built.
+const tekst = tjeneste.sesong ? tjeneste.sesong[aktivSesong(new Date())] : tjeneste.kort;
+// Placeholder images do not exist on disk: render a neutral block instead of a broken <img>.
+const bilde = tjeneste.bilder.find((b) => !b.plassholder && b.src);
+---
+
+<li class="kort">
+  <a href={href}>
+    {
+      bilde ? (
+        <img class="bilde" src={bilde.src} alt="" loading="lazy" width="640" height="360" />
+      ) : (
+        <div class="bilde" data-plassholder aria-hidden="true" />
+      )
+    }
+    <span class="nummer" aria-hidden="true">{tjeneste.nummer}</span>
+    <h3>{tjeneste.kundeTittel}</h3>
+    <p class="fagord">{tjeneste.fagord}</p>
+    <p class="tekst">{tekst}</p>
+  </a>
+</li>
+
+<style>
+  .kort {
+    position: relative;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  a {
+    display: block;
+    height: 100%;
+    color: var(--color-text);
+    text-decoration: none;
+    padding-bottom: var(--space-3);
+  }
+  a:hover h3 {
+    text-decoration: underline;
+  }
+  .bilde {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--color-sand);
+    margin-bottom: var(--space-3);
+  }
+  .nummer {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-orange);
+    color: var(--color-brown);
+    font-weight: 800;
+  }
+  h3 {
+    margin: 0 var(--space-3) var(--space-1);
+    font-size: 1.25rem;
+  }
+  .fagord {
+    margin: 0 var(--space-3) var(--space-2);
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+  .tekst {
+    margin: 0 var(--space-3);
+  }
+</style>

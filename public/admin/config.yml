@@ -124,6 +124,75 @@ collections:
           - { name: kvittering, label: Kvittering, widget: text }
           - { name: taptAnrop, label: Melding ved tapt anrop, widget: text }
           - { name: whatsappHilsen, label: 'WhatsApp-hilsen (bruk {tjeneste} og {kilde})', widget: text }
+          - name: forside
+            label: Forsiden
+            widget: object
+            fields:
+              - name: hero
+                label: Hero
+                widget: object
+                fields:
+                  - { name: stedslinje, label: Stedslinje, widget: string }
+                  - { name: tittel, label: Stor tittel, widget: string }
+                  - { name: ingress, label: Én setning om posisjonen, widget: text }
+                  - { name: lover, label: Tre løfter som kan holdes, widget: list, field: { name: lofte, label: Løfte, widget: string } }
+              - name: tjenester
+                label: Hva trenger du hjelp med?
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+              - name: varmtvann
+                label: Fastpris på varmtvannstank
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: arbeidMerke, label: Merke på fastprisen (arbeid), widget: string }
+                  - { name: typiskTotalMerke, label: Merke på typisk totalpris, widget: string }
+                  - { name: medTittel, label: Tittel - med, widget: string }
+                  - { name: med, label: Det som er med, widget: list, field: { name: punkt, label: Punkt, widget: string } }
+                  - { name: ikkeMedTittel, label: Tittel - ikke med, widget: string }
+                  - { name: ikkeMed, label: Det som ikke er med, widget: list, field: { name: punkt, label: Punkt, widget: string } }
+              - name: priser
+                label: Priser i korte trekk
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: timepris, label: Navn - timepris, widget: string }
+                  - { name: servicebil, label: Navn - servicebil, widget: string }
+                  - { name: forbruk, label: Navn - forbruk, widget: string }
+                  - { name: regneeksempel, label: Tittel på regneeksempel, widget: string }
+                  - { name: delerNote, label: Merknad om deler, widget: string }
+              - name: steg
+                label: Slik bestiller du
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+                  - name: steg
+                    label: Stegene
+                    widget: list
+                    fields:
+                      - { name: tittel, label: Tittel, widget: string }
+                      - { name: tekst, label: Tekst, widget: text }
+              - name: omEirik
+                label: Om Eirik
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: tekst, label: Tekst, widget: text }
+                  - { name: godkjenningerTittel, label: Tittel - godkjenninger, widget: string }
+                  - { name: anmeldelserTittel, label: Tittel - anmeldelser, widget: string }
+                  - { name: eksempelMerke, label: Merke på eksempler (vises bare utenfor produksjon), widget: string }
+              - name: omrader
+                label: Områder
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+              - name: skjema
+                label: Skjemaseksjonen
+                widget: object
+                fields:
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: merknad, label: Merknad, widget: text }
           - name: lekkerNaa
             label: Det lekker nå
             widget: object

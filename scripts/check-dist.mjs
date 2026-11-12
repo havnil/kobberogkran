@@ -26,9 +26,20 @@ function expectContains(file, needles) {
   }
 }
 
+function expectNotContains(file, needles) {
+  const html = read(file);
+  if (html === null) return;
+  for (const needle of needles) {
+    if (html.includes(needle)) failures.push(`${join(STATIC_DIR, file)} contains ${needle}`);
+  }
+}
+
 const chrome = ['class="mobil-bunnlinje"', 'href="tel:', 'href="https://wa.me/'];
-expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"', ...chrome]);
-expectContains('en/index.html', ['lang="en"', ...chrome]);
+expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"', ...chrome, 'id="lekker-naa"', 'id="skjema"', 'href="#skjema"']);
+expectContains('en/index.html', ['lang="en"', ...chrome, 'id="lekker-naa"', 'id="skjema"', 'href="#skjema"']);
+// The full-width night-duty stripe is not part of the brand; the marker must never appear.
+expectNotContains('index.html', ['data-dognvakt-stripe']);
+expectNotContains('en/index.html', ['data-dognvakt-stripe']);
 expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);
 read('sitemap-index.xml');

@@ -1,0 +1,24 @@
+---
+// A price formatted as «1 875 kr». Placeholder prices get the visible placeholder mark.
+import type { Verdi } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { formatKr } from '../lib/priser';
+
+interface Props {
+  verdi: Verdi<number>;
+  locale: Locale;
+}
+
+const { verdi, locale } = Astro.props;
+const tekst = formatKr(verdi.verdi, locale);
+---
+
+{
+  verdi.plassholder ? (
+    <span data-plassholder>
+      {tekst} <small class="plassholder-merke">Plassholder</small>
+    </span>
+  ) : (
+    tekst
+  )
+}

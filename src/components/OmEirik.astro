@@ -1,0 +1,109 @@
+---
+import type { Tekster, Omtale } from '../lib/innhold';
+
+interface Props {
+  tekst: Tekster['forside']['omEirik'];
+  /** Already filtered: only entries that may be shown. */
+  omtale: Omtale[];
+}
+
+const { tekst, omtale } = Astro.props;
+const godkjenninger = omtale.filter((o) => o.type === 'godkjenning');
+const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
+---
+
+<section class="seksjon om-eirik" aria-labelledby="om-eirik-tittel">
+  <div class="foto" data-plassholder aria-hidden="true"></div>
+  <div class="innhold">
+    <h2 id="om-eirik-tittel">{tekst.tittel}</h2>
+    <p>{tekst.tekst}</p>
+
+    {godkjenninger.length > 0 && <h3>{tekst.godkjenningerTittel}</h3>}
+    {
+      godkjenninger.length > 0 && (
+        <ul class="omtale">
+          {godkjenninger.map((o) => (
+            <li>
+              {o.tekst}
+              {!o.ekte && <small class="eksempel-merke">{tekst.eksempelMerke}</small>}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {anmeldelser.length > 0 && <h3>{tekst.anmeldelserTittel}</h3>}
+    {
+      anmeldelser.length > 0 && (
+        <ul class="omtale">
+          {anmeldelser.map((o) => (
+            <li>
+              <blockquote>{o.tekst}</blockquote>
+              {o.navn && <p class="navn">{o.navn}</p>}
+              {!o.ekte && <small class="eksempel-merke">{tekst.eksempelMerke}</small>}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .om-eirik {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .foto {
+    aspect-ratio: 4 / 3;
+    background: var(--color-sand);
+    border-radius: var(--radius-card);
+  }
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  h3 {
+    margin: var(--space-3) 0 var(--space-2);
+    font-size: 1.125rem;
+  }
+  .omtale {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .omtale li {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-2) var(--space-3);
+  }
+  blockquote {
+    margin: 0;
+  }
+  .navn {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+  .eksempel-merke {
+    display: inline-block;
+    margin-left: var(--space-2);
+    padding: 0.1em 0.5em;
+    border-radius: var(--radius-button);
+    background: var(--color-orange);
+    color: var(--color-brown);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  @media (min-width: 720px) {
+    .om-eirik {
+      grid-template-columns: 1fr 1.6fr;
+      align-items: start;
+      gap: var(--space-4);
+    }
+  }
+</style>

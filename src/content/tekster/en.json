@@ -2,6 +2,73 @@
   "kvittering": "[EN] Thanks, we have received your request.",
   "taptAnrop": "[EN] We saw that you called. Send a request or chat on WhatsApp.",
   "whatsappHilsen": "[EN] Hi! I need help with {tjeneste}. (From: {kilde})",
+  "forside": {
+    "hero": {
+      "stedslinje": "[EN] Arbeidstittel for stedslinje",
+      "tittel": "[EN] Arbeidstittel for stor tittel",
+      "ingress": "[EN] Arbeidstittel for én setning om posisjonen",
+      "lover": [
+        "[EN] Løfte 1",
+        "[EN] Løfte 2",
+        "[EN] Løfte 3"
+      ]
+    },
+    "tjenester": {
+      "tittel": "[EN] Hva trenger du hjelp med?"
+    },
+    "varmtvann": {
+      "tittel": "[EN] Fastpris på varmtvannstank",
+      "arbeidMerke": "[EN] arbeid",
+      "typiskTotalMerke": "[EN] typisk totalpris",
+      "medTittel": "[EN] Med i prisen",
+      "med": [
+        "[EN] Punkt med"
+      ],
+      "ikkeMedTittel": "[EN] Ikke med",
+      "ikkeMed": [
+        "[EN] Punkt ikke med"
+      ]
+    },
+    "priser": {
+      "tittel": "[EN] Priser i korte trekk",
+      "timepris": "[EN] Timepris",
+      "servicebil": "[EN] Servicebil per oppdrag",
+      "forbruk": "[EN] Forbruksmateriell",
+      "regneeksempel": "[EN] Regneeksempel: 1 time + servicebil + forbruk",
+      "delerNote": "[EN] pluss deler"
+    },
+    "steg": {
+      "tittel": "[EN] Slik bestiller du",
+      "steg": [
+        {
+          "tittel": "[EN] Steg 1",
+          "tekst": "[EN] Tekst steg 1"
+        },
+        {
+          "tittel": "[EN] Steg 2",
+          "tekst": "[EN] Tekst steg 2"
+        },
+        {
+          "tittel": "[EN] Steg 3",
+          "tekst": "[EN] Tekst steg 3"
+        }
+      ]
+    },
+    "omEirik": {
+      "tittel": "[EN] Om Eirik",
+      "tekst": "[EN] Kort om Eirik og tilknytningen til stedet",
+      "godkjenningerTittel": "[EN] Godkjenninger",
+      "anmeldelserTittel": "[EN] Anmeldelser",
+      "eksempelMerke": "[EN] Eksempel"
+    },
+    "omrader": {
+      "tittel": "[EN] Områder vi dekker"
+    },
+    "skjema": {
+      "tittel": "[EN] Send forespørsel",
+      "merknad": "[EN] Skjemaet kommer"
+    }
+  },
   "lekkerNaa": {
     "tittel": "[EN] It is leaking now",
     "punkter": [

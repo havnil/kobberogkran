@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { erLansering, launchVerdi } from '../src/lib/lansering';
+import { erLansering, erTurnstileTestnokkel, launchVerdi, turnstileNokkelForBygg } from '../src/lib/lansering';
 import { synligeOmtale, visEksempler } from '../src/lib/omtale';
 
 const filer = (dir: string): string[] =>
@@ -9,6 +9,33 @@ const filer = (dir: string): string[] =>
     const p = join(dir, n);
     return statSync(p).isDirectory() ? filer(p) : [p];
   });
+
+describe('Turnstile-testnøkler', () => {
+  it('kjenner igjen Cloudflares testnøkler og testhemmeligheter', () => {
+    for (const k of [
+      '1x00000000000000000000AA',
+      '2x00000000000000000000AB',
+      '1x00000000000000000000BB',
+      '2x00000000000000000000BB',
+      '3x00000000000000000000FF',
+      '1x0000000000000000000000000000000AA',
+      '2x0000000000000000000000000000000AA',
+      '3x0000000000000000000000000000000AA',
+    ]) {
+      expect(erTurnstileTestnokkel(k), k).toBe(true);
+    }
+    expect(erTurnstileTestnokkel('0x4AAAAAAABkMYinukE8nzY')).toBe(false);
+    expect(erTurnstileTestnokkel('')).toBe(false);
+  });
+
+  it('et lanseringsbygg avviser manglende nøkkel og testnøkler; ellers brukes testnøkkelen som standard', () => {
+    expect(() => turnstileNokkelForBygg('', true)).toThrow(/PUBLIC_TURNSTILE_SITE_KEY/);
+    expect(() => turnstileNokkelForBygg('1x00000000000000000000AA', true)).toThrow(/testnøkkel/);
+    expect(turnstileNokkelForBygg('0x4AAAAAAABkMYinukE8nzY', true)).toBe('0x4AAAAAAABkMYinukE8nzY');
+    expect(turnstileNokkelForBygg('', false)).toBe('1x00000000000000000000AA');
+    expect(turnstileNokkelForBygg('2x00000000000000000000AB', false)).toBe('2x00000000000000000000AB');
+  });
+});
 
 describe('lansering', () => {
   it('bare LAUNCH=true teller', () => {

@@ -17,6 +17,7 @@ const foresporsel = (over: Partial<Foresporsel> = {}): Foresporsel => ({
   kundetype: null,
   firmanavn: null,
   orgnr: null,
+  locale: null,
   status: 'ny',
   opprettet: '2026-11-12T10:00:00.000Z',
   kunde: { navn: 'Kari Kunde', telefon: '+4791234567', epost: 'kari@example.no' },

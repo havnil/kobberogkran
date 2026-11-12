@@ -87,11 +87,6 @@ describe('EpostVarsler', () => {
     expect(send).toHaveBeenCalledTimes(1);
   });
 
-  it('avviser vedlegg (bilder sendes som lenker)', async () => {
-    const v = new EpostVarsler({ send: vi.fn() } as never, 'a@b.no', vi.fn() as never);
-    await expect(v.send('c@d.no', 'e', 't', [{ filnavn: 'a.jpg', type: 'image/jpeg', innhold: new Uint8Array() }])).rejects.toThrow();
-  });
-
   it('kaster når bindingen feiler', async () => {
     const v = new EpostVarsler({ send: vi.fn(async () => { throw new Error('avvist'); }) } as never, 'a@b.no', ((f: string, t: string, r: string) => ({ from: f, to: t, raw: r })) as never);
     await expect(v.send('c@d.no', 'e', 't')).rejects.toThrow('avvist');
@@ -118,7 +113,6 @@ const env = (over: Partial<Env> = {}): Env =>
     DB: db,
     BILDER: {} as never,
     EPOST: { send: vi.fn() } as never,
-    TURNSTILE_SITE_KEY: 'x',
     SKJEMA_HMAC: 'hemmelig',
     VARSEL_TIL: 'eirik@example.no',
     VARSEL_FRA: 'varsel@kobberogkran.no',

@@ -58,7 +58,8 @@ is approved by the workflow and merges by itself once `ci` is green, **unless** 
 `.claude/`, `scripts/automerge/`, `scripts/watchdog/`, `.github/prompts/`,
 `.github/dependabot.yml`, the `auto-merge`, `claude`, `claude-watchdog` and `watchdog-*`
 workflows, `wrangler.jsonc`, and the safety-critical code: `scripts/`, `migrations/`,
-`src/server/`, `src/pages/api/`, `src/lib/lansering.ts`, `src/i18n/ui.ts`). If it does, the label is removed, a comment
+`src/server/`, `src/pages/api/`, `src/lib/lansering.ts`, `src/i18n/ui.ts`, `src/worker.ts`,
+`src/middleware.ts`, `public/_headers`). If it does, the label is removed, a comment
 lists the blocked files, and `needs-human` is added. The `main` ruleset requires that approval,
 so the agent can't merge a PR by any other route. You get a GitHub notification for
 every merge. To undo one, see [rollback.md](rollback.md).

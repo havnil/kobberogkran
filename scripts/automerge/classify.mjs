@@ -37,6 +37,10 @@ export const GUARD_PREFIXES = [
   'src/pages/api/',
   'src/lib/lansering.ts',
   'src/i18n/ui.ts',
+  // The Worker entry (cron), the security headers.
+  'src/worker.ts',
+  'src/middleware.ts',
+  'public/_headers',
 ];
 
 /** Media served from public/ (favicon, fonts, images outside uploads) is brand content. */

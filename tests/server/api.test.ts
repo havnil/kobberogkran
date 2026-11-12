@@ -277,6 +277,7 @@ describe('POST /api/foresporsel (steg 1)', () => {
     expect(f!.hast).toBe('snart');
     expect(f!.kilde).toBe('tapt-anrop');
     expect(f!.stedTekst).toBe('Bjerkeveien 1, Bjørkelangen');
+    expect(f!.locale).toBe('nb');
   });
 
   it('sender kvittering med lenke til send-bilder, og sorterer og varsler i waitUntil', async () => {
@@ -316,6 +317,8 @@ describe('POST /api/foresporsel (steg 1)', () => {
     const { id, token } = await opprett({ locale: 'en' });
     await ferdig();
     expect(kvitteringer()[0].mal.variabler.sendBilderLenke).toBe(`${BASE}/en/send-photos/?id=${id}&token=${token}`);
+    expect(kvitteringer()[0].mal.locale).toBe('en');
+    expect((await hentForesporsel(db, id))!.locale).toBe('en');
   });
 
   it('samme idemNokkel to ganger gir én rad og én kvittering (200 med samme id og token)', async () => {

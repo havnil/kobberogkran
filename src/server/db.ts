@@ -17,6 +17,8 @@ export interface ForesporselInput {
   kundetype?: string;
   firmanavn?: string;
   orgnr?: string;
+  /** Skjemaets språk ('nb' eller 'en'). */
+  locale?: string;
 }
 
 const na = () => new Date().toISOString();
@@ -70,8 +72,8 @@ export async function opprettForesporsel(
     .prepare(
       `INSERT INTO foresporsler
          (id, idem_nokkel, kunde_id, tjeneste, hast, sted_tekst, lat, lon,
-          kjoretid_min, kilde, kundetype, firmanavn, orgnr, status, opprettet, oppdatert)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ny', ?, ?)
+          kjoretid_min, kilde, kundetype, firmanavn, orgnr, locale, status, opprettet, oppdatert)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ny', ?, ?)
        ON CONFLICT(idem_nokkel) DO NOTHING`,
     )
     .bind(
@@ -88,6 +90,7 @@ export async function opprettForesporsel(
       input.kundetype ?? null,
       input.firmanavn ?? null,
       input.orgnr ?? null,
+      input.locale ?? null,
       tid,
       tid,
     )
@@ -193,6 +196,8 @@ export interface Foresporsel {
   kundetype: string | null;
   firmanavn: string | null;
   orgnr: string | null;
+  /** Kundens språk ('nb' eller 'en'); null for forespørsler uten skjema. */
+  locale: string | null;
   status: ForesporselStatus;
   opprettet: string;
   kunde: { navn: string | null; telefon: string; epost: string | null };
@@ -214,7 +219,7 @@ export async function hentForesporsel(db: D1Database, id: string): Promise<Fores
   const rad = await db
     .prepare(
       `SELECT f.id, f.tjeneste, f.hast, f.sted_tekst, f.lat, f.lon, f.kjoretid_min, f.beskrivelse,
-              f.svar_json, f.kilde, f.kundetype, f.firmanavn, f.orgnr, f.status, f.opprettet,
+              f.svar_json, f.kilde, f.kundetype, f.firmanavn, f.orgnr, f.locale, f.status, f.opprettet,
               k.navn AS kunde_navn, k.telefon AS kunde_telefon, k.epost AS kunde_epost
          FROM foresporsler f JOIN kunder k ON k.id = f.kunde_id
         WHERE f.id = ?`,
@@ -234,6 +239,7 @@ export async function hentForesporsel(db: D1Database, id: string): Promise<Fores
       kundetype: string | null;
       firmanavn: string | null;
       orgnr: string | null;
+      locale: string | null;
       status: ForesporselStatus;
       opprettet: string;
       kunde_navn: string | null;
@@ -259,6 +265,7 @@ export async function hentForesporsel(db: D1Database, id: string): Promise<Fores
     kundetype: rad.kundetype,
     firmanavn: rad.firmanavn,
     orgnr: rad.orgnr,
+    locale: rad.locale,
     status: rad.status,
     opprettet: rad.opprettet,
     kunde: { navn: rad.kunde_navn, telefon: rad.kunde_telefon, epost: rad.kunde_epost },

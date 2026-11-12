@@ -83,6 +83,9 @@ describe('classifyPaths', () => {
       'src/pages/api/bilde/[id].ts',
       'src/lib/lansering.ts',
       'src/i18n/ui.ts',
+      'src/worker.ts',
+      'src/middleware.ts',
+      'public/_headers',
       'wrangler.jsonc',
     ];
     for (const path of guards) {

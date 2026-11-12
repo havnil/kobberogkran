@@ -8,7 +8,6 @@ export interface Env {
   DB: D1Database;
   BILDER: R2Bucket;
   EPOST: SendEmail;
-  TURNSTILE_SITE_KEY: string;
   // Hemmeligheter (wrangler secret put). Valgfrie til de er satt.
   TURNSTILE_SECRET?: string;
   SKJEMA_HMAC?: string;
@@ -18,7 +17,7 @@ export interface Env {
   VARSEL_TIL?: string;
   /** Avsender, på et domene med Email Routing, f.eks. varsel@kobberogkran.no. */
   VARSEL_FRA?: string;
-  /** Grunnadresse for bildelenker i varselet og skjemalenken ved tapt anrop. Standard: https://kobberogkran.no */
+  /** Grunnadresse for lenker (se src/lib/nettsted.ts). Tom eller utelatt: https://kobberogkran.no */
   NETTSTED_URL?: string;
   // Meldingskanaler og tapte anrop (oppgave 12). Hemmeligheter; uten dem avvises webhookene.
   /** Tokenet Meta sender ved verifisering av WhatsApp-webhooken (`hub.verify_token`). */

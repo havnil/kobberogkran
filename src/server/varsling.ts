@@ -4,14 +4,8 @@
 import type { EmailMessage, SendEmail } from '@cloudflare/workers-types';
 import type { Env } from './env';
 
-export interface Vedlegg {
-  filnavn: string;
-  type: string;
-  innhold: Uint8Array;
-}
-
 export interface Varsler {
-  send(til: string, emne: string, tekst: string, vedlegg?: Vedlegg[]): Promise<void>;
+  send(til: string, emne: string, tekst: string): Promise<void>;
 }
 
 const koder = new TextEncoder();
@@ -92,8 +86,7 @@ export class EpostVarsler implements Varsler {
     private readonly naa: () => Date = () => new Date(),
   ) {}
 
-  async send(til: string, emne: string, tekst: string, vedlegg?: Vedlegg[]): Promise<void> {
-    if (vedlegg?.length) throw new Error('EpostVarsler sender ikke vedlegg; bruk signerte bildelenker');
+  async send(til: string, emne: string, tekst: string): Promise<void> {
     const domene = this.fra.split('@')[1] ?? 'kobberogkran.no';
     const raw = lagMime({
       fra: this.fra,

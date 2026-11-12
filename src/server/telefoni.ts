@@ -24,10 +24,13 @@ import { verifiserHmacHex } from './hmac';
 import { forStor, lesBegrensetKropp } from './kropp';
 import { lagKanaler, sendMedReserve, type Kanal, type SendResultat } from './kanaler/index';
 import { varsleEirik, type Varsler } from './varsling';
+import { nettstedUrl } from '../lib/nettsted';
 
 export const DEDUPE_MS = 30 * 60 * 1000;
 export const KILDE = 'tapt-anrop';
-const STANDARD_NETTSTED = 'https://kobberogkran.no';
+/** Firmadata og teksten til WhatsApp-hilsenen, validert én gang per modul (ikke per anrop). */
+const FIRMA = firmaSchema.parse(firmaJson.firma);
+const HILSEN = fyllHilsen(tekstSchema.parse(nbJson).whatsappHilsen, { kilde: KILDE });
 
 export interface TelefoniVerifiserer {
   verifiser(headers: Headers, raw: ArrayBuffer): Promise<boolean>;
@@ -80,14 +83,14 @@ export interface TelefoniDeps {
   naa?: () => Date;
 }
 
-/** Lenkene i malen `tapt_anrop`: skjemaet med `?kilde=tapt-anrop`, og wa.me med ferdig hilsen. */
-export function taptAnropVariabler(nettstedUrl: string | undefined): Record<string, string> {
-  const base = (nettstedUrl || STANDARD_NETTSTED).replace(/\/+$/, '');
-  const firma = firmaSchema.parse(firmaJson.firma);
-  const hilsen = fyllHilsen(tekstSchema.parse(nbJson).whatsappHilsen, { kilde: KILDE });
+/**
+ * Lenkene i malen `tapt_anrop`: skjemaet med `?kilde=tapt-anrop`, og wa.me med ferdig hilsen.
+ * Innringerens språk er ukjent (bare et nummer), så lenkene og meldingen er på norsk (`nb`).
+ */
+export function taptAnropVariabler(nettstedUrlVerdi: string | undefined): Record<string, string> {
   return {
-    skjemaLenke: `${base}/?kilde=${KILDE}#skjema`,
-    whatsappLenke: waLenke(firma.whatsapp.verdi, hilsen),
+    skjemaLenke: `${nettstedUrl(nettstedUrlVerdi)}/?kilde=${KILDE}#skjema`,
+    whatsappLenke: waLenke(FIRMA.whatsapp.verdi, HILSEN),
   };
 }
 
@@ -188,6 +191,7 @@ Melding ikke sendt: databasen feilet, så systemet kunne ikke sjekke ` +
         try {
           resultat = await sendMedReserve(deps.kanaler ?? lagKanaler(env), fra, {
             id: 'tapt_anrop',
+            locale: 'nb',
             variabler: taptAnropVariabler(env.NETTSTED_URL),
           });
           if (resultat.kanal) {

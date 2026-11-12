@@ -11,11 +11,10 @@ overvåking) står i [cloudflare-setup.md](cloudflare-setup.md). Her er det som 
 
 | Navn | Type | Hvor settes den | Brukes til |
 | --- | --- | --- | --- |
-| `DB` | D1-binding | `wrangler.jsonc` (steg 4) | Database |
+| `DB` | D1-binding | `wrangler.jsonc` (steg 5) | Database |
 | `BILDER` | R2-binding | `wrangler.jsonc` | Bilder fra skjemaet |
 | `EPOST` | `send_email`-binding | `wrangler.jsonc` | Varsel til Eirik |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Byggvariabel (offentlig) | Workers Builds → Settings → Build → Variables | Turnstile-nøkkelen i HTML-en |
-| `TURNSTILE_SITE_KEY` | Variabel | `wrangler.jsonc` `vars` | Samme nøkkel, for serveren |
 | `TURNSTILE_SECRET` | Hemmelighet | `npx wrangler secret put` | Sjekker Turnstile på serveren |
 | `SKJEMA_HMAC` | Hemmelighet | `npx wrangler secret put` | Signerer kvitteringslenker og bildelenker |
 | `ANTHROPIC_API_KEY` | Hemmelighet | `npx wrangler secret put` | AI-sammendrag til Eirik |
@@ -24,16 +23,23 @@ overvåking) står i [cloudflare-setup.md](cloudflare-setup.md). Her er det som 
 | `TELEFONI_WEBHOOK_SECRET` | Hemmelighet | `npx wrangler secret put` | Signatur fra telefonitjenesten |
 | `VARSEL_TIL` | Variabel | `wrangler.jsonc` `vars` | Eiriks e-postadresse |
 | `VARSEL_FRA` | Variabel | `wrangler.jsonc` `vars` | Avsender, f.eks. `varsel@kobberogkran.no` |
-| `NETTSTED_URL` | Variabel (valgfri) | `wrangler.jsonc` `vars` | Grunnadresse i lenker. Standard `https://kobberogkran.no` |
+| `NETTSTED_URL` | Variabel (valgfri) | `wrangler.jsonc` `vars` | Grunnadresse i lenker. Tom eller utelatt: `https://kobberogkran.no` |
 | `LAUNCH` | Byggvariabel | Workers Builds → Settings → Build → Variables | `true` på lanseringsdagen (steg 12) |
 
-Hemmeligheter settes slik, fra repoet på din maskin (du blir spurt om verdien):
+Hemmeligheter settes fra repoet på din maskin, én kommando per hemmelighet. Du blir spurt om
+verdien, og den vises ikke:
 
 ```
 npx wrangler secret put TURNSTILE_SECRET
+npx wrangler secret put SKJEMA_HMAC
+npx wrangler secret put ANTHROPIC_API_KEY
+npx wrangler secret put WHATSAPP_VERIFY_TOKEN
+npx wrangler secret put WHATSAPP_APP_SECRET
+npx wrangler secret put TELEFONI_WEBHOOK_SECRET
 ```
 
-Tilfeldige hemmeligheter (`SKJEMA_HMAC`, `WHATSAPP_VERIFY_TOKEN`) lager du med:
+`npx wrangler secret list` viser hvilke som er satt (uten verdiene). Tilfeldige hemmeligheter
+(`SKJEMA_HMAC`, `WHATSAPP_VERIFY_TOKEN`) lager du med:
 
 ```
 openssl rand -hex 32
@@ -41,6 +47,12 @@ openssl rand -hex 32
 
 Skriv aldri hemmeligheter i filer i repoet, i issues eller i chat. Roterer du `SKJEMA_HMAC`,
 slutter alle tidligere kvitteringslenker og alle bildelenker til Eirik å virke.
+
+**Previews bruker produksjonens ressurser.** Bindingene i `wrangler.jsonc` og hemmelighetene
+gjelder alle versjoner av Workeren, også preview-byggene for andre grener. En testforespørsel på
+en preview havner derfor i den samme databasen og R2-bøtta, sender e-post til Eirik og (når
+kanalene er koblet til) ekte meldinger til telefonnummeret i skjemaet. Bruk ditt eget nummer når
+du tester, og slett testforespørslene etterpå. Dette gjelder også etter lansering.
 
 ## Sjekkliste
 
@@ -72,11 +84,22 @@ npx wrangler d1 migrations apply kobberogkran --remote
 `migrations/0001_init.sql` kan bare endres **før** den er kjørt første gang. Etter det går alle
 endringer i nye filer (`0002_…`), aldri ved å rette den gamle.
 
-### 4. Legg bindingene inn i wrangler.jsonc (via PR)
+### 4. Slå på Email Routing og verifiser Eiriks adresse
 
-Gjør dette først når D1, R2 og e-post (steg 7) finnes. `wrangler.jsonc` krever menneskelig
-godkjenning, så endringen går via en pull request: be `@claude` eller en utvikler lage den, og
-godkjenn selv. Innholdet (bytt ut `<database_id>` og adressene):
+Gjøres før steg 5: `send_email`-bindingen i `wrangler.jsonc` krever en verifisert mottaker.
+
+Nye forespørsler sorteres (faste regler pluss AI-sammendrag) og sendes til Eirik på e-post.
+Bilder sendes ikke som vedlegg, men som signerte lenker som virker i 14 dager.
+
+1. Cloudflare → `kobberogkran.no` → **Email** → **Email Routing**: slå på tjenesten.
+2. Legg til Eiriks adresse som mottakeradresse (destination address) og **verifiser** den (han
+   får en e-post med en lenke).
+
+### 5. Legg bindingene inn i wrangler.jsonc (via PR)
+
+Gjør dette først når D1, R2 og Email Routing (steg 1–4) finnes. `wrangler.jsonc` krever
+menneskelig godkjenning, så endringen går via en pull request: be `@claude` eller en utvikler
+lage den, og godkjenn selv. Innholdet (bytt ut `<database_id>` og adressene):
 
 ```jsonc
 "d1_databases": [
@@ -94,37 +117,64 @@ godkjenn selv. Innholdet (bytt ut `<database_id>` og adressene):
 	{ "name": "EPOST", "destination_address": "<Eiriks e-postadresse>" }
 ],
 "vars": {
-	"TURNSTILE_SITE_KEY": "<site key fra Turnstile>",
 	"VARSEL_TIL": "<Eiriks e-postadresse>",
 	"VARSEL_FRA": "varsel@kobberogkran.no"
 }
 ```
 
-`VARSEL_FRA` må ligge på domenet med Email Routing (steg 7). `NETTSTED_URL` kan legges til i
-`vars` for å overstyre grunnadressen, f.eks. i en preview.
+`VARSEL_TIL` og `destination_address` er adressen som ble verifisert i steg 4. `VARSEL_FRA` må
+ligge på domenet med Email Routing. `NETTSTED_URL` kan legges til i `vars` for å overstyre
+grunnadressen i lenker.
+
+Mangler `VARSEL_TIL` eller `VARSEL_FRA`, eller avviser e-posten meldingen, blir forespørselen
+stående med status `sortert`, og hendelsen `varsel_feil` logges i tabellen `hendelser`. Varselet
+prøves på nytt neste gang kunden sender noe (steg 2 i skjemaet eller et bilde). Sender kunden ingenting mer,
+blir det liggende til cron-jobben under er slått på.
 
 Sjekk også at **Build command** i Workers Builds fortsatt er `npm run build`. Lanseringssjekken
 (steg 12) kjører inni den kommandoen.
 
-### 5. Opprett Turnstile
+#### Cron for varsel som ikke gikk (før lansering, eier/utvikler)
+
+En Cron Trigger prøver varselet på nytt for forespørsler som har stått med status `ny` eller
+`sortert` i mer enn 5 minutter (og er under 7 dager gamle), høyst 10 per kjøring. Koden er klar:
+`sveipUvarslede` i `src/server/sveip.ts`, kalt fra `scheduled` i `src/worker.ts`. `src/worker.ts`
+bruker adapterens egen `fetch` (`@astrojs/cloudflare/handler`), så sidene virker som før. Slå den
+på med denne endringen i `wrangler.jsonc` (via PR, som steg 5):
+
+```jsonc
+"main": "./src/worker.ts",
+"triggers": {
+	"crons": ["*/10 * * * *"]
+},
+```
+
+`main` erstatter `"@astrojs/cloudflare/entrypoints/server"`. Adapteren leser `main` fra
+`wrangler.jsonc` og bygger den egne inngangen (prøvd lokalt med `npm run build`: `scheduled` er med
+i `dist/server/entry.mjs`). Etter deploy: Cloudflare → Workers → `kobberogkran` → **Triggers** viser
+cron-jobben, og loggen viser `{"hendelse":"sveip",…}` når den har prøvd noe.
+
+### 6. Opprett Turnstile
 
 Turnstile stopper roboter i skjemaet.
 
 1. Cloudflare → Turnstile → **Add widget** for `kobberogkran.no` (og eventuelt preview-domenet).
    Modus «Managed».
 2. Legg **site key** i Workers Builds som byggvariabelen `PUBLIC_TURNSTILE_SITE_KEY`. Sidene med
-   skjemaet er forhåndsrendret, så nøkkelen må være med i bygget, ikke bare i `vars`. Den er
-   offentlig.
-3. Legg samme nøkkel som `TURNSTILE_SITE_KEY` i `vars` (steg 4).
-4. Sett hemmeligheten: `npx wrangler secret put TURNSTILE_SECRET`.
+   skjemaet er forhåndsrendret, så nøkkelen må være med i bygget. Den er offentlig. Serveren
+   trenger bare hemmeligheten.
+3. Sett hemmeligheten: `npx wrangler secret put TURNSTILE_SECRET`.
 
 Uten `PUBLIC_TURNSTILE_SITE_KEY` bruker bygget Cloudflares testnøkkel
 `1x00000000000000000000AA`, som alltid godkjennes. Den er bare for utvikling og
-testmiljøet. **Et lanseringsbygg (`LAUNCH=true`) uten ekte nøkkel feiler**, så testnøkkelen kan
-ikke komme i produksjon. Lokalt bruker `npm run dev` testnøkkelen; sett `TURNSTILE_SECRET` til
-testhemmeligheten `1x0000000000000000000000000000000AA` i `.dev.vars` for å sende skjemaet lokalt.
+testmiljøet. **Et lanseringsbygg (`LAUNCH=true`) uten ekte nøkkel, eller med en av Cloudflares
+testnøkler (`1x…`, `2x…`, `3x…`), feiler**, så en testnøkkel kan ikke komme i produksjon. Sjekk
+selv at `TURNSTILE_SECRET` i produksjon er den ekte hemmeligheten fra widgeten, ikke en
+testhemmelighet (`1x0000000000000000000000000000000AA` o.l.): serveren kan ikke se forskjell.
+Lokalt bruker `npm run dev` testnøkkelen; sett `TURNSTILE_SECRET` til testhemmeligheten i
+`.dev.vars` for å sende skjemaet lokalt.
 
-### 6. Opprett de andre hemmelighetene
+### 7. Opprett de andre hemmelighetene
 
 ```
 npx wrangler secret put SKJEMA_HMAC
@@ -139,41 +189,6 @@ npx wrangler secret put ANTHROPIC_API_KEY
   til kunden.
 - Hemmelighetene til meldingsleverandørene (`WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET`,
   `TELEFONI_WEBHOOK_SECRET`) settes i steg 9 og 10.
-
-### 7. Verifiser e-postadressen for varsel til Eirik
-
-Nye forespørsler sorteres (faste regler pluss AI-sammendrag) og sendes til Eirik på e-post.
-Bilder sendes ikke som vedlegg, men som signerte lenker som virker i 14 dager.
-
-1. Cloudflare → `kobberogkran.no` → **Email** → **Email Routing**: slå på tjenesten.
-2. Legg til Eiriks adresse som mottakeradresse (destination address) og **verifiser** den (han
-   får en e-post med en lenke).
-3. Kontroller at `VARSEL_TIL`, `VARSEL_FRA` og `send_email` i steg 4 stemmer.
-
-Mangler `VARSEL_TIL` eller `VARSEL_FRA`, eller avviser e-posten meldingen, blir forespørselen
-stående med status `sortert`, og hendelsen `varsel_feil` logges i tabellen `hendelser`. Varselet
-prøves på nytt neste gang kunden sender noe (steg 2 eller et bilde). Sender kunden ingenting mer,
-blir det liggende til cron-jobben under er slått på.
-
-#### Cron for varsel som ikke gikk (før lansering, eier/utvikler)
-
-En Cron Trigger prøver varselet på nytt for forespørsler som har stått med status `ny` eller
-`sortert` i mer enn 5 minutter (og er under 7 dager gamle), høyst 10 per kjøring. Koden er klar:
-`sveipUvarslede` i `src/server/sveip.ts`, kalt fra `scheduled` i `src/worker.ts`. `src/worker.ts`
-bruker adapterens egen `fetch` (`@astrojs/cloudflare/handler`), så sidene virker som før. Slå den
-på med denne endringen i `wrangler.jsonc` (via PR, som steg 4):
-
-```jsonc
-"main": "./src/worker.ts",
-"triggers": {
-	"crons": ["*/10 * * * *"]
-},
-```
-
-`main` erstatter `"@astrojs/cloudflare/entrypoints/server"`. Adapteren leser `main` fra
-`wrangler.jsonc` og bygger den egne inngangen (prøvd lokalt med `npm run build`: `scheduled` er med
-i `dist/server/entry.mjs`). Etter deploy: Cloudflare → Workers → `kobberogkran` → **Triggers** viser
-cron-jobben, og loggen viser `{"hendelse":"sveip",…}` når den har prøvd noe.
 
 ### 8. Test AI-sorteringen en gang for ekte
 
@@ -192,8 +207,8 @@ Forslaget med priser og risiko står i
 1. **Test før kjøp.** Kjøp ett nummer og prøv å registrere det i WhatsApp Business-appen på
    Eiriks telefon (verifisering med SMS eller samtalekode). Vent med å publisere nummeret til
    det virker. Feiler det, trengs et mobilabonnement til WhatsApp, eller to numre.
-2. Kjøp det nye nummeret og sett opp videresending til Eiriks mobil og et webhook ved ubesvart
-   anrop.
+2. Kjøp det nye nummeret og sett opp videresending til Eiriks mobil. Webhooken ved ubesvart
+   anrop registreres først på lanseringsdagen (steg 12), se under.
 3. Når leverandørene er valgt, må en utvikler legge til leverandøradapterne: kanalene
    (`Kanal`-implementasjoner for WhatsApp, RCS og SMS) og adapteren for telefoniens format og
    signatur. **Til det er gjort sendes ingen melding til kunden** (`lagKanaler` gir en tom
@@ -209,6 +224,14 @@ Webhookene avviser alt til hemmelighetene er satt:
 | `WHATSAPP_APP_SECRET` | «App Secret» fra Meta-appen (App settings → Basic). Signerer `X-Hub-Signature-256` | POST gir 503 |
 | `TELEFONI_WEBHOOK_SECRET` | Delt hemmelighet med telefonitjenesten. HMAC-SHA256 av kroppen, hex, i `X-Signatur` | POST gir 503 |
 
+**Når webhookene kan registreres.** Fram til lanseringsdagen ligger hele Workeren bak Cloudflare
+Access, og `kobberogkran.no` er ikke koblet til ennå. Meta og telefonitjenesten kan da ikke nå
+`/api/whatsapp/webhook` og `/api/telefoni/ubesvart` (Access svarer med en innloggingsside). Registrer
+derfor callback-URL-ene i steg 12, **etter** at Access-scope er satt til «Previews only» og
+domenet er lagt til. Vil du teste før det, lag en Access-policy med **Bypass** for nøyaktig de to
+stiene (`/api/whatsapp/*` og `/api/telefoni/*`) på adressen du tester mot; webhookene sjekker selv
+signaturen og avviser alt uten riktig hemmelighet.
+
 **Telefoni:** Telefonitjenesten skal sende `POST https://kobberogkran.no/api/telefoni/ubesvart`
 med JSON `{ "fra": "+47...", "tidspunkt": "<ISO 8601, valgfritt>" }` og header
 `X-Signatur: <hex av HMAC-SHA256(kropp, TELEFONI_WEBHOOK_SECRET)>`. Kan leverandøren ikke dette
@@ -218,9 +241,10 @@ nummer får høyst én melding per 30 minutter (tabellen `anrop`).
 ### 10. Verifiser bedriften hos Meta og send inn WhatsApp-malene
 
 1. I Meta Business Suite: verifiser bedriften (Kobber og Kran AS).
-2. I Meta-appen (WhatsApp → Configuration) settes callback-URL til
+2. Callback-URL-en i Meta-appen settes på lanseringsdagen (steg 12), når Access ikke lenger står
+   foran produksjon. Da settes (WhatsApp → Configuration) callback-URL til
    `https://kobberogkran.no/api/whatsapp/webhook` og samme verify token som i
-   `WHATSAPP_VERIFY_TOKEN`. Abonner på feltet `messages`.
+   `WHATSAPP_VERIFY_TOKEN`, og du abonnerer på feltet `messages`.
 3. Send inn malene `kvittering` og `tapt_anrop` til godkjenning. **Meta må godkjenne dem**, og
    det kan ta tid. Teksten må stemme med `tekster.kvittering` og `tekster.taptAnrop` i CMS-et.
 4. Inngående WhatsApp-meldinger sendes som varsel til Eirik og besvares aldri automatisk. Eirik
@@ -250,6 +274,8 @@ Bildene i `public/images/uploads/` er plassholdere til ekte bilder finnes. Se
 
 - **Hvor lenge** forespørsler, bilder og tabellen `anrop` (som inneholder telefonnumre) lagres.
   Det finnes ingen automatisk sletting, så avgjør også hvem som sletter og hvor ofte.
+- Med JavaScript skaleres bildene i nettleseren til maks 2000 px på lengste side og lagres som
+  JPEG (kvalitet 0,85) før de lastes opp. Det omkodede bildet har ingen metadata.
 - Serveren fjerner Exif, XMP og IPTC (der GPS-posisjonen ligger) fra JPEG og PNG før lagring.
   HEIC fra iPhone gjøres om til JPEG i nettleseren når skjemaet har JavaScript, så metadata
   fjernes også der. **Kjent begrensning:** et HEIC- eller WebP-bilde som lastes opp uten
@@ -293,9 +319,12 @@ Gjør dette når alt over er ferdig:
    previews ligger bak innlogging.
 4. **Legg til custom domains** og sett opp **omdirigering fra www til domenet**. Se
    [cloudflare-setup.md](cloudflare-setup.md) seksjon 2 (DNS først: [dns-migration.md](dns-migration.md)).
-5. **Slå på overvåking:** `WATCHDOG_ENABLED=true` og pek Grok Bot på siden. Se
+5. **Registrer webhookene** nå som produksjon er åpen og domenet virker: callback-URL og verify
+   token i Meta-appen (steg 10) og webhooken for ubesvart anrop hos telefonitjenesten (steg 9).
+   Ring nummeret uten å svare og sjekk at Eirik får varsel om tapt anrop.
+6. **Slå på overvåking:** `WATCHDOG_ENABLED=true` og pek Grok Bot på siden. Se
    [cloudflare-setup.md](cloudflare-setup.md) seksjon 4 og [watchdog.md](watchdog.md).
-6. Send en siste testforespørsel på `https://kobberogkran.no` og kontroller varselet til Eirik.
+7. Send en siste testforespørsel på `https://kobberogkran.no` og kontroller varselet til Eirik.
    **Står det «Kunden fikk IKKE kvittering (ingen kanal satt opp)», er ingen meldingskanal koblet
    til** (steg 9): kundene får da ingen kvittering og ingen melding ved tapt anrop. Avgjør bevisst
    om dere likevel lanserer (kunden ser fortsatt kvitteringen og lenken på skjermen).

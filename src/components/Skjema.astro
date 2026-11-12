@@ -6,7 +6,7 @@
 //
 // Turnstile is the only third-party script, and only loaded on pages with this form. The site key is
 // read at build time from PUBLIC_TURNSTILE_SITE_KEY; without it, Cloudflare's test key is used, but
-// never in a launch build (LAUNCH=true), which fails instead. See docs/runbooks/nettside-eiersteg.md.
+// never in a launch build (LAUNCH=true), which fails instead (also for any Turnstile test key). See docs/runbooks/nettside-eiersteg.md.
 // Without JavaScript Turnstile cannot run: the forms are hidden (`html:not(.js)`) and a <noscript>
 // note offers phone and WhatsApp instead.
 import LekkerNaa from './LekkerNaa.astro';
@@ -17,7 +17,7 @@ import { getServices } from '../i18n/services';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
 import { telHref } from '../lib/telefon';
-import { erLansering } from '../lib/lansering';
+import { erLansering, turnstileNokkelForBygg } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
 import { alleSporsmal, feltnavn, FELLES, HVOR_HORTE, valgNokkel, type Sporsmal } from '../client/skjema/sporsmal';
 import { BILDETYPER, HAST, MAKS_BILDER, TJENESTER } from '../server/validering';
@@ -33,13 +33,9 @@ const { locale, tjeneste = '' } = Astro.props;
 const [tekster, firma, tjenester] = await Promise.all([getTekster(locale), getFirma(), getServices(locale)]);
 const t = tekster.skjema;
 
-/** Cloudflare's always-pass test key. Never used in a launch build. */
-const TURNSTILE_TESTNOKKEL = '1x00000000000000000000AA';
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
-if (!siteKey && erLansering()) {
-  throw new Error('PUBLIC_TURNSTILE_SITE_KEY mangler i en lanseringsbygg (LAUNCH=true). Se docs/runbooks/nettside-eiersteg.md.');
-}
-const turnstileNokkel = siteKey || TURNSTILE_TESTNOKKEL;
+// Cloudflare's always-pass test key outside a launch build; a launch build fails without a real key
+// or with any Turnstile test key.
+const turnstileNokkel = turnstileNokkelForBygg(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '', erLansering());
 
 const tjenesteNavn = (k: string) => tjenester.find((e) => e.data.translationKey === k)?.data.kundeTittel ?? t.tjenesteAnnet;
 const forhandsvalgt = (TJENESTER as readonly string[]).includes(tjeneste) ? tjeneste : '';
@@ -233,14 +229,14 @@ const telefon = firma.telefon.verdi;
       kvittering.harLenke ? (
         <p>
           {kvittering.for}
-          <a class="send-bilder-lenke" data-send-bilder-lenke href="" />
+          <a class="send-bilder-lenke" data-send-bilder-lenke />
           {kvittering.etter}
         </p>
       ) : (
         <>
           <p>{kvittering.for}</p>
           <p>
-            {t.kvitteringLenke} <a class="send-bilder-lenke" data-send-bilder-lenke href="" />
+            {t.kvitteringLenke} <a class="send-bilder-lenke" data-send-bilder-lenke />
           </p>
         </>
       )

@@ -4,7 +4,10 @@
 // - POST /api/foresporsel (steg 1): lagres straks, idempotent på `idemNokkel`. Gir `{ id, token }`.
 //   Etter en ny forespørsel starter `waitUntil` sortering og varsel til Eirik, og den faste
 //   kvitteringen til kunden (med lenke for å sende flere bilder senere). Kvitteringen lover aldri tid.
-//   Et skjema uten JavaScript (urlencoded eller multipart) får 303 til takkesiden.
+//   Et skjema uten JavaScript (urlencoded eller multipart) får 303 til takkesiden. Skjemaet er skjult
+//   uten JavaScript (Turnstile krever det), men denne veien beholdes med vilje for robusthet: et
+//   skript som feiler etter at skjemaet er vist, eller en nettleser som sender skjemaet direkte,
+//   skal fortsatt gi en lagret forespørsel.
 // - PATCH /api/foresporsel/:id (steg 2), med `Authorization: Bearer <token>`.
 // - POST /api/bilde?id=…&token=… med bildet som kropp (image/*) eller multipart (feltet `bilde`).
 // - GET /api/bilde/:id?utloper=…&sig=… for Eiriks signerte, tidsbegrensede bildelenker.
@@ -30,6 +33,7 @@ import {
 } from './db';
 import type { Env, Kontekst } from './env';
 import { verifiserBildeLenke } from './bildelenke';
+import { bytesTilHex } from './hmac';
 import { hendelseLogger, lagKanaler, sendMedReserve, type Kanal } from './kanaler/index';
 import { lesBegrensetKropp } from './kropp';
 import { sorterOgVarsle } from './sortering/index';
@@ -78,9 +82,7 @@ const videre = (sted: string) => new Response(null, { status: 303, headers: { lo
 const medFeil = (sti: string, feil: Feilkode, felt?: string) =>
   `${sti}${sti.includes('?') ? '&' : '?'}feil=${feil}${felt ? `&felt=${encodeURIComponent(felt)}` : ''}`;
 
-const tilHex = (b: ArrayBuffer | Uint8Array) =>
-  [...(b instanceof Uint8Array ? b : new Uint8Array(b))].map((x) => x.toString(16).padStart(2, '0')).join('');
-const sha256Hex = async (tekst: string) => tilHex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(tekst)));
+const sha256Hex = async (tekst: string) => bytesTilHex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(tekst)));
 
 /**
  * UUID (versjon 8, deterministisk) fra idempotensnøkkelen. Turnstile krever en UUID som
@@ -93,7 +95,7 @@ export async function turnstileIdempotens(idemNokkel: string): Promise<string> {
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-8${h.slice(13, 16)}-${variant}${h.slice(17, 20)}-${h.slice(20, 32)}`;
 }
 
-const tilfeldigHex = () => [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, '0')).join('');
+const tilfeldigHex = () => bytesTilHex(crypto.getRandomValues(new Uint8Array(32)));
 const feiltekst = (e: unknown) => (e instanceof Error ? e.message : String(e)).slice(0, 300);
 
 const innholdstype = (r: Request) => (r.headers.get('content-type') ?? '').toLowerCase();
@@ -212,6 +214,7 @@ export async function haandterSteg1(request: Request, env: Env, ctx: Kontekst, d
         kundetype: d.kundetype,
         firmanavn: d.firmanavn ?? undefined,
         orgnr: d.orgnr ?? undefined,
+        locale: loc,
       },
       idem,
     );

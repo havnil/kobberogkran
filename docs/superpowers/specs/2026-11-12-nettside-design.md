@@ -229,6 +229,15 @@ Bygger på grunnmuren: Astro statisk på Cloudflare Workers, nb og en, Sveltia C
 - **Bilder og fonter:** Astro `<Image>` med `srcset`, og preload av bare de fontvektene som brukes.
 - **Tilgjengelighet:** WCAG 2.1 AA.
 
+## Avklaringer etter byggersjekken (byggerens valg, markert)
+
+- **Lanseringssperre og deploy (fakta + mitt valg):** Domenet er ikke koblet på. `main` deployer fortsatt til Worker-en `kobberogkran`, som står bak Cloudflare Access (Scope «All traffic") – `main` er altså i praksis et lukket testmiljø fram til lansering. Sperren styres av en byggvariabel `LAUNCH=true` som eieren setter i Workers Builds på lanseringsdagen (sammen med Access-scope → «Previews only» og custom domains). Uten variabelen tillates plassholdere; med den feiler bygget hvis plassholdermerket finnes. Ingen endring i deploy-flyten eller `wrangler.jsonc` trengs for dette.
+- **Ansvarsdeling (mitt valg):** Agenter skriver kode, `wrangler.jsonc`-endringer (via PR med menneskelig godkjenning) og runbooks. Eieren oppretter selv i Cloudflare: D1, R2 (EU), Turnstile, secrets for SMS og AI, og konto hos SMS-leverandør. Planen har egne «eier-steg» i rekkefølge.
+- **Én Worker (mitt valg):** Serverrutene (skjema, opplasting, SMS-webhook) ligger i samme Worker via Astro-adapterens server-rendrede ruter. Resten er forhåndsrendret.
+- **Område (mitt valg, plassholder):** Stedene fra forretningsplanen (Hemnes, Bjørkelangen, Aurskog, Løken, Setskog, Rømskog, Lillestrøm). Grensen for «utenfor området» settes som maks kjøretid fra Hemnes, plassholder 45 min, som eieren bekrefter før lansering.
+- **Datamodell (mitt valg):** AI-kontoret skal bruke samme D1-database. Skjemaet har derfor kunde-, forespørsel- og samtykketabeller med ID-er og status fra start, ikke bare én forespørselstabell.
+- **Engelske adresser (mitt valg):** Engelske slugger (`/en/services/water-heater/`), koblet via `translationKey` som i grunnmuren.
+
 ## Overlatt til byggeren
 
 - Valg av SMS-leverandør og løsning for tapte anrop: norsk nummer eller videresending, kostnad, at data lagres i EU, og hvordan det kobles mot mobilabonnementet Eirik får.

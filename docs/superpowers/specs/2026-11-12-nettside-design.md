@@ -176,7 +176,7 @@ Den sier ærlig at Eirik tar akutte oppdrag når han kan, men ikke har døgnvakt
 
 **Annet:**
 - Privatkunde er forhåndsvalgt. Bedrift gir felt for firmanavn og org.nr. Det automatiske oppslaget i Brønnøysundregistrene fra kimkran.no venter.
-- Kvitteringen vises på skjermen og sendes på WhatsApp, RCS eller SMS, med lenke for å sende flere bilder senere. Den lover ingen tid. Alle SMS-tekster er faste og godkjent.
+- Kvitteringen vises på skjermen og sendes på WhatsApp, RCS eller SMS, med lenke for å sende flere bilder senere. Den lover ingen tid. Alle meldingstekster er faste og godkjent.
 - Spam stoppes med et skjult felt for roboter (honningfelt) og Cloudflare Turnstile.
 - Feilmeldinger står ved feltet og inneholder alltid telefonnummeret.
 
@@ -260,8 +260,8 @@ Bygger på grunnmuren: Astro statisk på Cloudflare Workers, nb og en, Sveltia C
 ## Avklaringer etter byggersjekken (byggerens valg, markert)
 
 - **Lanseringssperre og deploy (fakta + mitt valg):** Domenet er ikke koblet på. `main` deployer fortsatt til Worker-en `kobberogkran`, som står bak Cloudflare Access (Scope «All traffic") – `main` er altså i praksis et lukket testmiljø fram til lansering. Sperren styres av en byggvariabel `LAUNCH=true` som eieren setter i Workers Builds på lanseringsdagen (sammen med Access-scope → «Previews only» og custom domains). Uten variabelen tillates plassholdere; med den feiler bygget hvis plassholdermerket finnes. Ingen endring i deploy-flyten eller `wrangler.jsonc` trengs for dette.
-- **Ansvarsdeling (mitt valg):** Agenter skriver kode, `wrangler.jsonc`-endringer (via PR med menneskelig godkjenning) og runbooks. Eieren oppretter selv i Cloudflare: D1, R2 (EU), Turnstile, secrets for SMS og AI, og konto hos SMS-leverandør. Planen har egne «eier-steg» i rekkefølge.
-- **Én Worker (mitt valg):** Serverrutene (skjema, opplasting, SMS-webhook) ligger i samme Worker via Astro-adapterens server-rendrede ruter. Resten er forhåndsrendret.
+- **Ansvarsdeling (mitt valg):** Agenter skriver kode, `wrangler.jsonc`-endringer (via PR med menneskelig godkjenning) og runbooks. Eieren oppretter selv i Cloudflare: D1, R2 (EU), Turnstile, secrets for meldinger og AI, kontoer hos telefoni- og meldingsleverandør, og verifisering av bedriften hos Meta (WhatsApp). Planen har egne «eier-steg» i rekkefølge.
+- **Én Worker (mitt valg):** Serverrutene (skjema, opplasting, webhooks for telefoni og meldinger) ligger i samme Worker via Astro-adapterens server-rendrede ruter. Resten er forhåndsrendret.
 - **Område (mitt valg, plassholder):** Stedene fra forretningsplanen (Hemnes, Bjørkelangen, Aurskog, Løken, Setskog, Rømskog, Lillestrøm). Grensen for «utenfor området» settes som maks kjøretid fra Hemnes, plassholder 45 min, som eieren bekrefter før lansering.
 - **Datamodell (mitt valg):** AI-kontoret skal bruke samme D1-database. Skjemaet har derfor kunde-, forespørsel- og samtykketabeller med ID-er og status fra start, ikke bare én forespørselstabell.
 - **Engelske adresser (mitt valg):** Engelske slugger (`/en/services/water-heater/`), koblet via `translationKey` som i grunnmuren.

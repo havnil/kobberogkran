@@ -82,6 +82,23 @@ describe('text markers', () => {
     expect(findPlaceholders(dist(), [en])).toHaveLength(1);
   });
 
+  it('treats en.json (and */en.json) as English and flags [EN] in the real tekster file', () => {
+    const real = resolve('src/content/tekster/en.json');
+    const hits = findPlaceholders(dist(), [real]);
+    expect(hits.length).toBeGreaterThan(0);
+    expect(hits.every((h) => h.replaceAll('\\', '/').includes('src/content/tekster/en.json:'))).toBe(true);
+    const nb = content('tekster/nb.json', '{ "t": "[EN] Title" }');
+    const en = content('tekster/en.json', '{ "t": "[EN] Title" }');
+    expect(findPlaceholders(dist(), [nb])).toEqual([]);
+    expect(findPlaceholders(dist(), [en])).toHaveLength(1);
+  });
+
+  it('flags [EN] inside an HTML attribute value (data-tekster JSON) in English pages', () => {
+    html('en/index.html', '<form data-tekster="{&quot;feil&quot;:&quot;[EN] Something went wrong&quot;}"></form>');
+    html('en/b.html', "<div data-x='{&#34;a&#34;:&#34;[EN] b&#34;}'></div>");
+    expect(findPlaceholders(dist(), [])).toHaveLength(2);
+  });
+
   it('ignores [data-plassholder] in CSS', () => {
     html('index.html', '<style>[data-plassholder]{outline:1px solid}</style><p>ren</p>');
     expect(findPlaceholders(dist(), [])).toEqual([]);

@@ -14,11 +14,12 @@ const DATA_DIR = 'src/content';
 
 // Markers: `data-plassholder` as an attribute (not a CSS selector), `"plassholder": true`
 // in data, the literal `PLASSHOLDER` anywhere, and the `[EN] ` prefix of English placeholder
-// copy (start of a line or of a text/value) in English files only.
+// copy (start of a line or of a text/value, also inside an HTML-escaped attribute value such as
+// `data-tekster="{&quot;x&quot;:&quot;[EN] …"`) in English files only.
 const ATTR = /<[^>]*\sdata-plassholder\b/;
 const DATA_FLAG = /"plassholder"\s*:\s*true/;
 const LITERAL = /PLASSHOLDER/;
-const EN_PREFIX = /(^\s*|[:>"'-]\s*)\[EN\] /;
+const EN_PREFIX = /(^\s*|[:>"'-]\s*|&quot;\s*|&#3[49];\s*|&#x2[27];\s*)\[EN\] /;
 
 function walk(dir, ext) {
   if (!existsSync(dir)) return [];
@@ -41,7 +42,12 @@ function scan(file, markers) {
   return hits;
 }
 
-const isEnglish = (path) => /(^|[\\/])en[\\/]/.test(path);
+/**
+ * English files: anything under an `en/` directory, and `en.json` / `en.md` (e.g.
+ * src/content/tekster/en.json, whose strings are only rendered by SSR pages such as takk and
+ * send-bilder and so never appear in the static HTML).
+ */
+const isEnglish = (path) => /(^|[\\/])en([\\/]|\.(json|md)$)/.test(path);
 
 /**
  * @param {string} distDir directory scanned recursively for .html files

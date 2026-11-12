@@ -63,12 +63,44 @@ export const forsideSchema = z.object({
   skjema: z.object({ tittel: z.string(), merknad: z.string() }),
 });
 
+/** Copy for the service template and the other pages. Working titles until a human writes the final text. */
+export const siderSchema = z.object({
+  tjeneste: z.object({
+    faktaTittel: z.string(),
+    sideboksTittel: z.string(),
+    sideboksTekst: z.string(),
+    faqTittel: z.string(),
+    andreTittel: z.string(),
+    omraderTittel: z.string(),
+    /** Eyebrow above the form on a service page. */
+    skjemaEyebrow: z.string(),
+  }),
+  priser: z.object({
+    kveldHelgNavn: z.string(),
+    kveldHelgVerdi: z.string(),
+    /** Note under the prices: all prices include VAT. */
+    mvaNote: z.string(),
+  }),
+  bad: z.object({
+    prosessTittel: z.string(),
+    prosess: z.array(stegSchema),
+    ansvarTittel: z.string(),
+    ansvar: z.string(),
+  }),
+  kontakt: z.object({
+    telefonNavn: z.string(),
+    epostNavn: z.string(),
+    adresseNavn: z.string(),
+  }),
+});
+
 export const tekstSchema = z.object({
   kvittering: z.string(),
   taptAnrop: z.string(),
   /** Template for the WhatsApp greeting. Placeholders: {tjeneste}, {kilde}. */
   whatsappHilsen: z.string(),
   forside: forsideSchema,
+  sider: siderSchema,
   lekkerNaa: z.object({
     tittel: z.string(),
     punkter: z.array(z.string()),

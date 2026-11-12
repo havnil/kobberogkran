@@ -1,0 +1,26 @@
+---
+// Placeholder for the request form (built in a later task). `data-tjeneste` carries the
+// translationKey of the service to preselect; it is empty where no service is implied.
+import type { Tekster } from '../lib/innhold';
+
+interface Props {
+  tekst: Tekster['forside']['skjema'];
+  eyebrow?: string;
+  tjeneste?: string;
+}
+
+const { tekst, eyebrow, tjeneste = '' } = Astro.props;
+---
+
+<section class="seksjon" id="skjema" data-tjeneste={tjeneste} aria-labelledby="skjema-tittel">
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h2 id="skjema-tittel">{tekst.tittel}</h2>
+  <p>{tekst.merknad}</p>
+</section>
+
+<style>
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+</style>

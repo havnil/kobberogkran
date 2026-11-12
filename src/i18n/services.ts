@@ -1,7 +1,8 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { LOCALES, type Locale } from './locales';
 import { navPath } from './nav';
-import type { Alternate } from './alternates';
+import { localizePath, type Alternate } from './alternates';
+import { ui } from './ui';
 
 export type ServiceEntry = CollectionEntry<'tjenester'>;
 
@@ -33,4 +34,13 @@ export async function servicePaths(locale: Locale) {
       });
       return { params: { slug: serviceSlugOf(entry) }, props: { entry, alternates } };
     });
+}
+
+/** Breadcrumbs of a service page: Home / Services / <service>. The last crumb has no `href`. */
+export function serviceTrail(locale: Locale, entry: ServiceEntry): { name: string; href?: string }[] {
+  return [
+    { name: ui[locale].hjem, href: localizePath(locale, 'index') },
+    { name: ui[locale].nav.tjenester, href: navPath(locale, 'tjenester') },
+    { name: entry.data.title },
+  ];
 }

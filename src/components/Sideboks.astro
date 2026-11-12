@@ -1,0 +1,61 @@
+---
+// The sticky side box: call, WhatsApp and a link to the request form (`#skjema`) on the same page.
+// The WhatsApp link is built here from the company data; a shared helper may replace it later.
+import Plassholder from './Plassholder.astro';
+import type { Firma } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+import { telHref, waDigits } from '../lib/telefon';
+
+interface Props {
+  locale: Locale;
+  firma: Firma;
+  tittel: string;
+  tekst: string;
+}
+
+const { locale, firma, tittel, tekst } = Astro.props;
+const t = ui[locale];
+---
+
+<aside class="sideboks" aria-labelledby="sideboks-tittel">
+  <h2 id="sideboks-tittel">{tittel}</h2>
+  <p class="nummer"><Plassholder verdi={firma.telefon} locale={locale} /></p>
+  <p>{tekst}</p>
+  <div class="knapper">
+    <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
+    <a class="knapp knapp-omriss" href={`https://wa.me/${waDigits(firma.whatsapp.verdi)}`}>{t.whatsapp}</a>
+    <a class="knapp knapp-brun" href="#skjema">{t.skjemaKnapp}</a>
+  </div>
+</aside>
+
+<style>
+  .sideboks {
+    background: var(--color-sand);
+    border-radius: var(--radius-card);
+    padding: var(--space-3);
+  }
+  h2 {
+    margin: 0 0 var(--space-2);
+    font-size: 1.25rem;
+  }
+  .nummer {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: 1.75rem;
+  }
+  .knapper {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .knapper :global(.knapp) {
+    text-align: center;
+  }
+  @media (min-width: 1000px) {
+    .sideboks {
+      position: sticky;
+      top: var(--space-4);
+    }
+  }
+</style>

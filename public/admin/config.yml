@@ -199,6 +199,48 @@ collections:
                 fields:
                   - { name: tittel, label: Tittel, widget: string }
                   - { name: merknad, label: Merknad, widget: text }
+          - name: sider
+            label: Tjenestesider og øvrige sider
+            widget: object
+            fields:
+              - name: tjeneste
+                label: Mal for tjenestesider
+                widget: object
+                fields:
+                  - { name: faktaTittel, label: Tittel - fakta, widget: string }
+                  - { name: sideboksTittel, label: Sideboks - tittel, widget: string }
+                  - { name: sideboksTekst, label: Sideboks - tekst, widget: text }
+                  - { name: faqTittel, label: Tittel - spørsmål og svar, widget: string }
+                  - { name: andreTittel, label: Tittel - andre tjenester, widget: string }
+                  - { name: omraderTittel, label: Tittel - steder, widget: string }
+                  - { name: skjemaEyebrow, label: Over skjemaet, widget: string }
+              - name: priser
+                label: Prissiden
+                widget: object
+                fields:
+                  - { name: kveldHelgNavn, label: Navn - kveld og helg, widget: string }
+                  - { name: kveldHelgVerdi, label: Verdi - kveld og helg, widget: string }
+                  - { name: mvaNote, label: Merknad om mva, widget: string }
+              - name: bad
+                label: Badsiden
+                widget: object
+                fields:
+                  - { name: prosessTittel, label: Tittel - prosessen, widget: string }
+                  - name: prosess
+                    label: Stegene
+                    widget: list
+                    fields:
+                      - { name: tittel, label: Tittel, widget: string }
+                      - { name: tekst, label: Tekst, widget: text }
+                  - { name: ansvarTittel, label: Tittel - ansvar, widget: string }
+                  - { name: ansvar, label: Ansvar, widget: text }
+              - name: kontakt
+                label: Kontaktsiden
+                widget: object
+                fields:
+                  - { name: telefonNavn, label: Navn - telefon, widget: string }
+                  - { name: epostNavn, label: Navn - e-post, widget: string }
+                  - { name: adresseNavn, label: Navn - adresse, widget: string }
           - name: lekkerNaa
             label: Det lekker nå
             widget: object

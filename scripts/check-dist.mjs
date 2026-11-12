@@ -40,6 +40,21 @@ expectContains('en/index.html', ['lang="en"', ...chrome, 'id="lekker-naa"', 'id=
 // The full-width night-duty stripe is not part of the brand; the marker must never appear.
 expectNotContains('index.html', ['data-dognvakt-stripe']);
 expectNotContains('en/index.html', ['data-dognvakt-stripe']);
+// Service pages: all five exist in both languages, each with a form section for its service.
+const tjenester = {
+  nb: ['service-og-reparasjon', 'varmtvannstank', 'bronn-og-vann', 'hytte', 'bad'],
+  en: ['service-and-repairs', 'water-heater', 'well-and-water', 'cabin', 'bathroom'],
+};
+for (const slug of tjenester.nb) expectContains(`tjenester/${slug}/index.html`, ['lang="nb"', 'id="skjema"', 'data-tjeneste=', 'href="#skjema"', 'application/ld+json']);
+for (const slug of tjenester.en) expectContains(`en/services/${slug}/index.html`, ['lang="en"', 'id="skjema"', 'data-tjeneste=', 'href="#skjema"', 'application/ld+json']);
+// The bathroom page must not show any price (no `data-pris` element at all).
+expectNotContains('tjenester/bad/index.html', ['data-pris']);
+expectNotContains('en/services/bathroom/index.html', ['data-pris']);
+// The price page shows prices and the contact page has the form.
+expectContains('priser/index.html', ['data-pris']);
+expectContains('en/prices/index.html', ['data-pris']);
+expectContains('kontakt/index.html', ['id="skjema"']);
+expectContains('en/contact/index.html', ['id="skjema"']);
 expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);
 read('sitemap-index.xml');

@@ -75,6 +75,46 @@
       "merknad": "[EN] Skjemaet kommer"
     }
   },
+  "sider": {
+    "tjeneste": {
+      "faktaTittel": "[EN] PLASSHOLDER: Fakta",
+      "sideboksTittel": "[EN] PLASSHOLDER: Raskeste vei",
+      "sideboksTekst": "[EN] PLASSHOLDER: Ring, skriv på WhatsApp eller send en forespørsel",
+      "faqTittel": "[EN] PLASSHOLDER: Det folk lurer på",
+      "andreTittel": "[EN] PLASSHOLDER: Andre tjenester",
+      "omraderTittel": "[EN] PLASSHOLDER: Her kjører vi",
+      "skjemaEyebrow": "[EN] PLASSHOLDER: Forespørsel"
+    },
+    "priser": {
+      "kveldHelgNavn": "[EN] PLASSHOLDER: Kveld og helg",
+      "kveldHelgVerdi": "[EN] PLASSHOLDER: etter avtale",
+      "mvaNote": "[EN] PLASSHOLDER: Alle priser er oppgitt med mva."
+    },
+    "bad": {
+      "prosessTittel": "[EN] PLASSHOLDER: Slik går det til",
+      "prosess": [
+        {
+          "tittel": "[EN] PLASSHOLDER: Steg 1",
+          "tekst": "[EN] PLASSHOLDER: Tekst steg 1"
+        },
+        {
+          "tittel": "[EN] PLASSHOLDER: Steg 2",
+          "tekst": "[EN] PLASSHOLDER: Tekst steg 2"
+        },
+        {
+          "tittel": "[EN] PLASSHOLDER: Steg 3",
+          "tekst": "[EN] PLASSHOLDER: Tekst steg 3"
+        }
+      ],
+      "ansvarTittel": "[EN] PLASSHOLDER: Eirik har ansvaret mot kunden",
+      "ansvar": "[EN] PLASSHOLDER: Beskrivelse av ansvaret og de faste partnerne"
+    },
+    "kontakt": {
+      "telefonNavn": "[EN] PLASSHOLDER: Telefon",
+      "epostNavn": "[EN] PLASSHOLDER: E-post",
+      "adresseNavn": "[EN] PLASSHOLDER: Adresse"
+    }
+  },
   "lekkerNaa": {
     "tittel": "[EN] It is leaking now",
     "punkter": [

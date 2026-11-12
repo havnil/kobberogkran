@@ -1,0 +1,44 @@
+---
+// «Det folk lurer på»: native details/summary, mirrored in FAQPage JSON-LD by the page.
+interface Props {
+  tittel: string;
+  faq: { sporsmal: string; svar: string }[];
+}
+
+const { tittel, faq } = Astro.props;
+---
+
+{
+  faq.length > 0 && (
+    <section class="seksjon" aria-labelledby="faq-tittel">
+      <h2 id="faq-tittel">{tittel}</h2>
+      {faq.map((q) => (
+        <details>
+          <summary>{q.sporsmal}</summary>
+          <p>{q.svar}</p>
+        </details>
+      ))}
+    </section>
+  )
+}
+
+<style>
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  details {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+  details p {
+    margin: var(--space-2) 0 0;
+  }
+</style>

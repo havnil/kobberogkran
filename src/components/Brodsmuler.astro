@@ -1,0 +1,43 @@
+---
+// Breadcrumbs. The last crumb is the current page and is not a link.
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /** `href` is left out on the current page. */
+  trail: { name: string; href?: string }[];
+}
+
+const { locale, trail } = Astro.props;
+---
+
+<nav class="brodsmuler" aria-label={ui[locale].brodsmuler}>
+  <ol>
+    {
+      trail.map((ledd) => (
+        <li>{ledd.href ? <a href={ledd.href}>{ledd.name}</a> : <span aria-current="page">{ledd.name}</span>}</li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .brodsmuler {
+    padding-top: var(--space-2);
+    font-size: 0.9375rem;
+  }
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  li:not(:last-child)::after {
+    content: '/';
+    margin-left: 0.25rem;
+    color: var(--color-muted);
+  }
+</style>

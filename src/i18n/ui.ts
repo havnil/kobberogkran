@@ -29,6 +29,9 @@ export interface UiStrings {
   eksempelMerke: string;
   /** Footer line label: «Org.nr. <number> MVA». */
   orgnr: string;
+  /** Breadcrumb navigation: accessible name and the first crumb. */
+  brodsmuler: string;
+  hjem: string;
 }
 
 export const ui: Record<Locale, UiStrings> = {
@@ -53,6 +56,8 @@ export const ui: Record<Locale, UiStrings> = {
     plassholderMerke: 'Plassholder',
     eksempelMerke: 'Eksempel',
     orgnr: 'Org.nr.',
+    brodsmuler: 'Brødsmuler',
+    hjem: 'Hjem',
   },
   en: {
     switcherLabel: 'Choose language',
@@ -75,5 +80,7 @@ export const ui: Record<Locale, UiStrings> = {
     plassholderMerke: 'Placeholder',
     eksempelMerke: 'Example',
     orgnr: 'Org. no.',
+    brodsmuler: 'Breadcrumbs',
+    hjem: 'Home',
   },
 };

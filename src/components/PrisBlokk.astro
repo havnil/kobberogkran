@@ -30,11 +30,11 @@ const eksempelErPlassholder = [priser.timepris, priser.servicebil, priser.forbru
       <p class="eksempel-sum">
         {
           eksempelErPlassholder ? (
-            <span data-plassholder>
+            <span data-pris data-plassholder>
               {formatKr(eksempel, locale)} <small class="plassholder-merke">{ui[locale].plassholderMerke}</small>
             </span>
           ) : (
-            formatKr(eksempel, locale)
+            <span data-pris>{formatKr(eksempel, locale)}</span>
           )
         }
       </p>

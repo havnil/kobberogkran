@@ -16,10 +16,10 @@ const tekst = formatKr(verdi.verdi, locale);
 
 {
   verdi.plassholder ? (
-    <span data-plassholder>
+    <span data-pris data-plassholder>
       {tekst} <small class="plassholder-merke">{ui[locale].plassholderMerke}</small>
     </span>
   ) : (
-    tekst
+    <span data-pris>{tekst}</span>
   )
 }

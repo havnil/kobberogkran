@@ -1,0 +1,213 @@
+---
+// The service page template: breadcrumbs, hero with fact box, article with sticky side box,
+// FAQ, the other services, places served and the request form (service preselected).
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Brodsmuler from './Brodsmuler.astro';
+import Faq from './Faq.astro';
+import Omrader from './Omrader.astro';
+import Sideboks from './Sideboks.astro';
+import Skjemaseksjon from './Skjemaseksjon.astro';
+import TjenesteKort from './TjenesteKort.astro';
+import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
+import type { Alternate } from '../i18n/alternates';
+import type { Locale } from '../i18n/locales';
+import { getServices, serviceSlugOf, servicePath, serviceTrail, type ServiceEntry } from '../i18n/services';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd, SITE } from '../lib/jsonld';
+import { getTekster } from '../lib/tekster';
+import { telHref } from '../lib/telefon';
+
+interface Props {
+  locale: Locale;
+  entry: ServiceEntry;
+  alternates: Alternate[];
+}
+
+const { locale, entry, alternates } = Astro.props;
+const t = ui[locale];
+const tj = entry.data;
+const [firma, tekster, alle, { Content }] = await Promise.all([getFirma(), getTekster(locale), getServices(locale), render(entry)]);
+const s = tekster.sider;
+const trail = serviceTrail(locale, entry);
+const url = `${SITE}${servicePath(locale, serviceSlugOf(entry))}`;
+const jsonLd = [
+  serviceJsonLd(tj, url),
+  breadcrumbJsonLd(trail.map((ledd) => ({ name: ledd.name, url: `${SITE}${ledd.href ?? servicePath(locale, serviceSlugOf(entry))}` }))),
+  faqJsonLd(tj.faq),
+].filter((x): x is object => x !== null);
+// Placeholder images do not exist on disk: show a neutral block instead of a broken <img>.
+const bilde = tj.bilder.find((b) => !b.plassholder && b.src);
+const andre = alle.filter((e) => e.data.translationKey !== tj.translationKey);
+const erBad = tj.translationKey === 'bad';
+const erTank = tj.translationKey === 'varmtvannstank';
+---
+
+<BaseLayout locale={locale} title={tj.title} description={tj.kort} alternates={alternates} jsonLd={jsonLd} harSkjema>
+  <Brodsmuler locale={locale} trail={trail} />
+
+  <section class="hero" aria-labelledby="tjeneste-tittel">
+    <div class="hero-tekst">
+      <p class="eyebrow">{tj.fagord}</p>
+      <h1 id="tjeneste-tittel">{tj.kundeTittel}</h1>
+      <p class="ingress">{tj.kort}</p>
+      <div class="hero-knapper">
+        <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
+        <a class="knapp knapp-brun" href="#skjema">{t.skjemaKnapp}</a>
+      </div>
+    </div>
+    {
+      tj.fakta.length > 0 && (
+        <div class="faktaboks">
+          <h2>{s.tjeneste.faktaTittel}</h2>
+          <dl>
+            {tj.fakta.map((f) => (
+              <div>
+                <dt>{f.tall}</dt>
+                <dd>{f.tekst}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )
+    }
+  </section>
+
+  {
+    bilde ? (
+      <img class="bilde" src={bilde.src} alt="" width="1200" height="600" />
+    ) : (
+      <div class="bilde" data-plassholder aria-hidden="true"></div>
+    )
+  }
+
+  <div class="artikkel-rad">
+    <article class="artikkel">
+      <Content />
+      {
+        erBad && (
+          <section aria-labelledby="bad-prosess-tittel">
+            <h2 id="bad-prosess-tittel">{tekster.sider.bad.prosessTittel}</h2>
+            <ol>
+              {tekster.sider.bad.prosess.map((steg) => (
+                <li>
+                  <strong>{steg.tittel}</strong>
+                  <p>{steg.tekst}</p>
+                </li>
+              ))}
+            </ol>
+            <h2>{tekster.sider.bad.ansvarTittel}</h2>
+            <p>{tekster.sider.bad.ansvar}</p>
+          </section>
+        )
+      }
+    </article>
+    <Sideboks locale={locale} firma={firma} tittel={s.tjeneste.sideboksTittel} tekst={s.tjeneste.sideboksTekst} />
+  </div>
+
+  {erTank && <VarmtvannstankBlokk locale={locale} tekst={tekster.forside.varmtvann} priser={firma.priser} />}
+
+  <Faq tittel={s.tjeneste.faqTittel} faq={tj.faq} />
+
+  <section class="seksjon" aria-labelledby="andre-tittel">
+    <h2 id="andre-tittel">{s.tjeneste.andreTittel}</h2>
+    <ol class="kort-liste">
+      {andre.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} />)}
+    </ol>
+  </section>
+
+  <Omrader tekst={{ tittel: s.tjeneste.omraderTittel }} omrade={firma.omrade} />
+
+  <Skjemaseksjon tekst={tekster.forside.skjema} eyebrow={`${s.tjeneste.skjemaEyebrow} · ${tj.kundeTittel}`} tjeneste={tj.translationKey} />
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-4) var(--space-3);
+  }
+  h1 {
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    margin: 0 0 var(--space-3);
+  }
+  .ingress {
+    font-size: 1.25rem;
+    max-width: 38rem;
+    margin: 0 0 var(--space-3);
+  }
+  .hero-knapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .faktaboks {
+    background: var(--color-brown);
+    color: var(--color-cream);
+    border-radius: var(--radius-card);
+    padding: var(--space-3);
+    align-self: center;
+  }
+  .faktaboks h2 {
+    margin: 0 0 var(--space-2);
+    font-size: 1.125rem;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  dt {
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: 1.5rem;
+  }
+  dd {
+    margin: 0;
+  }
+  .bilde {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    background: var(--color-sand);
+    border-radius: var(--radius-card);
+  }
+  .artikkel-rad {
+    display: grid;
+    gap: var(--space-4);
+    margin-block: var(--space-4);
+    align-items: start;
+  }
+  .artikkel {
+    max-width: 44rem;
+  }
+  .kort-liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  h2 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  @media (min-width: 720px) {
+    .kort-liste {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .hero {
+      grid-template-columns: 1.4fr 1fr;
+      align-items: center;
+    }
+    .artikkel-rad {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+    }
+    .kort-liste {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

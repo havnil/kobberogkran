@@ -75,6 +75,46 @@
       "merknad": "PLASSHOLDER: Skjemaet kommer"
     }
   },
+  "sider": {
+    "tjeneste": {
+      "faktaTittel": "PLASSHOLDER: Fakta",
+      "sideboksTittel": "PLASSHOLDER: Raskeste vei",
+      "sideboksTekst": "PLASSHOLDER: Ring, skriv på WhatsApp eller send en forespørsel",
+      "faqTittel": "PLASSHOLDER: Det folk lurer på",
+      "andreTittel": "PLASSHOLDER: Andre tjenester",
+      "omraderTittel": "PLASSHOLDER: Her kjører vi",
+      "skjemaEyebrow": "PLASSHOLDER: Forespørsel"
+    },
+    "priser": {
+      "kveldHelgNavn": "PLASSHOLDER: Kveld og helg",
+      "kveldHelgVerdi": "PLASSHOLDER: etter avtale",
+      "mvaNote": "PLASSHOLDER: Alle priser er oppgitt med mva."
+    },
+    "bad": {
+      "prosessTittel": "PLASSHOLDER: Slik går det til",
+      "prosess": [
+        {
+          "tittel": "PLASSHOLDER: Steg 1",
+          "tekst": "PLASSHOLDER: Tekst steg 1"
+        },
+        {
+          "tittel": "PLASSHOLDER: Steg 2",
+          "tekst": "PLASSHOLDER: Tekst steg 2"
+        },
+        {
+          "tittel": "PLASSHOLDER: Steg 3",
+          "tekst": "PLASSHOLDER: Tekst steg 3"
+        }
+      ],
+      "ansvarTittel": "PLASSHOLDER: Eirik har ansvaret mot kunden",
+      "ansvar": "PLASSHOLDER: Beskrivelse av ansvaret og de faste partnerne"
+    },
+    "kontakt": {
+      "telefonNavn": "PLASSHOLDER: Telefon",
+      "epostNavn": "PLASSHOLDER: E-post",
+      "adresseNavn": "PLASSHOLDER: Adresse"
+    }
+  },
   "lekkerNaa": {
     "tittel": "PLASSHOLDER: Det lekker nå",
     "punkter": [

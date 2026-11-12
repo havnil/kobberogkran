@@ -1,7 +1,7 @@
 ---
-import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Forside from '../components/Forside.astro';
+import Side from '../components/Side.astro';
 import { pagePaths, slugOf, type PageEntry } from '../i18n/pages';
 import type { Alternate } from '../i18n/alternates';
 
@@ -17,19 +17,8 @@ interface Props {
 const { entry, alternates } = Astro.props;
 // The front page uses its own template; its copy comes from the `tekster` collection.
 const erForside = slugOf(entry) === 'index';
-// The body of index.md is not used by the front page, so it is not rendered.
-const Content = erForside ? null : (await render(entry)).Content;
 ---
 
-<BaseLayout locale="nb" title={entry.data.title} description={entry.data.description} alternates={alternates} harSkjema={erForside}>
-  {
-    erForside ? (
-      <Forside locale="nb" />
-    ) : (
-      <>
-        <h1>{entry.data.title}</h1>
-        {Content && <Content />}
-      </>
-    )
-  }
+<BaseLayout locale="nb" title={entry.data.title} description={entry.data.description} alternates={alternates} harSkjema={erForside || entry.data.translationKey === 'kontakt'}>
+  {erForside ? <Forside locale="nb" /> : <Side locale="nb" entry={entry} />}
 </BaseLayout>

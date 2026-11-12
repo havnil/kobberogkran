@@ -1,0 +1,152 @@
+---
+// Body of the generic pages (everything except the front page and the services). Each page gets the
+// blocks the spec asks for, picked by `translationKey`; the markdown body is the page's own text.
+import { render } from 'astro:content';
+import Brodsmuler from './Brodsmuler.astro';
+import OmEirik from './OmEirik.astro';
+import Omrader from './Omrader.astro';
+import Plassholder from './Plassholder.astro';
+import PrisBlokk from './PrisBlokk.astro';
+import Skjemaseksjon from './Skjemaseksjon.astro';
+import TjenesteKort from './TjenesteKort.astro';
+import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
+import type { Locale } from '../i18n/locales';
+import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
+import { localizePath } from '../i18n/alternates';
+import type { PageEntry } from '../i18n/pages';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
+import { getTekster } from '../lib/tekster';
+import { telHref } from '../lib/telefon';
+
+interface Props {
+  locale: Locale;
+  entry: PageEntry;
+}
+
+const { locale, entry } = Astro.props;
+const nokkel = entry.data.translationKey;
+const [firma, tekster, { Content }] = await Promise.all([getFirma(), getTekster(locale), render(entry)]);
+const tjenester = nokkel === 'tjenester' ? await getServices(locale) : [];
+const synlig = nokkel === 'om' ? synligeOmtale(await getOmtale(), visEksempler(import.meta.env.PROD, process.env.LAUNCH)) : [];
+const f = tekster.forside;
+const s = tekster.sider;
+const t = ui[locale];
+const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: entry.data.title }];
+---
+
+<Brodsmuler locale={locale} trail={trail} />
+<h1>{entry.data.title}</h1>
+<div class="tekst"><Content /></div>
+
+{
+  nokkel === 'tjenester' && (
+    <section class="seksjon" aria-labelledby="tjenester-tittel">
+      <h2 id="tjenester-tittel">{f.tjenester.tittel}</h2>
+      <ol class="kort-liste">
+        {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} />)}
+      </ol>
+    </section>
+  )
+}
+
+{
+  nokkel === 'priser' && (
+    <>
+      <PrisBlokk locale={locale} tekst={f.priser} priser={firma.priser} />
+      <dl class="kveld">
+        <div>
+          <dt>{s.priser.kveldHelgNavn}</dt>
+          <dd>{s.priser.kveldHelgVerdi}</dd>
+        </div>
+      </dl>
+      <p>{s.priser.mvaNote}</p>
+      <VarmtvannstankBlokk locale={locale} tekst={f.varmtvann} priser={firma.priser} />
+    </>
+  )
+}
+
+{nokkel === 'omrader' && <Omrader tekst={f.omrader} omrade={firma.omrade} />}
+
+{
+  nokkel === 'om' && (
+    <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />
+  )
+}
+
+{
+  nokkel === 'kontakt' && (
+    <>
+      <dl class="kontakt">
+        <div>
+          <dt>{s.kontakt.telefonNavn}</dt>
+          <dd><a href={telHref(firma.telefon.verdi)}><Plassholder verdi={firma.telefon} locale={locale} /></a></dd>
+        </div>
+        <div>
+          <dt>{s.kontakt.epostNavn}</dt>
+          <dd><a href={`mailto:${firma.epost.verdi}`}><Plassholder verdi={firma.epost} locale={locale} /></a></dd>
+        </div>
+        <div>
+          <dt>{s.kontakt.adresseNavn}</dt>
+          <dd><Plassholder verdi={firma.adresse} locale={locale} /></dd>
+        </div>
+      </dl>
+      <Skjemaseksjon tekst={f.skjema} />
+    </>
+  )
+}
+
+<style>
+  h1 {
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    margin: var(--space-4) 0 var(--space-3);
+  }
+  .tekst {
+    max-width: 44rem;
+  }
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+  .kort-liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .kveld,
+  .kontakt {
+    margin: var(--space-3) 0;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-2) var(--space-3);
+  }
+  .kveld > div,
+  .kontakt > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+  }
+  dt {
+    color: var(--color-muted);
+  }
+  dd {
+    margin: 0;
+    font-weight: 800;
+    text-align: right;
+  }
+  @media (min-width: 720px) {
+    .kort-liste {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .kort-liste {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -155,7 +155,14 @@ describe('lagBrukermelding', () => {
     expect(tekst).toContain('[telefon]');
     expect(tekst).toContain('[e-post]');
     expect(tekst).toContain('kjeller');
-    expect(tekst).toContain('Storgata 1');
+  });
+
+  it('sender aldri jobbadressen (stedtekst, gårds- og bruksnummer) til modellen', () => {
+    const f = foresporsel({ stedTekst: 'Storgata 1, 1940 Bjørkelangen (gnr 12 bnr 3)', kjoretidMin: 25 });
+    const tekst = lagBrukermelding(f, regelsjekk(f));
+    for (const forbudt of ['Storgata', 'Bjørkelangen', '1940', 'gnr 12', 'bnr 3']) expect(tekst).not.toContain(forbudt);
+    expect(tekst).toContain('Kjøretid fra Hemnes: ca. 25 min');
+    expect(tekst).toMatch(/Innenfor området: ja/);
   });
 
   it('beholder årstall, gårds- og bruksnummer og org.nr.', () => {

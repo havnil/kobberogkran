@@ -235,6 +235,16 @@ Bildene i `public/images/uploads/` er plassholdere til ekte bilder finnes. Se
   kvitteringen (`/send-bilder/?id=…&token=…`) utløper ikke.
 - Adresseforslagene hentes fra Kartverket (`ws.geonorge.no`). Det kunden skriver i adressefeltet
   (fra 3 tegn), og posisjonen ved «Bruk der jeg er nå», sendes dit. Ingen andre data sendes.
+- **AI-sortering hos Anthropic** (når `ANTHROPIC_API_KEY` er satt). For hver ny forespørsel, og
+  igjen når kunden fyller ut steg 2, sendes dette til Anthropics API (modellen `claude-haiku-5-5`):
+  tjenesten, kundens hast, beskrivelsen og svarene fra skjemaet (med telefonnumre og
+  e-postadresser i fritekst skrubbet bort), hva bildene viser (merkene, ikke bildene), antall
+  bilder, omtrentlig kjøretid fra Hemnes, om jobben er innenfor området, og resultatet av
+  regelsjekken. **Sendes ikke:** navn, telefon, e-post, adressen eller gårds- og bruksnummeret i
+  stedsfeltet, koordinater og bildene. Merk at kunden selv kan skrive en adresse i
+  beskrivelsen; den skrubbes ikke. Hvor lenge Anthropic lagrer API-data, og om de brukes til
+  trening, står i Anthropics vilkår og personvernpolicy. **Sjekk gjeldende vilkår** før lansering
+  og skriv Anthropic inn som databehandler i personvernerklæringen.
 - Turnstile (Cloudflare) er det eneste tredjepartsskriptet, og lastes bare på sider med skjemaet.
 - Skjemaet lagrer ingenting i nettleseren (ingen cookies, localStorage eller sessionStorage).
 - Uten JavaScript kan Turnstile ikke kjøre, og serveren avviser skjemaet. Da viser siden telefon

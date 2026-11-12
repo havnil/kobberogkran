@@ -84,17 +84,20 @@ function svarForModell(svar: Foresporsel['svar']): Record<string, unknown> | nul
 }
 
 /**
- * Teksten modellen får. Inneholder aldri kundens navn, telefon eller e-post: kontaktfeltene
- * sendes ikke, og telefonnumre og e-postadresser i fritekst skrubbes bort.
+ * Teksten modellen får. Inneholder aldri kundens navn, telefon, e-post eller jobbadresse:
+ * kontaktfeltene og stedet (adresse, gårds- og bruksnummer, koordinater) sendes ikke, bare
+ * kjøretiden og om jobben er innenfor området. Telefonnumre og e-postadresser i fritekst skrubbes bort.
  */
 export function lagBrukermelding(f: Foresporsel, regler: Regelsjekk): string {
   const kjoretid = f.kjoretidMin ?? kjoretidMin(f.lat, f.lon);
   const svar = svarForModell(f.svar);
+  const innenfor = regler.utenforOmrade == null ? 'ukjent' : regler.utenforOmrade ? 'nei' : 'ja';
   const linjer = [
     `Tjeneste: ${f.tjeneste}`,
     `Kundens hast: ${f.hast ?? 'ikke oppgitt'}`,
-    `Sted (tekst): ${f.stedTekst ? skrubb(f.stedTekst) : 'ikke oppgitt'}`,
+    `Sted oppgitt: ${f.stedTekst?.trim() || (f.lat != null && f.lon != null) ? 'ja' : 'nei'}`,
     `Kjøretid fra Hemnes: ${kjoretid == null ? 'ukjent' : `ca. ${kjoretid} min`}`,
+    `Innenfor området: ${innenfor}`,
     `Antall bilder: ${f.bilder.length}`,
     '',
     'Beskrivelse fra kunden:',

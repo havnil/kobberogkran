@@ -1,133 +1,81 @@
 ---
-// Front page hero: seasonal badge, place line, the big three-line title (last line in the accent colour),
-// intro and two buttons over the full-width illustration, which fades into the cream on the left. On the
-// right the key figures card hangs from the copper pipe by two pipe clamps.
+// The hero used on every page, in the reference's layout: the big slanted title (last line in the accent
+// colour), intro and two buttons on the left over a full-width illustration that fades into the cream; a
+// fact card hanging from the copper pipe on the right (`kort` slot). Above the title: the seasonal badge on
+// the front page, breadcrumbs on the other pages.
+import Brodsmuler from './Brodsmuler.astro';
+import Henger from './Henger.astro';
 import Illustrasjon from './Illustrasjon.astro';
-import Tall from './Tall.astro';
-import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
 import { ui } from '../i18n/ui';
 import type { Locale } from '../i18n/locales';
-import { aktivSesong } from '../lib/priser';
 import { telHref } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
-  hero: Tekster['forside']['hero'];
-  nokkeltall: Tekster['forside']['nokkeltall'];
   firma: Firma;
-  /** URL of the cabin service page (the seasonal badge links there). */
-  hytteHref?: string;
+  tittel: string;
+  /** The accent line, shown after `tittel` on its own line. */
+  aksent?: string;
+  ingress: string;
+  skjemaHref: string;
+  eyebrow?: string;
+  sesong?: { tekst: string; href: string };
+  trail?: { name: string; href?: string }[];
+  bilde?: { src: string; width: number; height: number; plassholder: boolean };
+  /** Shorter hero for pages without a fact card or with less to say. */
+  kompakt?: boolean;
 }
 
-const { locale, hero, nokkeltall: nk, firma, hytteHref } = Astro.props;
+const { locale, firma, tittel, aksent, ingress, skjemaHref, eyebrow, sesong, trail, bilde, kompakt = false } = Astro.props;
 const t = ui[locale];
-const p = firma.priser;
-// One visible badge for the card; each placeholder value keeps its own `data-plassholder`.
-const harPlassholder = [p.timepris, p.varmtvannstankArbeid, p.servicebil, firma.omrade.maksKjoretidMin].some((v) => v.plassholder);
-const sesong = hero.sesongmerke[aktivSesong(new Date())];
-const sesongHref = hytteHref ? `${hytteHref}${sesong.anker ? `#${sesong.anker}` : ''}` : undefined;
-// The accent line is the end of the title; if the text no longer ends with it, the whole title stays plain.
-const delt = hero.tittelAksent && hero.tittel.endsWith(hero.tittelAksent);
-const forAksent = delt ? hero.tittel.slice(0, -hero.tittelAksent.length).trim() : hero.tittel;
+// A conditional slot can be present but empty (pages without a card): render it once to find out.
+const kortHtml = Astro.slots.has('kort') ? await Astro.slots.render('kort') : '';
+const harKort = kortHtml.trim() !== '';
 ---
 
-<section class="hero" aria-labelledby="hero-tittel">
-  <div class="hero-bakgrunn">
-    <Illustrasjon class="hero-bilde" src="/images/uploads/illustrasjon-hero.svg" width={1600} height={1000} locale={locale} plassholder loading="eager" />
-  </div>
+<section class:list={['hero', { kompakt, 'uten-kort': !harKort }]} aria-labelledby="hero-tittel">
+  {
+    bilde && (
+      <div class="hero-bakgrunn">
+        <Illustrasjon class="hero-bilde" src={bilde.src} width={bilde.width} height={bilde.height} locale={locale} plassholder={bilde.plassholder} loading="eager" />
+      </div>
+    )
+  }
   <div class="hero-inner ramme">
     <div class="hero-tekst">
+      {trail && <div class="brodsmuler-plass"><Brodsmuler locale={locale} trail={trail} /></div>}
       {
-        sesongHref && (
-          <a class="sesong" href={sesongHref}>
+        sesong && (
+          <a class="sesong" href={sesong.href}>
             <svg aria-hidden="true" viewBox="0 0 16 20" width="14" height="18"><path d="M8 1S1.5 9 1.5 13a6.5 6.5 0 0 0 13 0C14.5 9 8 1 8 1z" fill="var(--color-orange)" /></svg>
             <span>{sesong.tekst}</span>
           </a>
         )
       }
-      <p class="eyebrow">{hero.stedslinje}</p>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h1 id="hero-tittel" class="display hero-tittel">
-        {forAksent}
-        {delt && <span class="aksent">{hero.tittelAksent}</span>}
+        {tittel}
+        {aksent && <span class="aksent">{aksent}</span>}
       </h1>
-      <p class="ingress">{hero.ingress}</p>
+      <p class="ingress">{ingress}</p>
       <div class="hero-knapper">
-        <a class="knapp" href="#skjema">{t.skjemaKnapp}</a>
+        <a class="knapp" href={skjemaHref}>{t.skjemaKnapp}</a>
         <a class="knapp knapp-flat" href={telHref(firma.telefon.verdi)}>
           {t.ring}
           <span data-plassholder={firma.telefon.plassholder ? '' : undefined}>{firma.telefon.verdi}</span>
         </a>
       </div>
     </div>
-
-    <div class="hero-heng">
-      <span class="heng-ror" aria-hidden="true"></span>
-      <svg class="heng-klammer" aria-hidden="true" viewBox="0 0 440 130" preserveAspectRatio="xMidYMax meet">
-        <defs>
-          <linearGradient id="kobber-vannrett" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#E09A63" />
-            <stop offset="0.45" stop-color="#B5652B" />
-            <stop offset="1" stop-color="#8A4A1D" />
-          </linearGradient>
-          <linearGradient id="kobber-loddrett" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#8A4A1D" />
-            <stop offset="0.35" stop-color="#E09A63" />
-            <stop offset="0.7" stop-color="#B5652B" />
-            <stop offset="1" stop-color="#8A4A1D" />
-          </linearGradient>
-          <pattern id="gjenger" width="6" height="4" patternUnits="userSpaceOnUse">
-            <rect width="6" height="4" fill="#6B4A38" />
-            <path d="M0 3.5h6" stroke="#4A2412" stroke-width="1" />
-          </pattern>
-        </defs>
-        <rect x="214" y="0" width="12" height="12" fill="url(#kobber-loddrett)" />
-        <rect x="28" y="14" width="384" height="12" rx="6" fill="url(#kobber-vannrett)" />
-        <rect x="22" y="10" width="10" height="20" rx="2" fill="#8A4A1D" />
-        <rect x="408" y="10" width="10" height="20" rx="2" fill="#8A4A1D" />
-        <rect x="204" y="7" width="32" height="26" rx="5" fill="#8A4A1D" />
-        <rect x="209" y="11" width="22" height="4" rx="2" fill="#E09A63" opacity="0.6" />
-        {
-          [70, 370].map((x) => (
-            <g>
-              <rect x={x - 12} y="7" width="24" height="26" rx="4" fill="none" stroke="#4A2412" stroke-width="4" />
-              <rect x={x - 15} y="31" width="30" height="7" rx="2" fill="#4A2412" />
-              <rect x={x - 3} y="38" width="6" height="76" fill="url(#gjenger)" />
-              <rect x={x - 8} y="110" width="16" height="9" rx="1.5" fill="#4A2412" />
-              <rect x={x - 20} y="119" width="40" height="11" rx="1.5" fill="#4A2412" />
-            </g>
-          ))
-        }
-      </svg>
-      <div class="nokkelkort">
-        <p class="nk-topp">
-          <span>{nk.eyebrow} {harPlassholder && <small class="plassholder-merke">{t.plassholderMerke}</small>}</span>
-          <span>{nk.merke}</span>
-        </p>
-        <dl class="nk-rutenett">
-          <div>
-            <dt>{nk.timepris}</dt>
-            <dd><Tall verdi={p.timepris} enhet="kr" locale={locale} pris /></dd>
-          </div>
-          <div>
-            <dt>{nk.tank}</dt>
-            <dd><Tall verdi={p.varmtvannstankArbeid} enhet="kr" locale={locale} pris /></dd>
-          </div>
-          <div>
-            <dt>{nk.servicebil}</dt>
-            <dd><Tall verdi={p.servicebil} enhet="kr" locale={locale} pris /></dd>
-          </div>
-          <div>
-            <dt>{nk.kjoretid}</dt>
-            <dd><Tall verdi={firma.omrade.maksKjoretidMin} enhet={nk.kjoretidEnhet} locale={locale} /></dd>
-          </div>
-        </dl>
-        <p class="nk-bunn">
-          <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M3.5 10.5 8 15l8.5-9" fill="none" stroke="var(--color-orange-dark)" stroke-width="2.6" /></svg>
-          {nk.prisForStart}
-        </p>
-      </div>
-    </div>
+    {
+      harKort && (
+        <div class="hero-kort">
+          <Henger>
+            <Fragment set:html={kortHtml} />
+          </Henger>
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -139,6 +87,10 @@ const forAksent = delt ? hero.tittel.slice(0, -hero.tittelAksent.length).trim() 
   }
 
   /* The illustration fills the hero; on small screens it sits behind the hanging card at the bottom. */
+  .brodsmuler-plass {
+    margin-bottom: var(--space-3);
+  }
+
   .hero-bakgrunn {
     position: absolute;
     z-index: -1;
@@ -223,106 +175,18 @@ const forAksent = delt ? hero.tittel.slice(0, -hero.tittelAksent.length).trim() 
     margin-inline: -0.4rem;
   }
 
-  /* The pipe comes down from the top, ends in a T, and the clamps hold the card. */
-  .hero-heng {
+  .hero-kort {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 27.5rem;
-    justify-self: center;
+    justify-content: center;
     padding-bottom: 3rem;
   }
 
-  .heng-ror {
-    display: block;
-    flex: 1;
-    min-height: 3rem;
-    width: calc(12 / 440 * 100%);
-    background: linear-gradient(90deg, #8a4a1d, var(--color-copper-light) 35%, var(--color-copper) 70%, #8a4a1d);
+  .kompakt .hero-tekst {
+    padding-bottom: 3rem;
   }
 
-  .heng-klammer {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .nokkelkort {
-    width: 100%;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-orange);
-    box-shadow: 0 30px 60px -36px rgb(74 36 18 / 0.55);
-  }
-
-  .nk-topp {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-2);
-    margin: 0;
-    padding: 0.9rem 1.25rem;
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-accent);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .nokkelkort :global(.tall-merke) {
-    display: none;
-  }
-
-  .nk-topp .plassholder-merke {
-    margin-left: 0.4rem;
-    letter-spacing: 0.04em;
-  }
-
-  .nk-rutenett {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 0;
-  }
-
-  .nk-rutenett > div {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .nk-rutenett > div:nth-child(odd) {
-    border-right: 1px solid var(--color-border);
-  }
-
-  dt {
-    margin-bottom: 0.35rem;
-    color: var(--color-muted);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    line-height: 1.3;
-    text-transform: uppercase;
-  }
-
-  dd {
-    margin: 0;
-    font-size: 1.625rem;
-    line-height: 1.1;
-  }
-
-  .nk-bunn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0.9rem 1.25rem;
-    font-family: var(--font-display);
-    font-size: 1.0625rem;
-    font-weight: 800;
-    font-style: italic;
-    text-transform: uppercase;
+  .kompakt .hero-tittel {
+    font-size: clamp(2rem, 7.4vw, 4.25rem);
   }
 
   @media (min-width: 1000px) {
@@ -362,9 +226,34 @@ const forAksent = delt ? hero.tittel.slice(0, -hero.tittelAksent.length).trim() 
       white-space: nowrap;
     }
 
-    .hero-heng {
-      justify-self: end;
+    .hero-kort {
+      justify-content: flex-end;
       padding-bottom: 6rem;
+    }
+
+    .kompakt {
+      min-height: min(44rem, calc(78svh - var(--header-h)));
+    }
+
+    .kompakt.uten-kort {
+      min-height: 0;
+    }
+
+    .kompakt .hero-tekst {
+      padding-block: 4rem 5rem;
+    }
+
+    .kompakt .hero-kort {
+      padding-bottom: 5rem;
+    }
+
+    .uten-kort .hero-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .uten-kort .hero-tittel {
+      margin-right: 0;
+      max-width: 20ch;
     }
   }
 </style>

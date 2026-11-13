@@ -1,5 +1,7 @@
 ---
-import KrVerdi from './KrVerdi.astro';
+// Fixed price for replacing a water heater, in detail: the two prices and what is and is not included.
+// Used on the water-heater page and the prices page.
+import Tall from './Tall.astro';
 import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
@@ -13,79 +15,134 @@ interface Props {
 const { locale, tekst, priser } = Astro.props;
 ---
 
-<section class="seksjon varmtvann" aria-labelledby="varmtvann-tittel">
-  <h2 id="varmtvann-tittel">{tekst.tittel}</h2>
-  <div class="tall">
-    <div class="pris">
-      <p class="stort"><KrVerdi verdi={priser.varmtvannstankArbeid} locale={locale} /></p>
-      <p class="merke">{tekst.arbeidMerke}</p>
+<section class="seksjon" id="fastpris" aria-labelledby="varmtvann-tittel">
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{tekst.eyebrow}</p>
+        <h2 id="varmtvann-tittel" class="display">{tekst.tittel}</h2>
+      </div>
+      <p class="hode-ingress">{tekst.ingress}</p>
     </div>
-    <div class="pris">
-      <p class="stort sekundar"><KrVerdi verdi={priser.varmtvannstankTypiskTotal} locale={locale} /></p>
-      <p class="merke">{tekst.typiskTotalMerke}</p>
-    </div>
-  </div>
-  <div class="lister">
-    <div>
-      <h3>{tekst.medTittel}</h3>
-      <ul>{tekst.med.map((p) => <li>{p}</li>)}</ul>
-    </div>
-    <div>
-      <h3>{tekst.ikkeMedTittel}</h3>
-      <ul>{tekst.ikkeMed.map((p) => <li>{p}</li>)}</ul>
+    <div class="vv">
+      <dl class="vv-priser">
+        <div>
+          <dt>{tekst.arbeidMerke}</dt>
+          <dd><Tall verdi={priser.varmtvannstankArbeid} enhet="kr" locale={locale} pris /></dd>
+        </div>
+        <div>
+          <dt>{tekst.typiskTotalMerke}</dt>
+          <dd><Tall verdi={priser.varmtvannstankTypiskTotal} enhet="kr" locale={locale} pris /></dd>
+        </div>
+      </dl>
+      <div class="vv-lister">
+        <div>
+          <h3 class="skra">{tekst.medTittel}</h3>
+          <ul class="med">{tekst.med.map((p) => <li>{p}</li>)}</ul>
+        </div>
+        <div>
+          <h3 class="skra">{tekst.ikkeMedTittel}</h3>
+          <ul class="ikke-med">{tekst.ikkeMed.map((p) => <li>{p}</li>)}</ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .varmtvann {
-    background: var(--color-sand);
-    border-radius: var(--radius-card);
-    padding: var(--space-4) var(--space-3);
+  .vv {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-left: 5px solid var(--color-orange);
+    box-shadow: 0 30px 60px -40px rgb(74 36 18 / 0.5);
   }
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-  }
-  .tall {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-4);
-  }
-  .stort {
+
+  .vv-priser {
+    display: grid;
     margin: 0;
-    font-family: var(--font-brand);
-    font-weight: 800;
-    font-size: clamp(2.25rem, 8vw, 3.75rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .vv-priser > div {
+    padding: 1.5rem 1.75rem;
+  }
+
+  .vv-priser > div + div {
+    border-top: 1px solid var(--color-border);
+  }
+
+  dt {
+    margin-bottom: 0.4rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 2.75rem);
     line-height: 1.1;
   }
-  .sekundar {
-    font-size: clamp(1.5rem, 5vw, 2.25rem);
-  }
-  .merke {
-    margin: 0;
-    color: var(--color-muted);
-    font-weight: 600;
-  }
-  .lister {
+
+  .vv-lister {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
+    padding: 2rem 1.75rem 2.25rem;
   }
+
   h3 {
-    margin: 0 0 var(--space-2);
-    font-size: 1.125rem;
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
   }
+
   ul {
+    list-style: none;
     margin: 0;
-    padding-left: 1.25rem;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
   }
+
+  li {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  li::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .med li::before {
+    content: '✓';
+    color: var(--color-orange-dark);
+  }
+
+  .ikke-med li::before {
+    content: '–';
+    color: var(--color-muted);
+  }
+
   @media (min-width: 720px) {
-    .varmtvann {
-      padding: var(--space-4);
-    }
-    .lister {
+    .vv-priser {
       grid-template-columns: 1fr 1fr;
+    }
+
+    .vv-priser > div + div {
+      border-top: 0;
+      border-left: 1px solid var(--color-border);
+    }
+
+    .vv-lister {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      padding: 2.5rem;
     }
   }
 </style>

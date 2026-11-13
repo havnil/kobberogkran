@@ -1,9 +1,12 @@
 ---
-// The sticky side box: call, WhatsApp and a link to the request form (`#skjema`) on the same page.
+// «Raskeste vei»: the sticky side box next to the article. Big phone number, one sentence, three facts in
+// monospace rows and the buttons. The form button jumps to `#skjema` on the same page (or the contact page).
 import Plassholder from './Plassholder.astro';
+import Tall from './Tall.astro';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
 import { ui } from '../i18n/ui';
+import { getTekster } from '../lib/tekster';
 import WhatsAppKnapp from './WhatsAppKnapp.astro';
 import { telHref } from '../lib/telefon';
 
@@ -13,50 +16,146 @@ interface Props {
   tittel: string;
   tekst: string;
   tjeneste?: string;
+  skjemaHref?: string;
+  /** No prices at all (the bathroom page never shows a price). */
+  utenPriser?: boolean;
 }
 
-const { locale, firma, tittel, tekst, tjeneste } = Astro.props;
+const { locale, firma, tittel, tekst, tjeneste, skjemaHref = '#skjema', utenPriser = false } = Astro.props;
 const t = ui[locale];
+const tekster = await getTekster(locale);
+const nk = tekster.forside.nokkeltall;
+const base = firma.omrade.steder[0];
 ---
 
 <aside class="sideboks" aria-labelledby="sideboks-tittel">
-  <h2 id="sideboks-tittel">{tittel}</h2>
-  <p class="nummer"><Plassholder verdi={firma.telefon} locale={locale} /></p>
-  <p>{tekst}</p>
+  <h2 id="sideboks-tittel" class="sb-tittel">{tittel}</h2>
+  <p class="sb-nummer"><a href={telHref(firma.telefon.verdi)}><Plassholder verdi={firma.telefon} locale={locale} /></a></p>
+  <p class="sb-tekst">{tekst}</p>
+  <dl>
+    {
+      utenPriser ? (
+        <div>
+          <dt>{nk.kjoretid}</dt>
+          <dd><Tall verdi={firma.omrade.maksKjoretidMin} enhet={nk.kjoretidEnhet} locale={locale} /></dd>
+        </div>
+      ) : (
+        <>
+          <div>
+            <dt>{nk.timepris}</dt>
+            <dd><Tall verdi={firma.priser.timepris} enhet="kr" locale={locale} pris /></dd>
+          </div>
+          <div>
+            <dt>{nk.servicebil}</dt>
+            <dd><Tall verdi={firma.priser.servicebil} enhet="kr" locale={locale} pris /></dd>
+          </div>
+        </>
+      )
+    }
+    {
+      base && (
+        <div>
+          <dt>{tekster.forside.omrader.base}</dt>
+          <dd>{base}</dd>
+        </div>
+      )
+    }
+  </dl>
   <div class="knapper">
-    <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
-    <WhatsAppKnapp class="knapp knapp-omriss" locale={locale} tjeneste={tjeneste}>{t.whatsapp}</WhatsAppKnapp>
-    <a class="knapp knapp-brun" href="#skjema">{t.skjemaKnapp}</a>
+    <a class="knapp" href={skjemaHref}>{t.skjemaKnapp}</a>
+    <WhatsAppKnapp class="knapp knapp-flat" locale={locale} tjeneste={tjeneste}>{t.whatsapp}</WhatsAppKnapp>
   </div>
 </aside>
 
 <style>
   .sideboks {
-    background: var(--color-sand);
-    border-radius: var(--radius-card);
-    padding: var(--space-3);
+    padding: 2rem 1.75rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-top: 4px solid var(--color-orange);
+    box-shadow: 0 30px 60px -40px rgb(74 36 18 / 0.5);
   }
-  h2 {
-    margin: 0 0 var(--space-2);
-    font-size: 1.25rem;
+
+  .sb-tittel {
+    margin: 0 0 0.5rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
-  .nummer {
-    margin: 0 0 var(--space-2);
-    font-family: var(--font-brand);
+
+  .sb-nummer {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-display);
+    font-size: 2.25rem;
     font-weight: 800;
-    font-size: 1.75rem;
+    font-style: italic;
+    line-height: 1.1;
   }
+
+  .sb-nummer a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .sb-nummer :global(.plassholder-merke) {
+    font-size: 0.625rem;
+  }
+
+  .sb-tekst {
+    margin: 0 0 1.25rem;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  dl {
+    margin: 0 0 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  dl > div {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  dt {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  dd :global(.tall) {
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  dd :global(.tall .enhet) {
+    font-size: 1em;
+    color: inherit;
+  }
+
   .knapper {
-    display: grid;
-    gap: var(--space-2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    margin-inline: -0.4rem;
   }
-  .knapper :global(.knapp) {
-    text-align: center;
-  }
+
   @media (min-width: 1000px) {
     .sideboks {
       position: sticky;
-      top: var(--space-4);
+      top: calc(var(--header-h) + 1.5rem);
     }
   }
 </style>

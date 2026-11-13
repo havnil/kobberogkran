@@ -1,0 +1,158 @@
+---
+// The fact card: a top line in monospace, cells with a label and a figure, and a bottom line.
+// A cell shows a `firma` value through <Tall> (keeps `data-plassholder`), or a short text with a note.
+// When any value is a placeholder, one visible badge sits in the top line.
+import Tall from './Tall.astro';
+import type { Verdi } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+export interface Celle {
+  etikett: string;
+  verdi?: Verdi<number>;
+  enhet?: string;
+  pris?: boolean;
+  /** Text instead of a number, with an optional small note under it. */
+  tekst?: string;
+  under?: string;
+  /** Span both columns. */
+  bred?: boolean;
+}
+
+interface Props {
+  locale: Locale;
+  venstre: string;
+  hoyre?: string;
+  celler: Celle[];
+  bunn?: string;
+}
+
+const { locale, venstre, hoyre, celler, bunn } = Astro.props;
+const harPlassholder = celler.some((c) => c.verdi?.plassholder);
+---
+
+<div class="faktakort">
+  <p class="fk-topp">
+    <span>{venstre} {harPlassholder && <small class="plassholder-merke">{ui[locale].plassholderMerke}</small>}</span>
+    {hoyre && <span>{hoyre}</span>}
+  </p>
+  <dl class="fk-rutenett">
+    {
+      celler.map((c) => (
+        <div class:list={['fk-celle', { bred: c.bred }]}>
+          <dt>{c.etikett}</dt>
+          <dd>
+            {c.verdi ? <Tall verdi={c.verdi} enhet={c.enhet ?? ''} locale={locale} pris={c.pris} /> : <span class="fk-tekst">{c.tekst}</span>}
+            {c.under && <span class="fk-under">{c.under}</span>}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+  {
+    bunn && (
+      <p class="fk-bunn">
+        <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M3.5 10.5 8 15l8.5-9" fill="none" stroke="var(--color-orange-dark)" stroke-width="2.6" /></svg>
+        {bunn}
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .faktakort {
+    width: 100%;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-orange);
+    box-shadow: 0 30px 60px -36px rgb(74 36 18 / 0.55);
+  }
+
+  .fk-topp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .fk-topp .plassholder-merke {
+    margin-left: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+
+  .faktakort :global(.tall-merke) {
+    display: none;
+  }
+
+  .fk-rutenett {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+  }
+
+  .fk-celle {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .fk-celle:not(.bred):nth-child(odd) {
+    border-right: 1px solid var(--color-border);
+  }
+
+  .fk-celle.bred {
+    grid-column: 1 / -1;
+  }
+
+  dt {
+    margin-bottom: 0.35rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.625rem;
+    line-height: 1.1;
+  }
+
+  .fk-tekst {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .fk-under {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .fk-bunn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.9rem 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 800;
+    font-style: italic;
+    text-transform: uppercase;
+  }
+</style>

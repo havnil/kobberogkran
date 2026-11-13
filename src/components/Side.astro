@@ -1,26 +1,28 @@
 ---
-// Body of the generic pages (everything except the front page and the services). Each page gets the
-// blocks the spec asks for, picked by `translationKey`; the markdown body is the page's own text.
+// Body of the generic pages (everything except the front page and the services), in the same system as the
+// service template: hero with breadcrumbs and a fact card on the pipe, the markdown text next to the sticky
+// side box, then the blocks each page needs (picked by `translationKey`). The legal pages get a short hero
+// and the text alone.
 import { render } from 'astro:content';
-import Brodsmuler from './Brodsmuler.astro';
+import Faktakort, { type Celle } from './Faktakort.astro';
+import Hero from './Hero.astro';
 import OmEirik from './OmEirik.astro';
 import Omrader from './Omrader.astro';
-import Plassholder from './Plassholder.astro';
 import PrisBlokk from './PrisBlokk.astro';
+import Sideboks from './Sideboks.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
-import WhatsAppKnapp from './WhatsAppKnapp.astro';
 import TjenesteKort from './TjenesteKort.astro';
 import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
 import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { localizePath } from '../i18n/alternates';
+import { navPath } from '../i18n/nav';
 import type { PageEntry } from '../i18n/pages';
 import { ui } from '../i18n/ui';
 import { getFirma } from '../lib/firma';
 import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
 import { launchVerdi } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
-import { telHref } from '../lib/telefon';
 
 interface Props {
   locale: Locale;
@@ -35,20 +37,104 @@ const synlig = nokkel === 'om' ? synligeOmtale(await getOmtale(), visEksempler(i
 const f = tekster.forside;
 const s = tekster.sider;
 const t = ui[locale];
+const nk = f.nokkeltall;
+const p = firma.priser;
 const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: entry.data.title }];
+const juridisk = nokkel === 'personvern' || nokkel === 'vilkar';
+const harSkjema = nokkel === 'kontakt';
+const skjemaHref = harSkjema ? '#skjema' : navPath(locale, 'kontakt');
+const base = firma.omrade.steder[0] ?? '';
+
+// Illustration and fact card per page. The legal pages have neither.
+const bilder: Record<string, string> = {
+  tjenester: '/images/uploads/illustrasjon-service-og-reparasjon.svg',
+  priser: '/images/uploads/illustrasjon-varmtvannstank.svg',
+  omrader: '/images/uploads/illustrasjon-omrade.svg',
+  om: '/images/uploads/illustrasjon-eirik.svg',
+  kontakt: '/images/uploads/illustrasjon-hero.svg',
+};
+const prisCeller: Celle[] = [
+  { etikett: nk.timepris, verdi: p.timepris, enhet: 'kr', pris: true },
+  { etikett: nk.servicebil, verdi: p.servicebil, enhet: 'kr', pris: true },
+  { etikett: f.priser.forbruk, verdi: p.forbruk, enhet: 'kr', pris: true },
+  { etikett: nk.tank, verdi: p.varmtvannstankArbeid, enhet: 'kr', pris: true },
+];
+const stedCeller: Celle[] = [
+  { etikett: f.omrader.base, tekst: base },
+  { etikett: nk.kjoretid, verdi: firma.omrade.maksKjoretidMin, enhet: nk.kjoretidEnhet },
+  { etikett: f.omrader.eyebrow, tekst: firma.omrade.steder.join(' · '), bred: true },
+];
+const kontaktCeller: Celle[] = [
+  { etikett: s.kontakt.telefonNavn, tekst: firma.telefon.verdi, bred: true },
+  { etikett: s.kontakt.epostNavn, tekst: firma.epost.verdi, bred: true },
+  { etikett: s.kontakt.adresseNavn, tekst: firma.adresse.verdi, bred: true },
+];
+const kort: { venstre: string; hoyre: string; celler: Celle[] } | undefined = {
+  tjenester: { venstre: nk.eyebrow, hoyre: nk.merke, celler: prisCeller },
+  priser: { venstre: s.priser.listeEyebrow, hoyre: nk.merke, celler: prisCeller },
+  omrader: { venstre: f.omrader.eyebrow, hoyre: base, celler: stedCeller },
+  om: { venstre: f.omrader.eyebrow, hoyre: base, celler: stedCeller },
+  kontakt: { venstre: s.kontakt.kortEyebrow, hoyre: s.kontakt.rolle, celler: kontaktCeller },
+}[nokkel];
+const kontaktPlassholder = [firma.telefon, firma.epost, firma.adresse].some((v) => v.plassholder);
+const bildeSrc = juridisk ? undefined : bilder[nokkel];
 ---
 
-<Brodsmuler locale={locale} trail={trail} />
-<h1>{entry.data.title}</h1>
-<div class="tekst"><Content /></div>
+<Hero
+  locale={locale}
+  firma={firma}
+  trail={trail}
+  tittel={entry.data.title}
+  ingress={entry.data.description}
+  skjemaHref={skjemaHref}
+  bilde={bildeSrc ? { src: bildeSrc, width: 1200, height: 900, plassholder: true } : undefined}
+  kompakt
+>
+  {
+    kort && (
+      <div slot="kort" class="kort-plass" data-plassholder={nokkel === 'kontakt' && kontaktPlassholder ? '' : undefined}>
+        <Faktakort locale={locale} venstre={kort.venstre} hoyre={kort.hoyre} celler={kort.celler} bunn={nk.prisForStart} />
+      </div>
+    )
+  }
+</Hero>
+
+<div class="seksjon">
+  {
+    juridisk ? (
+      <div class="ramme">
+        <article class="artikkel">
+          <Content />
+        </article>
+      </div>
+    ) : (
+      <div class="ramme artikkel-rad">
+        <article class="artikkel">
+          <Content />
+        </article>
+        <Sideboks locale={locale} firma={firma} tittel={s.tjeneste.sideboksTittel} tekst={s.tjeneste.sideboksTekst} skjemaHref={skjemaHref} />
+      </div>
+    )
+  }
+</div>
 
 {
   nokkel === 'tjenester' && (
     <section class="seksjon" aria-labelledby="tjenester-tittel">
-      <h2 id="tjenester-tittel">{f.tjenester.tittel}</h2>
-      <ol class="kort-liste">
-        {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} locale={locale} />)}
-      </ol>
+      <div class="ramme">
+        <div class="hode">
+          <div>
+            <p class="eyebrow">{f.tjenester.eyebrow.replace('{antall}', String(tjenester.length))}</p>
+            <h2 id="tjenester-tittel" class="display">{f.tjenester.tittel}</h2>
+          </div>
+          <p class="hode-ingress">{f.tjenester.ingress}</p>
+        </div>
+        <ol class="ruter">
+          {tjenester.map((e) => (
+            <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={e.data.nummer} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={f.tjenester.seMer} />
+          ))}
+        </ol>
+      </div>
     </section>
   )
 }
@@ -56,100 +142,25 @@ const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: en
 {
   nokkel === 'priser' && (
     <>
-      <PrisBlokk locale={locale} tekst={f.priser} priser={firma.priser} />
-      <dl class="kveld">
-        <div>
-          <dt>{s.priser.kveldHelgNavn}</dt>
-          <dd>{s.priser.kveldHelgVerdi}</dd>
-        </div>
-      </dl>
-      <p>{s.priser.mvaNote}</p>
+      <PrisBlokk locale={locale} tekst={f.priser} side={s.priser} priser={firma.priser} />
       <VarmtvannstankBlokk locale={locale} tekst={f.varmtvann} priser={firma.priser} />
     </>
   )
 }
 
-{nokkel === 'omrader' && <Omrader locale={locale} tekst={f.omrader} omrade={firma.omrade} />}
+{nokkel === 'omrader' && <Omrader locale={locale} tekst={f.omrader} omrade={firma.omrade} medKart />}
 
-{
-  nokkel === 'om' && (
-    <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />
-  )
-}
+{nokkel === 'om' && <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />}
 
-{
-  nokkel === 'kontakt' && (
-    <>
-      <dl class="kontakt">
-        <div>
-          <dt>{s.kontakt.telefonNavn}</dt>
-          <dd><a href={telHref(firma.telefon.verdi)}><Plassholder verdi={firma.telefon} locale={locale} /></a></dd>
-        </div>
-        <div>
-          <dt>{s.kontakt.epostNavn}</dt>
-          <dd><a href={`mailto:${firma.epost.verdi}`}><Plassholder verdi={firma.epost} locale={locale} /></a></dd>
-        </div>
-        <div>
-          <dt>{s.kontakt.adresseNavn}</dt>
-          <dd><Plassholder verdi={firma.adresse} locale={locale} /></dd>
-        </div>
-      </dl>
-      <p><WhatsAppKnapp class="knapp knapp-omriss" locale={locale}>{t.whatsapp}</WhatsAppKnapp></p>
-      <Skjemaseksjon locale={locale} tekst={f.skjema} />
-    </>
-  )
-}
+{nokkel === 'kontakt' && <Skjemaseksjon locale={locale} tekst={f.skjema} />}
 
 <style>
-  h1 {
-    font-size: clamp(2rem, 7vw, 3.25rem);
-    margin: var(--space-4) 0 var(--space-3);
+  .kort-plass {
+    width: 100%;
   }
-  .tekst {
-    max-width: 44rem;
-  }
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-  }
-  .kort-liste {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-3);
-  }
-  .kveld,
-  .kontakt {
-    margin: var(--space-3) 0;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    padding: var(--space-2) var(--space-3);
-  }
-  .kveld > div,
-  .kontakt > div {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-2) 0;
-  }
-  dt {
-    color: var(--color-muted);
-  }
-  dd {
-    margin: 0;
-    font-weight: 800;
-    text-align: right;
-  }
-  @media (min-width: 720px) {
-    .kort-liste {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (min-width: 1000px) {
-    .kort-liste {
-      grid-template-columns: repeat(3, 1fr);
-    }
+
+  .kort-plass :global(.fk-tekst) {
+    font-size: 1.125rem;
+    overflow-wrap: anywhere;
   }
 </style>

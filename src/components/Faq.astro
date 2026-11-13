@@ -1,44 +1,90 @@
 ---
-// «Det folk lurer på»: native details/summary, mirrored in FAQPage JSON-LD by the page.
+// «Det folk lurer på»: native details/summary as ruled rows with a plus, mirrored in FAQPage JSON-LD by the page.
 interface Props {
   tittel: string;
+  eyebrow?: string;
   faq: { sporsmal: string; svar: string }[];
 }
 
-const { tittel, faq } = Astro.props;
+const { tittel, eyebrow, faq } = Astro.props;
 ---
 
 {
   faq.length > 0 && (
     <section class="seksjon" aria-labelledby="faq-tittel">
-      <h2 id="faq-tittel">{tittel}</h2>
-      {faq.map((q) => (
-        <details>
-          <summary>{q.sporsmal}</summary>
-          <p>{q.svar}</p>
-        </details>
-      ))}
+      <div class="ramme">
+        <div class="faq">
+          {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+          <h2 id="faq-tittel" class="display">{tittel}</h2>
+          <div class="faq-liste">
+            {faq.map((q) => (
+              <details>
+                <summary>{q.sporsmal}</summary>
+                <p>{q.svar}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   )
 }
 
 <style>
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
+  .faq {
+    max-width: 56rem;
   }
+
+  h2.display {
+    margin-bottom: 3rem;
+  }
+
+  .faq-liste {
+    border-top: 1px solid var(--color-border-strong);
+  }
+
   details {
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    padding: var(--space-2) var(--space-3);
-    margin-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-strong);
   }
+
   summary {
+    position: relative;
+    display: block;
+    padding: 1.4rem 3rem 1.4rem 0;
     cursor: pointer;
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1.4;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '+';
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
     font-weight: 700;
   }
+
+  details[open] summary::after {
+    content: '−';
+  }
+
+  summary:hover {
+    color: var(--color-orange-dark);
+  }
+
   details p {
-    margin: var(--space-2) 0 0;
+    max-width: 46rem;
+    margin: 0 0 1.5rem;
+    color: var(--color-muted);
   }
 </style>

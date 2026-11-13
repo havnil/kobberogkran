@@ -1,4 +1,6 @@
 ---
+// The about page block: portrait illustration, documentation, approvals and what customers say.
+// Examples render only outside launch builds, with an «Eksempel» badge.
 import Illustrasjon from './Illustrasjon.astro';
 import type { Tekster, Omtale } from '../lib/innhold';
 import type { Locale } from '../i18n/locales';
@@ -18,111 +20,145 @@ const godkjenninger = omtale.filter((o) => o.type === 'godkjenning');
 const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
 ---
 
-<section class="seksjon om-eirik" aria-labelledby="om-eirik-tittel">
-  <Illustrasjon class="foto" src="/images/uploads/illustrasjon-eirik.svg" width={800} height={1000} locale={locale} plassholder />
-  <div class="innhold">
-    <h2 id="om-eirik-tittel">{tekst.tittel}</h2>
-    <p>{tekst.tekst}</p>
+<section class="seksjon" aria-labelledby="om-eirik-tittel">
+  <div class="ramme om-eirik">
+    <Illustrasjon class="foto" src="/images/uploads/illustrasjon-eirik.svg" width={800} height={1000} locale={locale} plassholder />
+    <div class="innhold">
+      <h2 id="om-eirik-tittel" class="display">{tekst.tittel}</h2>
+      <p class="ingress">{tekst.tekst}</p>
 
-    {dokumentasjon.punkter.length > 0 && <h3>{dokumentasjon.tittel}</h3>}
-    {
-      dokumentasjon.punkter.length > 0 && (
-        <ul class="dokumentasjon">
-          {dokumentasjon.punkter.map((p) => <li>{p}</li>)}
-        </ul>
-      )
-    }
+      {
+        dokumentasjon.punkter.length > 0 && (
+          <div class="blokk">
+            <h3 class="skra">{dokumentasjon.tittel}</h3>
+            <ul class="dokumentasjon">
+              {dokumentasjon.punkter.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
 
-    {godkjenninger.length > 0 && <h3>{tekst.godkjenningerTittel}</h3>}
-    {
-      godkjenninger.length > 0 && (
-        <ul class="omtale">
-          {godkjenninger.map((o) => (
-            <li>
-              {o.tekst}
-              {!o.ekte && <small class="eksempel-merke">{eksempelMerke}</small>}
-            </li>
-          ))}
-        </ul>
-      )
-    }
+      {
+        godkjenninger.length > 0 && (
+          <div class="blokk">
+            <h3 class="skra">{tekst.godkjenningerTittel}</h3>
+            <ul class="rader">
+              {godkjenninger.map((o) => (
+                <li>
+                  {o.tekst}
+                  {!o.ekte && <small class="plassholder-merke">{eksempelMerke}</small>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
 
-    {anmeldelser.length > 0 && <h3>{tekst.anmeldelserTittel}</h3>}
-    {
-      anmeldelser.length > 0 && (
-        <ul class="omtale">
-          {anmeldelser.map((o) => (
-            <li>
-              <blockquote>{o.tekst}</blockquote>
-              {o.navn && <p class="navn">{o.navn}</p>}
-              {!o.ekte && <small class="eksempel-merke">{eksempelMerke}</small>}
-            </li>
-          ))}
-        </ul>
-      )
-    }
+      {
+        anmeldelser.length > 0 && (
+          <div class="blokk">
+            <h3 class="skra">{tekst.anmeldelserTittel}</h3>
+            <ul class="rader">
+              {anmeldelser.map((o) => (
+                <li>
+                  <blockquote>«{o.tekst}»</blockquote>
+                  <p class="navn">
+                    {o.navn}
+                    {!o.ekte && <small class="plassholder-merke">{eksempelMerke}</small>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
   </div>
 </section>
 
 <style>
   .om-eirik {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
   }
+
   .om-eirik :global(.foto) {
     aspect-ratio: 4 / 5;
     max-width: 28rem;
-    box-shadow: 0 24px 48px -32px rgb(74 36 18 / 0.6);
+    border-radius: 0;
+    border: 1px solid var(--color-border);
+    border-top: 4px solid var(--color-orange);
   }
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
+
+  h2.display {
+    margin-bottom: var(--space-3);
   }
-  h3 {
-    margin: var(--space-3) 0 var(--space-2);
+
+  .ingress {
+    max-width: 40rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
     font-size: 1.125rem;
   }
-  .omtale {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-2);
+
+  .blokk + .blokk {
+    margin-top: var(--space-4);
   }
-  .omtale li {
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    padding: var(--space-2) var(--space-3);
+
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
   }
+
   .dokumentasjon {
     margin: 0;
     padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
   }
-  blockquote {
+
+  .dokumentasjon li::marker {
+    color: var(--color-orange-dark);
+  }
+
+  .rader {
+    list-style: none;
     margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border-strong);
   }
+
+  .rader li {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .rader .plassholder-merke {
+    margin-left: 0.5rem;
+  }
+
+  blockquote {
+    margin: 0 0 0.5rem;
+    font-size: 1.0625rem;
+  }
+
   .navn {
     margin: 0;
     color: var(--color-muted);
-    font-size: 0.9375rem;
-  }
-  .eksempel-merke {
-    display: inline-block;
-    margin-left: var(--space-2);
-    padding: 0.1em 0.5em;
-    border-radius: var(--radius-button);
-    background: var(--color-orange);
-    color: var(--color-on-orange);
-    font-size: 0.7rem;
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
-  @media (min-width: 720px) {
+
+  @media (min-width: 900px) {
     .om-eirik {
-      grid-template-columns: 1fr 1.6fr;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
       align-items: start;
-      gap: var(--space-4);
+      gap: 4rem;
     }
   }
 </style>

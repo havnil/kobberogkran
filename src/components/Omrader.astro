@@ -1,4 +1,6 @@
 ---
+// «Her jobber vi» on the service pages and the areas page: section head and the places as chips, with
+// Hemnes marked as the base. The areas page also shows the drawn map.
 import Illustrasjon from './Illustrasjon.astro';
 import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
@@ -6,59 +8,81 @@ import type { Locale } from '../i18n/locales';
 
 interface Props {
   locale: Locale;
-  tekst: Pick<Tekster['forside']['omrader'], 'tittel'>;
+  tekst: Tekster['forside']['omrader'];
+  /** Title override (the service pages have their own). */
+  tittel?: string;
+  eyebrow?: string;
   omrade: Firma['omrade'];
+  medKart?: boolean;
 }
 
-const { locale, tekst, omrade } = Astro.props;
+const { locale, tekst, tittel, eyebrow, omrade, medKart = false } = Astro.props;
+const [base, ...andre] = omrade.steder;
 ---
 
-<section class="seksjon omrader" aria-labelledby="omrader-tittel">
-  <div class="tekst">
-    <h2 id="omrader-tittel">{tekst.tittel}</h2>
-    <ul>
-      {omrade.steder.map((sted) => <li>{sted}</li>)}
+<section class="seksjon" aria-labelledby="omrader-tittel">
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
+        <h2 id="omrader-tittel" class="display">{tittel ?? tekst.tittel}</h2>
+      </div>
+      <p class="hode-ingress">{tekst.ingress}</p>
+    </div>
+    <ul class="chips">
+      <li class="base">{base} <span class="merke">{tekst.base}</span></li>
+      {andre.map((sted) => <li>{sted}</li>)}
     </ul>
+    <p class="utenfor">{tekst.utenfor}</p>
+    {medKart && <Illustrasjon class="kart" src="/images/uploads/illustrasjon-omrade.svg" width={1200} height={900} locale={locale} plassholder />}
   </div>
-  <Illustrasjon class="kart" src="/images/uploads/illustrasjon-omrade.svg" width={1200} height={900} locale={locale} plassholder />
 </section>
 
 <style>
-  .omrader {
-    display: grid;
-    gap: var(--space-4);
-    align-items: center;
-  }
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-  }
-  ul {
+  .chips {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: 0.6rem;
   }
-  li {
-    padding: 0.35rem 1rem;
-    border-radius: var(--radius-button);
-    background: var(--color-sand);
-    font-weight: 600;
+
+  .chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.5rem 1.1rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border-strong);
+    font-weight: 800;
   }
-  li:first-child {
+
+  .merke {
+    padding: 0.1rem 0.45rem;
     background: var(--color-orange);
     color: var(--color-on-orange);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
-  .omrader :global(.kart) {
-    aspect-ratio: 4 / 3;
+
+  .utenfor {
+    margin: var(--space-3) 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ramme :global(.kart) {
+    margin-top: 3rem;
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
     border: 1px solid var(--color-border);
-  }
-  @media (min-width: 900px) {
-    .omrader {
-      grid-template-columns: 1fr 1.3fr;
-      gap: var(--space-5);
-    }
   }
 </style>

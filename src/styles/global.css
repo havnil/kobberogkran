@@ -377,3 +377,97 @@ h2.display {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* Article next to the sticky side box (service pages and the other pages). */
+.artikkel-rad {
+  display: grid;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (min-width: 1000px) {
+  .artikkel-rad {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: 6rem;
+  }
+}
+
+/* Body text written in markdown: slanted capital headings, drop bullets, numbered steps in monospace. */
+.artikkel {
+  max-width: 46rem;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.artikkel > :first-child {
+  margin-top: 0;
+}
+
+.artikkel h2 {
+  margin: 3.5rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.4vw, 2.25rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.artikkel h3 {
+  margin: 2rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.artikkel p {
+  margin: 0 0 1.1rem;
+}
+
+.artikkel ul {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.artikkel ul > li {
+  position: relative;
+  margin-bottom: 0.6rem;
+  padding-left: 1.75rem;
+}
+
+/* A small orange drop as the bullet. */
+.artikkel ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0.2rem;
+  top: 0.5em;
+  width: 0.65rem;
+  height: 0.85rem;
+  background: var(--color-orange);
+  clip-path: path('M5.2 0C5.2 0 0 6.2 0 9.6a5.2 5.2 0 0 0 10.4 0C10.4 6.2 5.2 0 5.2 0z');
+}
+
+.artikkel ol {
+  margin: 0 0 1.25rem;
+  padding-left: 2rem;
+}
+
+.artikkel ol > li {
+  margin-bottom: 0.6rem;
+}
+
+.artikkel ol > li::marker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.artikkel a {
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}

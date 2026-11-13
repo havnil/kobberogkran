@@ -2,6 +2,7 @@
 // The front page, section for section as in docs/research/2026-11-13-kimkran-element-for-element.md.
 // All copy comes from `tekster/<locale>.json` (`forside`); prices and places from `firma`.
 import Band from './Band.astro';
+import Faktakort from './Faktakort.astro';
 import Hero from './Hero.astro';
 import OmraderForside from './OmraderForside.astro';
 import Servicebil from './Servicebil.astro';
@@ -15,6 +16,7 @@ import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { getFirma } from '../lib/firma';
 import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
 import { launchVerdi } from '../lib/lansering';
+import { aktivSesong } from '../lib/priser';
 import { getTekster } from '../lib/tekster';
 
 interface Props {
@@ -31,13 +33,35 @@ const hrefFor = (key: string) => {
   return e ? servicePath(locale, serviceSlugOf(e)) : undefined;
 };
 const tankHref = hrefFor('varmtvannstank') ?? '#skjema';
+const hytteHref = hrefFor('hytte');
+const sesongTekst = f.hero.sesongmerke[aktivSesong(new Date())];
+const sesong = hytteHref ? { tekst: sesongTekst.tekst, href: sesongTekst.anker ? `${hytteHref}#${sesongTekst.anker}` : hytteHref } : undefined;
+// The accent line is the end of the title; if the text no longer ends with it, the whole title stays plain.
+const delt = f.hero.tittelAksent !== '' && f.hero.tittel.endsWith(f.hero.tittelAksent);
+const tittel = delt ? f.hero.tittel.slice(0, -f.hero.tittelAksent.length).trim() : f.hero.tittel;
+const nk = f.nokkeltall;
+const p = firma.priser;
 const ruter = f.tjenester.ruter.flatMap((r) => {
   const href = hrefFor(r.tjeneste);
   return href ? [{ ...r, href: r.anker ? `${href}#${r.anker}` : href }] : [];
 });
 ---
 
-<Hero locale={locale} hero={f.hero} nokkeltall={f.nokkeltall} firma={firma} hytteHref={hrefFor('hytte')} />
+<Hero locale={locale} firma={firma} tittel={tittel} aksent={delt ? f.hero.tittelAksent : undefined} ingress={f.hero.ingress} eyebrow={f.hero.stedslinje} sesong={sesong} skjemaHref="#skjema" bilde={{ src: '/images/uploads/illustrasjon-hero.svg', width: 1600, height: 1000, plassholder: true }}>
+  <Faktakort
+    slot="kort"
+    locale={locale}
+    venstre={nk.eyebrow}
+    hoyre={nk.merke}
+    celler={[
+      { etikett: nk.timepris, verdi: p.timepris, enhet: 'kr', pris: true },
+      { etikett: nk.tank, verdi: p.varmtvannstankArbeid, enhet: 'kr', pris: true },
+      { etikett: nk.servicebil, verdi: p.servicebil, enhet: 'kr', pris: true },
+      { etikett: nk.kjoretid, verdi: firma.omrade.maksKjoretidMin, enhet: nk.kjoretidEnhet },
+    ]}
+    bunn={nk.prisForStart}
+  />
+</Hero>
 
 <section class="seksjon" id="tjenester" aria-labelledby="tjenester-tittel">
   <div class="ramme">

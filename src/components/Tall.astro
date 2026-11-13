@@ -1,0 +1,30 @@
+---
+// A figure in monospace with a small unit: «1 125 kr», «45 min». Values from `firma` keep their placeholder
+// mark (`data-plassholder` and the visible badge). Prices also carry `data-pris`.
+import type { Verdi } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  verdi: Verdi<number>;
+  enhet: string;
+  locale: Locale;
+  /** The value is a price (adds `data-pris`). */
+  pris?: boolean;
+  class?: string;
+}
+
+const { verdi, enhet, locale, pris = false, class: klasse } = Astro.props;
+const tall = new Intl.NumberFormat(locale === 'nb' ? 'nb-NO' : 'en-GB').format(verdi.verdi);
+const attr = { ...(pris ? { 'data-pris': '' } : {}), ...(verdi.plassholder ? { 'data-plassholder': '' } : {}) };
+---
+
+<span class:list={['tall', klasse]} {...attr}>{tall}<span class="enhet">{enhet}</span>{verdi.plassholder && <small class="plassholder-merke tall-merke">{ui[locale].plassholderMerke}</small>}</span>
+
+<style>
+  .tall-merke {
+    margin-left: 0.5em;
+    font-size: 0.625rem;
+    vertical-align: 0.4em;
+  }
+</style>

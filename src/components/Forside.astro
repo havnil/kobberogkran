@@ -1,14 +1,15 @@
 ---
-// The front page. Sections follow the spec order; all copy comes from `tekster/<locale>.json` (`forside`).
+// The front page, section for section as in docs/research/2026-11-13-kimkran-element-for-element.md.
+// All copy comes from `tekster/<locale>.json` (`forside`); prices and places from `firma`.
+import Band from './Band.astro';
 import Hero from './Hero.astro';
-import LekkerNaa from './LekkerNaa.astro';
-import Omrader from './Omrader.astro';
-import OmEirik from './OmEirik.astro';
-import PrisBlokk from './PrisBlokk.astro';
+import OmraderForside from './OmraderForside.astro';
+import Servicebil from './Servicebil.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
 import Steg from './Steg.astro';
+import TankFremhevet from './TankFremhevet.astro';
+import Tanksjekk from './Tanksjekk.astro';
 import TjenesteKort from './TjenesteKort.astro';
-import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
 import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { getFirma } from '../lib/firma';
@@ -25,46 +26,38 @@ const [firma, tekster, tjenester, omtale] = await Promise.all([getFirma(), getTe
 // `LAUNCH` is read at build time via import.meta.env (see src/lib/lansering.ts).
 const synlig = synligeOmtale(omtale, visEksempler(import.meta.env.PROD, launchVerdi()));
 const f = tekster.forside;
+const hrefFor = (key: string) => {
+  const e = tjenester.find((s) => s.data.translationKey === key);
+  return e ? servicePath(locale, serviceSlugOf(e)) : undefined;
+};
+const tankHref = hrefFor('varmtvannstank') ?? '#skjema';
+const ruter = f.tjenester.ruter.flatMap((r) => {
+  const href = hrefFor(r.tjeneste);
+  return href ? [{ ...r, href: r.anker ? `${href}#${r.anker}` : href }] : [];
+});
 ---
 
-<Hero locale={locale} hero={f.hero} firma={firma} />
+<Hero locale={locale} hero={f.hero} nokkeltall={f.nokkeltall} firma={firma} hytteHref={hrefFor('hytte')} />
 
-<section class="seksjon" aria-labelledby="tjenester-tittel">
-  <h2 id="tjenester-tittel">{f.tjenester.tittel}</h2>
-  <ol class="kort-liste">
-    {tjenester.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} tjeneste={e.data} locale={locale} />)}
-  </ol>
+<section class="seksjon" id="tjenester" aria-labelledby="tjenester-tittel">
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{f.tjenester.eyebrow.replace('{antall}', String(ruter.length))}</p>
+        <h2 id="tjenester-tittel" class="display">{f.tjenester.ruterTittel}</h2>
+      </div>
+      <p class="hode-ingress">{f.tjenester.ingress}</p>
+    </div>
+    <ol class="ruter">
+      {ruter.map((r, i) => <TjenesteKort href={r.href} nummer={i + 1} tittel={r.tittel} tekst={r.tekst} seMer={f.tjenester.seMer} />)}
+    </ol>
+  </div>
 </section>
 
-<LekkerNaa locale={locale} tekst={tekster.lekkerNaa} firma={firma} />
-<VarmtvannstankBlokk locale={locale} tekst={f.varmtvann} priser={firma.priser} />
-<PrisBlokk locale={locale} tekst={f.priser} priser={firma.priser} />
+<Servicebil locale={locale} tekst={f.bil} />
+<TankFremhevet locale={locale} tekst={f.varmtvann} priser={firma.priser} tankHref={tankHref} />
+<Tanksjekk tekst={f.tanksjekk} tankHref={tankHref} />
+<Band locale={locale} tekst={f.band} />
+<OmraderForside locale={locale} tekst={f.omrader} omtaleTittel={f.omEirik.anmeldelserTittel} omrade={firma.omrade} omtale={synlig} />
 <Steg tekst={f.steg} />
-<OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />
-<Omrader locale={locale} tekst={f.omrader} omrade={firma.omrade} />
-
-<Skjemaseksjon locale={locale} tekst={f.skjema} />
-
-<style>
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-  }
-  .kort-liste {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-3);
-  }
-  @media (min-width: 720px) {
-    .kort-liste {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (min-width: 1000px) {
-    .kort-liste {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-</style>
+<Skjemaseksjon locale={locale} tekst={f.skjema} lekker />

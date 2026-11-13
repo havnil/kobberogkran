@@ -1,121 +1,100 @@
 ---
-import Illustrasjon from './Illustrasjon.astro';
-import type { Tjeneste } from '../lib/innhold';
-import type { Locale } from '../i18n/locales';
-import { tjenesteBilde } from '../lib/illustrasjon';
-import { aktivSesong } from '../lib/priser';
-
+// A numbered tile: number in monospace, slanted title, one line and «Se mer →». Used in the four-column
+// grids (`.ruter`) on the front page, the services page and under each service.
 interface Props {
   href: string;
-  tjeneste: Tjeneste;
-  locale: Locale;
+  nummer: number;
+  tittel: string;
+  tekst: string;
+  seMer: string;
 }
 
-const { href, tjeneste, locale } = Astro.props;
-// The cabin card swaps text with the season when the page is built.
-const tekst = tjeneste.sesong ? tjeneste.sesong[aktivSesong(new Date())] : tjeneste.kort;
-// A real image when there is one; otherwise the drawn illustration, marked as a placeholder.
-const bilde = tjenesteBilde(tjeneste);
+const { href, nummer, tittel, tekst, seMer } = Astro.props;
 ---
 
-<li class="kort">
+<li class="rute vis">
   <a href={href}>
-    <Illustrasjon class="bilde" src={bilde.src} width={1200} height={900} locale={locale} plassholder={bilde.plassholder} />
-    <span class="nummer" aria-hidden="true">{tjeneste.nummer}</span>
-    <h3>{tjeneste.kundeTittel}</h3>
-    <p class="fagord">{tjeneste.fagord}</p>
-    <p class="tekst">{tekst}</p>
-    <span class="mer" aria-hidden="true">→</span>
+    <span class="rute-nr" aria-hidden="true">{String(nummer).padStart(2, '0')}</span>
+    <h3 class="skra">{tittel}</h3>
+    <p>{tekst}</p>
+    <span class="rute-mer" aria-hidden="true">{seMer} →</span>
   </a>
 </li>
 
 <style>
-  .kort {
+  .rute {
     position: relative;
     background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    overflow: hidden;
-    transition:
-      box-shadow 0.2s ease,
-      transform 0.2s ease,
-      border-color 0.2s ease;
   }
-  .kort:hover,
-  .kort:focus-within {
-    border-color: var(--color-border-strong);
-    box-shadow: 0 14px 30px -18px rgb(74 36 18 / 0.45);
-    transform: translateY(-2px);
-  }
+
   a {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: 2rem 1.6rem 1.75rem;
     color: var(--color-text);
     text-decoration: none;
-    padding-bottom: var(--space-3);
   }
-  a:hover h3 {
-    text-decoration: underline;
-  }
-  .kort :global(.bilde) {
-    aspect-ratio: 3 / 2;
-    border-radius: 0;
-    margin-bottom: var(--space-3);
-    border-bottom: 1px solid var(--color-border);
-  }
-  .kort :global(.bilde img) {
-    object-position: center 65%;
-    transition: transform 0.4s ease;
-  }
-  .kort:hover :global(.bilde img) {
-    transform: scale(1.03);
-  }
-  .nummer {
+
+  /* An orange line slides in under the tile on hover and focus. */
+  a::after {
+    content: '';
     position: absolute;
-    top: var(--space-2);
-    left: var(--space-2);
-    width: 2.25rem;
-    height: 2.25rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 3px;
     background: var(--color-orange);
-    color: var(--color-on-orange);
-    font-weight: 800;
-    box-shadow: 0 0 0 3px var(--color-white);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
   }
-  h3 {
-    margin: 0 var(--space-3) var(--space-1);
-    font-size: 1.25rem;
+
+  a:hover::after,
+  a:focus-visible::after {
+    transform: scaleX(1);
   }
-  .fagord {
-    margin: 0 var(--space-3) var(--space-2);
+
+  a:focus-visible {
+    outline-offset: -3px;
+  }
+
+  .rute-nr {
+    margin-bottom: 0.75rem;
     color: var(--color-muted);
-    font-size: 0.9375rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
   }
-  .tekst {
-    margin: 0 var(--space-3);
+
+  h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.375rem;
   }
-  .mer {
-    margin: auto var(--space-3) 0;
-    padding-top: var(--space-2);
+
+  p {
+    margin: 0 0 1.25rem;
+    color: var(--color-muted);
+    font-size: 0.9875rem;
+    line-height: 1.55;
+  }
+
+  .rute-mer {
+    margin-top: auto;
     color: var(--color-accent);
+    font-size: 0.8125rem;
     font-weight: 800;
-    font-size: 1.25rem;
-    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
+
+  a:hover h3 {
+    color: var(--color-orange-dark);
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .kort,
-    .kort :global(.bilde img) {
+    a::after {
       transition: none;
-    }
-    .kort:hover,
-    .kort:focus-within {
-      transform: none;
-    }
-    .kort:hover :global(.bilde img) {
-      transform: none;
     }
   }
 </style>

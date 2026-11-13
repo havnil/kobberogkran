@@ -1,0 +1,83 @@
+---
+// Full-width chocolate band with the service-van illustration and one big title at the bottom left.
+import Illustrasjon from './Illustrasjon.astro';
+import type { Tekster } from '../lib/innhold';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['band'];
+}
+
+const { locale, tekst } = Astro.props;
+---
+
+<section class="band stemning" aria-labelledby="band-tittel">
+  <Illustrasjon class="stemning-bilde" src="/images/uploads/illustrasjon-eirik.svg" width={800} height={1000} locale={locale} plassholder />
+  <div class="ramme stemning-tekst">
+    <p class="eyebrow">{tekst.eyebrow}</p>
+    <h2 id="band-tittel" class="display">
+      {tekst.tittel}
+      <span class="aksent">{tekst.tittelAksent}</span>
+    </h2>
+  </div>
+</section>
+
+<style>
+  .stemning {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: flex-end;
+    min-height: 34rem;
+    overflow: hidden;
+  }
+
+  .stemning :global(.stemning-bilde) {
+    position: absolute;
+    z-index: -2;
+    top: 0;
+    right: 0;
+    width: min(100%, 44rem);
+    height: 100%;
+    border-radius: 0;
+    background: var(--color-brown);
+  }
+
+  .stemning :global(.stemning-bilde img) {
+    object-position: center 40%;
+  }
+
+  .stemning :global(.stemning-bilde .illustrasjon-merke) {
+    left: auto;
+    right: 5rem;
+    top: var(--space-3);
+    bottom: auto;
+  }
+
+  /* Brown from the left and from below, so the cream title always has full contrast. */
+  .stemning::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(0deg, var(--color-brown) 0%, rgb(74 36 18 / 0.85) 30%, rgb(74 36 18 / 0) 70%),
+      linear-gradient(90deg, var(--color-brown) 0%, var(--color-brown) 35%, rgb(74 36 18 / 0.35) 75%, rgb(74 36 18 / 0.1) 100%);
+  }
+
+  .stemning-tekst {
+    padding-block: 5rem 4rem;
+  }
+
+  h2.display {
+    max-width: 16ch;
+    font-size: clamp(2.25rem, 7vw, 6rem);
+  }
+
+  @media (min-width: 1000px) {
+    .stemning {
+      min-height: 70vh;
+    }
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+// «I bilen / Servicebilen»: what is always in the van, as numbered rows with a bar for how often it is used
+// and a value on the right. The list is a draft until Eirik confirms it (`bekreftet`).
+import type { Tekster } from '../lib/innhold';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['bil'];
+}
+
+const { locale, tekst } = Astro.props;
+const utkast = !tekst.bekreftet;
+---
+
+<section class="seksjon" id="bilen" aria-labelledby="bil-tittel">
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{tekst.eyebrow}</p>
+        <h2 id="bil-tittel" class="display">{tekst.tittel}</h2>
+      </div>
+      <p class="hode-ingress">
+        {tekst.ingress}
+        {utkast && <small class="plassholder-merke" data-plassholder>{ui[locale].plassholderMerke}</small>}
+      </p>
+    </div>
+    <ol class="bil-liste">
+      {
+        tekst.utstyr.map((u, i) => (
+          <li class="vis">
+            <span class:list={['bil-nr', { forste: i === 0 }]} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="bil-navn">
+              <strong>{u.navn}</strong>
+              <span>{u.under}</span>
+            </span>
+            <span class="bil-bruk">
+              <span class="visuelt-skjult">{tekst.brukAv.replace('{n}', String(u.bruk))}</span>
+              {Array.from({ length: u.bruk }, () => <span class="strek" aria-hidden="true" />)}
+            </span>
+            <span class="bil-verdi tall">
+              {u.verdi}
+              {u.enhet && <span class="enhet">{u.enhet}</span>}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .bil-liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      'nr navn verdi'
+      'nr bruk bruk';
+    align-items: center;
+    gap: 0.5rem var(--space-3);
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .bil-nr {
+    grid-area: nr;
+    justify-self: start;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .bil-nr.forste {
+    position: relative;
+    isolation: isolate;
+    padding: 0.35rem 0.9rem;
+    color: var(--color-on-orange);
+  }
+
+  .bil-nr.forste::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-orange);
+    transform: skewX(-12deg);
+  }
+
+  .bil-navn {
+    grid-area: navn;
+    display: grid;
+    line-height: 1.3;
+  }
+
+  .bil-navn strong {
+    font-size: 1.0625rem;
+    font-weight: 800;
+  }
+
+  .bil-navn span {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+  }
+
+  .bil-bruk {
+    grid-area: bruk;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .strek {
+    width: 1.75rem;
+    height: 0.7rem;
+    background: var(--color-orange);
+    transform: skewX(-20deg);
+  }
+
+  .bil-verdi {
+    grid-area: verdi;
+    justify-self: end;
+    font-size: 1.0625rem;
+    white-space: nowrap;
+  }
+
+  .bil-verdi .enhet {
+    font-size: 0.8125rem;
+  }
+
+  .plassholder-merke {
+    margin-left: 0.5rem;
+  }
+
+  @media (min-width: 900px) {
+    li {
+      grid-template-columns: 5.5rem minmax(0, 1.3fr) minmax(0, 1fr) auto;
+      grid-template-areas: 'nr navn bruk verdi';
+      padding: 1.2rem 0;
+    }
+  }
+</style>

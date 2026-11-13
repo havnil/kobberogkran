@@ -1,4 +1,5 @@
 ---
+// «Slik bestiller du»: three panels with coloured top lines (orange, copper, brown).
 import type { Tekster } from '../lib/innhold';
 
 interface Props {
@@ -6,92 +7,87 @@ interface Props {
 }
 
 const { tekst } = Astro.props;
-// One drawn icon per step (send a request, the call back, job done). Steps beyond three get none.
-const ANTALL_IKONER = 3;
 ---
 
 <section class="seksjon" aria-labelledby="steg-tittel">
-  <h2 id="steg-tittel">{tekst.tittel}</h2>
-  <ol>
-    {
-      tekst.steg.map((steg, i) => (
-        <li>
-          <div class="topp">
-            {i < ANTALL_IKONER && <img class="ikon" src={`/images/uploads/ikon-steg-${i + 1}.svg`} alt="" width="200" height="200" loading="lazy" decoding="async" />}
-            <span class="nummer" aria-hidden="true">{i + 1}</span>
-          </div>
-          <h3>{steg.tittel}</h3>
-          <p>{steg.tekst}</p>
-        </li>
-      ))
-    }
-  </ol>
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{tekst.eyebrow}</p>
+        <h2 id="steg-tittel" class="display">{tekst.tittel}</h2>
+      </div>
+      <p class="hode-ingress">{tekst.ingress}</p>
+    </div>
+    <ol class="steg">
+      {
+        tekst.steg.map((steg, i) => (
+          <li class="vis" data-steg={(i % 3) + 1}>
+            <p class="steg-nr">
+              {tekst.stegEtikett} {i + 1}
+            </p>
+            <h3 class="skra">{steg.tittel}</h3>
+            <p>{steg.tekst}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
 </section>
 
 <style>
-  h2 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-  }
-  ol {
+  .steg {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--space-3);
+    gap: 2px;
   }
+
   li {
-    position: relative;
+    --linje: var(--color-orange);
+    padding: 2.25rem 1.9rem 2.5rem;
     background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    padding: var(--space-3);
+    border-top: 4px solid var(--linje);
+    box-shadow:
+      0 0 0 1px var(--color-border),
+      0 20px 40px -36px rgb(74 36 18 / 0.5);
   }
-  .topp {
-    position: relative;
-    width: 5.5rem;
-    margin-bottom: var(--space-3);
+
+  li[data-steg='2'] {
+    --linje: var(--color-copper);
   }
-  .ikon {
-    display: block;
-    width: 5.5rem;
-    height: 5.5rem;
+
+  li[data-steg='3'] {
+    --linje: var(--color-brown);
   }
-  .nummer {
-    display: grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    background: var(--color-orange);
-    color: var(--color-on-orange);
-    font-weight: 800;
+
+  .steg-nr {
+    margin: 0 0 1.25rem;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
-  .ikon + .nummer {
-    position: absolute;
-    right: -0.75rem;
-    bottom: -0.25rem;
-    box-shadow: 0 0 0 3px var(--color-white);
+
+  li[data-steg='3'] .steg-nr {
+    color: var(--color-brown);
   }
+
   h3 {
-    margin: 0 0 var(--space-1);
-    font-size: 1.25rem;
+    margin: 0 0 0.75rem;
+    font-size: 1.375rem;
   }
-  p {
+
+  li > p:last-child {
     margin: 0;
+    color: var(--color-muted);
   }
-  @media (min-width: 720px) {
-    ol {
+
+  @media (min-width: 900px) {
+    .steg {
       grid-template-columns: repeat(3, 1fr);
-    }
-    /* A dashed copper line joins the steps. */
-    li:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      top: calc(var(--space-3) + 2.75rem);
-      left: calc(100% + 1px);
-      width: var(--space-3);
-      border-top: 3px dashed var(--color-border-strong);
     }
   }
 </style>

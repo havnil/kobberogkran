@@ -135,13 +135,63 @@ collections:
                 fields:
                   - { name: stedslinje, label: Stedslinje, widget: string }
                   - { name: tittel, label: Stor tittel, widget: string }
+                  - { name: tittelAksent, label: Siste linje i tittelen (aksentfarge; må være slutten av tittelen), widget: string }
                   - { name: ingress, label: Én setning om posisjonen, widget: text }
                   - { name: lover, label: Tre løfter som kan holdes, widget: list, field: { name: lofte, label: Løfte, widget: string } }
+                  - name: sesongmerke
+                    label: Sesongmerke over tittelen (lenker til hyttesiden)
+                    widget: object
+                    fields:
+                      - { name: host, label: Høst og vinter, widget: object, fields: [{ name: tekst, label: Tekst, widget: string }, { name: anker, label: Avsnitt på hyttesiden (id), widget: string }] }
+                      - { name: var, label: Vår og sommer, widget: object, fields: [{ name: tekst, label: Tekst, widget: string }, { name: anker, label: Avsnitt på hyttesiden (id), widget: string }] }
+              - name: nokkeltall
+                label: Nøkkeltall-kortet i hero
+                widget: object
+                fields:
+                  - { name: eyebrow, label: Overskrift, widget: string }
+                  - { name: merke, label: Merke til høyre, widget: string }
+                  - { name: timepris, label: Etikett - timepris, widget: string }
+                  - { name: tank, label: Etikett - varmtvannstank, widget: string }
+                  - { name: servicebil, label: Etikett - servicebil, widget: string }
+                  - { name: kjoretid, label: Etikett - kjøretid, widget: string }
+                  - { name: kjoretidEnhet, label: Enhet - kjøretid, widget: string }
+                  - { name: prisForStart, label: Nederste linje, widget: string }
               - name: tjenester
                 label: Hva trenger du hjelp med?
                 widget: object
                 fields:
+                  - { name: tittel, label: Tittel (tjenestesiden), widget: string }
+                  - { name: eyebrow, label: 'Etikett over tittelen ({antall} = antall ruter)', widget: string }
+                  - { name: ruterTittel, label: Tittel på forsiden, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: seMer, label: Lenketekst på rutene, widget: string }
+                  - name: ruter
+                    label: Rutene
+                    widget: list
+                    fields:
+                      - { name: tittel, label: Tittel, widget: string }
+                      - { name: tekst, label: Én linje, widget: string }
+                      - { name: tjeneste, label: Tjeneste (oversettelsesnøkkel), widget: string }
+                      - { name: anker, label: Avsnitt på tjenestesiden (id; kan stå tomt), widget: string, required: false }
+              - name: bil
+                label: I bilen (servicebilen)
+                widget: object
+                fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
                   - { name: tittel, label: Tittel, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: bekreftet, label: Bekreftet av Eirik, widget: boolean, default: false }
+                  - { name: brukEtikett, label: Etikett - bruk, widget: string }
+                  - { name: brukAv, label: 'Skjermlesertekst for stolpene ({n})', widget: string }
+                  - name: utstyr
+                    label: Utstyr
+                    widget: list
+                    fields:
+                      - { name: navn, label: Navn, widget: string }
+                      - { name: under, label: Undertekst, widget: string }
+                      - { name: bruk, label: Hvor ofte i bruk (1-5), widget: number, value_type: int, min: 1, max: 5 }
+                      - { name: verdi, label: Verdi, widget: string }
+                      - { name: enhet, label: Enhet, widget: string, required: false }
               - name: varmtvann
                 label: Fastpris på varmtvannstank
                 widget: object
@@ -153,6 +203,45 @@ collections:
                   - { name: med, label: Det som er med, widget: list, field: { name: punkt, label: Punkt, widget: string } }
                   - { name: ikkeMedTittel, label: Tittel - ikke med, widget: string }
                   - { name: ikkeMed, label: Det som ikke er med, widget: list, field: { name: punkt, label: Punkt, widget: string } }
+                  - { name: eyebrow, label: Etikett, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: faktaTotal, label: Etikett - typisk total, widget: string }
+                  - { name: faktaTid, label: Etikett - tid, widget: string }
+                  - { name: faktaTidVerdi, label: Verdi - tid, widget: string }
+                  - { name: faktaDok, label: Etikett - dokumentasjon, widget: string }
+                  - { name: faktaDokVerdi, label: Verdi - dokumentasjon, widget: string }
+                  - { name: knappBilde, label: Knapp - send bilde, widget: string }
+                  - { name: knappLes, label: Knapp - les mer, widget: string }
+              - name: tanksjekk
+                label: Tanksjekk (alder på varmtvannstanken)
+                widget: object
+                fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: arEtikett, label: Etikett - årstall, widget: string }
+                  - { name: arHjelp, label: Hjelpetekst - årstall, widget: string }
+                  - { name: knapp, label: Knapp, widget: string }
+                  - { name: alderEnhet, label: Enhet - år, widget: string }
+                  - { name: maalerGrense, label: Merke på grensen, widget: string }
+                  - { name: svarStart, label: Svar før noe er skrevet, widget: text }
+                  - { name: svarOk, label: 'Svar - følg med ({alder})', widget: text }
+                  - { name: svarSnart, label: 'Svar - bytt snart ({alder})', widget: text }
+                  - { name: svarNaa, label: 'Svar - bytt nå ({alder})', widget: text }
+                  - { name: svarUgyldig, label: 'Svar - ugyldig årstall ({fra}, {til})', widget: text }
+                  - { name: forbehold, label: Forbehold, widget: string }
+                  - { name: personvern, label: Om personvern, widget: string }
+                  - { name: utenJs, label: Tekst uten JavaScript, widget: text }
+                  - { name: snartAr, label: Alder - planlegg bytte, widget: number, value_type: int }
+                  - { name: grenseAr, label: Alder - bytt nå (forsikring), widget: number, value_type: int }
+                  - { name: maksAr, label: Måleren slutter på, widget: number, value_type: int }
+              - name: band
+                label: Brunt bånd
+                widget: object
+                fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: tittelAksent, label: Siste linje (aksentfarge), widget: string }
               - name: priser
                 label: Priser i korte trekk
                 widget: object
@@ -167,7 +256,10 @@ collections:
                 label: Slik bestiller du
                 widget: object
                 fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
                   - { name: tittel, label: Tittel, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: stegEtikett, label: Ordet «Steg», widget: string }
                   - name: steg
                     label: Stegene
                     widget: list
@@ -192,21 +284,43 @@ collections:
                 label: Områder
                 widget: object
                 fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
                   - { name: tittel, label: Tittel, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: base, label: Merke på basen, widget: string }
+                  - { name: utenfor, label: Utenfor området, widget: string }
+                  - { name: omtaleEyebrow, label: Etikett - omtaler, widget: string }
               - name: skjema
                 label: Skjemaseksjonen
                 widget: object
                 fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
                   - { name: tittel, label: Tittel, widget: string }
                   - { name: merknad, label: Merknad, widget: text }
+                  - { name: ringDirekte, label: Over telefonnummeret, widget: string }
           - name: sider
             label: Tjenestesider og øvrige sider
             widget: object
             fields:
+              - name: felles
+                label: Felles (meny og bunntekst)
+                widget: object
+                fields:
+                  - { name: menyVarmtvannstank, label: Menypunkt - varmtvannstank, widget: string }
+                  - { name: menyLekker, label: Menypunkt - lekker det, widget: string }
+                  - { name: bunntekst, label: Setning i bunnteksten, widget: text }
+                  - { name: kontaktTittel, label: Bunntekst - kontakt, widget: string }
+                  - { name: adresseTittel, label: Bunntekst - adresse, widget: string }
               - name: tjeneste
                 label: Mal for tjenestesider
                 widget: object
                 fields:
+                  - { name: tittelSted, label: Tittel - etter tjenestenavnet, widget: string }
+                  - { name: tittelAksent, label: Tittel - siste linje (aksentfarge), widget: string }
+                  - { name: prisForStart, label: Nederste linje i faktakortet, widget: string }
+                  - { name: faqEyebrow, label: Etikett - spørsmål og svar, widget: string }
+                  - { name: andreEyebrow, label: Etikett - andre tjenester, widget: string }
+                  - { name: omraderEyebrow, label: Etikett - steder, widget: string }
                   - { name: faktaTittel, label: Tittel - fakta, widget: string }
                   - { name: sideboksTittel, label: Sideboks - tittel, widget: string }
                   - { name: sideboksTekst, label: Sideboks - tekst, widget: text }
@@ -221,6 +335,8 @@ collections:
                   - { name: kveldHelgNavn, label: Navn - kveld og helg, widget: string }
                   - { name: kveldHelgVerdi, label: Verdi - kveld og helg, widget: string }
                   - { name: mvaNote, label: Merknad om mva, widget: string }
+                  - { name: listeEyebrow, label: Etikett - prisliste, widget: string }
+                  - { name: listeTittel, label: Tittel - prisliste, widget: string }
               - name: bad
                 label: Badsiden
                 widget: object
@@ -241,6 +357,8 @@ collections:
                   - { name: telefonNavn, label: Navn - telefon, widget: string }
                   - { name: epostNavn, label: Navn - e-post, widget: string }
                   - { name: adresseNavn, label: Navn - adresse, widget: string }
+                  - { name: kortEyebrow, label: Kontaktkortet - etikett, widget: string }
+                  - { name: rolle, label: Kontaktkortet - rolle, widget: string }
           - name: lekkerNaa
             label: Det lekker nå
             widget: object

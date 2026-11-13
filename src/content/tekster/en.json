@@ -15,10 +15,137 @@
         "A price before the job starts",
         "Turns up when agreed",
         "You deal with Eirik all the way"
-      ]
+      ],
+      "tittelAksent": "Aurskog-Høland",
+      "sesongmerke": {
+        "host": {
+          "tekst": "Winterising the cabin: sign up now",
+          "anker": "winterising-in-autumn"
+        },
+        "var": {
+          "tekst": "Opening the cabin: book the water on",
+          "anker": "opening-in-spring"
+        }
+      }
+    },
+    "nokkeltall": {
+      "eyebrow": "Key figures",
+      "merke": "Incl. VAT",
+      "timepris": "Hourly rate",
+      "tank": "Water heater, work",
+      "servicebil": "Service van",
+      "kjoretid": "Drive from Hemnes",
+      "kjoretidEnhet": "min",
+      "prisForStart": "Price before we start"
     },
     "tjenester": {
-      "tittel": "What do you need help with?"
+      "tittel": "What do you need help with?",
+      "eyebrow": "{antall} jobs",
+      "ruterTittel": "What has happened?",
+      "ingress": "Pick the one that fits best. Each tile goes to the page about the job, with a form at the bottom.",
+      "seMer": "See more",
+      "ruter": [
+        {
+          "tittel": "A leak",
+          "tekst": "A dripping tap, water under the sink or damp where it should be dry.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": ""
+        },
+        {
+          "tittel": "Blocked drain",
+          "tekst": "A sink, floor drain or toilet that will not drain.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": "typical-jobs"
+        },
+        {
+          "tittel": "Water heater",
+          "tekst": "Replaced at a fixed price for the work when the tank stays in the same place.",
+          "tjeneste": "varmtvannstank",
+          "anker": ""
+        },
+        {
+          "tittel": "New bathroom",
+          "tekst": "The plumbing part of the bathroom, with a written quote after a site visit.",
+          "tjeneste": "bad",
+          "anker": ""
+        },
+        {
+          "tittel": "Brown water and wells",
+          "tekst": "Pump, pressure tank, filter and water test.",
+          "tjeneste": "bronn-og-vann",
+          "anker": ""
+        },
+        {
+          "tittel": "The cabin",
+          "tekst": "Winterising in autumn and the water back on in spring.",
+          "tjeneste": "hytte",
+          "anker": ""
+        },
+        {
+          "tittel": "Barns and farms",
+          "tekst": "Water for animals and farm buildings, from a well or the mains.",
+          "tjeneste": "bronn-og-vann",
+          "anker": "barns-and-farms"
+        },
+        {
+          "tittel": "Businesses and housing co-ops",
+          "tekst": "Service and repairs for businesses, housing co-operatives and owner associations.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": ""
+        }
+      ]
+    },
+    "bil": {
+      "eyebrow": "In the van",
+      "tittel": "The service van",
+      "ingress": "What Eirik uses most is always in the van, so more jobs are done on the first visit.",
+      "bekreftet": false,
+      "brukEtikett": "Use",
+      "brukAv": "Used {n} out of 5",
+      "utstyr": [
+        {
+          "navn": "Common parts",
+          "under": "Seals, fittings, stopcocks and valves",
+          "bruk": 5,
+          "verdi": "100+",
+          "enhet": "parts"
+        },
+        {
+          "navn": "Press tool",
+          "under": "Joins copper and plastic pipes without an open flame",
+          "bruk": 4,
+          "verdi": "15–54",
+          "enhet": "mm"
+        },
+        {
+          "navn": "Drain camera",
+          "under": "Looks inside the drain before anything is opened up",
+          "bruk": 3,
+          "verdi": "30",
+          "enhet": "m"
+        },
+        {
+          "navn": "Leak detection",
+          "under": "Moisture meter and thermal camera",
+          "bruk": 3,
+          "verdi": "2",
+          "enhet": "pcs"
+        },
+        {
+          "navn": "Frost protection",
+          "under": "Thawing frozen pipes and heating cable",
+          "bruk": 2,
+          "verdi": "Nov–Mar",
+          "enhet": ""
+        },
+        {
+          "navn": "Water test kit",
+          "under": "A quick test on site, full analysis at a laboratory",
+          "bruk": 2,
+          "verdi": "1",
+          "enhet": "kit"
+        }
+      ]
     },
     "varmtvann": {
       "tittel": "Fixed price for replacing a water heater",
@@ -40,7 +167,42 @@
         "A new floor drain or leak protection to current standards",
         "An electrician, if the tank is to be hard-wired",
         "Difficult access, such as a cramped cellar or crawl space"
-      ]
+      ],
+      "eyebrow": "Fixed price · water heater",
+      "ingress": "When the new tank goes in the same place as the old one, the work is a fixed price. Send a photo of the rating plate and the floor around the tank, and Eirik can tell whether the fixed price applies.",
+      "faktaTotal": "Typical total",
+      "faktaTid": "Time",
+      "faktaTidVerdi": "1 day",
+      "faktaDok": "Documentation",
+      "faktaDokVerdi": "FDV",
+      "knappBilde": "Send a photo of the tank",
+      "knappLes": "Read more"
+    },
+    "tanksjekk": {
+      "eyebrow": "Tank check",
+      "tittel": "Is your water heater old?",
+      "ingress": "Find the year of manufacture on the rating plate and type it in. The gauge shows its age against what insurers tend to expect.",
+      "arEtikett": "Year made · from the rating plate",
+      "arHjelp": "Often shown as «Prod.» or as the first digits of the serial number.",
+      "knapp": "Use in my request",
+      "alderEnhet": "yrs",
+      "maalerGrense": "Insurance",
+      "svarStart": "Type in the year to see how old the tank is.",
+      "svarOk": "The tank is {alder} years old. Keep an eye on it: look for rust, drips and water under the tank.",
+      "svarSnart": "The tank is {alder} years old and getting close to the age insurers treat as old. Plan a replacement in the next year or two.",
+      "svarNaa": "The tank is {alder} years old. Many insurers reduce the payout for leaks from tanks this old. Replace it now, before it leaks.",
+      "svarUgyldig": "Type a year between {fra} and {til}.",
+      "forbehold": "A guide only · check your insurance terms",
+      "personvern": "The year stays in your browser. Nothing is stored or sent.",
+      "utenJs": "Under 15 years: keep an eye on the tank. 15 to 19 years: plan a replacement. 20 years or more: replace it now. Many insurers treat a tank as old after about 20 years.",
+      "snartAr": 15,
+      "grenseAr": 20,
+      "maksAr": 30
+    },
+    "band": {
+      "eyebrow": "Kobber og Kran · Hemnes",
+      "tittel": "On the road in Hemnes and",
+      "tittelAksent": "Aurskog-Høland"
     },
     "priser": {
       "tittel": "Prices at a glance",
@@ -65,7 +227,10 @@
           "tittel": "The job is done and documented",
           "tekst": "Eirik turns up when agreed, tidies up after himself and gives you documentation of the work."
         }
-      ]
+      ],
+      "eyebrow": "From request to finished job",
+      "ingress": "You deal with Eirik all the way. No middlemen.",
+      "stegEtikett": "Step"
     },
     "omEirik": {
       "tittel": "About Eirik",
@@ -82,14 +247,28 @@
       ]
     },
     "omrader": {
-      "tittel": "Where we work"
+      "tittel": "Where we work",
+      "eyebrow": "Areas",
+      "ingress": "Based in Hemnes. Eirik drives all over Aurskog-Høland and to Lillestrøm.",
+      "base": "Base",
+      "utenfor": "Outside the area: larger jobs, by arrangement",
+      "omtaleEyebrow": "Reviews"
     },
     "skjema": {
       "tittel": "Send a request",
-      "merknad": "It takes half a minute. Tell us what it is, where the job is and how Eirik can reach you. You can add photos afterwards, and e-mail is optional. Leaking right now? Turn off the water and call instead."
+      "merknad": "It takes half a minute. Tell us what it is, where the job is and how Eirik can reach you. You can add photos afterwards, and e-mail is optional. Leaking right now? Turn off the water and call instead.",
+      "eyebrow": "Request",
+      "ringDirekte": "Or call directly"
     }
   },
   "sider": {
+    "felles": {
+      "menyVarmtvannstank": "Water heater",
+      "menyLekker": "A leak?",
+      "bunntekst": "Plumber in Hemnes, Aurskog-Høland. Service, water heaters, wells, cabins and bathrooms.",
+      "kontaktTittel": "Contact",
+      "adresseTittel": "Address"
+    },
     "tjeneste": {
       "faktaTittel": "In short",
       "sideboksTittel": "Quickest way to get help",
@@ -97,12 +276,20 @@
       "faqTittel": "Common questions",
       "andreTittel": "Other things Eirik can help with",
       "omraderTittel": "Where we work",
-      "skjemaEyebrow": "Request"
+      "skjemaEyebrow": "Request",
+      "tittelSted": "in Hemnes and",
+      "tittelAksent": "Aurskog-Høland",
+      "prisForStart": "Price before we start",
+      "faqEyebrow": "Questions and answers",
+      "andreEyebrow": "Goes with",
+      "omraderEyebrow": "Areas"
     },
     "priser": {
       "kveldHelgNavn": "Evenings and weekends",
       "kveldHelgVerdi": "by arrangement",
-      "mvaNote": "All prices include 25% VAT. Businesses get an invoice with VAT shown separately."
+      "mvaNote": "All prices include 25% VAT. Businesses get an invoice with VAT shown separately.",
+      "listeEyebrow": "Price list",
+      "listeTittel": "Prices incl. VAT"
     },
     "bad": {
       "prosessTittel": "How it works",
@@ -138,7 +325,9 @@
     "kontakt": {
       "telefonNavn": "Phone and WhatsApp",
       "epostNavn": "E-mail",
-      "adresseNavn": "Address"
+      "adresseNavn": "Address",
+      "kortEyebrow": "Contact",
+      "rolle": "Owner and plumber"
     }
   },
   "lekkerNaa": {

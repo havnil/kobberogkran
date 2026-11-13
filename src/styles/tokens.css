@@ -46,6 +46,14 @@
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-heading: "Inter", system-ui, sans-serif;  /* weight 800-900, letter-spacing -0.02em */
   --font-brand: "Rubik", "Inter", sans-serif;      /* only the set B wordmark and large uppercase titles */
+  /* Large display titles: Rubik 800, uppercase, slanted (the browser obliques the upright face). */
+  --font-display: "Rubik", "Inter", system-ui, sans-serif;
+  /* Eyebrows, numbering, labels and figures. The system's own monospace: no font file to load. */
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Consolas, "Liberation Mono", Menlo, monospace;
+
+  /* Copper: decorative graphics only (the pipe, step lines). Never text. */
+  --color-copper: #B5652B;
+  --color-copper-light: #E09A63;
 
   /* Shape */
   --radius-card: 18px;
@@ -58,4 +66,10 @@
   --space-5: 4rem;
 
   --content-width: 70rem;
+
+  /* Layout: a 1224 px content frame, a fixed-height header and generous section spacing. */
+  --ramme: 76.5rem;
+  --gutter: 1rem;
+  --header-h: 4.5rem;
+  --seksjon-luft: 5.25rem;
 }

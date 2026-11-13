@@ -20,6 +20,7 @@ export const tjenesteSchema = z.object({
 });
 
 const stegSchema = z.object({ tittel: z.string(), tekst: z.string() });
+const lenkeSchema = z.object({ tekst: z.string(), anker: z.string() });
 
 /** Copy for the front page sections. Working titles from the spec until a human writes the final text. */
 export const forsideSchema = z.object({
@@ -28,10 +29,48 @@ export const forsideSchema = z.object({
     stedslinje: z.string(),
     tittel: z.string(),
     ingress: z.string(),
+    /** The last line of the title, shown in the accent colour. Must be the end of `tittel`. */
+    tittelAksent: z.string(),
     /** The three promises in the fact box. */
     lover: z.array(z.string()),
+    /** Seasonal badge above the title: `host` in autumn/winter, `var` in spring/summer. `anker` is a heading id on the cabin page. */
+    sesongmerke: z.object({ host: lenkeSchema, var: lenkeSchema }),
   }),
-  tjenester: z.object({ tittel: z.string() }),
+  /** The key figures card that hangs from the copper pipe in the hero. Values come from `firma`. */
+  nokkeltall: z.object({
+    eyebrow: z.string(),
+    merke: z.string(),
+    timepris: z.string(),
+    tank: z.string(),
+    servicebil: z.string(),
+    kjoretid: z.string(),
+    kjoretidEnhet: z.string(),
+    prisForStart: z.string(),
+  }),
+  tjenester: z.object({
+    /** Title of the services overview page. */
+    tittel: z.string(),
+    /** Front page: eyebrow (`{antall}` is the number of tiles), title, intro and the tiles. */
+    eyebrow: z.string(),
+    ruterTittel: z.string(),
+    ingress: z.string(),
+    seMer: z.string(),
+    /** `tjeneste` is a service translationKey; `anker` a heading id on that page (may be empty). */
+    ruter: z.array(z.object({ tittel: z.string(), tekst: z.string(), tjeneste: z.string(), anker: z.string() })),
+  }),
+  /** «I bilen»: what is always in the van. `bruk` is how often it is used, 1 to 5. Drafts until Eirik confirms (`bekreftet`). */
+  bil: z.object({
+    eyebrow: z.string(),
+    tittel: z.string(),
+    ingress: z.string(),
+    bekreftet: z.boolean(),
+    brukEtikett: z.string(),
+    /** Screen reader text for the bars. Placeholder: {n}. */
+    brukAv: z.string(),
+    utstyr: z.array(
+      z.object({ navn: z.string(), under: z.string(), bruk: z.number().int().min(1).max(5), verdi: z.string(), enhet: z.string() }),
+    ),
+  }),
   varmtvann: z.object({
     tittel: z.string(),
     /** Label on the big fixed price: «arbeid». */
@@ -41,7 +80,44 @@ export const forsideSchema = z.object({
     med: z.array(z.string()),
     ikkeMedTittel: z.string(),
     ikkeMed: z.array(z.string()),
+    /** The featured block on the front page. */
+    eyebrow: z.string(),
+    ingress: z.string(),
+    faktaTotal: z.string(),
+    faktaTid: z.string(),
+    faktaTidVerdi: z.string(),
+    faktaDok: z.string(),
+    faktaDokVerdi: z.string(),
+    knappBilde: z.string(),
+    knappLes: z.string(),
   }),
+  /** «Tanksjekk»: the tank-age calculator. Runs in the browser only; nothing is stored or sent. */
+  tanksjekk: z.object({
+    eyebrow: z.string(),
+    tittel: z.string(),
+    ingress: z.string(),
+    arEtikett: z.string(),
+    arHjelp: z.string(),
+    knapp: z.string(),
+    alderEnhet: z.string(),
+    maalerGrense: z.string(),
+    /** Answers. Placeholders: {alder}, {fra}, {til}. */
+    svarStart: z.string(),
+    svarOk: z.string(),
+    svarSnart: z.string(),
+    svarNaa: z.string(),
+    svarUgyldig: z.string(),
+    forbehold: z.string(),
+    personvern: z.string(),
+    /** Shown without JavaScript instead of the calculator. */
+    utenJs: z.string(),
+    /** Years: from `snartAr` «plan a replacement», from `grenseAr` «replace now» (what insurers tend to expect). */
+    snartAr: z.number().int().positive(),
+    grenseAr: z.number().int().positive(),
+    maksAr: z.number().int().positive(),
+  }),
+  /** The full-width brown band. */
+  band: z.object({ eyebrow: z.string(), tittel: z.string(), tittelAksent: z.string() }),
   priser: z.object({
     tittel: z.string(),
     timepris: z.string(),
@@ -50,7 +126,7 @@ export const forsideSchema = z.object({
     regneeksempel: z.string(),
     delerNote: z.string(),
   }),
-  steg: z.object({ tittel: z.string(), steg: z.array(stegSchema) }),
+  steg: z.object({ eyebrow: z.string(), tittel: z.string(), ingress: z.string(), stegEtikett: z.string(), steg: z.array(stegSchema) }),
   omEirik: z.object({
     tittel: z.string(),
     tekst: z.string(),
@@ -59,13 +135,35 @@ export const forsideSchema = z.object({
   }),
   /** Documentation (FDV and wet room) shown under «Om Eirik». */
   dokumentasjon: z.object({ tittel: z.string(), punkter: z.array(z.string()) }),
-  omrader: z.object({ tittel: z.string() }),
-  skjema: z.object({ tittel: z.string(), merknad: z.string() }),
+  omrader: z.object({
+    eyebrow: z.string(),
+    tittel: z.string(),
+    ingress: z.string(),
+    base: z.string(),
+    utenfor: z.string(),
+    omtaleEyebrow: z.string(),
+  }),
+  skjema: z.object({ eyebrow: z.string(), tittel: z.string(), merknad: z.string(), ringDirekte: z.string() }),
 });
 
 /** Copy for the service template and the other pages. Working titles until a human writes the final text. */
 export const siderSchema = z.object({
+  /** Shared by every page: the two extra menu items and the footer. */
+  felles: z.object({
+    menyVarmtvannstank: z.string(),
+    menyLekker: z.string(),
+    bunntekst: z.string(),
+    kontaktTittel: z.string(),
+    adresseTittel: z.string(),
+  }),
   tjeneste: z.object({
+    /** The hero title reads `<service> <tittelSted> <tittelAksent>`, the last part in the accent colour. */
+    tittelSted: z.string(),
+    tittelAksent: z.string(),
+    prisForStart: z.string(),
+    faqEyebrow: z.string(),
+    andreEyebrow: z.string(),
+    omraderEyebrow: z.string(),
     faktaTittel: z.string(),
     sideboksTittel: z.string(),
     sideboksTekst: z.string(),
@@ -80,6 +178,8 @@ export const siderSchema = z.object({
     kveldHelgVerdi: z.string(),
     /** Note under the prices: all prices include VAT. */
     mvaNote: z.string(),
+    listeEyebrow: z.string(),
+    listeTittel: z.string(),
   }),
   bad: z.object({
     prosessTittel: z.string(),
@@ -91,6 +191,8 @@ export const siderSchema = z.object({
     telefonNavn: z.string(),
     epostNavn: z.string(),
     adresseNavn: z.string(),
+    kortEyebrow: z.string(),
+    rolle: z.string(),
   }),
 });
 

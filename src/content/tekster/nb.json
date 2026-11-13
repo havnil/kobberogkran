@@ -15,10 +15,137 @@
         "Pris før jobben starter",
         "Kommer når det er avtalt",
         "Du har med Eirik å gjøre hele veien"
-      ]
+      ],
+      "tittelAksent": "Aurskog-Høland",
+      "sesongmerke": {
+        "host": {
+          "tekst": "Vinterstengning av hytta: meld deg på",
+          "anker": "vinterstengning-om-høsten"
+        },
+        "var": {
+          "tekst": "Oppstart av hytta: bestill vann på",
+          "anker": "åpning-om-våren"
+        }
+      }
+    },
+    "nokkeltall": {
+      "eyebrow": "Nøkkeltall",
+      "merke": "Med mva",
+      "timepris": "Timepris",
+      "tank": "Varmtvannstank, arbeid",
+      "servicebil": "Servicebil",
+      "kjoretid": "Kjøretid fra Hemnes",
+      "kjoretidEnhet": "min",
+      "prisForStart": "Pris før start"
     },
     "tjenester": {
-      "tittel": "Hva trenger du hjelp med?"
+      "tittel": "Hva trenger du hjelp med?",
+      "eyebrow": "{antall} oppdrag",
+      "ruterTittel": "Hva har skjedd?",
+      "ingress": "Velg det som ligner mest. Hver rute går til siden om jobben, med skjema nederst.",
+      "seMer": "Se mer",
+      "ruter": [
+        {
+          "tittel": "Det lekker",
+          "tekst": "Drypp fra kranen, vann under vasken eller fukt der det ikke skal være.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": ""
+        },
+        {
+          "tittel": "Tett avløp",
+          "tekst": "Vask, sluk eller do som ikke vil renne unna.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": "typiske-jobber"
+        },
+        {
+          "tittel": "Varmtvannstank",
+          "tekst": "Bytte til fastpris på arbeidet når tanken står på samme sted.",
+          "tjeneste": "varmtvannstank",
+          "anker": ""
+        },
+        {
+          "tittel": "Nytt bad",
+          "tekst": "Rørleggerdelen av badet, med skriftlig tilbud etter befaring.",
+          "tjeneste": "bad",
+          "anker": ""
+        },
+        {
+          "tittel": "Brunt vann og brønn",
+          "tekst": "Pumpe, trykktank, filter og vannprøve.",
+          "tjeneste": "bronn-og-vann",
+          "anker": ""
+        },
+        {
+          "tittel": "Hytta",
+          "tekst": "Vinterstengning om høsten og vann på igjen om våren.",
+          "tjeneste": "hytte",
+          "anker": ""
+        },
+        {
+          "tittel": "Fjøs og gård",
+          "tekst": "Vann til dyr og driftsbygning, fra brønn eller kommunalt nett.",
+          "tjeneste": "bronn-og-vann",
+          "anker": "fjøs-og-gård"
+        },
+        {
+          "tittel": "Bedrift og borettslag",
+          "tekst": "Service og reparasjon for bedrifter, borettslag og sameier.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": ""
+        }
+      ]
+    },
+    "bil": {
+      "eyebrow": "I bilen",
+      "tittel": "Servicebilen",
+      "ingress": "Det Eirik bruker mest, ligger alltid i bilen. Da blir flere jobber gjort på første besøk.",
+      "bekreftet": false,
+      "brukEtikett": "Bruk",
+      "brukAv": "Brukes {n} av 5",
+      "utstyr": [
+        {
+          "navn": "Vanlige deler",
+          "under": "Pakninger, koblinger, stoppekraner og ventiler",
+          "bruk": 5,
+          "verdi": "100+",
+          "enhet": "deler"
+        },
+        {
+          "navn": "Pressverktøy",
+          "under": "Skjøter kobber- og plastrør uten åpen flamme",
+          "bruk": 4,
+          "verdi": "15–54",
+          "enhet": "mm"
+        },
+        {
+          "navn": "Rørkamera",
+          "under": "Ser inn i avløpet før noe blir brutt opp",
+          "bruk": 3,
+          "verdi": "30",
+          "enhet": "m"
+        },
+        {
+          "navn": "Lekkasjesøk",
+          "under": "Fuktmåler og termokamera",
+          "bruk": 3,
+          "verdi": "2",
+          "enhet": "stk"
+        },
+        {
+          "navn": "Frostsikring",
+          "under": "Tining av frosne rør og varmekabel",
+          "bruk": 2,
+          "verdi": "nov–mar",
+          "enhet": ""
+        },
+        {
+          "navn": "Vannprøvesett",
+          "under": "Enkel prøve på stedet, full analyse hos laboratorium",
+          "bruk": 2,
+          "verdi": "1",
+          "enhet": "sett"
+        }
+      ]
     },
     "varmtvann": {
       "tittel": "Fastpris på bytte av varmtvannstank",
@@ -40,7 +167,42 @@
         "Nytt sluk eller lekkasjesikring etter dagens krav",
         "Elektriker, hvis tanken skal fast tilkobles",
         "Vanskelig adkomst, for eksempel trang kjeller eller krypkjeller"
-      ]
+      ],
+      "eyebrow": "Fastpris · varmtvannstank",
+      "ingress": "Står den nye tanken på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt tanken, så ser Eirik om fastprisen holder.",
+      "faktaTotal": "Typisk total",
+      "faktaTid": "Tid",
+      "faktaTidVerdi": "1 dag",
+      "faktaDok": "Dokumentasjon",
+      "faktaDokVerdi": "FDV",
+      "knappBilde": "Send bilde av tanken",
+      "knappLes": "Les mer"
+    },
+    "tanksjekk": {
+      "eyebrow": "Tanksjekk",
+      "tittel": "Er varmtvannstanken din gammel?",
+      "ingress": "Finn produksjonsåret på typeskiltet og skriv det inn. Måleren viser alderen mot det forsikringen pleier å forvente.",
+      "arEtikett": "Produksjonsår · fra typeskiltet",
+      "arHjelp": "Står ofte som «Prod.» eller som de første sifrene i serienummeret.",
+      "knapp": "Bruk i forespørselen",
+      "alderEnhet": "år",
+      "maalerGrense": "Forsikring",
+      "svarStart": "Skriv inn årstallet, så ser du hvor gammel tanken er.",
+      "svarOk": "Tanken er {alder} år. Følg med på den: se etter rust, drypp og vann under tanken.",
+      "svarSnart": "Tanken er {alder} år og nærmer seg alderen forsikringen regner som gammel. Planlegg et bytte det neste året eller to.",
+      "svarNaa": "Tanken er {alder} år. Mange forsikringer gir avkortning ved lekkasje fra så gamle tanker. Bytt den nå, før den lekker.",
+      "svarUgyldig": "Skriv et årstall mellom {fra} og {til}.",
+      "forbehold": "Veiledende · sjekk vilkårene i din forsikring",
+      "personvern": "Årstallet blir i nettleseren din. Ingenting lagres eller sendes.",
+      "utenJs": "Under 15 år: følg med på tanken. 15 til 19 år: planlegg et bytte. 20 år eller mer: bytt nå. Mange forsikringer regner en tank som gammel etter rundt 20 år.",
+      "snartAr": 15,
+      "grenseAr": 20,
+      "maksAr": 30
+    },
+    "band": {
+      "eyebrow": "Kobber og Kran · Hemnes",
+      "tittel": "På vei i Hemnes og",
+      "tittelAksent": "Aurskog-Høland"
     },
     "priser": {
       "tittel": "Priser i korte trekk",
@@ -65,7 +227,10 @@
           "tittel": "Jobben blir gjort og dokumentert",
           "tekst": "Eirik kommer når det er avtalt, rydder etter seg og gir deg dokumentasjon på det som er gjort."
         }
-      ]
+      ],
+      "eyebrow": "Fra forespørsel til ferdig jobb",
+      "ingress": "Du har med Eirik å gjøre hele veien. Ingen mellomledd.",
+      "stegEtikett": "Steg"
     },
     "omEirik": {
       "tittel": "Om Eirik",
@@ -82,14 +247,28 @@
       ]
     },
     "omrader": {
-      "tittel": "Her jobber vi"
+      "tittel": "Her jobber vi",
+      "eyebrow": "Områder",
+      "ingress": "Base på Hemnes. Eirik kjører i hele Aurskog-Høland og til Lillestrøm.",
+      "base": "Base",
+      "utenfor": "Utenfor området: større jobber, etter avtale",
+      "omtaleEyebrow": "Omtaler"
     },
     "skjema": {
       "tittel": "Send forespørsel",
-      "merknad": "Det tar et halvt minutt. Fortell hva det gjelder, hvor jobben er og hvordan Eirik når deg. Bilder kan du legge til etterpå, og e-post er valgfritt. Lekker det nå? Steng vannet og ring heller."
+      "merknad": "Det tar et halvt minutt. Fortell hva det gjelder, hvor jobben er og hvordan Eirik når deg. Bilder kan du legge til etterpå, og e-post er valgfritt. Lekker det nå? Steng vannet og ring heller.",
+      "eyebrow": "Forespørsel",
+      "ringDirekte": "Eller ring direkte"
     }
   },
   "sider": {
+    "felles": {
+      "menyVarmtvannstank": "Varmtvannstank",
+      "menyLekker": "Lekker det?",
+      "bunntekst": "Rørlegger på Hemnes i Aurskog-Høland. Service, varmtvannstank, brønn, hytte og bad.",
+      "kontaktTittel": "Kontakt",
+      "adresseTittel": "Adresse"
+    },
     "tjeneste": {
       "faktaTittel": "Kort fortalt",
       "sideboksTittel": "Raskeste vei til hjelp",
@@ -97,12 +276,20 @@
       "faqTittel": "Det folk lurer på",
       "andreTittel": "Andre ting Eirik hjelper med",
       "omraderTittel": "Her jobber vi",
-      "skjemaEyebrow": "Forespørsel"
+      "skjemaEyebrow": "Forespørsel",
+      "tittelSted": "på Hemnes og i",
+      "tittelAksent": "Aurskog-Høland",
+      "prisForStart": "Pris før start",
+      "faqEyebrow": "Spørsmål og svar",
+      "andreEyebrow": "Henger sammen med",
+      "omraderEyebrow": "Områder"
     },
     "priser": {
       "kveldHelgNavn": "Kveld og helg",
       "kveldHelgVerdi": "etter avtale",
-      "mvaNote": "Alle priser er oppgitt med 25 % mva. Bedrifter får faktura med mva spesifisert."
+      "mvaNote": "Alle priser er oppgitt med 25 % mva. Bedrifter får faktura med mva spesifisert.",
+      "listeEyebrow": "Prisliste",
+      "listeTittel": "Priser med mva"
     },
     "bad": {
       "prosessTittel": "Slik går det til",
@@ -138,7 +325,9 @@
     "kontakt": {
       "telefonNavn": "Telefon og WhatsApp",
       "epostNavn": "E-post",
-      "adresseNavn": "Adresse"
+      "adresseNavn": "Adresse",
+      "kortEyebrow": "Kontakt",
+      "rolle": "Eier og rørlegger"
     }
   },
   "lekkerNaa": {

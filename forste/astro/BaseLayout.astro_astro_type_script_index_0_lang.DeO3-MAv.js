@@ -1,0 +1,1 @@
+import{n as e,r as t,t as n}from"./whatsapp.CJHmvNqo.js";var r=e(new URLSearchParams(location.search).get(`kilde`));r&&document.querySelectorAll(`a[data-wa]`).forEach(e=>{let{waNummer:i,waMal:a,waTjeneste:o}=e.dataset;i&&a&&(e.href=t(i,n(a,{tjeneste:o,kilde:r})))});

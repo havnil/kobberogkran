@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <path d="M150 770V430a450 450 0 0 1 900 0v340z" fill="#EFE6DC"/>
+  <path d="M0 770h1200v130H0z" fill="#E6D1AC"/>
+  <path d="M0 770h1200" stroke="#CFB07C" stroke-width="6"/>
+
+  <!-- pipes from the top -->
+  <g fill="none">
+    <path d="M540 190V120q0-24-24-24H-10" stroke="#A84508" stroke-width="26"/>
+    <path d="M540 190V120q0-24-24-24H-10" stroke="#F7883F" stroke-width="6" opacity=".7" transform="translate(-6 -6)"/>
+    <path d="M660 190V120q0-24 24-24h526" stroke="#A84508" stroke-width="26"/>
+    <path d="M660 190V120q0-24 24-24h526" stroke="#F7883F" stroke-width="6" opacity=".7" transform="translate(6 -6)"/>
+    <path d="M748 410h60q20 0 20 20v300" stroke="#CDBBA9" stroke-width="14" stroke-linecap="round"/>
+  </g>
+
+  <!-- shut-off valve with leak stop on the cold inlet -->
+  <g stroke="#4A2412" stroke-width="5" stroke-linejoin="round">
+    <rect x="236" y="74" width="60" height="44" rx="6" fill="#4A2412"/>
+    <rect x="216" y="136" width="100" height="84" rx="14" fill="#F26A0F"/>
+    <path d="M266 118v18" stroke-width="10"/>
+    <path d="M266 156s-14 18-14 28a14 14 0 0 0 28 0c0-10-14-28-14-28z" fill="#F7F2EC"/>
+    <path d="M246 200l40-40" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g fill="#F7883F"><rect x="364" y="84" width="16" height="24" rx="3"/><rect x="386" y="84" width="16" height="24" rx="3"/></g>
+  <g fill="#F7883F"><rect x="864" y="84" width="16" height="24" rx="3"/><rect x="886" y="84" width="16" height="24" rx="3"/></g>
+
+  <!-- tank -->
+  <g stroke="#4A2412" stroke-width="6" stroke-linejoin="round">
+    <path d="M440 250q0-70 160-70t160 70v440q0 20-20 20H460q-20 0-20-20z" fill="#FFFFFF"/>
+  </g>
+  <path d="M700 230q40 16 46 40v410q0 16-14 16h-20z" fill="#F1E9DF"/>
+  <path d="M446 270q154 40 308 0" fill="none" stroke="#E8DCCF" stroke-width="6"/>
+  <path d="M446 640h308" stroke="#E8DCCF" stroke-width="6"/>
+  <rect x="520" y="440" width="160" height="110" rx="14" fill="#EFE6DC" stroke="#4A2412" stroke-width="5"/>
+  <circle cx="570" cy="495" r="26" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <path d="M570 495l12-14" stroke="#4A2412" stroke-width="5" stroke-linecap="round"/>
+  <path d="M618 480h40M618 498h40M618 516h26" stroke="#CDBBA9" stroke-width="6" stroke-linecap="round"/>
+  <rect x="740" y="396" width="26" height="30" rx="5" fill="#4A2412"/>
+  <g fill="#4A2412"><rect x="470" y="706" width="26" height="36"/><rect x="704" y="706" width="26" height="36"/></g>
+
+  <!-- drip tray -->
+  <path d="M380 730h440l-14 50H394z" fill="#F26A0F" stroke="#4A2412" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M400 742h400" stroke="#F7883F" stroke-width="6" stroke-linecap="round"/>
+  <path d="M806 760h90q20 0 20 20v4" fill="none" stroke="#6B4A38" stroke-width="12"/>
+  <ellipse cx="930" cy="806" rx="58" ry="14" fill="#CDBBA9" stroke="#4A2412" stroke-width="5"/>
+  <path d="M900 806h60M910 800h40M910 812h40" stroke="#4A2412" stroke-width="3"/>
+
+  <!-- leak sensor with signal -->
+  <ellipse cx="300" cy="790" rx="44" ry="14" fill="#4A2412"/>
+  <rect x="262" y="764" width="76" height="26" rx="10" fill="#FFFFFF" stroke="#4A2412" stroke-width="5"/>
+  <circle cx="300" cy="777" r="5" fill="#F26A0F"/>
+  <g fill="none" stroke="#F26A0F" stroke-width="7" stroke-linecap="round">
+    <path d="M276 730q24-22 48 0"/><path d="M258 708q42-38 84 0"/><path d="M240 686q60-54 120 0"/>
+  </g>
+</svg>

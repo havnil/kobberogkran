@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <g id="kran">
+      <rect x="0" y="34" width="9" height="34" rx="3"/>
+      <path d="M9 44h44q26 0 26 26v10H67V70q0-10-10-10H9z"/>
+      <path d="M26 60a16 13 0 0 0 32 0z"/>
+      <rect x="37" y="24" width="12" height="22"/>
+      <rect x="31" y="34" width="24" height="6" rx="2"/>
+      <rect x="26" y="16" width="34" height="9" rx="4.5"/>
+      <circle cx="26" cy="20.5" r="7"/>
+      <circle cx="60" cy="20.5" r="7"/>
+      <rect x="39" y="8" width="8" height="12" rx="3"/>
+    </g>
+  </defs>
+  <rect width="800" height="1000" fill="#F7F2EC"/>
+  <circle cx="610" cy="170" r="110" fill="#F9C9A0"/>
+  <g fill="#8F8C6E">
+    <use href="#gran" transform="translate(690 300) scale(1.3)"/><use href="#gran" transform="translate(740 300) scale(1.8)"/><use href="#gran" transform="translate(790 300) scale(1.1)"/>
+  </g>
+  <path d="M0 880h800v120H0z" fill="#DCC193"/>
+  <path d="M0 880h800" stroke="#CFB07C" stroke-width="6"/>
+  <ellipse cx="400" cy="896" rx="380" ry="20" fill="#4A2412" opacity=".15"/>
+
+  <!-- van, side view, sliding door open -->
+  <g stroke="#4A2412" stroke-width="6" stroke-linejoin="round">
+    <path d="M-40 300h680q40 0 40 40v500q0 20-20 20H-40z" fill="#FFFFFF"/>
+  </g>
+  <path d="M-40 760c240-10 470-30 720-80v34c-250 46-480 70-720 76z" fill="#F26A0F"/>
+  <path d="M-40 742c240-10 470-28 720-80" stroke="#4A2412" stroke-width="7" fill="none"/>
+  <rect x="-40" y="820" width="728" height="40" rx="12" fill="#2E170B"/>
+  <circle cx="90" cy="862" r="62" fill="#2E170B"/>
+  <circle cx="90" cy="862" r="26" fill="#CDBBA9"/>
+  <!-- door opening with shelves -->
+  <rect x="40" y="350" width="260" height="400" rx="8" fill="#6B4A38" stroke="#4A2412" stroke-width="6"/>
+  <path d="M40 460h260M40 580h260M40 690h260" stroke="#4A2412" stroke-width="8"/>
+  <g stroke="#4A2412" stroke-width="4">
+    <rect x="58" y="408" width="90" height="48" rx="6" fill="#F26A0F"/><rect x="156" y="418" width="80" height="38" rx="6" fill="#EFE6DC"/>
+    <rect x="58" y="520" width="130" height="56" rx="6" fill="#EFE6DC"/><rect x="196" y="530" width="90" height="46" rx="6" fill="#F26A0F"/>
+    <rect x="58" y="636" width="100" height="50" rx="6" fill="#F26A0F"/><rect x="166" y="646" width="62" height="40" rx="6" fill="#CDBBA9"/>
+  </g>
+  <path d="M80 432h50M74 548h90M80 660h56" stroke="#4A2412" stroke-width="4"/>
+  <!-- coils of copper pipe on the floor of the van -->
+  <g fill="none" stroke="#A84508" stroke-width="8"><circle cx="250" cy="720" r="26"/><circle cx="250" cy="720" r="16"/></g>
+  <!-- logo mark on the van (rear panel) -->
+  <path d="M340 470v-30q0-14 14-14h196" stroke="#F26A0F" stroke-width="14" fill="none"/>
+  <path d="M362 418v16M534 418v16" stroke="#FFFFFF" stroke-width="4"/>
+  <use href="#kran" transform="translate(542 368) scale(.9)" fill="#F26A0F"/>
+
+  <!-- the plumber, seen from behind -->
+  <g stroke="#2E170B" stroke-width="4" stroke-linejoin="round">
+    <!-- boots and legs -->
+    <rect x="440" y="858" width="66" height="34" rx="12" fill="#2E170B"/>
+    <rect x="530" y="858" width="66" height="34" rx="12" fill="#2E170B"/>
+    <path d="M444 620h70l-6 244h-60zM522 620h70l6 244h-62z" fill="#4A2412"/>
+    <rect x="452" y="736" width="52" height="56" rx="8" fill="#2E170B"/>
+    <rect x="532" y="736" width="52" height="56" rx="8" fill="#2E170B"/>
+    <!-- arms -->
+    <path d="M440 430q-34 6-38 50l-14 140q0 14 14 16h20q12-2 14-14l18-130z" fill="#E05F0C"/>
+    <path d="M598 430q34 6 38 50l12 136q0 14-14 16h-20q-12-2-14-14l-14-128z" fill="#E05F0C"/>
+    <!-- jacket -->
+    <path d="M438 428q80-34 162 0l16 222q-96 18-196 0z" fill="#F26A0F"/>
+    <path d="M422 624q98 16 196 0v26q-96 18-196 0z" fill="#4A2412"/>
+    <!-- hands -->
+    <circle cx="412" cy="648" r="20" fill="#C98E66"/>
+    <circle cx="626" cy="644" r="20" fill="#C98E66"/>
+    <!-- neck and head -->
+    <rect x="496" y="370" width="46" height="46" fill="#C98E66"/>
+    <path d="M478 418q41 20 82 0" fill="#4A2412"/>
+    <ellipse cx="519" cy="344" rx="46" ry="52" fill="#2E170B"/>
+    <ellipse cx="472" cy="350" rx="9" ry="15" fill="#C98E66"/>
+    <!-- cap, brim peeking out to the left -->
+    <path d="M478 318q-40-2-54 10 8 10 56 6z" fill="#A84508"/>
+    <path d="M468 330q0-60 51-62 51 2 51 62z" fill="#4A2412"/>
+    <path d="M519 270q-22 20-26 60M519 270q22 20 26 60" fill="none" stroke="#6B4A38" stroke-width="3"/>
+    <path d="M470 330h98" stroke-width="5"/>
+    <circle cx="519" cy="270" r="6" fill="#F26A0F"/>
+  </g>
+  <!-- back print: white pipe and tap -->
+  <path d="M478 540v-26q0-12 12-12h70" stroke="#FFFFFF" stroke-width="9" fill="none"/>
+  <use href="#kran" transform="translate(556 478) scale(.48)" fill="#FFFFFF"/>
+  <!-- toolbox in hand -->
+  <g stroke="#2E170B" stroke-width="5" stroke-linejoin="round">
+    <path d="M600 680v-20q0-12 12-12h28q12 0 12 12v20" fill="none" stroke-width="10"/>
+    <rect x="570" y="676" width="116" height="84" rx="10" fill="#F26A0F"/>
+    <rect x="564" y="670" width="128" height="22" rx="8" fill="#A84508"/>
+    <rect x="614" y="696" width="28" height="16" rx="4" fill="#4A2412"/>
+  </g>
+</svg>

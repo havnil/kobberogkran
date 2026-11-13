@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <path id="drape" d="M0 0c0 0-8 11-8 17a8 8 0 0 0 16 0C8 11 0 0 0 0z"/>
+  </defs>
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <circle cx="180" cy="110" r="60" fill="#F9C9A0"/>
+
+  <!-- ground layers -->
+  <path d="M0 250h1200v650H0z" fill="#DCC193"/>
+  <path d="M0 400c160-20 300 14 460-6s320-24 480 0 200 10 260 0v506H0z" fill="#B89A7C"/>
+  <path d="M0 620c180-14 320 12 500 0s340-20 500-4 160 10 200 4v280H0z" fill="#A9BDBA" opacity=".7"/>
+  <g fill="none" stroke="#8C6E54" stroke-width="5" stroke-linecap="round">
+    <path d="M60 470l50 30 30-20M380 520l40-26 40 40M620 460l60 20 20 40M900 500l30 40 60-20M120 720l60-30 40 40M700 760l40 30 60-30M960 700l40-20 30 40"/>
+  </g>
+  <g fill="#FBF7F1" opacity=".6"><circle cx="160" cy="680" r="5"/><circle cx="430" cy="720" r="4"/><circle cx="820" cy="690" r="5"/><circle cx="1080" cy="760" r="4"/><circle cx="560" cy="820" r="5"/></g>
+  <path d="M0 238h1200v24H0z" fill="#8F8C6E"/>
+  <path d="M0 238c40-8 80 8 120 0s80 8 120 0 80 8 120 0 80 8 120 0 80 8 120 0 80 8 120 0 80 8 120 0 80 8 120 0 80 8 120 0 80 8 120 0" fill="#8F8C6E"/>
+
+  <!-- spruces -->
+  <g fill="#3E4A33"><use href="#gran" transform="translate(470 240) scale(1.5)"/><use href="#gran" transform="translate(540 240) scale(1.1)"/></g>
+  <use href="#gran" transform="translate(505 240) scale(.9)" fill="#56603F"/>
+
+  <!-- borehole -->
+  <rect x="244" y="250" width="72" height="620" fill="#EFE6DC"/>
+  <rect x="244" y="250" width="72" height="190" fill="#CDBBA9" stroke="#4A2412" stroke-width="5"/>
+  <rect x="244" y="540" width="72" height="330" fill="#A9BDBA"/>
+  <path d="M244 540h72" stroke="#FBF7F1" stroke-width="5"/>
+  <path d="M244 250v620M316 250v620" stroke="#4A2412" stroke-width="5"/>
+  <!-- well cap -->
+  <rect x="236" y="196" width="88" height="56" rx="8" fill="#6B4A38" stroke="#4A2412" stroke-width="5"/>
+  <rect x="228" y="186" width="104" height="18" rx="9" fill="#4A2412"/>
+
+  <!-- pump and riser pipe -->
+  <path d="M280 760V340q0-20 20-20h560" fill="none" stroke="#A84508" stroke-width="16"/>
+  <path d="M276 760V340q0-20 20-20h564" fill="none" stroke="#F7883F" stroke-width="4" opacity=".7"/>
+  <rect x="258" y="750" width="44" height="100" rx="20" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <path d="M262 784h36M262 800h36" stroke="#4A2412" stroke-width="3"/>
+  <g fill="#FBF7F1"><path d="M370 312l14 8-14 8z"/><path d="M520 312l14 8-14 8z"/><path d="M670 312l14 8-14 8z"/></g>
+
+  <!-- house and basement cutaway -->
+  <path d="M760 138 900 50l140 88z" fill="#4A2412"/>
+  <rect x="780" y="138" width="240" height="112" fill="#A8361F"/>
+  <rect x="820" y="160" width="44" height="46" fill="#F9C9A0" stroke="#FBF7F1" stroke-width="6"/>
+  <rect x="930" y="160" width="44" height="46" fill="#F9C9A0" stroke="#FBF7F1" stroke-width="6"/>
+  <path d="M770 250h260" stroke="#FBF7F1" stroke-width="8"/>
+  <rect x="790" y="262" width="300" height="220" rx="10" fill="#F7F2EC" stroke="#4A2412" stroke-width="6"/>
+  <path d="M790 470h300" stroke="#E8DCCF" stroke-width="10"/>
+  <!-- pressure tank -->
+  <rect x="826" y="350" width="80" height="116" rx="34" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <path d="M832 390h68" stroke="#A84508" stroke-width="5"/>
+  <circle cx="866" cy="336" r="16" fill="#FFFFFF" stroke="#4A2412" stroke-width="4"/>
+  <path d="M866 336l7-8" stroke="#4A2412" stroke-width="3" stroke-linecap="round"/>
+  <!-- filter and UV -->
+  <rect x="936" y="368" width="44" height="96" rx="10" fill="#6B4A38" stroke="#4A2412" stroke-width="5"/>
+  <rect x="930" y="356" width="56" height="18" rx="6" fill="#F26A0F" stroke="#4A2412" stroke-width="4"/>
+  <rect x="1006" y="300" width="56" height="150" rx="22" fill="#FFFFFF" stroke="#4A2412" stroke-width="5"/>
+  <rect x="1022" y="320" width="24" height="110" rx="12" fill="#F7883F" opacity=".75"/>
+  <path d="M860 320h174v-20M866 320v14M958 320v36" fill="none" stroke="#A84508" stroke-width="10"/>
+  <path d="M1034 300v-30h70" fill="none" stroke="#A84508" stroke-width="10"/>
+  <use href="#drape" transform="translate(1120 266) scale(2)" fill="#F26A0F"/>
+</svg>

@@ -19,6 +19,6 @@ const { entry, alternates } = Astro.props;
 const erForside = slugOf(entry) === 'index';
 ---
 
-<BaseLayout locale="en" title={entry.data.title} description={entry.data.description} alternates={alternates} harSkjema={erForside || entry.data.translationKey === 'kontakt'}>
+<BaseLayout locale="en" title={entry.data.title} description={entry.data.description} alternates={alternates} harSkjema={erForside || entry.data.translationKey === 'kontakt'} fullBredde>
   {erForside ? <Forside locale="en" /> : <Side locale="en" entry={entry} />}
 </BaseLayout>

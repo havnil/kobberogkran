@@ -1,0 +1,180 @@
+---
+// The firm's signature: a thin copper pipe along the right edge with a tap and a drop at its end. The pipe
+// grows with scroll progress, and the tap is a link to the request form. Only on wide screens (≥ 1380 px),
+// where it never touches the content. With reduced motion the pipe stays still and the drop does not fall.
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  href: string;
+}
+
+const { locale, href } = Astro.props;
+---
+
+<a class="ror-skinne" href={href} data-ror-skinne>
+  <span class="ror-linje" aria-hidden="true"></span>
+  <span class="ror-ende" aria-hidden="true">
+    <svg viewBox="0 0 44 72" width="44" height="72">
+      <rect x="15" y="0" width="14" height="7" rx="1.5" fill="#8A4A1D" />
+      <rect x="12.5" y="6" width="19" height="22" rx="5" fill="#B5652B" />
+      <rect x="15.5" y="9" width="4" height="15" rx="2" fill="#E09A63" opacity="0.8" />
+      <rect x="3" y="12" width="38" height="6" rx="3" fill="#4A2412" />
+      <circle cx="22" cy="15" r="4.5" fill="#F26A0F" />
+      <path d="M17 27h10v9q0 3-3 3h-4q-3 0-3-3z" fill="#B5652B" />
+      <rect x="15.5" y="37" width="13" height="5" rx="2" fill="#8A4A1D" />
+      <path class="ror-drape" d="M22 50c0 0-5 6.5-5 10a5 5 0 0 0 10 0c0-3.5-5-10-5-10z" fill="#F26A0F" />
+    </svg>
+  </span>
+  <span class="ror-etikett">{ui[locale].skjemaKnapp}</span>
+</a>
+
+<script>
+  const skinne = document.querySelector<HTMLElement>('[data-ror-skinne]');
+  if (skinne) {
+    const rolig = matchMedia('(prefers-reduced-motion: reduce)');
+    let ventende = false;
+    const oppdater = () => {
+      ventende = false;
+      if (rolig.matches) {
+        skinne.style.removeProperty('--p');
+        return;
+      }
+      const maks = document.documentElement.scrollHeight - innerHeight;
+      const p = maks > 0 ? Math.min(Math.max(scrollY / maks, 0), 1) : 0;
+      skinne.style.setProperty('--p', p.toFixed(4));
+    };
+    addEventListener(
+      'scroll',
+      () => {
+        if (!ventende) {
+          ventende = true;
+          requestAnimationFrame(oppdater);
+        }
+      },
+      { passive: true },
+    );
+    addEventListener('resize', oppdater);
+    rolig.addEventListener('change', oppdater);
+    oppdater();
+  }
+</script>
+
+<style>
+  .ror-skinne {
+    --p: 0;
+    --lengde: calc(var(--p) * (100% - 6rem) + 1.5rem);
+    position: fixed;
+    top: calc(var(--header-h) + 0.75rem);
+    right: 0.875rem;
+    bottom: 1rem;
+    z-index: 40;
+    width: 2.75rem;
+    display: none;
+    pointer-events: none;
+    text-decoration: none;
+  }
+
+  @media (min-width: 1380px) {
+    .ror-skinne {
+      display: block;
+    }
+  }
+
+  .ror-linje {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 6px;
+    height: var(--lengde);
+    margin-left: -3px;
+    background: linear-gradient(90deg, #8a4a1d, var(--color-copper-light) 35%, var(--color-copper) 70%, #8a4a1d);
+    border-radius: 0 0 2px 2px;
+  }
+
+  .ror-ende {
+    position: absolute;
+    top: var(--lengde);
+    left: 0;
+    width: 2.75rem;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .ror-ende svg {
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .ror-skinne:hover .ror-ende svg {
+    transform: rotate(-6deg);
+  }
+
+  /* The label slides out to the left of the tap on hover and keyboard focus. Visually hidden otherwise,
+     so it is always the link's accessible name. */
+  .ror-etikett {
+    position: absolute;
+    top: calc(var(--lengde) + 0.5rem);
+    right: 3.25rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--color-brown);
+    color: var(--color-cream);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    clip-path: inset(0 0 0 100%);
+    transition: clip-path 0.2s ease;
+  }
+
+  .ror-skinne:hover .ror-etikett,
+  .ror-skinne:focus-visible .ror-etikett {
+    clip-path: inset(0);
+  }
+
+  .ror-skinne:focus-visible {
+    outline: none;
+  }
+
+  .ror-skinne:focus-visible .ror-ende {
+    outline: 3px solid var(--color-brown);
+    outline-offset: 2px;
+  }
+
+  .ror-drape {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ror-drape {
+      animation: drypp 2.6s ease-in infinite;
+    }
+  }
+
+  @keyframes drypp {
+    0%,
+    35% {
+      transform: translateY(-6px) scale(0.4);
+      opacity: 0;
+    }
+    55% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(14px) scale(1);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ror-etikett,
+    .ror-ende svg {
+      transition: none;
+    }
+  }
+</style>

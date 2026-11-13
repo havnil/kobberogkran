@@ -2,6 +2,7 @@
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import MobilBunnlinje from '../components/MobilBunnlinje.astro';
+import RorSkinne from '../components/RorSkinne.astro';
 import { getFirma } from '../lib/firma';
 import { erLansering } from '../lib/lansering';
 import { orgJsonLd } from '../lib/jsonld';
@@ -24,9 +25,11 @@ interface Props {
   ogImage?: string;
   /** The page has the request form section (`#skjema`): the form buttons jump there instead of to the contact page. */
   harSkjema?: boolean;
+  /** The page lays out its own full-width sections (`.ramme` inside); otherwise `main` is a centred column. */
+  fullBredde?: boolean;
 }
 
-const { locale, title, description, alternates, noindex = false, jsonLd = [], ogImage = '/og-image.png', harSkjema = false } = Astro.props;
+const { locale, title, description, alternates, noindex = false, jsonLd = [], ogImage = '/og-image.png', harSkjema = false, fullBredde = false } = Astro.props;
 const firma = await getFirma();
 const alleJsonLd = noindex ? jsonLd : [orgJsonLd(firma, locale), ...jsonLd];
 const skjemaHref = harSkjema ? '#skjema' : navPath(locale, 'kontakt');
@@ -57,6 +60,7 @@ const utkast = !erLansering();
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" href="/fonts/inter/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/inter/inter-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/rubik/rubik-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin />
     {alleJsonLd.map((data) => <script type="application/ld+json" set:html={jsonLdText(data)} />)}
     {noindex && <meta name="robots" content="noindex" />}
     {!noindex && <link rel="canonical" href={canonical.href} />}
@@ -73,13 +77,15 @@ const utkast = !erLansering();
       )
     }
     <Header locale={locale} alternates={alternates} skjemaHref={skjemaHref} />
-    <main id="main" class="container">
+    <main id="main" class:list={[!fullBredde && 'container']}>
       <slot />
     </main>
     <Footer locale={locale} />
     <MobilBunnlinje locale={locale} skjemaHref={skjemaHref} />
+    <RorSkinne locale={locale} href={skjemaHref} />
     <script>
       import '../scripts/whatsapp-kilde';
+      import '../scripts/side';
     </script>
   </body>
 </html>

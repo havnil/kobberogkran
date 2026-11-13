@@ -124,7 +124,7 @@ const celler = [...prisCelle, ...tj.fakta.map((f, i) => ({ etikett: String(prisC
         </div>
       </div>
       <ol class="ruter">
-        {andre.map((e) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={e.data.nummer} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={tekster.forside.tjenester.seMer} />)}
+        {andre.map((e, i) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={i + 1} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={tekster.forside.tjenester.seMer} />)}
       </ol>
     </div>
   </section>

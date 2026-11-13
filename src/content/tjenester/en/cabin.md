@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: "Cabins: opening, winterising and frozen pipes"
 kundeTittel: "Water on and off at the cabin"
 fagord: "Opening, winterising and frost damage"
-nummer: 4
+nummer: 6
 kort: "Water off before the frost and back on in spring, done properly so the pipes survive the winter. Eirik also helps when something has frozen."
 sesong:
   host: "Winterising before the frost: Eirik drains the pipes and closes the cabin properly, so you avoid frost damage."
@@ -55,6 +55,10 @@ There are many cabins in the forests around Hemnes, Setskog and Rømskog, and ma
 - The water heater is filled before the power goes on
 - All joints are checked for leaks and frost damage
 - You get a message when the cabin is ready to use
+
+## Leak-proof cabin
+
+Want to know the cabin stays dry while you're away? Eirik can fit a water stop valve on the main line when he opens or winterises the cabin. Read more about the [leak-proof cabin](/en/services/leak-proof-cabin/).
 
 ## Frozen pipes
 

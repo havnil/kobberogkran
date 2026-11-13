@@ -37,7 +37,10 @@ const t = tekster.skjema;
 // or with any Turnstile test key.
 const turnstileNokkel = turnstileNokkelForBygg(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '', erLansering());
 
-const tjenesteNavn = (k: string) => tjenester.find((e) => e.data.translationKey === k)?.data.kundeTittel ?? t.tjenesteAnnet;
+const tjenesteNavn = (k: string) => {
+  const e = tjenester.find((x) => x.data.translationKey === k);
+  return e ? (e.data.skjemaNavn ?? e.data.kundeTittel) : t.tjenesteAnnet;
+};
 const forhandsvalgt = (TJENESTER as readonly string[]).includes(tjeneste) ? tjeneste : '';
 const hastNavn: Record<(typeof HAST)[number], string> = {
   'lekker-naa': t.hasterLekkerNaa,

@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: "Water heater replacement"
 kundeTittel: "New water heater"
 fagord: "Replacing a hot water cylinder"
-nummer: 2
+nummer: 3
 kort: "A fixed price for the work when the tank is replaced in the same place. You see what is included, and what isn't."
 fakta:
   - tall: "Fixed price"

@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: "Bathroom plumbing"
 kundeTittel: "New bathroom"
 fagord: "Plumbing in wet rooms"
-nummer: 5
+nummer: 4
 kort: "Eirik does the plumbing for your bathroom and coordinates with the electrician and tiler. You have one person to deal with."
 fakta:
   - tall: "Site visit"

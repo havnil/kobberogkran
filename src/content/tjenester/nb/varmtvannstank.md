@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: 'Bytte av varmtvannstank'
 kundeTittel: 'Ny varmtvannstank'
 fagord: 'Bytte av varmtvannsbereder'
-nummer: 2
+nummer: 3
 kort: 'Fastpris på arbeidet når tanken byttes på samme sted. Du ser hva som er med, og hva som ikke er det.'
 fakta:
   - tall: 'Fastpris'

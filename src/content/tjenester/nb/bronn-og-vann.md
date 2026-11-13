@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: 'Brønn, pumpe og vannbehandling'
 kundeTittel: 'Brunt vann, lukt eller lavt trykk'
 fagord: 'Brønn, pumpe og vannbehandling'
-nummer: 3
+nummer: 5
 kort: 'Pumpa går hele tida, vannet er brunt eller lukter egg? Eirik ser på pumpe, trykktank, filter og UV, også i fjøset.'
 fakta:
   - tall: 'Brønn'
@@ -61,7 +61,7 @@ Riktig vannbehandling starter med å vite hva som er i vannet. Et filter for jer
 
 ## Fjøs og gård
 
-Vann til dyra kan ikke vente til våren. Eirik legger og reparerer vannledninger i fjøs, monterer drikkekar og setter opp frostfrie vannposter, så du har vann på tunet og i beitet også når det er kaldt. Gi beskjed om adkomst og hvor vannet skal fram, så kan han planlegge jobben.
+Vann til dyra kan ikke vente til våren. Eirik legger og reparerer vannledninger i fjøs, monterer drikkekar og setter opp frostfrie vannposter, så du har vann på tunet og i beitet også når det er kaldt. Les mer om [vann i fjøs og på gården](/tjenester/fjos-og-gard/).
 
 ## Det tar vi ikke
 

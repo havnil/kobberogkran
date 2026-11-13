@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: 'Hytte: åpning, vinterstengning og frosne rør'
 kundeTittel: 'Vann på og av hytta'
 fagord: 'Åpning, vinterstengning og frostskade'
-nummer: 4
+nummer: 6
 kort: 'Vann av før frosten og på igjen til våren, gjort riktig så rørene tåler vinteren. Eirik hjelper også når noe har frosset.'
 sesong:
   host: 'Vinterstengning før frosten: Eirik tømmer rørene og stenger hytta riktig, så du slipper frostskader.'
@@ -55,6 +55,10 @@ Det er mange hytter i skogene rundt Hemnes, Setskog og Rømskog, og mange av dem
 - Varmtvannstanken fylles før strømmen slås på
 - Alle koblinger sjekkes for lekkasje og frostskader
 - Du får beskjed når hytta er klar til bruk
+
+## Lekkasjesikker hytte
+
+Vil du vite at hytta er tett også når du er borte? Eirik kan montere vannstopper på hovedledningen når han åpner eller stenger hytta. Les mer om [lekkasjesikker hytte](/tjenester/lekkasjesikker-hytte/).
 
 ## Frosne rør
 

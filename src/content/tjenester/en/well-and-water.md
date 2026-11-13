@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: "Wells, pumps and water treatment"
 kundeTittel: "Brown water, a smell or low pressure"
 fagord: "Wells, pumps and water treatment"
-nummer: 3
+nummer: 5
 kort: "Is the pump running all the time, or is the water brown or smelling of eggs? Eirik sees to the pump, pressure tank, filter and UV, in the barn too."
 fakta:
   - tall: "Wells"
@@ -61,7 +61,7 @@ The right water treatment starts with knowing what is in the water. An iron filt
 
 ## Barns and farms
 
-Water for animals can't wait until spring. Eirik lays and repairs water pipes in barns, fits drinking bowls and installs frost-free water posts, so you have water in the yard and on the pasture when it is cold too. Tell him about access and where the water needs to go, so he can plan the job.
+Water for animals can't wait until spring. Eirik lays and repairs water pipes in barns, fits drinking bowls and installs frost-free water posts, so you have water in the yard and on the pasture when it is cold too. Read more about [water in barns and on farms](/en/services/barns-and-farms/).
 
 ## What we don't do
 

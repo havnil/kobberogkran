@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: 'Rørleggerarbeid på bad'
 kundeTittel: 'Nytt bad'
 fagord: 'Rørleggerarbeid i våtrom'
-nummer: 5
+nummer: 4
 kort: 'Eirik tar rørleggerdelen av badet og koordinerer med elektriker og flislegger. Du har én å forholde deg til.'
 fakta:
   - tall: 'Befaring'

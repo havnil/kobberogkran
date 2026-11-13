@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <path id="drape" d="M0 0c0 0-8 11-8 17a8 8 0 0 0 16 0C8 11 0 0 0 0z"/>
+  </defs>
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <circle cx="980" cy="180" r="120" fill="#FBE6D3"/>
+  <circle cx="980" cy="180" r="74" fill="#F9C9A0"/>
+  <path d="M0 520c220-60 420-70 640-40s380 10 560-30v450H0z" fill="#C9C9A4"/>
+  <path d="M0 640c260-30 520-20 780 0s300 0 420-12v272H0z" fill="#B3B48A"/>
+
+  <!-- spruces -->
+  <g fill="#3E4A33">
+    <use href="#gran" transform="translate(70 520) scale(2)"/><use href="#gran" transform="translate(150 500) scale(1.4)"/>
+    <use href="#gran" transform="translate(1090 470) scale(1.8)"/><use href="#gran" transform="translate(1160 480) scale(1.3)"/>
+  </g>
+
+  <!-- barn -->
+  <g transform="translate(250 230)">
+    <path d="M0 160 80 40h300l80 120z" fill="#4A2412"/>
+    <rect x="10" y="160" width="440" height="260" fill="#A8361F"/>
+    <path d="M10 190h440" stroke="#8A2A17" stroke-width="6"/>
+    <path d="M60 160v260M120 160v260M340 160v260M400 160v260" stroke="#8A2A17" stroke-width="4" opacity=".7"/>
+    <rect x="160" y="250" width="140" height="170" fill="#FFFFFF"/>
+    <rect x="172" y="262" width="116" height="158" fill="#6B4A38"/>
+    <path d="M172 262l116 158M288 262 172 420" stroke="#FFFFFF" stroke-width="10"/>
+    <rect x="190" y="90" width="80" height="50" fill="#FFFFFF"/>
+    <path d="M230 90v50M190 115h80" stroke="#A8361F" stroke-width="6"/>
+    <g fill="#F9C9A0" stroke="#FFFFFF" stroke-width="6"><rect x="40" y="230" width="60" height="50"/><rect x="360" y="230" width="60" height="50"/></g>
+  </g>
+
+  <!-- water pipe to the frost-free post -->
+  <path d="M700 820H960V640" fill="none" stroke="#A84508" stroke-width="18"/>
+  <path d="M700 814H954V640" fill="none" stroke="#F7883F" stroke-width="5" opacity=".7"/>
+  <path d="M0 760h1200" stroke="#8C6E54" stroke-width="4" stroke-dasharray="2 14" stroke-linecap="round" opacity=".6"/>
+  <!-- frost-free water post -->
+  <rect x="944" y="520" width="32" height="140" rx="6" fill="#4A2412"/>
+  <path d="M960 540h50q14 0 14 14v20" fill="none" stroke="#4A2412" stroke-width="16" stroke-linecap="round"/>
+  <rect x="930" y="500" width="60" height="20" rx="8" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <use href="#drape" transform="translate(1024 596) scale(1.8)" fill="#F26A0F"/>
+  <!-- drinking trough -->
+  <path d="M960 660h150l-14 40H974z" fill="#CDBBA9" stroke="#4A2412" stroke-width="6"/>
+  <path d="M972 668h126" stroke="#A9BDBA" stroke-width="10"/>
+
+  <!-- fence -->
+  <g stroke="#6B4A38" stroke-width="10" stroke-linecap="round">
+    <path d="M760 620v90M840 620v90M1150 620v90"/>
+    <path d="M740 640h70M820 640h80M1120 640h60M740 680h70M820 680h80M1120 680h60"/>
+  </g>
+</svg>

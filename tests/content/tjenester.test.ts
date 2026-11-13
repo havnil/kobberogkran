@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { omtaleSchema, tekstSchema, tjenesteSchema, type Tjeneste } from '../../src/lib/innhold';
+import { TJENESTER } from '../../src/server/validering';
 
 function load(locale: string): Tjeneste[] {
   const dir = `src/content/tjenester/${locale}`;
@@ -17,9 +18,9 @@ const nb = load('nb');
 const en = load('en');
 
 describe('tjenester', () => {
-  it.each([['nb', nb], ['en', en]])('has exactly 5 services in %s with nummer 1-5', (_l, list) => {
-    expect(list).toHaveLength(5);
-    expect(list.map((t) => t.nummer).sort()).toEqual([1, 2, 3, 4, 5]);
+  it.each([['nb', nb], ['en', en]])('has exactly 9 services in %s with nummer 1-9', (_l, list) => {
+    expect(list).toHaveLength(9);
+    expect(list.map((t) => t.nummer).sort((a, b) => a - b)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it('has every translationKey in both locales with the same nummer', () => {
@@ -28,12 +29,48 @@ describe('tjenester', () => {
   });
 
   it('uses the agreed slugs', () => {
-    expect(readdirSync('src/content/tjenester/nb').sort()).toEqual(
-      ['bad.md', 'bronn-og-vann.md', 'hytte.md', 'service-og-reparasjon.md', 'varmtvannstank.md'],
-    );
-    expect(readdirSync('src/content/tjenester/en').sort()).toEqual(
-      ['bathroom.md', 'cabin.md', 'service-and-repairs.md', 'water-heater.md', 'well-and-water.md'],
-    );
+    expect(readdirSync('src/content/tjenester/nb').sort()).toEqual([
+      'bad.md',
+      'bedrift-og-borettslag.md',
+      'bronn-og-vann.md',
+      'fjos-og-gard.md',
+      'hytte.md',
+      'lekkasje.md',
+      'lekkasjesikker-hytte.md',
+      'tett-avlop.md',
+      'varmtvannstank.md',
+    ]);
+    expect(readdirSync('src/content/tjenester/en').sort()).toEqual([
+      'barns-and-farms.md',
+      'bathroom.md',
+      'blocked-drain.md',
+      'businesses-and-co-ops.md',
+      'cabin.md',
+      'leak-proof-cabin.md',
+      'leaks.md',
+      'water-heater.md',
+      'well-and-water.md',
+    ]);
+  });
+
+  it('maps every page to a service the form knows', () => {
+    for (const t of [...nb, ...en]) expect(TJENESTER).toContain(t.skjemaTjeneste ?? t.translationKey);
+  });
+
+  it('gives each front page tile its own service page', () => {
+    for (const l of ['nb', 'en']) {
+      const t = tekstSchema.parse(JSON.parse(readFileSync(`src/content/tekster/${l}.json`, 'utf8')));
+      const nokler = t.forside.tjenester.ruter.map((r) => r.tjeneste);
+      expect(new Set(nokler).size).toBe(nokler.length);
+      for (const k of nokler) expect(nb.map((s) => s.translationKey)).toContain(k);
+    }
+  });
+
+  it('has 6 to 8 questions per service', () => {
+    for (const t of [...nb, ...en]) {
+      expect(t.faq.length).toBeGreaterThanOrEqual(6);
+      expect(t.faq.length).toBeLessThanOrEqual(8);
+    }
   });
 
   it('marks every image as placeholder', () => {

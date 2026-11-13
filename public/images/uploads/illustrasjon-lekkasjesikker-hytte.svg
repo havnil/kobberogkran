@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <path id="drape" d="M0 0c0 0-8 11-8 17a8 8 0 0 0 16 0C8 11 0 0 0 0z"/>
+  </defs>
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <circle cx="300" cy="180" r="130" fill="#FBE6D3"/>
+  <circle cx="300" cy="180" r="80" fill="#F9C9A0"/>
+  <path d="M0 500c220-70 420-80 640-40s380 10 560-40v480H0z" fill="#C9C9A4"/>
+
+  <!-- spruces -->
+  <g fill="#3E4A33">
+    <use href="#gran" transform="translate(80 540) scale(2.2)"/><use href="#gran" transform="translate(170 520) scale(1.5)"/>
+    <use href="#gran" transform="translate(760 520) scale(1.6)"/>
+  </g>
+
+  <!-- cabin -->
+  <g transform="translate(240 300)">
+    <rect x="20" y="120" width="420" height="200" fill="#6B4A38"/>
+    <path d="M20 148h420M20 176h420M20 204h420M20 232h420M20 260h420M20 288h420" stroke="#4A2412" stroke-width="4"/>
+    <path d="M-30 130 230 0l260 130z" fill="#4A2412"/>
+    <g fill="#F7883F" stroke="#FBF7F1" stroke-width="7"><rect x="70" y="170" width="80" height="70"/><rect x="320" y="170" width="80" height="70"/></g>
+    <path d="M110 170v70M70 205h80M360 170v70M320 205h80" stroke="#FBF7F1" stroke-width="5"/>
+    <rect x="196" y="190" width="70" height="130" fill="#4A2412"/>
+    <circle cx="252" cy="258" r="5" fill="#F26A0F"/>
+  </g>
+  <path d="M0 640c260-40 500-30 760-10s300 10 440-10v280H0z" fill="#B3B48A"/>
+
+  <!-- cutaway: main line with the water stop valve -->
+  <path d="M120 900V770q0-40 40-40h460q40 0 40 40v130z" fill="#B89A7C"/>
+  <path d="M120 900V770q0-40 40-40h460q40 0 40 40v130" fill="none" stroke="#4A2412" stroke-width="6"/>
+  <path d="M150 830H630" stroke="#A84508" stroke-width="22"/>
+  <path d="M150 824H630" stroke="#F7883F" stroke-width="5" opacity=".7"/>
+  <rect x="340" y="796" width="100" height="68" rx="12" fill="#F26A0F" stroke="#4A2412" stroke-width="6"/>
+  <rect x="362" y="760" width="56" height="40" rx="8" fill="#FFFFFF" stroke="#4A2412" stroke-width="5"/>
+  <circle cx="390" cy="780" r="8" fill="#3E7D4A"/>
+  <path d="M380 830h20" stroke="#4A2412" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- signal -->
+  <g fill="none" stroke="#A84508" stroke-width="7" stroke-linecap="round">
+    <path d="M470 760q30-30 60 0"/><path d="M450 730q50-50 100 0"/><path d="M430 700q70-70 140 0"/>
+  </g>
+
+  <!-- phone with a leak alert -->
+  <g transform="translate(860 330)">
+    <rect width="200" height="380" rx="30" fill="#4A2412"/>
+    <rect x="14" y="40" width="172" height="300" rx="10" fill="#FFFFFF"/>
+    <rect x="76" y="16" width="48" height="10" rx="5" fill="#6B4A38"/>
+    <use href="#drape" transform="translate(100 90) scale(3.2)" fill="#F26A0F"/>
+    <path d="M40 200h120M40 230h90" stroke="#CDBBA9" stroke-width="10" stroke-linecap="round"/>
+    <rect x="40" y="262" width="120" height="50" rx="8" fill="#F26A0F"/>
+    <path d="M78 287h44" stroke="#2E170B" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -13,6 +13,9 @@ export default defineConfig({
     locales: ['nb', 'en'],
     routing: { prefixDefaultLocale: false },
   },
+  // The site does not use Astro sessions. Without this the adapter adds a `SESSION` KV binding
+  // without an id, which `wrangler preview` (branch previews in Workers Builds) rejects (code 10021).
+  session: false,
   adapter: cloudflare(),
   integrations: [
     sitemap({

@@ -27,7 +27,7 @@ const [firma, tekster] = await Promise.all([getFirma(), getTekster(locale)]);
 <section class="seksjon skjemaseksjon" id="skjema" data-tjeneste={tjeneste} aria-labelledby="skjema-tittel">
   <div class="ramme ss">
     <div class="ss-venstre">
-      <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
+      <p class="eyebrow">{(eyebrow ?? tekst.eyebrow).replaceAll(' · ', ' · ')}</p>
       <h2 id="skjema-tittel" class="display">{tekst.tittel}</h2>
       <p class="ss-merknad">{tekst.merknad}</p>
       <p class="ss-ring">{tekst.ringDirekte}</p>

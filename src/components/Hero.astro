@@ -53,7 +53,8 @@ const harKort = kortHtml.trim() !== '';
           </a>
         )
       }
-      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {/* A middle dot stays at the end of a line, never at the start of the next. */}
+      {eyebrow && <p class="eyebrow">{eyebrow.replaceAll(' · ', ' · ')}</p>}
       <h1 id="hero-tittel" class="display hero-tittel">
         <span class="linje">{tittel}</span>
         {aksent && <span class="aksent linje">{aksent}</span>}

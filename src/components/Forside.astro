@@ -5,7 +5,6 @@ import Band from './Band.astro';
 import Faktakort from './Faktakort.astro';
 import Hero from './Hero.astro';
 import OmraderForside from './OmraderForside.astro';
-import Servicebil from './Servicebil.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
 import Steg from './Steg.astro';
 import TankFremhevet from './TankFremhevet.astro';
@@ -78,7 +77,6 @@ const ruter = f.tjenester.ruter.flatMap((r) => {
   </div>
 </section>
 
-<Servicebil locale={locale} tekst={f.bil} />
 <TankFremhevet locale={locale} tekst={f.varmtvann} priser={firma.priser} tankHref={tankHref} />
 <Tanksjekk tekst={f.tanksjekk} tankHref={tankHref} />
 <Band locale={locale} tekst={f.band} />

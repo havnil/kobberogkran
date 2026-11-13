@@ -58,19 +58,6 @@ export const forsideSchema = z.object({
     /** `tjeneste` is a service translationKey; `anker` a heading id on that page (may be empty). */
     ruter: z.array(z.object({ tittel: z.string(), tekst: z.string(), tjeneste: z.string(), anker: z.string() })),
   }),
-  /** «I bilen»: what is always in the van. `bruk` is how often it is used, 1 to 5. Drafts until Eirik confirms (`bekreftet`). */
-  bil: z.object({
-    eyebrow: z.string(),
-    tittel: z.string(),
-    ingress: z.string(),
-    bekreftet: z.boolean(),
-    brukEtikett: z.string(),
-    /** Screen reader text for the bars. Placeholder: {n}. */
-    brukAv: z.string(),
-    utstyr: z.array(
-      z.object({ navn: z.string(), under: z.string(), bruk: z.number().int().min(1).max(5), verdi: z.string(), enhet: z.string() }),
-    ),
-  }),
   varmtvann: z.object({
     tittel: z.string(),
     /** Label on the big fixed price: «arbeid». */

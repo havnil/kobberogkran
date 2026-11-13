@@ -95,58 +95,6 @@
         }
       ]
     },
-    "bil": {
-      "eyebrow": "In the van",
-      "tittel": "The service van",
-      "ingress": "What Eirik uses most is always in the van, so more jobs are done on the first visit.",
-      "bekreftet": false,
-      "brukEtikett": "Use",
-      "brukAv": "Used {n} out of 5",
-      "utstyr": [
-        {
-          "navn": "Common parts",
-          "under": "Seals, fittings, stopcocks and valves",
-          "bruk": 5,
-          "verdi": "100+",
-          "enhet": "parts"
-        },
-        {
-          "navn": "Press tool",
-          "under": "Joins copper and plastic pipes without an open flame",
-          "bruk": 4,
-          "verdi": "15–54",
-          "enhet": "mm"
-        },
-        {
-          "navn": "Drain camera",
-          "under": "Looks inside the drain before anything is opened up",
-          "bruk": 3,
-          "verdi": "30",
-          "enhet": "m"
-        },
-        {
-          "navn": "Leak detection",
-          "under": "Moisture meter and thermal camera",
-          "bruk": 3,
-          "verdi": "2",
-          "enhet": "pcs"
-        },
-        {
-          "navn": "Frost protection",
-          "under": "Thawing frozen pipes and heating cable",
-          "bruk": 2,
-          "verdi": "Nov–Mar",
-          "enhet": ""
-        },
-        {
-          "navn": "Water test kit",
-          "under": "A quick test on site, full analysis at a laboratory",
-          "bruk": 2,
-          "verdi": "1",
-          "enhet": "kit"
-        }
-      ]
-    },
     "varmtvann": {
       "tittel": "Fixed price for replacing a water heater",
       "arbeidMerke": "fixed price for the work",

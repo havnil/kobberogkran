@@ -173,25 +173,6 @@ collections:
                       - { name: tekst, label: Én linje, widget: string }
                       - { name: tjeneste, label: Tjeneste (oversettelsesnøkkel), widget: string }
                       - { name: anker, label: Avsnitt på tjenestesiden (id; kan stå tomt), widget: string, required: false }
-              - name: bil
-                label: I bilen (servicebilen)
-                widget: object
-                fields:
-                  - { name: eyebrow, label: Etikett, widget: string }
-                  - { name: tittel, label: Tittel, widget: string }
-                  - { name: ingress, label: Ingress, widget: text }
-                  - { name: bekreftet, label: Bekreftet av Eirik, widget: boolean, default: false }
-                  - { name: brukEtikett, label: Etikett - bruk, widget: string }
-                  - { name: brukAv, label: 'Skjermlesertekst for stolpene ({n})', widget: string }
-                  - name: utstyr
-                    label: Utstyr
-                    widget: list
-                    fields:
-                      - { name: navn, label: Navn, widget: string }
-                      - { name: under, label: Undertekst, widget: string }
-                      - { name: bruk, label: Hvor ofte i bruk (1-5), widget: number, value_type: int, min: 1, max: 5 }
-                      - { name: verdi, label: Verdi, widget: string }
-                      - { name: enhet, label: Enhet, widget: string, required: false }
               - name: varmtvann
                 label: Fastpris på varmtvannstank
                 widget: object

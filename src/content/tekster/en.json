@@ -9,14 +9,14 @@
   "forside": {
     "hero": {
       "stedslinje": "Kobber og Kran · Hemnes · Aurskog-Høland",
-      "tittel": "Plumber in Hemnes and Aurskog-Høland",
+      "tittel": "Plumber in Hemnes, Aurskog-Høland",
       "ingress": "Your local plumber: you talk to Eirik himself, get a price before the job starts, and he turns up when agreed.",
       "lover": [
         "A price before the job starts",
         "Turns up when agreed",
         "You deal with Eirik all the way"
       ],
-      "tittelAksent": "and Aurskog-Høland",
+      "tittelAksent": "Aurskog-Høland",
       "sesongmerke": {
         "host": {
           "tekst": "Winterising the cabin: sign up now",
@@ -70,7 +70,7 @@
           "anker": ""
         },
         {
-          "tittel": "Brown water and wells",
+          "tittel": "Wells and water",
           "tekst": "Pump, pressure tank, filter and water test.",
           "tjeneste": "bronn-og-vann",
           "anker": ""

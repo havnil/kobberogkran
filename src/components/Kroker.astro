@@ -79,7 +79,8 @@ const { locale, tank, hytte, priser, tankHref, hytteHref } = Astro.props;
 
   .krok-tittel {
     margin: 0 0 var(--space-3);
-    font-size: clamp(1.625rem, 3vw, 2.25rem);
+    /* The card is a size container: «Lekkasjesikker hytte» stays on one line from phone width up. */
+    font-size: clamp(1.5rem, 7.8cqi, 2.25rem);
     line-height: 1.05;
     text-wrap: balance;
   }

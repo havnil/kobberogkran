@@ -52,9 +52,14 @@ const [firma, tekster] = await Promise.all([getFirma(), getTekster(locale)]);
     align-items: start;
   }
 
+  .ss-venstre {
+    container-type: inline-size;
+  }
+
+  /* «Send forespørsel» on one line in the column it has. */
   h2.display {
     margin-bottom: var(--space-3);
-    font-size: clamp(1.9rem, 8vw, 3.75rem);
+    font-size: clamp(1.75rem, 9.4cqi, 3.75rem);
   }
 
   .ss-merknad {

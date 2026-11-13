@@ -55,8 +55,8 @@ const harKort = kortHtml.trim() !== '';
       }
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h1 id="hero-tittel" class="display hero-tittel">
-        {tittel}
-        {aksent && <span class="aksent">{aksent}</span>}
+        <span class="linje">{tittel}</span>
+        {aksent && <span class="aksent linje">{aksent}</span>}
       </h1>
       <p class="ingress">{ingress}</p>
       <div class="hero-knapper">
@@ -129,7 +129,11 @@ const harKort = kortHtml.trim() !== '';
     gap: 0;
   }
 
+  /* The text column is a size container, so the title scales with the room it really has, never with the
+     viewport: it can then never run under the hanging card or the pipe. */
   .hero-tekst {
+    container-type: inline-size;
+    min-width: 0;
     padding-block: 2.5rem 1rem;
   }
 
@@ -154,10 +158,18 @@ const harKort = kortHtml.trim() !== '';
     text-decoration: underline;
   }
 
+  /* Each part of the title is its own line (the accent part last); a part wraps only where it must, and
+     then balanced, so no line is left with a lone word. Sized for the front page copy: «Rørlegger på Hemnes»
+     on one line from about 600 px of column. */
   .hero-tittel {
     margin: 0 0 var(--space-4);
-    font-size: clamp(2.1rem, 9.4vw, 5.1rem);
+    font-size: clamp(1.9rem, 9.2cqi, 5rem);
     line-height: 0.95;
+  }
+
+  .hero-tittel .linje {
+    display: block;
+    text-wrap: balance;
   }
 
   .ingress {
@@ -186,7 +198,7 @@ const harKort = kortHtml.trim() !== '';
   }
 
   .kompakt .hero-tittel {
-    font-size: clamp(2rem, 7.4vw, 4.25rem);
+    font-size: clamp(2rem, 7cqi, 4.25rem);
   }
 
   @media (min-width: 1000px) {
@@ -207,7 +219,7 @@ const harKort = kortHtml.trim() !== '';
     }
 
     .hero-inner {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 27.5rem);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
       column-gap: var(--space-4);
       min-height: inherit;
     }
@@ -217,17 +229,12 @@ const harKort = kortHtml.trim() !== '';
       padding-block: 4.5rem 5rem;
     }
 
-    /* The title may run under the gap towards the card, as long as the last line stays on one line. */
     .hero-tittel {
-      font-size: min(5.1rem, 5.6vw);
+      font-size: clamp(2.25rem, 8cqi, 5rem);
     }
 
     .kompakt .hero-tittel {
-      font-size: min(4.25rem, 4.8vw);
-    }
-
-    .hero-tittel .aksent {
-      white-space: nowrap;
+      font-size: clamp(2.25rem, 7cqi, 4.25rem);
     }
 
     .hero-kort {
@@ -256,14 +263,21 @@ const harKort = kortHtml.trim() !== '';
     }
 
     .uten-kort .hero-tittel {
-      font-size: min(5.1rem, 6vw);
-      margin-right: 0;
+      font-size: clamp(2.25rem, 6cqi, 4.25rem);
       max-width: 20ch;
     }
   }
-  @media (min-width: 1340px) {
-    .hero-tittel {
-      margin-right: -7rem;
+
+  /* Keep the illustration's badge clear of the fixed copper pipe at the right edge (from 1380 px). */
+  @media (min-width: 1380px) {
+    .hero :global(.hero-bilde .illustrasjon-merke) {
+      right: 5rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 27.5rem);
     }
   }
 </style>

@@ -1,6 +1,8 @@
 ---
 // A numbered tile: number in monospace, slanted title, one line and «Se mer →». Used in the four-column
-// grids (`.ruter`) on the front page, the services page and under each service.
+// grids (`.ruter`) on the front page, the services page and under each service. Each tile spans four rows
+// of the grid (subgrid), so numbers, titles, texts and «Se mer» line up across a row even when one title
+// wraps to two lines; «Se mer» sits at the bottom.
 interface Props {
   href: string;
   nummer: number;
@@ -24,14 +26,19 @@ const { href, nummer, tittel, tekst, seMer } = Astro.props;
 <style>
   .rute {
     position: relative;
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 0;
     background: var(--color-white);
   }
 
   a {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 2rem 1.6rem 1.75rem;
+    display: grid;
+    grid-row: 1 / -1;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    padding: 2rem 1.25rem 1.75rem;
     color: var(--color-text);
     text-decoration: none;
   }
@@ -69,7 +76,8 @@ const { href, nummer, tittel, tekst, seMer } = Astro.props;
 
   h3 {
     margin: 0 0 0.6rem;
-    font-size: 1.375rem;
+    font-size: 1.25rem;
+    text-wrap: balance;
   }
 
   p {
@@ -80,7 +88,7 @@ const { href, nummer, tittel, tekst, seMer } = Astro.props;
   }
 
   .rute-mer {
-    margin-top: auto;
+    align-self: end;
     color: var(--color-accent);
     font-size: 0.8125rem;
     font-weight: 800;

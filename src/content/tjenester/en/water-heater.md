@@ -2,7 +2,7 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: "Water heater replacement"
-kundeTittel: "New water heater"
+kundeTittel: "Water heater"
 fagord: "Replacing a hot water cylinder"
 nummer: 3
 kort: "A fixed price for the work when the tank is replaced in the same place. You see what is included, and what isn't."

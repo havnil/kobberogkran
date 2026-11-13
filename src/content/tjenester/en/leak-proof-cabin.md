@@ -2,8 +2,8 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: "Leak-proof cabin: water stop valve and remote shut-off"
-kundeTittel: "Leak-proof cabin"
-fagord: "Water stop valve, leak sensors and remote shut-off"
+kundeTittel: "Cabin protection"
+fagord: "Water stop valve at the cabin"
 nummer: 9
 kort: "Eirik opens or winterises the cabin and fits a water stop valve on the main line. If it leaks, the water is shut off, and you get to know."
 fakta:

@@ -129,7 +129,7 @@ const bildeSrc = juridisk ? undefined : bilder[nokkel];
           </div>
           <p class="hode-ingress">{f.tjenester.ingress}</p>
         </div>
-        <ol class="ruter">
+        <ol class="ruter ruter-3">
           {tjenester.map((e) => (
             <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={e.data.nummer} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={f.tjenester.seMer} />
           ))}

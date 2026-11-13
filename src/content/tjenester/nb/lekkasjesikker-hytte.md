@@ -2,8 +2,8 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: 'Lekkasjesikker hytte: vannstopper og fjernstenging'
-kundeTittel: 'Lekkasjesikker hytte'
-fagord: 'Vannstopper, lekkasjesensor og fjernstenging'
+kundeTittel: 'Hyttesikring'
+fagord: 'Vannstopper på hytta'
 nummer: 9
 kort: 'Eirik åpner eller stenger hytta og monterer vannstopper på hovedledningen. Lekker det, stenges vannet, og du får vite det.'
 fakta:

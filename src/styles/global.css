@@ -46,6 +46,19 @@ main {
   width: 100%;
 }
 
+/* Headings never leave a short word alone on a line: lines are balanced everywhere. */
+h1,
+h2,
+h3,
+h4,
+summary,
+.eyebrow,
+.skra,
+dt,
+dd {
+  text-wrap: balance;
+}
+
 h1,
 h2,
 h3 {
@@ -87,6 +100,9 @@ img {
   left: var(--space-3);
   top: -100%;
   z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   padding: var(--space-2) var(--space-3);
   background: var(--color-brown);
   color: var(--color-cream);
@@ -225,8 +241,10 @@ img {
   hyphens: manual;
 }
 
+/* Sized by the column the title sits in (a size container, see `.hode`), so long words such as
+   «varmtvannstanken» never break and two lines are used where two are enough. */
 h2.display {
-  font-size: clamp(1.9rem, 8vw, 4.25rem);
+  font-size: clamp(1.9rem, 8.4cqi, 4.25rem);
 }
 
 .display .aksent {
@@ -250,6 +268,10 @@ h2.display {
   display: grid;
   gap: var(--space-3);
   margin-bottom: 3rem;
+}
+
+.hode > :first-child {
+  container-type: inline-size;
 }
 
 .hode-ingress {
@@ -376,6 +398,11 @@ h2.display {
   .ruter {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  /* Nine services fill three full rows. */
+  .ruter-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Article next to the sticky side box (service pages and the other pages). */
@@ -406,7 +433,7 @@ h2.display {
 .artikkel h2 {
   margin: 3.5rem 0 1rem;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.4vw, 2.25rem);
+  font-size: clamp(1.375rem, 1rem + 1.6vw, 2.25rem);
   font-weight: 800;
   font-style: italic;
   line-height: 1.1;

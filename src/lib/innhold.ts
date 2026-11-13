@@ -8,13 +8,21 @@ export const tjenesteSchema = z.object({
   kundeTittel: z.string(),
   /** The trade term, shown as subtitle. */
   fagord: z.string(),
-  nummer: z.number().int().min(1).max(5),
+  /** Order on the services page and in the menu; the front page tiles have their own order. */
+  nummer: z.number().int().min(1).max(12),
   kort: z.string(),
   fakta: z.array(z.object({ tall: z.string(), tekst: z.string() })),
   faq: z.array(z.object({ sporsmal: z.string(), svar: z.string() })),
   /** Seasonal card text (cabin): `host` in autumn/winter, `var` in spring/summer. */
   sesong: z.object({ host: z.string(), var: z.string() }).optional(),
   bilder: z.array(z.object({ src: z.string(), plassholder: z.boolean() })),
+  /**
+   * The service to preselect in the request form when this page's own `translationKey` is not one of the
+   * form's services (`TJENESTER` in src/server/validering.ts), e.g. `tett-avlop` → `service-og-reparasjon`.
+   */
+  skjemaTjeneste: z.string().optional(),
+  /** Label of this service in the form's service list, when `kundeTittel` is narrower than what the form option covers. */
+  skjemaNavn: z.string().optional(),
   translationKey: z.string(),
   locale: z.enum(['nb', 'en']),
 });
@@ -67,16 +75,8 @@ export const forsideSchema = z.object({
     med: z.array(z.string()),
     ikkeMedTittel: z.string(),
     ikkeMed: z.array(z.string()),
-    /** The featured block on the front page. */
     eyebrow: z.string(),
     ingress: z.string(),
-    faktaTotal: z.string(),
-    faktaTid: z.string(),
-    faktaTidVerdi: z.string(),
-    faktaDok: z.string(),
-    faktaDokVerdi: z.string(),
-    knappBilde: z.string(),
-    knappLes: z.string(),
   }),
   /** «Tanksjekk»: the tank-age calculator. Runs in the browser only; nothing is stored or sent. */
   tanksjekk: z.object({
@@ -98,10 +98,25 @@ export const forsideSchema = z.object({
     personvern: z.string(),
     /** Shown without JavaScript instead of the calculator. */
     utenJs: z.string(),
+    /** Link to the water-heater page, shown instead of the result without JavaScript. */
+    knappUtenJs: z.string(),
+    /** Revealed with the result: the fixed price on the work (from `firma`) and a note about what comes on top. */
+    prisEtikett: z.string(),
+    prisNote: z.string(),
     /** Years: from `snartAr` «plan a replacement», from `grenseAr` «replace now» (what insurers tend to expect). */
     snartAr: z.number().int().positive(),
     grenseAr: z.number().int().positive(),
     maksAr: z.number().int().positive(),
+  }),
+  /** The cabin hook card next to the tank check: «Lekkasjesikker hytte». The price comes from `firma`. */
+  hyttesikring: z.object({
+    eyebrow: z.string(),
+    tittel: z.string(),
+    ingress: z.string(),
+    punkter: z.array(z.string()),
+    prisEtikett: z.string(),
+    prisNote: z.string(),
+    knapp: z.string(),
   }),
   /** The full-width brown band. */
   band: z.object({ eyebrow: z.string(), tittel: z.string(), tittelAksent: z.string() }),
@@ -144,9 +159,8 @@ export const siderSchema = z.object({
     adresseTittel: z.string(),
   }),
   tjeneste: z.object({
-    /** The hero title reads `<service> <tittelSted> <tittelAksent>`, the last part in the accent colour. */
-    tittelSted: z.string(),
-    tittelAksent: z.string(),
+    /** Line above the hero title (the title is the service name alone): trade and places. */
+    stedslinje: z.string(),
     prisForStart: z.string(),
     faqEyebrow: z.string(),
     andreEyebrow: z.string(),

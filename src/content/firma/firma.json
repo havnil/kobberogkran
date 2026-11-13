@@ -12,7 +12,8 @@
       "servicebil": { "verdi": 625, "plassholder": true },
       "forbruk": { "verdi": 125, "plassholder": true },
       "varmtvannstankArbeid": { "verdi": 8125, "plassholder": true },
-      "varmtvannstankTypiskTotal": { "verdi": 18000, "plassholder": true }
+      "varmtvannstankTypiskTotal": { "verdi": 18000, "plassholder": true },
+      "hyttesikringArbeid": { "verdi": 4000, "plassholder": true }
     },
     "omrade": {
       "steder": ["Hemnes", "Bjørkelangen", "Aurskog", "Løken", "Setskog", "Rømskog", "Lillestrøm"],

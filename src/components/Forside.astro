@@ -1,14 +1,14 @@
 ---
-// The front page, section for section as in docs/research/2026-11-13-kimkran-element-for-element.md.
+// The front page: hero, the eight tiles, the hook row (tank check and leak-proof cabin), the band, areas,
+// steps and the form. Layout from docs/research/2026-11-13-kimkran-element-for-element.md.
 // All copy comes from `tekster/<locale>.json` (`forside`); prices and places from `firma`.
 import Band from './Band.astro';
 import Faktakort from './Faktakort.astro';
 import Hero from './Hero.astro';
+import Kroker from './Kroker.astro';
 import OmraderForside from './OmraderForside.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
 import Steg from './Steg.astro';
-import TankFremhevet from './TankFremhevet.astro';
-import Tanksjekk from './Tanksjekk.astro';
 import TjenesteKort from './TjenesteKort.astro';
 import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
@@ -77,8 +77,7 @@ const ruter = f.tjenester.ruter.flatMap((r) => {
   </div>
 </section>
 
-<TankFremhevet locale={locale} tekst={f.varmtvann} priser={firma.priser} tankHref={tankHref} />
-<Tanksjekk tekst={f.tanksjekk} tankHref={tankHref} />
+<Kroker locale={locale} tank={f.tanksjekk} hytte={f.hyttesikring} priser={firma.priser} tankHref={tankHref} hytteHref={hrefFor('lekkasjesikker-hytte')} />
 <Band locale={locale} tekst={f.band} />
 <OmraderForside locale={locale} tekst={f.omrader} omtaleTittel={f.omEirik.anmeldelserTittel} omrade={firma.omrade} omtale={synlig} />
 <Steg tekst={f.steg} />

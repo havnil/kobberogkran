@@ -16,7 +16,7 @@
         "Kommer når det er avtalt",
         "Du har med Eirik å gjøre hele veien"
       ],
-      "tittelAksent": "Aurskog-Høland",
+      "tittelAksent": "og i Aurskog-Høland",
       "sesongmerke": {
         "host": {
           "tekst": "Vinterstengning av hytta: meld deg på",
@@ -54,8 +54,8 @@
         {
           "tittel": "Tett avløp",
           "tekst": "Vask, sluk eller do som ikke vil renne unna.",
-          "tjeneste": "service-og-reparasjon",
-          "anker": "typiske-jobber"
+          "tjeneste": "tett-avlop",
+          "anker": ""
         },
         {
           "tittel": "Varmtvannstank",
@@ -84,13 +84,13 @@
         {
           "tittel": "Fjøs og gård",
           "tekst": "Vann til dyr og driftsbygning, fra brønn eller kommunalt nett.",
-          "tjeneste": "bronn-og-vann",
-          "anker": "fjøs-og-gård"
+          "tjeneste": "fjos-og-gard",
+          "anker": ""
         },
         {
           "tittel": "Bedrift og borettslag",
           "tekst": "Service og reparasjon for bedrifter, borettslag og sameier.",
-          "tjeneste": "service-og-reparasjon",
+          "tjeneste": "bedrift-og-borettslag",
           "anker": ""
         }
       ]
@@ -117,22 +117,15 @@
         "Vanskelig adkomst, for eksempel trang kjeller eller krypkjeller"
       ],
       "eyebrow": "Fastpris · varmtvannstank",
-      "ingress": "Står den nye tanken på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt tanken, så ser Eirik om fastprisen holder.",
-      "faktaTotal": "Typisk total",
-      "faktaTid": "Tid",
-      "faktaTidVerdi": "1 dag",
-      "faktaDok": "Dokumentasjon",
-      "faktaDokVerdi": "FDV",
-      "knappBilde": "Send bilde av tanken",
-      "knappLes": "Les mer"
+      "ingress": "Står den nye tanken på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt tanken, så ser Eirik om fastprisen holder."
     },
     "tanksjekk": {
       "eyebrow": "Tanksjekk",
       "tittel": "Er varmtvannstanken din gammel?",
-      "ingress": "Finn produksjonsåret på typeskiltet og skriv det inn. Måleren viser alderen mot det forsikringen pleier å forvente.",
+      "ingress": "Skriv inn produksjonsåret fra typeskiltet, så ser du alderen mot det forsikringen pleier å regne som gammelt.",
       "arEtikett": "Produksjonsår · fra typeskiltet",
       "arHjelp": "Står ofte som «Prod.» eller som de første sifrene i serienummeret.",
-      "knapp": "Bruk i forespørselen",
+      "knapp": "Send bilde av tanken",
       "alderEnhet": "år",
       "maalerGrense": "Forsikring",
       "svarStart": "Skriv inn årstallet, så ser du hvor gammel tanken er.",
@@ -145,7 +138,23 @@
       "utenJs": "Under 15 år: følg med på tanken. 15 til 19 år: planlegg et bytte. 20 år eller mer: bytt nå. Mange forsikringer regner en tank som gammel etter rundt 20 år.",
       "snartAr": 15,
       "grenseAr": 20,
-      "maksAr": 30
+      "maksAr": 30,
+      "knappUtenJs": "Se fastprisen på bytte",
+      "prisEtikett": "Fastpris på arbeidet",
+      "prisNote": "Når ny tank står på samme sted. Tank og deler kommer i tillegg."
+    },
+    "hyttesikring": {
+      "eyebrow": "Hyttesikring",
+      "tittel": "Lekkasjesikker hytte",
+      "ingress": "Eirik åpner eller stenger hytta og monterer vannstopper på hovedledningen. Har hytta nett, kan du stenge vannet fra mobilen.",
+      "punkter": [
+        "Åpning om våren eller vinterstengning om høsten",
+        "Vannstopper med fjernstenging, montert og testet",
+        "Bilder og beskjed når jobben er gjort"
+      ],
+      "prisEtikett": "Fastpris på arbeidet",
+      "prisNote": "Vannstopperen og utstyret du velger kommer i tillegg.",
+      "knapp": "Slik sikrer du hytta"
     },
     "band": {
       "eyebrow": "Kobber og Kran · Hemnes",
@@ -225,12 +234,11 @@
       "andreTittel": "Andre ting Eirik hjelper med",
       "omraderTittel": "Her jobber vi",
       "skjemaEyebrow": "Forespørsel",
-      "tittelSted": "på Hemnes og i",
-      "tittelAksent": "Aurskog-Høland",
       "prisForStart": "Pris før start",
       "faqEyebrow": "Spørsmål og svar",
       "andreEyebrow": "Henger sammen med",
-      "omraderEyebrow": "Områder"
+      "omraderEyebrow": "Områder",
+      "stedslinje": "Rørlegger · Hemnes og Aurskog-Høland"
     },
     "priser": {
       "kveldHelgNavn": "Kveld og helg",

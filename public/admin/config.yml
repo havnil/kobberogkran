@@ -68,7 +68,7 @@ collections:
     folder: src/content/tjenester
     extension: md
     format: frontmatter
-    # The five services are fixed; new ones need code changes.
+    # The services are fixed; new ones need a file per language (and a form mapping in `skjemaTjeneste`).
     create: false
     i18n: true
     slug: '{{title | localize}}'
@@ -77,7 +77,7 @@ collections:
       - { name: title, label: Tittel, widget: string, i18n: true }
       - { name: kundeTittel, label: Tittel i kundens ord, widget: string, i18n: true }
       - { name: fagord, label: Fagord (undertittel), widget: string, i18n: true }
-      - { name: nummer, label: Nummer (1-5), widget: number, value_type: int, min: 1, max: 5, i18n: duplicate }
+      - { name: nummer, label: Nummer (1-12), widget: number, value_type: int, min: 1, max: 12, i18n: duplicate }
       - { name: kort, label: Kort tekst på kortet, widget: text, i18n: true }
       - name: fakta
         label: Fakta
@@ -108,6 +108,8 @@ collections:
         fields:
           - { name: src, label: Bilde, widget: image }
           - { name: plassholder, label: Plassholder (blokkerer lansering), widget: boolean, default: true }
+      - { name: skjemaTjeneste, label: Tjeneste i skjemaet (oversettelsesnøkkel; tom = denne siden), widget: string, required: false, i18n: duplicate }
+      - { name: skjemaNavn, label: Navn i skjemaets tjenesteliste (tom = tittel i kundens ord), widget: string, required: false, i18n: true }
       - { name: translationKey, label: Oversettelsesnøkkel, widget: hidden, i18n: duplicate }
       - { name: locale, label: Språk, widget: hidden, default: '{{locale}}', i18n: true }
       - { name: body, label: Innhold, widget: markdown, i18n: true }
@@ -186,13 +188,6 @@ collections:
                   - { name: ikkeMed, label: Det som ikke er med, widget: list, field: { name: punkt, label: Punkt, widget: string } }
                   - { name: eyebrow, label: Etikett, widget: string }
                   - { name: ingress, label: Ingress, widget: text }
-                  - { name: faktaTotal, label: Etikett - typisk total, widget: string }
-                  - { name: faktaTid, label: Etikett - tid, widget: string }
-                  - { name: faktaTidVerdi, label: Verdi - tid, widget: string }
-                  - { name: faktaDok, label: Etikett - dokumentasjon, widget: string }
-                  - { name: faktaDokVerdi, label: Verdi - dokumentasjon, widget: string }
-                  - { name: knappBilde, label: Knapp - send bilde, widget: string }
-                  - { name: knappLes, label: Knapp - les mer, widget: string }
               - name: tanksjekk
                 label: Tanksjekk (alder på varmtvannstanken)
                 widget: object
@@ -202,7 +197,7 @@ collections:
                   - { name: ingress, label: Ingress, widget: text }
                   - { name: arEtikett, label: Etikett - årstall, widget: string }
                   - { name: arHjelp, label: Hjelpetekst - årstall, widget: string }
-                  - { name: knapp, label: Knapp, widget: string }
+                  - { name: knapp, label: Knapp i svaret (velger varmtvannstank i skjemaet), widget: string }
                   - { name: alderEnhet, label: Enhet - år, widget: string }
                   - { name: maalerGrense, label: Merke på grensen, widget: string }
                   - { name: svarStart, label: Svar før noe er skrevet, widget: text }
@@ -213,9 +208,23 @@ collections:
                   - { name: forbehold, label: Forbehold, widget: string }
                   - { name: personvern, label: Om personvern, widget: string }
                   - { name: utenJs, label: Tekst uten JavaScript, widget: text }
+                  - { name: knappUtenJs, label: Knapp uten JavaScript (til varmtvannstanksiden), widget: string }
+                  - { name: prisEtikett, label: Etikett på fastprisen i svaret, widget: string }
+                  - { name: prisNote, label: Merknad under fastprisen, widget: string }
                   - { name: snartAr, label: Alder - planlegg bytte, widget: number, value_type: int }
                   - { name: grenseAr, label: Alder - bytt nå (forsikring), widget: number, value_type: int }
                   - { name: maksAr, label: Måleren slutter på, widget: number, value_type: int }
+              - name: hyttesikring
+                label: Lekkasjesikker hytte (kortet ved tanksjekken)
+                widget: object
+                fields:
+                  - { name: eyebrow, label: Etikett, widget: string }
+                  - { name: tittel, label: Tittel, widget: string }
+                  - { name: ingress, label: Ingress, widget: text }
+                  - { name: punkter, label: Tre punkter, widget: list, field: { name: punkt, label: Punkt, widget: string } }
+                  - { name: prisEtikett, label: Etikett på fastprisen, widget: string }
+                  - { name: prisNote, label: Merknad under fastprisen, widget: string }
+                  - { name: knapp, label: Knapp (til siden om lekkasjesikker hytte), widget: string }
               - name: band
                 label: Brunt bånd
                 widget: object
@@ -296,8 +305,7 @@ collections:
                 label: Mal for tjenestesider
                 widget: object
                 fields:
-                  - { name: tittelSted, label: Tittel - etter tjenestenavnet, widget: string }
-                  - { name: tittelAksent, label: Tittel - siste linje (aksentfarge), widget: string }
+                  - { name: stedslinje, label: Linje over tittelen (fag og sted), widget: string }
                   - { name: prisForStart, label: Nederste linje i faktakortet, widget: string }
                   - { name: faqEyebrow, label: Etikett - spørsmål og svar, widget: string }
                   - { name: andreEyebrow, label: Etikett - andre tjenester, widget: string }
@@ -513,6 +521,7 @@ collections:
                   - { name: forbruk, label: Forbruk, widget: object, fields: *verdiNum }
                   - { name: varmtvannstankArbeid, label: Varmtvannstank - fastpris på arbeid, widget: object, fields: *verdiNum }
                   - { name: varmtvannstankTypiskTotal, label: Varmtvannstank - typisk totalpris, widget: object, fields: *verdiNum }
+                  - { name: hyttesikringArbeid, label: Lekkasjesikker hytte - fastpris på arbeid, widget: object, fields: *verdiNum }
               - name: omrade
                 label: Område
                 widget: object

@@ -48,6 +48,14 @@ const erBad = tj.translationKey === 'bad';
 const erTank = tj.translationKey === 'varmtvannstank';
 // The cabin card text changes with the season, like the front page badge.
 const ingress = tj.sesong ? tj.sesong[aktivSesong(new Date())] : tj.kort;
+// Pages that are not a service in the form (e.g. «Tett avløp») preselect the form service they belong to.
+const skjemaTjeneste = tj.skjemaTjeneste ?? tj.translationKey;
+// «Lekkasjesikker hytte» has a fixed price on the work: the first cell of the fact card, from `firma`.
+const prisCelle =
+  tj.translationKey === 'lekkasjesikker-hytte'
+    ? [{ etikett: tekster.forside.hyttesikring.prisEtikett, verdi: firma.priser.hyttesikringArbeid, enhet: 'kr', pris: true, bred: true, under: tekster.forside.hyttesikring.prisNote }]
+    : [];
+const celler = [...prisCelle, ...tj.fakta.map((f, i) => ({ etikett: String(prisCelle.length + i + 1).padStart(2, '0'), tekst: f.tall, under: f.tekst, bred: true }))];
 ---
 
 <BaseLayout locale={locale} title={tj.title} description={tj.kort} alternates={alternates} jsonLd={jsonLd} harSkjema fullBredde>
@@ -55,21 +63,21 @@ const ingress = tj.sesong ? tj.sesong[aktivSesong(new Date())] : tj.kort;
     locale={locale}
     firma={firma}
     trail={trail}
-    tittel={`${tj.kundeTittel} ${s.tjeneste.tittelSted}`}
-    aksent={s.tjeneste.tittelAksent}
+    eyebrow={s.tjeneste.stedslinje}
+    tittel={tj.kundeTittel}
     ingress={ingress}
     skjemaHref="#skjema"
     bilde={{ src: bilde.src, width: 1200, height: 900, plassholder: bilde.plassholder }}
     kompakt
   >
     {
-      tj.fakta.length > 0 && (
+      celler.length > 0 && (
         <Faktakort
           slot="kort"
           locale={locale}
           venstre={s.tjeneste.faktaTittel}
           hoyre={tj.fagord}
-          celler={tj.fakta.map((f, i) => ({ etikett: String(i + 1).padStart(2, '0'), tekst: f.tall, under: f.tekst, bred: true }))}
+          celler={celler}
           bunn={s.tjeneste.prisForStart}
         />
       )
@@ -103,7 +111,7 @@ const ingress = tj.sesong ? tj.sesong[aktivSesong(new Date())] : tj.kort;
   </div>
 
   {erTank && <VarmtvannstankBlokk locale={locale} tekst={tekster.forside.varmtvann} priser={firma.priser} />}
-  {erTank && <Tanksjekk tekst={tekster.forside.tanksjekk} tankHref={egenHref} />}
+  {erTank && <Tanksjekk locale={locale} tekst={tekster.forside.tanksjekk} tankHref={egenHref} pris={firma.priser.varmtvannstankArbeid} />}
 
   <Faq eyebrow={s.tjeneste.faqEyebrow} tittel={s.tjeneste.faqTittel} faq={tj.faq} />
 
@@ -123,5 +131,5 @@ const ingress = tj.sesong ? tj.sesong[aktivSesong(new Date())] : tj.kort;
 
   <Omrader locale={locale} tekst={tekster.forside.omrader} tittel={s.tjeneste.omraderTittel} eyebrow={s.tjeneste.omraderEyebrow} omrade={firma.omrade} />
 
-  <Skjemaseksjon locale={locale} tekst={tekster.forside.skjema} eyebrow={`${s.tjeneste.skjemaEyebrow} · ${tj.kundeTittel}`} tjeneste={tj.translationKey} />
+  <Skjemaseksjon locale={locale} tekst={tekster.forside.skjema} eyebrow={`${s.tjeneste.skjemaEyebrow} · ${tj.kundeTittel}`} tjeneste={skjemaTjeneste} />
 </BaseLayout>

@@ -16,7 +16,7 @@
         "Turns up when agreed",
         "You deal with Eirik all the way"
       ],
-      "tittelAksent": "Aurskog-Høland",
+      "tittelAksent": "and Aurskog-Høland",
       "sesongmerke": {
         "host": {
           "tekst": "Winterising the cabin: sign up now",
@@ -46,7 +46,7 @@
       "seMer": "See more",
       "ruter": [
         {
-          "tittel": "A leak",
+          "tittel": "It's leaking",
           "tekst": "A dripping tap, water under the sink or damp where it should be dry.",
           "tjeneste": "service-og-reparasjon",
           "anker": ""
@@ -54,8 +54,8 @@
         {
           "tittel": "Blocked drain",
           "tekst": "A sink, floor drain or toilet that will not drain.",
-          "tjeneste": "service-og-reparasjon",
-          "anker": "typical-jobs"
+          "tjeneste": "tett-avlop",
+          "anker": ""
         },
         {
           "tittel": "Water heater",
@@ -84,13 +84,13 @@
         {
           "tittel": "Barns and farms",
           "tekst": "Water for animals and farm buildings, from a well or the mains.",
-          "tjeneste": "bronn-og-vann",
-          "anker": "barns-and-farms"
+          "tjeneste": "fjos-og-gard",
+          "anker": ""
         },
         {
-          "tittel": "Businesses and housing co-ops",
+          "tittel": "Businesses and co-ops",
           "tekst": "Service and repairs for businesses, housing co-operatives and owner associations.",
-          "tjeneste": "service-og-reparasjon",
+          "tjeneste": "bedrift-og-borettslag",
           "anker": ""
         }
       ]
@@ -117,22 +117,15 @@
         "Difficult access, such as a cramped cellar or crawl space"
       ],
       "eyebrow": "Fixed price · water heater",
-      "ingress": "When the new tank goes in the same place as the old one, the work is a fixed price. Send a photo of the rating plate and the floor around the tank, and Eirik can tell whether the fixed price applies.",
-      "faktaTotal": "Typical total",
-      "faktaTid": "Time",
-      "faktaTidVerdi": "1 day",
-      "faktaDok": "Documentation",
-      "faktaDokVerdi": "FDV",
-      "knappBilde": "Send a photo of the tank",
-      "knappLes": "Read more"
+      "ingress": "When the new tank goes in the same place as the old one, the work is a fixed price. Send a photo of the rating plate and the floor around the tank, and Eirik can tell whether the fixed price applies."
     },
     "tanksjekk": {
       "eyebrow": "Tank check",
       "tittel": "Is your water heater old?",
-      "ingress": "Find the year of manufacture on the rating plate and type it in. The gauge shows its age against what insurers tend to expect.",
+      "ingress": "Type the year from the rating plate to see the tank’s age against what insurers tend to treat as old.",
       "arEtikett": "Year made · from the rating plate",
       "arHjelp": "Often shown as «Prod.» or as the first digits of the serial number.",
-      "knapp": "Use in my request",
+      "knapp": "Send a photo of the tank",
       "alderEnhet": "yrs",
       "maalerGrense": "Insurance",
       "svarStart": "Type in the year to see how old the tank is.",
@@ -145,7 +138,23 @@
       "utenJs": "Under 15 years: keep an eye on the tank. 15 to 19 years: plan a replacement. 20 years or more: replace it now. Many insurers treat a tank as old after about 20 years.",
       "snartAr": 15,
       "grenseAr": 20,
-      "maksAr": 30
+      "maksAr": 30,
+      "knappUtenJs": "See the fixed price",
+      "prisEtikett": "Fixed price on the work",
+      "prisNote": "When the new tank goes in the same place. Tank and parts come on top."
+    },
+    "hyttesikring": {
+      "eyebrow": "Cabin protection",
+      "tittel": "Leak-proof cabin",
+      "ingress": "Eirik opens or winterises the cabin and fits a water stop valve on the main line. If the cabin has internet, you can shut off the water from your phone.",
+      "punkter": [
+        "Opening in spring or winterising in autumn",
+        "A water stop valve with remote shut-off, fitted and tested",
+        "Photos and a message when the job is done"
+      ],
+      "prisEtikett": "Fixed price on the work",
+      "prisNote": "The valve and equipment you choose come on top.",
+      "knapp": "How it works"
     },
     "band": {
       "eyebrow": "Kobber og Kran · Hemnes",
@@ -225,12 +234,11 @@
       "andreTittel": "Other things Eirik can help with",
       "omraderTittel": "Where we work",
       "skjemaEyebrow": "Request",
-      "tittelSted": "in Hemnes and",
-      "tittelAksent": "Aurskog-Høland",
       "prisForStart": "Price before we start",
       "faqEyebrow": "Questions and answers",
       "andreEyebrow": "Goes with",
-      "omraderEyebrow": "Areas"
+      "omraderEyebrow": "Areas",
+      "stedslinje": "Plumber · Hemnes and Aurskog-Høland"
     },
     "priser": {
       "kveldHelgNavn": "Evenings and weekends",

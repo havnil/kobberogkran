@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <path d="M0 600h1200v300H0z" fill="#E6D1AC"/>
+  <path d="M0 600h1200" stroke="#CFB07C" stroke-width="6"/>
+
+  <!-- underfloor heating loops, cutaway -->
+  <path d="M120 660h860q30 0 30 30t-30 30H150q-30 0-30 30t30 30h830q30 0 30 30t-30 30H120" fill="none" stroke="#F26A0F" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- radiator -->
+  <rect x="200" y="300" width="460" height="240" rx="18" fill="#FFFFFF" stroke="#4A2412" stroke-width="6"/>
+  <path d="M260 320v200M320 320v200M380 320v200M440 320v200M500 320v200M560 320v200M620 320v200" stroke="#E3D5C5" stroke-width="10" stroke-linecap="round"/>
+  <!-- heat waves -->
+  <path d="M300 270q-14-24 0-48t0-48M430 270q-14-24 0-48t0-48M560 270q-14-24 0-48t0-48" fill="none" stroke="#F26A0F" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- copper supply and return pipes -->
+  <path d="M640 540v40h270V360" fill="none" stroke="#B5652B" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M220 540v40" stroke="#B5652B" stroke-width="22" stroke-linecap="round"/>
+  <path d="M220 580h-60v50" fill="none" stroke="#A84508" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- manifold cabinet with pump and gauge -->
+  <rect x="840" y="200" width="240" height="320" rx="14" fill="#FFFFFF" stroke="#4A2412" stroke-width="6"/>
+  <rect x="870" y="240" width="180" height="22" rx="11" fill="#B5652B" stroke="#4A2412" stroke-width="4"/>
+  <rect x="870" y="300" width="180" height="22" rx="11" fill="#A84508" stroke="#4A2412" stroke-width="4"/>
+  <path d="M895 262v38M940 262v38M985 262v38M1030 262v38" stroke="#4A2412" stroke-width="6"/>
+  <circle cx="960" cy="420" r="56" fill="#A9BDBA" stroke="#4A2412" stroke-width="6"/>
+  <circle cx="960" cy="420" r="18" fill="#4A2412"/>
+  <circle cx="1040" cy="480" r="22" fill="#FFFFFF" stroke="#4A2412" stroke-width="5"/>
+  <path d="M1040 480l10-12" stroke="#F26A0F" stroke-width="5" stroke-linecap="round"/>
+</svg>

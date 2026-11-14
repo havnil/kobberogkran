@@ -34,7 +34,7 @@ translationKey: fjos-og-gard
 locale: en
 ---
 
-Water for the animals can't wait until spring. There are many farms around Hemnes, Setskog and Rømskog, and many have their own well and long pipes out to the barn and pasture. Eirik helps with the water from the well or the mains all the way to the drinking bowl.
+Water for the animals can't wait until spring. There are many farms around Hemnes, Setskog, Rømskog and Trøgstad, and many have their own well and long pipes out to the barn and pasture. Eirik helps with the water from the well or the mains all the way to the drinking bowl.
 
 ## What Eirik helps with
 

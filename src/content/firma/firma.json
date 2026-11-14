@@ -16,7 +16,7 @@
       "hyttesikringArbeid": { "verdi": 4000, "plassholder": true }
     },
     "omrade": {
-      "steder": ["Hemnes", "Bjørkelangen", "Aurskog", "Løken", "Setskog", "Rømskog", "Lillestrøm"],
+      "steder": ["Hemnes", "Bjørkelangen", "Aurskog", "Løken", "Setskog", "Rømskog", "Trøgstad", "Askim", "Mysen", "Lillestrøm"],
       "maksKjoretidMin": { "verdi": 45, "plassholder": true }
     }
   }

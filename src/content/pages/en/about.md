@@ -27,4 +27,4 @@ Kobber og Kran is newly started. We only show approvals we actually have, and th
 
 ## Closer than you think
 
-Kobber og Kran is based in Hemnes and works throughout Aurskog-Høland and in Lillestrøm. See where we go on the areas page.
+Kobber og Kran is based in Hemnes and works throughout Aurskog-Høland, in Indre Østfold and in Lillestrøm. See where we go on the areas page.

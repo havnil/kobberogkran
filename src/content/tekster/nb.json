@@ -8,7 +8,7 @@
   "whatsappHilsen": "Hei Eirik! Jeg trenger hjelp av en rørlegger.[ Det gjelder: {tjeneste}.][ (Fra: {kilde})]",
   "forside": {
     "hero": {
-      "stedslinje": "Kobber og Kran · Hemnes · Aurskog-Høland",
+      "stedslinje": "Kobber og Kran · Aurskog-Høland · Indre Østfold",
       "tittel": "Rørlegger på Hemnes i Aurskog-Høland",
       "ingress": "Bygdas egen rørlegger: du snakker med Eirik selv, får pris før jobben starter, og han kommer når det er avtalt.",
       "lover": [
@@ -212,7 +212,7 @@
     "omrader": {
       "tittel": "Her jobber vi",
       "eyebrow": "Områder",
-      "ingress": "Base på Hemnes. Eirik kjører i hele Aurskog-Høland og til Lillestrøm.",
+      "ingress": "Base på Hemnes. Eirik kjører i hele Aurskog-Høland og Indre Østfold, og til Lillestrøm.",
       "base": "Base",
       "utenfor": "Utenfor området: større jobber, etter avtale",
       "omtaleEyebrow": "Omtaler"
@@ -244,7 +244,7 @@
       "faqEyebrow": "Spørsmål og svar",
       "andreEyebrow": "Henger sammen med",
       "omraderEyebrow": "Områder",
-      "stedslinje": "Rørlegger · Hemnes og Aurskog-Høland"
+      "stedslinje": "Rørlegger · Aurskog-Høland og Indre Østfold"
     },
     "priser": {
       "kveldHelgNavn": "Kveld og helg",

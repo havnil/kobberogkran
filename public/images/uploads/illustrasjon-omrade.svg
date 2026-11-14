@@ -15,6 +15,7 @@
   </defs>
   <rect width="1200" height="900" rx="0" fill="#EFE6DC"/>
 
+  <g transform="translate(150 0) scale(.75)">
   <!-- service area -->
   <path d="M520 190c90-40 230-30 330-10 120 24 210 40 230 110 18 70-10 150-30 240-20 90-40 170-140 200-110 32-250 20-350-30-90-46-120-130-110-230 8-90-20-230 70-280z" fill="#F7F2EC" stroke="#CDBBA9" stroke-width="4" stroke-dasharray="14 12"/>
 
@@ -71,6 +72,26 @@
     <text x="540" y="620" text-anchor="end">Hemnessjøen</text>
   </g>
 
+  </g>
+  <!-- Indre Østfold, south of Hemnes -->
+  <g transform="translate(150 0) scale(.75)">
+    <path d="M300 900c40-60 160-90 300-80 120 8 200 40 220 110 16 60-20 140-120 170-120 36-300 30-380-30-60-46-60-120-20-170z" fill="#F7F2EC" stroke="#CDBBA9" stroke-width="4" stroke-dasharray="14 12"/>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M592 700C580 780 540 860 500 920M500 920C420 940 320 960 240 1000M500 920C540 980 580 1040 610 1080" stroke="#A84508" stroke-width="10"/>
+      <path d="M592 700C580 780 540 860 500 920M500 920C420 940 320 960 240 1000M500 920C540 980 580 1040 610 1080" stroke="#F7883F" stroke-width="3"/>
+    </g>
+    <g fill="#4A2412" stroke="#F7F2EC" stroke-width="5">
+      <circle cx="500" cy="920" r="13"/>
+      <circle cx="240" cy="1000" r="13"/>
+      <circle cx="610" cy="1080" r="13"/>
+    </g>
+    <g font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-weight="800" font-size="32" fill="#4A2412" stroke="#EFE6DC" stroke-width="8" paint-order="stroke" stroke-linejoin="round">
+      <text x="530" y="930">Trøgstad</text>
+      <text x="240" y="1050" text-anchor="middle">Askim</text>
+      <text x="640" y="1090">Mysen</text>
+    </g>
+    <text x="800" y="1000" font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-weight="600" font-style="italic" font-size="26" fill="#6B4A38">Indre Østfold</text>
+  </g>
   <!-- compass -->
   <g transform="translate(1040 800)">
     <circle r="40" fill="#F7F2EC" stroke="#CDBBA9" stroke-width="4"/>

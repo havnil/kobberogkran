@@ -2,16 +2,20 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: "Areas we cover"
-description: "Kobber og Kran is based in Hemnes and takes jobs in Aurskog-Høland and Lillestrøm: Hemnes, Bjørkelangen, Aurskog, Løken, Setskog, Rømskog and Lillestrøm."
+description: "Kobber og Kran is based in Hemnes and takes jobs in Aurskog-Høland, Indre Østfold and Lillestrøm: Hemnes, Bjørkelangen, Aurskog, Løken, Setskog, Rømskog, Trøgstad, Askim, Mysen and Lillestrøm."
 translationKey: omrader
 locale: en
 ---
 
-Kobber og Kran is based in Hemnes, and most jobs are in Aurskog-Høland. A short drive means Eirik spends his time on the job, not in the van.
+Kobber og Kran is based in Hemnes, and the jobs are in Aurskog-Høland and Indre Østfold. A short drive means Eirik spends his time on the job, not in the van.
 
 ## All of Aurskog-Høland
 
 We take jobs throughout the municipality: in Hemnes and Løken, in Bjørkelangen and Aurskog, and out towards Setskog and Rømskog. Many people here have their own well and a private drain, and that is everyday work for Eirik.
+
+## Indre Østfold
+
+From Hemnes it is about as far to Trøgstad, Askim and Mysen as to Bjørkelangen and Aurskog. That is why we take jobs throughout Indre Østfold, both small call-outs and larger jobs.
 
 ## Cabins in the forest
 

@@ -7,4 +7,4 @@ translationKey: home
 locale: nb
 ---
 
-Kobber og Kran er rørleggeren på Hemnes. Eirik tar service og reparasjon, bytte av varmtvannsbereder, brønn og vannbehandling, hytter og rørleggerdelen av bad i Aurskog-Høland og Lillestrøm.
+Kobber og Kran er rørleggeren på Hemnes. Eirik tar service og reparasjon, bytte av varmtvannsbereder, brønn og vannbehandling, hytter og rørleggerdelen av bad i Aurskog-Høland, Indre Østfold og Lillestrøm.

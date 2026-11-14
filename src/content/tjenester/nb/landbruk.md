@@ -34,7 +34,7 @@ translationKey: fjos-og-gard
 locale: nb
 ---
 
-Vann til dyra kan ikke vente til våren. Det er mange gårdsbruk rundt Hemnes, Setskog og Rømskog, og mange har egen brønn og lange ledninger ut til fjøs og beite. Eirik hjelper med vannet fra brønnen eller kommunen og helt fram til drikkekaret.
+Vann til dyra kan ikke vente til våren. Det er mange gårdsbruk rundt Hemnes, Setskog, Rømskog og Trøgstad, og mange har egen brønn og lange ledninger ut til fjøs og beite. Eirik hjelper med vannet fra brønnen eller kommunen og helt fram til drikkekaret.
 
 ## Dette hjelper Eirik med
 

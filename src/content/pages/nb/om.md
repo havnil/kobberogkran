@@ -27,4 +27,4 @@ Kobber og Kran er nystartet. Vi viser bare godkjenninger vi faktisk har, og de s
 
 ## Nærmere enn du tror
 
-Kobber og Kran holder til på Hemnes og jobber i hele Aurskog-Høland og i Lillestrøm. Se hvor vi kjører på siden om områder.
+Kobber og Kran holder til på Hemnes og jobber i hele Aurskog-Høland, i Indre Østfold og i Lillestrøm. Se hvor vi kjører på siden om områder.

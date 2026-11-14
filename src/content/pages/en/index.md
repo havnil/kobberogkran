@@ -7,4 +7,4 @@ translationKey: home
 locale: en
 ---
 
-Kobber og Kran is the plumber in Hemnes. Eirik handles service and repairs, water heater replacement, wells and water treatment, cabins and bathroom plumbing in Aurskog-Høland and Lillestrøm.
+Kobber og Kran is the plumber in Hemnes. Eirik handles service and repairs, water heater replacement, wells and water treatment, cabins and bathroom plumbing in Aurskog-Høland, Indre Østfold and Lillestrøm.

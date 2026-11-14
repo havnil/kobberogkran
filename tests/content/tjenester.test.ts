@@ -18,9 +18,9 @@ const nb = load('nb');
 const en = load('en');
 
 describe('tjenester', () => {
-  it.each([['nb', nb], ['en', en]])('has exactly 9 services in %s with nummer 1-9', (_l, list) => {
-    expect(list).toHaveLength(9);
-    expect(list.map((t) => t.nummer).sort((a, b) => a - b)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  it.each([['nb', nb], ['en', en]])('has exactly 10 services in %s with nummer 1-10', (_l, list) => {
+    expect(list).toHaveLength(10);
+    expect(list.map((t) => t.nummer).sort((a, b) => a - b)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   });
 
   it('has every translationKey in both locales with the same nummer', () => {
@@ -33,19 +33,21 @@ describe('tjenester', () => {
       'bad.md',
       'bedrift-og-borettslag.md',
       'bronn-og-vann.md',
-      'landbruk.md',
       'hytte.md',
+      'landbruk.md',
       'lekkasje.md',
       'lekkasjesikker-hytte.md',
       'tett-avlop.md',
+      'varmeanlegg.md',
       'varmtvannsbereder.md',
     ]);
     expect(readdirSync('src/content/tjenester/en').sort()).toEqual([
-      'farming.md',
       'bathroom.md',
       'blocked-drain.md',
       'businesses-and-co-ops.md',
       'cabin.md',
+      'farming.md',
+      'heating.md',
       'leak-proof-cabin.md',
       'leaks.md',
       'water-heater.md',

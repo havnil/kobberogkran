@@ -70,8 +70,14 @@
           "anker": ""
         },
         {
-          "tittel": "Wells and water",
-          "tekst": "Pump, pressure tank, filter and water test.",
+          "tittel": "Heating",
+          "tekst": "Hydronic heating: new systems, replacement, extensions and service agreements.",
+          "tjeneste": "varmeanlegg",
+          "anker": ""
+        },
+        {
+          "tittel": "Private water",
+          "tekst": "Well, pump, pressure tank and water treatment.",
           "tjeneste": "bronn-og-vann",
           "anker": ""
         },
@@ -82,7 +88,7 @@
           "anker": ""
         },
         {
-          "tittel": "Barns and farms",
+          "tittel": "Farming",
           "tekst": "Water for animals and farm buildings, from a well or the mains.",
           "tjeneste": "fjos-og-gard",
           "anker": ""

@@ -70,8 +70,14 @@
           "anker": ""
         },
         {
-          "tittel": "Brunt vann og brønn",
-          "tekst": "Pumpe, trykktank, filter og vannprøve.",
+          "tittel": "Varmeanlegg",
+          "tekst": "Vannbåren varme: nytt anlegg, utskifting, utbygging og serviceavtale.",
+          "tjeneste": "varmeanlegg",
+          "anker": ""
+        },
+        {
+          "tittel": "Privat vann",
+          "tekst": "Brønn, pumpe, trykktank og vannrensing.",
           "tjeneste": "bronn-og-vann",
           "anker": ""
         },
@@ -82,7 +88,7 @@
           "anker": ""
         },
         {
-          "tittel": "Fjøs og gård",
+          "tittel": "Landbruk",
           "tekst": "Vann til dyr og driftsbygning, fra brønn eller kommunalt nett.",
           "tjeneste": "fjos-og-gard",
           "anker": ""

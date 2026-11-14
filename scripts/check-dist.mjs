@@ -34,7 +34,14 @@ function expectNotContains(file, needles) {
   }
 }
 
-const chrome = ['class="mobil-bunnlinje"', 'href="tel:', 'href="https://wa.me/'];
+// WhatsApp links appear only when `firma.visWhatsapp` is on; when it is off they must be gone.
+const visWhatsapp = JSON.parse(readFileSync('src/content/firma/firma.json', 'utf8')).firma.visWhatsapp === true;
+const waLenke = 'href="https://wa.me/';
+const chrome = ['class="mobil-bunnlinje"', 'href="tel:', ...(visWhatsapp ? [waLenke] : [])];
+if (!visWhatsapp) {
+  expectNotContains('index.html', [waLenke]);
+  expectNotContains('en/index.html', [waLenke]);
+}
 expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"', ...chrome, 'id="lekker-naa"', 'id="skjema"', 'href="#skjema"']);
 expectContains('en/index.html', ['lang="en"', ...chrome, 'id="lekker-naa"', 'id="skjema"', 'href="#skjema"']);
 // The full-width night-duty stripe is not part of the brand; the marker must never appear.

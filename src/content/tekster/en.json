@@ -251,7 +251,50 @@
       "kveldHelgVerdi": "by arrangement",
       "mvaNote": "All prices include 25% VAT. Businesses get an invoice with VAT shown separately.",
       "listeEyebrow": "Price list",
-      "listeTittel": "Prices incl. VAT"
+      "listeTittel": "Prices incl. VAT",
+      "fastpriser": {
+        "eyebrow": "Fixed prices",
+        "tittel": "Fixed prices on common jobs",
+        "ingress": "Eirik does these jobs often, so he knows what they take. If the new one goes where the old one was, the work has a fixed price. Send a photo of what is being replaced, and he confirms the price.",
+        "note": "Fixed price on the work. Call-out fee, equipment and parts come on top.",
+        "rader": [
+          {
+            "pris": "varmtvannstankArbeid",
+            "navn": "Replacing a water heater",
+            "merknad": "New water heater in the same place, with safety valve and mixing valve"
+          },
+          {
+            "pris": "hyttesikringArbeid",
+            "navn": "Water shut-off valve",
+            "merknad": "A valve on the main line with sensors where leaks are most common"
+          },
+          {
+            "pris": "utekranArbeid",
+            "navn": "Frost-free outdoor tap",
+            "merknad": "New outdoor tap on an outside wall, connected to the pipe inside"
+          },
+          {
+            "pris": "servantskapArbeid",
+            "navn": "Vanity unit",
+            "merknad": "Fitting the cabinet, basin and tap where the old one was"
+          },
+          {
+            "pris": "kjokkenbatteriArbeid",
+            "navn": "Kitchen tap",
+            "merknad": "Replacing the mixer tap in the kitchen"
+          },
+          {
+            "pris": "toalettArbeid",
+            "navn": "Replacing a toilet",
+            "merknad": "Floor-standing toilet in the same place"
+          },
+          {
+            "pris": "stoppekranArbeid",
+            "navn": "New main stopcock",
+            "merknad": "Replacing the stopcock where the water comes in"
+          }
+        ]
+      }
     },
     "bad": {
       "prosessTittel": "How it works",

@@ -18,6 +18,7 @@ const firma: Firma = {
   adresse: ph('Hemnes, 1970 Hemnes'),
   priser: {
     timepris: tall(1), servicebil: tall(1), forbruk: tall(1), varmtvannstankArbeid: tall(1), varmtvannstankTypiskTotal: tall(1), hyttesikringArbeid: tall(1),
+    utekranArbeid: tall(1), kjokkenbatteriArbeid: tall(1), servantskapArbeid: tall(1), toalettArbeid: tall(1), stoppekranArbeid: tall(1),
   },
   omrade: { steder: ['Hemnes', 'Aurskog'], maksKjoretidMin: tall(45) },
 };

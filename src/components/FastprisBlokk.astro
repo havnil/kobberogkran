@@ -1,0 +1,111 @@
+---
+// Fixed prices on common jobs, on the prices page. Names come from `sider.priser.fastpriser`, figures from
+// `firma.priser`, so a price is changed in one place and keeps its placeholder mark.
+import Tall from './Tall.astro';
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['sider']['priser']['fastpriser'];
+  priser: Firma['priser'];
+}
+
+const { locale, tekst, priser } = Astro.props;
+---
+
+<section class="seksjon" id="fastpriser" aria-labelledby="fastpriser-tittel">
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{tekst.eyebrow}</p>
+        <h2 id="fastpriser-tittel" class="display">{tekst.tittel}</h2>
+      </div>
+      <p class="hode-ingress">{tekst.ingress}</p>
+    </div>
+    <ol class="liste">
+      {
+        tekst.rader.map((r, i) => (
+          <li>
+            <span class="nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="navn">
+              <strong>{r.navn}</strong>
+              <span class="merknad">{r.merknad}</span>
+            </span>
+            <Tall class="verdi" verdi={priser[r.pris]} enhet="kr" locale={locale} pris />
+          </li>
+        ))
+      }
+    </ol>
+    <p class="note">{tekst.note}</p>
+  </div>
+</section>
+
+<style>
+  .liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .nr {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .navn {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .navn strong {
+    font-size: 1.0625rem;
+    font-weight: 800;
+  }
+
+  .merknad {
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  li :global(.verdi) {
+    justify-self: end;
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
+
+  li :global(.verdi .enhet) {
+    font-size: 0.875rem;
+  }
+
+  .note {
+    margin: 1.25rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 520px) {
+    li {
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+    }
+
+    li :global(.verdi) {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+</style>

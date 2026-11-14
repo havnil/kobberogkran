@@ -18,7 +18,14 @@ export const priserSchema = z.object({
   varmtvannstankTypiskTotal: verdi(z.number()),
   /** «Lekkasjesikker hytte»: fixed price on the work for a water stop valve on the cabin's main line. */
   hyttesikringArbeid: verdi(z.number()),
+  /** Fixed prices on the work for common small jobs, listed on the prices page (`sider.priser.fastpriser`). */
+  utekranArbeid: verdi(z.number()),
+  kjokkenbatteriArbeid: verdi(z.number()),
+  servantskapArbeid: verdi(z.number()),
+  toalettArbeid: verdi(z.number()),
+  stoppekranArbeid: verdi(z.number()),
 });
+
 
 export const firmaSchema = z.object({
   navn: z.string(),

@@ -251,7 +251,50 @@
       "kveldHelgVerdi": "etter avtale",
       "mvaNote": "Alle priser er oppgitt med 25 % mva. Bedrifter får faktura med mva spesifisert.",
       "listeEyebrow": "Prisliste",
-      "listeTittel": "Priser med mva"
+      "listeTittel": "Priser med mva",
+      "fastpriser": {
+        "eyebrow": "Fastpriser",
+        "tittel": "Fastpris på vanlige jobber",
+        "ingress": "Disse jobbene gjør Eirik ofte, så han vet hva de tar. Står det nye der det gamle stod, er arbeidet fastpris. Send et bilde av det som skal byttes, så bekrefter han prisen.",
+        "note": "Fastpris på arbeidet. Servicebil, utstyr og deler kommer i tillegg.",
+        "rader": [
+          {
+            "pris": "varmtvannstankArbeid",
+            "navn": "Bytte av varmtvannsbereder",
+            "merknad": "Ny bereder på samme sted, med sikkerhetsventil og blandeventil"
+          },
+          {
+            "pris": "hyttesikringArbeid",
+            "navn": "Vannstoppventil",
+            "merknad": "Ventil på hovedledningen med sensorer der det oftest lekker"
+          },
+          {
+            "pris": "utekranArbeid",
+            "navn": "Frostfri utekran",
+            "merknad": "Ny utekran på yttervegg, koblet til ledningen innenfor"
+          },
+          {
+            "pris": "servantskapArbeid",
+            "navn": "Servantskap",
+            "merknad": "Montering av skap, servant og batteri der det gamle stod"
+          },
+          {
+            "pris": "kjokkenbatteriArbeid",
+            "navn": "Kjøkkenbatteri",
+            "merknad": "Bytte av blandebatteri på kjøkkenet"
+          },
+          {
+            "pris": "toalettArbeid",
+            "navn": "Bytte av toalett",
+            "merknad": "Gulvstående toalett på samme sted"
+          },
+          {
+            "pris": "stoppekranArbeid",
+            "navn": "Ny hovedstoppekran",
+            "merknad": "Bytte av stoppekranen der vannet kommer inn"
+          }
+        ]
+      }
     },
     "bad": {
       "prosessTittel": "Slik går det til",

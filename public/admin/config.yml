@@ -326,6 +326,21 @@ collections:
                   - { name: mvaNote, label: Merknad om mva, widget: string }
                   - { name: listeEyebrow, label: Etikett - prisliste, widget: string }
                   - { name: listeTittel, label: Tittel - prisliste, widget: string }
+                  - name: fastpriser
+                    label: Fastpriser (eksempler)
+                    widget: object
+                    fields:
+                      - { name: eyebrow, label: Etikett, widget: string }
+                      - { name: tittel, label: Tittel, widget: string }
+                      - { name: ingress, label: Ingress, widget: text }
+                      - { name: note, label: Merknad under listen, widget: string }
+                      - name: rader
+                        label: Rader
+                        widget: list
+                        fields:
+                          - { name: pris, label: Pris (fra firmadata), widget: select, options: [varmtvannstankArbeid, hyttesikringArbeid, utekranArbeid, kjokkenbatteriArbeid, servantskapArbeid, toalettArbeid, stoppekranArbeid] }
+                          - { name: navn, label: Navn, widget: string }
+                          - { name: merknad, label: Hva som er med, widget: string }
               - name: bad
                 label: Badsiden
                 widget: object
@@ -523,6 +538,11 @@ collections:
                   - { name: varmtvannstankArbeid, label: Varmtvannstank - fastpris på arbeid, widget: object, fields: *verdiNum }
                   - { name: varmtvannstankTypiskTotal, label: Varmtvannstank - typisk totalpris, widget: object, fields: *verdiNum }
                   - { name: hyttesikringArbeid, label: Lekkasjesikker hytte - fastpris på arbeid, widget: object, fields: *verdiNum }
+                  - { name: utekranArbeid, label: Frostfri utekran - fastpris på arbeid, widget: object, fields: *verdiNum }
+                  - { name: kjokkenbatteriArbeid, label: Kjøkkenbatteri - fastpris på arbeid, widget: object, fields: *verdiNum }
+                  - { name: servantskapArbeid, label: Servantskap - fastpris på arbeid, widget: object, fields: *verdiNum }
+                  - { name: toalettArbeid, label: Toalett - fastpris på arbeid, widget: object, fields: *verdiNum }
+                  - { name: stoppekranArbeid, label: Hovedstoppekran - fastpris på arbeid, widget: object, fields: *verdiNum }
               - name: omrade
                 label: Område
                 widget: object

@@ -14,7 +14,12 @@
       "forbruk": { "verdi": 125, "plassholder": true },
       "varmtvannstankArbeid": { "verdi": 8125, "plassholder": true },
       "varmtvannstankTypiskTotal": { "verdi": 18000, "plassholder": true },
-      "hyttesikringArbeid": { "verdi": 4000, "plassholder": true }
+      "hyttesikringArbeid": { "verdi": 4000, "plassholder": true },
+      "utekranArbeid": { "verdi": 3125, "plassholder": true },
+      "kjokkenbatteriArbeid": { "verdi": 1875, "plassholder": true },
+      "servantskapArbeid": { "verdi": 3750, "plassholder": true },
+      "toalettArbeid": { "verdi": 3125, "plassholder": true },
+      "stoppekranArbeid": { "verdi": 2500, "plassholder": true }
     },
     "omrade": {
       "steder": ["Hemnes", "Bjørkelangen", "Aurskog", "Løken", "Setskog", "Rømskog", "Trøgstad", "Askim", "Mysen", "Lillestrøm"],

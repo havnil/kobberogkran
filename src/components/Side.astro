@@ -9,6 +9,7 @@ import Hero from './Hero.astro';
 import OmEirik from './OmEirik.astro';
 import Omrader from './Omrader.astro';
 import PrisBlokk from './PrisBlokk.astro';
+import FastprisBlokk from './FastprisBlokk.astro';
 import Sideboks from './Sideboks.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
 import TjenesteKort from './TjenesteKort.astro';
@@ -143,6 +144,7 @@ const bildeSrc = juridisk ? undefined : bilder[nokkel];
   nokkel === 'priser' && (
     <>
       <PrisBlokk locale={locale} tekst={f.priser} side={s.priser} priser={firma.priser} />
+      <FastprisBlokk locale={locale} tekst={s.priser.fastpriser} priser={firma.priser} />
       <VarmtvannstankBlokk locale={locale} tekst={f.varmtvann} priser={firma.priser} />
     </>
   )

@@ -1,6 +1,7 @@
 // Content schemas for services, UI texts and testimonials. Plain Zod so tests can import them
 // without Astro. All visible copy is placeholder (`PLASSHOLDER: ` / `[EN] `) until a human writes it.
 import { z } from 'astro/zod';
+import { FASTPRIS_NOKLER } from './fastpriser';
 
 export const tjenesteSchema = z.object({
   title: z.string(),
@@ -181,6 +182,14 @@ export const siderSchema = z.object({
     mvaNote: z.string(),
     listeEyebrow: z.string(),
     listeTittel: z.string(),
+    /** Examples of fixed prices on the work. `pris` names the price in `firma.priser`. */
+    fastpriser: z.object({
+      eyebrow: z.string(),
+      tittel: z.string(),
+      ingress: z.string(),
+      note: z.string(),
+      rader: z.array(z.object({ pris: z.enum(FASTPRIS_NOKLER), navn: z.string(), merknad: z.string() })),
+    }),
   }),
   bad: z.object({
     prosessTittel: z.string(),

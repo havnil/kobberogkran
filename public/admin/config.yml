@@ -509,6 +509,7 @@ collections:
               - { name: juridiskNavn, label: Juridisk navn, widget: string }
               - { name: telefon, label: Telefon, widget: object, fields: &verdiStr [{ name: verdi, label: Verdi, widget: string }, { name: plassholder, label: Plassholder (blokkerer lansering), widget: boolean }] }
               - { name: whatsapp, label: WhatsApp, widget: object, fields: *verdiStr }
+              - { name: visWhatsapp, label: Vis WhatsApp på nettsiden, widget: boolean, default: false }
               - { name: epost, label: E-post, widget: object, fields: *verdiStr }
               - { name: orgnr, label: Org.nr., widget: object, fields: *verdiStr }
               - { name: adresse, label: Adresse, widget: object, fields: *verdiStr }

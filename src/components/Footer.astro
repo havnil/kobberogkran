@@ -40,7 +40,7 @@ const ar = new Date().getFullYear();
               )
             }
           </li>
-          <li><WhatsAppKnapp locale={locale}>{t.whatsapp}</WhatsAppKnapp></li>
+          {firma.visWhatsapp && <li><WhatsAppKnapp locale={locale}>{t.whatsapp}</WhatsAppKnapp></li>}
         </ul>
       </div>
       <div>

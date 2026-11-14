@@ -235,7 +235,7 @@
     "tjeneste": {
       "faktaTittel": "In short",
       "sideboksTittel": "Quickest way to get help",
-      "sideboksTekst": "Call Eirik, write on WhatsApp, or send a request with a photo. If water is leaking now, turn off the main stopcock first.",
+      "sideboksTekst": "Call Eirik, or send a request with a photo. If water is leaking now, turn off the main stopcock first.",
       "faqTittel": "Common questions",
       "andreTittel": "Other things Eirik can help with",
       "omraderTittel": "Where we work",
@@ -285,7 +285,7 @@
       "ansvar": "When an electrician and a tiler work through Kobber og Kran, your agreement is with Eirik. You have one person to call and one person to deal with if something is not as agreed. If you bring your own tradespeople, you agree in writing who is responsible for what before work starts."
     },
     "kontakt": {
-      "telefonNavn": "Phone and WhatsApp",
+      "telefonNavn": "Phone",
       "epostNavn": "E-mail",
       "adresseNavn": "Address",
       "kortEyebrow": "Contact",
@@ -406,7 +406,7 @@
       "nettverk": "Couldn't connect. Check your connection and try again, or call:",
       "server": "Something went wrong on our side. Try again in a moment, or call:"
     },
-    "utenJs": "The form needs JavaScript to work. Call or send a WhatsApp message instead:",
+    "utenJs": "The form needs JavaScript to work. Call instead:",
     "samtykkeWhatsapp": "I'd like to get a reply on WhatsApp",
     "forslagAntall": "{antall} address suggestions. Use the arrow keys to choose."
   },
@@ -418,7 +418,7 @@
     "sendBilderTekst": "Here you can add more photos to your request. One from a distance and one close up is ideal, plus the rating plate if there is one.",
     "sendBilderSend": "Send the photo",
     "sendBilderOk": "The photo has arrived. You can send another one.",
-    "sendBilderFeil": "The photo didn't arrive. Try again, or send it on WhatsApp.",
+    "sendBilderFeil": "The photo didn't arrive. Try again, or call Eirik.",
     "ugyldigLenkeTittel": "The link doesn't work",
     "ugyldigLenkeTekst": "The link is incomplete. Use the link in the message you received, or call Eirik."
   }

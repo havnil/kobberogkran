@@ -18,10 +18,10 @@ const mal = tekster.whatsappHilsen;
 const href = waLenke(firma.whatsapp.verdi, fyllHilsen(mal, { tjeneste }));
 ---
 
-<a
+{firma.visWhatsapp && (<a
   {...attrs}
   href={href}
   data-wa
   data-wa-nummer={firma.whatsapp.verdi}
   data-wa-mal={mal}
-  data-wa-tjeneste={tjeneste}><slot /></a>
+  data-wa-tjeneste={tjeneste}><slot /></a>)}

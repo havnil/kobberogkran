@@ -25,6 +25,8 @@ export const firmaSchema = z.object({
   juridiskNavn: z.string(),
   telefon: verdi(z.string()),
   whatsapp: verdi(z.string()),
+  /** Show WhatsApp to customers (buttons, links and the reply-on-WhatsApp consent). Off: the site only offers phone and the form. */
+  visWhatsapp: z.boolean(),
   epost: verdi(z.string()),
   orgnr: verdi(z.string()),
   adresse: verdi(z.string()),

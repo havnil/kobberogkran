@@ -12,6 +12,7 @@ const firma: Firma = {
   juridiskNavn: 'Kobber og Kran AS',
   telefon: ph('000 00 000'),
   whatsapp: ph('+4700000000'),
+  visWhatsapp: false,
   epost: ekte('post@example.no'),
   orgnr: ekte('123 456 789'),
   adresse: ph('Hemnes, 1970 Hemnes'),

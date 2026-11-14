@@ -4,6 +4,7 @@
     "juridiskNavn": "Kobber og Kran AS",
     "telefon": { "verdi": "000 00 000", "plassholder": true },
     "whatsapp": { "verdi": "+4700000000", "plassholder": true },
+    "visWhatsapp": false,
     "epost": { "verdi": "post@kobberogkran.no", "plassholder": true },
     "orgnr": { "verdi": "000 000 000", "plassholder": true },
     "adresse": { "verdi": "Hemnes, 1970 Hemnes", "plassholder": true },

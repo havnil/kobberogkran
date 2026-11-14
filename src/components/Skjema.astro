@@ -206,10 +206,12 @@ const telefon = firma.telefon.verdi;
       </div>
     </fieldset>
 
-    <label class="valg-rad samtykke">
-      <input type="checkbox" name="samtykkeWhatsapp" value="ja" />
-      <span>{t.samtykkeWhatsapp}</span>
-    </label>
+    {firma.visWhatsapp && (
+      <label class="valg-rad samtykke">
+        <input type="checkbox" name="samtykkeWhatsapp" value="ja" />
+        <span>{t.samtykkeWhatsapp}</span>
+      </label>
+    )}
 
     <div class="turnstile" id="felt-turnstileToken" tabindex="-1">
       <div class="cf-turnstile" data-sitekey={turnstileNokkel} data-language={locale === 'nb' ? 'nb' : 'en'}></div>

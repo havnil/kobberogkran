@@ -235,7 +235,7 @@
     "tjeneste": {
       "faktaTittel": "Kort fortalt",
       "sideboksTittel": "Raskeste vei til hjelp",
-      "sideboksTekst": "Ring Eirik, skriv på WhatsApp, eller send en forespørsel med bilde. Lekker det nå, steng hovedstoppekranen først.",
+      "sideboksTekst": "Ring Eirik, eller send en forespørsel med bilde. Lekker det nå, steng hovedstoppekranen først.",
       "faqTittel": "Det folk lurer på",
       "andreTittel": "Andre ting Eirik hjelper med",
       "omraderTittel": "Her jobber vi",
@@ -285,7 +285,7 @@
       "ansvar": "Når elektriker og flislegger er med gjennom Kobber og Kran, er det Eirik du har avtalen med. Du har én å ringe og én å forholde deg til hvis noe ikke blir som avtalt. Har du egne håndverkere, avtaler dere skriftlig hvem som har ansvaret for hva før arbeidet starter."
     },
     "kontakt": {
-      "telefonNavn": "Telefon og WhatsApp",
+      "telefonNavn": "Telefon",
       "epostNavn": "E-post",
       "adresseNavn": "Adresse",
       "kortEyebrow": "Kontakt",
@@ -406,7 +406,7 @@
       "nettverk": "Fikk ikke kontakt. Sjekk nettet og prøv igjen, eller ring:",
       "server": "Noe gikk galt hos oss. Prøv igjen om litt, eller ring:"
     },
-    "utenJs": "Skjemaet trenger JavaScript for å virke. Ring eller send en melding på WhatsApp i stedet:",
+    "utenJs": "Skjemaet trenger JavaScript for å virke. Ring i stedet:",
     "samtykkeWhatsapp": "Jeg vil gjerne få svar på WhatsApp",
     "forslagAntall": "{antall} adresseforslag. Bruk piltastene for å velge."
   },
@@ -418,7 +418,7 @@
     "sendBilderTekst": "Her kan du legge til flere bilder i forespørselen din. Ta gjerne ett bilde på avstand og ett nært, og ett av typeskiltet hvis det finnes.",
     "sendBilderSend": "Send bildet",
     "sendBilderOk": "Bildet er kommet fram. Du kan sende ett til.",
-    "sendBilderFeil": "Bildet kom ikke fram. Prøv igjen, eller send det på WhatsApp.",
+    "sendBilderFeil": "Bildet kom ikke fram. Prøv igjen, eller ring Eirik.",
     "ugyldigLenkeTittel": "Lenken virker ikke",
     "ugyldigLenkeTekst": "Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring Eirik."
   }

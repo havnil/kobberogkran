@@ -399,7 +399,7 @@ h2.display {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  /* Nine services fill three full rows. */
+  /* Three columns when that fills every row (see src/lib/ruter.ts). */
   .ruter-3 {
     grid-template-columns: repeat(3, 1fr);
   }

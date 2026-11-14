@@ -3,6 +3,7 @@
 // from the pipe; article with the sticky side box; FAQ; related services as tiles; places as chips; and the
 // request form with this service preselected. The water-heater page also gets the fixed price in detail
 // and the tank check.
+import { ruterKlasse } from '../lib/ruter';
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Faktakort from './Faktakort.astro';
@@ -123,7 +124,7 @@ const celler = [...prisCelle, ...tj.fakta.map((f, i) => ({ etikett: String(prisC
           <h2 id="andre-tittel" class="display">{s.tjeneste.andreTittel}</h2>
         </div>
       </div>
-      <ol class="ruter">
+      <ol class:list={['ruter', ruterKlasse(andre.length)]}>
         {andre.map((e, i) => <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={i + 1} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={tekster.forside.tjenester.seMer} />)}
       </ol>
     </div>

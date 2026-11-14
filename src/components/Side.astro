@@ -3,6 +3,7 @@
 // service template: hero with breadcrumbs and a fact card on the pipe, the markdown text next to the sticky
 // side box, then the blocks each page needs (picked by `translationKey`). The legal pages get a short hero
 // and the text alone.
+import { ruterKlasse } from '../lib/ruter';
 import { render } from 'astro:content';
 import Faktakort, { type Celle } from './Faktakort.astro';
 import Hero from './Hero.astro';
@@ -130,7 +131,7 @@ const bildeSrc = juridisk ? undefined : bilder[nokkel];
           </div>
           <p class="hode-ingress">{f.tjenester.ingress}</p>
         </div>
-        <ol class="ruter ruter-3">
+        <ol class:list={['ruter', ruterKlasse(tjenester.length)]}>
           {tjenester.map((e) => (
             <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={e.data.nummer} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={f.tjenester.seMer} />
           ))}

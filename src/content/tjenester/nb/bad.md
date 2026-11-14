@@ -46,7 +46,7 @@ Ingen bad er like. Et lite bad med rør i god stand er en helt annen jobb enn et
 - Nye vann- og avløpsrør, og omlegging der utstyret flyttes
 - Sluk og tilkobling mot membranen, gjort etter dagens krav
 - Montering av toalett, servant, dusj og blandebatterier
-- Varmtvannstank og vaskemaskin hvis de står på badet
+- Varmtvannsbereder og vaskemaskin hvis de står på badet
 - Bilder av alt som skjules, og dokumentasjon på våtromsarbeidet
 
 ## Dette kan du gjøre før befaringen

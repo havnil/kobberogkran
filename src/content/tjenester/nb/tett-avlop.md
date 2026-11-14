@@ -27,7 +27,7 @@ faq:
   - sporsmal: 'Hvorfor tetter avløpet seg igjen og igjen?'
     svar: 'Det kan være for lite fall på røret, et knekk, røtter eller fett som har satt seg. Med rørkamera kan Eirik se hva det er, og foreslå en varig løsning i stedet for å åpne det på nytt hver måned.'
   - sporsmal: 'Huset har septiktank. Gjelder det samme?'
-    svar: 'Avløpet inne i huset er det samme. Er tanken full eller trenger tømming, er det kommunen eller et tømmefirma som gjør det. Si fra i forespørselen om huset har septiktank eller er koblet til kommunalt nett.'
+    svar: 'Avløpet inne i huset er det samme. Er septiktanken full eller trenger tømming, er det kommunen eller et tømmefirma som gjør det. Si fra i forespørselen om huset har septiktank eller er koblet til kommunalt nett.'
 bilder:
   - src: /images/uploads/illustrasjon-tett-avlop.svg
     plassholder: true
@@ -59,6 +59,6 @@ Et avløp går sjelden tett over natta. Det blir tregere for hver uke, til vanne
 - Ikke hell fett i vasken. Tørk stekepanna med papir først.
 - Kast våtservietter og bind i søpla, ikke i do.
 
-## Det tar vi ikke
+## Samarbeidspartnere
 
-Spyling av hovedledninger og tømming av septiktank gjør andre. Trenger jobben det, sier Eirik fra og hjelper deg videre.
+Spyling av hovedledninger og tømming av septiktank gjør et spylefirma Eirik samarbeider med. Trenger jobben det, ordner han kontakten.

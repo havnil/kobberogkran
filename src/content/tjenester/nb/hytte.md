@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: 'Hytte: åpning, vinterstengning og frosne rør'
 kundeTittel: 'Vann på og av hytta'
 fagord: 'Åpning, vinterstengning og frostskade'
-nummer: 6
+nummer: 7
 kort: 'Vann av før frosten og på igjen til våren, gjort riktig så rørene tåler vinteren. Eirik hjelper også når noe har frosset.'
 sesong:
   host: 'Vinterstengning før frosten: Eirik tømmer rørene og stenger hytta riktig, så du slipper frostskader.'
@@ -18,7 +18,7 @@ fakta:
     tekst: 'Du får bilder og beskjed når jobben er gjort.'
 faq:
   - sporsmal: 'Hva er vinterstengning?'
-    svar: 'Vinterstengning betyr at vannet stenges og rørene, varmtvannstanken, toalettet og vannlåsene tømmes eller sikres, så ingenting fryser og sprekker når hytta står kald. Hvordan det gjøres, kommer an på hvordan anlegget er bygget. Eirik ser på hytta første gang og lager en fast rutine for den.'
+    svar: 'Vinterstengning betyr at vannet stenges og rørene, varmtvannsberederen, toalettet og vannlåsene tømmes eller sikres, så ingenting fryser og sprekker når hytta står kald. Hvordan det gjøres, kommer an på hvordan anlegget er bygget. Eirik ser på hytta første gang og lager en fast rutine for den.'
   - sporsmal: 'Når bør jeg bestille vinterstengning?'
     svar: 'Gjerne i god tid før de første kalde nettene, i september eller oktober. Mange vil ha det gjort samtidig, så det lønner seg å ta kontakt tidlig. Kryss av for påminnelser i skjemaet, så får du beskjed neste år også.'
   - sporsmal: 'Må jeg være på hytta?'
@@ -26,7 +26,7 @@ faq:
   - sporsmal: 'Hytta har ingen adresse. Hvordan finner Eirik fram?'
     svar: 'Trykk «Bruk der jeg er nå» i skjemaet når du er på hytta, eller oppgi gårds- og bruksnummer. Du kan også beskrive veien, for eksempel bom, avkjøring og parkering.'
   - sporsmal: 'Rørene har frosset. Hva gjør jeg?'
-    svar: 'Steng hovedstoppekranen og slå av strømmen til varmtvannstanken. Ikke bruk åpen flamme for å tine rørene. Når rør fryser, kan de sprekke, og lekkasjen kommer først når de tiner. Ring Eirik og meld fra til forsikringen.'
+    svar: 'Steng hovedstoppekranen og slå av strømmen til varmtvannsberederen. Ikke bruk åpen flamme for å tine rørene. Når rør fryser, kan de sprekke, og lekkasjen kommer først når de tiner. Ring Eirik og meld fra til forsikringen.'
   - sporsmal: 'Hytta har brønn. Gjelder det samme?'
     svar: 'Brønn, pumpe og trykktank må også sikres mot frost. Eirik tar hele anlegget, fra brønnen og inn. Si fra i skjemaet om hytta har brønn, så han tar med det som trengs.'
   - sporsmal: 'Hva koster det?'
@@ -44,7 +44,7 @@ Det er mange hytter i skogene rundt Hemnes, Setskog og Rømskog, og mange av dem
 
 ## Vinterstengning om høsten
 
-- Vannet stenges, og rør, varmtvannstank og blandebatterier tømmes
+- Vannet stenges, og rør, varmtvannsbereder og blandebatterier tømmes
 - Toalett og vannlåser tømmes eller fylles med frostvæske
 - Brønn, pumpe og trykktank sikres hvis hytta har det
 - Eirik sjekker at det ikke er synlige lekkasjer, og noterer hva som bør gjøres før neste sesong
@@ -52,7 +52,7 @@ Det er mange hytter i skogene rundt Hemnes, Setskog og Rømskog, og mange av dem
 ## Åpning om våren
 
 - Vannet settes på og luftes ut av rørene
-- Varmtvannstanken fylles før strømmen slås på
+- Varmtvannsberederen fylles før strømmen slås på
 - Alle koblinger sjekkes for lekkasje og frostskader
 - Du får beskjed når hytta er klar til bruk
 
@@ -62,11 +62,11 @@ Vil du vite at hytta er tett også når du er borte? Eirik kan montere vannstopp
 
 ## Frosne rør
 
-Har noe frosset, steng hovedstoppekranen og slå av strømmen til varmtvannstanken. Ikke bruk åpen flamme for å tine rørene. Ring Eirik og meld fra til forsikringen. Han finner skaden, reparerer rørene og hjelper deg å unngå at det skjer igjen, for eksempel med varmekabel eller en bedre plassering av ledningen.
+Har noe frosset, steng hovedstoppekranen og slå av strømmen til varmtvannsberederen. Ikke bruk åpen flamme for å tine rørene. Ring Eirik og meld fra til forsikringen. Han finner skaden, reparerer rørene og hjelper deg å unngå at det skjer igjen, for eksempel med varmekabel eller en bedre plassering av ledningen.
 
 ## Dette trenger Eirik fra deg
 
 - **Hvor hytta er:** adresse, «Bruk der jeg er nå», eller gårds- og bruksnummer
 - **Adkomst:** om veien er brøytet, bom eller parkering, og hvor nøkkelen ligger
-- **Vann:** kommunalt vann eller brønn, og om det er avløp til tank
-- **Bilder** av der vannet kommer inn, varmtvannstanken og eventuelle skader
+- **Vann:** kommunalt vann eller brønn, og om det er avløp til tett tank
+- **Bilder** av der vannet kommer inn, varmtvannsberederen og eventuelle skader

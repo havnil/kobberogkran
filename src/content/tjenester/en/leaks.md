@@ -61,6 +61,6 @@ A dripping tap, a seal that has given up or a little water under the dishwasher.
 - Clear the space under the sink or around whatever needs fixing.
 - Collect the small jobs, so they can be done on the same visit.
 
-## What we don't do
+## Partners
 
-Electrical work and repairs to floors and walls after water damage are done by others. If the job needs it, Eirik will tell you and help you on your way.
+If the job needs an electrician, or floors and walls need repairing after water damage, Eirik has regular partners he contacts. You still deal with one person.

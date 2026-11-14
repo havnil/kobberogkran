@@ -59,6 +59,6 @@ A drain rarely blocks overnight. It gets slower every week, until one day the wa
 - Don't pour fat down the sink. Wipe the pan with paper first.
 - Put wet wipes and sanitary products in the bin, not the toilet.
 
-## What we don't do
+## Partners
 
-Jetting of main drains and emptying septic tanks are done by others. If the job needs it, Eirik will tell you and help you on your way.
+Jetting of main drains and emptying septic tanks are done by a drain company Eirik works with. If the job needs it, he arranges the contact.

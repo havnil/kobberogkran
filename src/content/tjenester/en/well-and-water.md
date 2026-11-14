@@ -2,9 +2,9 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: "Wells, pumps and water treatment"
-kundeTittel: "Brown water, a smell or low pressure"
+kundeTittel: "Problems with private water"
 fagord: "Wells, pumps and water treatment"
-nummer: 5
+nummer: 6
 kort: "Is the pump running all the time, or is the water brown or smelling of eggs? Eirik sees to the pump, pressure tank, filter and UV, in the barn too."
 fakta:
   - tall: "Wells"
@@ -27,7 +27,7 @@ faq:
   - sporsmal: "Do you help with water in the barn?"
     svar: "Yes. Eirik does water pipes and drinking bowls in barns, frost-free water posts in the yard and on pasture, and pressure systems for farms. Farms out here need water that works in January too."
   - sporsmal: "Do you drill wells?"
-    svar: "No. The drilling itself is done by a well driller. Eirik does everything from the well and in: pump, pressure tank, filter, UV and the pipes in the house."
+    svar: "No, but Eirik works with a well driller and arranges the contact. He does everything from the well and in: pump, pressure tank, filter, UV and the pipes in the house."
   - sporsmal: "What does it cost?"
     svar: "Troubleshooting and servicing are charged at the hourly rate. For a new filter, UV system or pump you get an estimate or a fixed price once Eirik knows what is needed. See the prices page for the hourly rate and service van."
 bilder:
@@ -61,8 +61,8 @@ The right water treatment starts with knowing what is in the water. An iron filt
 
 ## Barns and farms
 
-Water for animals can't wait until spring. Eirik lays and repairs water pipes in barns, fits drinking bowls and installs frost-free water posts, so you have water in the yard and on the pasture when it is cold too. Read more about [water in barns and on farms](/en/services/barns-and-farms/).
+Water for animals can't wait until spring. Eirik lays and repairs water pipes in barns, fits drinking bowls and installs frost-free water posts, so you have water in the yard and on the pasture when it is cold too. Read more about [water for farming](/en/services/farming/).
 
-## What we don't do
+## Partners
 
-Well drilling and digging trenches are done by others. Eirik is happy to work with whoever you use.
+Well drilling and digging are done by regular partners. If the water needs treatment, Eirik works with a supplier of water treatment systems. He arranges the contact, so you do not have to search yourself.

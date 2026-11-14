@@ -32,7 +32,7 @@
       "eyebrow": "Nøkkeltall",
       "merke": "Med mva",
       "timepris": "Timepris",
-      "tank": "Varmtvannstank, arbeid",
+      "tank": "Varmtvannsbereder, arbeid",
       "servicebil": "Servicebil",
       "kjoretid": "Kjøretid fra Hemnes",
       "kjoretidEnhet": "min",
@@ -58,8 +58,8 @@
           "anker": ""
         },
         {
-          "tittel": "Varmtvannstank",
-          "tekst": "Bytte til fastpris på arbeidet når tanken står på samme sted.",
+          "tittel": "Varmtvannsbereder",
+          "tekst": "Bytte til fastpris på arbeidet når berederen står på samme sted.",
           "tjeneste": "varmtvannstank",
           "anker": ""
         },
@@ -96,52 +96,52 @@
       ]
     },
     "varmtvann": {
-      "tittel": "Fastpris på bytte av varmtvannstank",
+      "tittel": "Fastpris på bytte av varmtvannsbereder",
       "arbeidMerke": "fastpris på arbeidet",
-      "typiskTotalMerke": "typisk totalpris med ny tank",
+      "typiskTotalMerke": "typisk totalpris med ny bereder",
       "medTittel": "Med i fastprisen",
       "med": [
-        "Tømming og frakobling av den gamle tanken",
-        "Montering av ny tank på samme sted",
-        "Montering av sikkerhetsventil og blandeventil som hører til tanken",
+        "Tømming og frakobling av den gamle berederen",
+        "Montering av ny bereder på samme sted",
+        "Montering av sikkerhetsventil og blandeventil som hører til berederen",
         "Tilkobling av vann og trykkprøving",
-        "Bortkjøring av den gamle tanken",
+        "Bortkjøring av den gamle berederen",
         "FDV-dokumentasjon på det som er montert"
       ],
       "ikkeMedTittel": "Ikke med i fastprisen",
       "ikkeMed": [
-        "Selve tanken og deler (kommer i tillegg)",
-        "Flytting av tanken til et annet sted",
+        "Selve berederen og deler (kommer i tillegg)",
+        "Flytting av berederen til et annet sted",
         "Nytt sluk eller lekkasjesikring etter dagens krav",
-        "Elektriker, hvis tanken skal fast tilkobles",
+        "Elektriker, hvis berederen skal fast tilkobles",
         "Vanskelig adkomst, for eksempel trang kjeller eller krypkjeller"
       ],
-      "eyebrow": "Fastpris · varmtvannstank",
-      "ingress": "Står den nye tanken på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt tanken, så ser Eirik om fastprisen holder."
+      "eyebrow": "Fastpris · varmtvannsbereder",
+      "ingress": "Står den nye berederen på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt berederen, så ser Eirik om fastprisen holder."
     },
     "tanksjekk": {
       "eyebrow": "Tanksjekk",
-      "tittel": "Er varmtvannstanken din gammel?",
+      "tittel": "Er varmtvannsberederen din gammel?",
       "ingress": "Skriv inn produksjonsåret fra typeskiltet, så ser du alderen mot det forsikringen pleier å regne som gammelt.",
       "arEtikett": "Produksjonsår · fra typeskiltet",
       "arHjelp": "Står ofte som «Prod.» eller som de første sifrene i serienummeret.",
-      "knapp": "Send bilde av tanken",
+      "knapp": "Send bilde av berederen",
       "alderEnhet": "år",
       "maalerGrense": "Forsikring",
-      "svarStart": "Skriv inn årstallet, så ser du hvor gammel tanken er.",
-      "svarOk": "Tanken er {alder} år. Følg med på den: se etter rust, drypp og vann under tanken.",
-      "svarSnart": "Tanken er {alder} år og nærmer seg alderen forsikringen regner som gammel. Planlegg et bytte det neste året eller to.",
-      "svarNaa": "Tanken er {alder} år. Mange forsikringer gir avkortning ved lekkasje fra så gamle tanker. Bytt den nå, før den lekker.",
+      "svarStart": "Skriv inn årstallet, så ser du hvor gammel berederen er.",
+      "svarOk": "Berederen er {alder} år. Følg med på den: se etter rust, drypp og vann under berederen.",
+      "svarSnart": "Berederen er {alder} år og nærmer seg alderen forsikringen regner som gammel. Planlegg et bytte det neste året eller to.",
+      "svarNaa": "Berederen er {alder} år. Mange forsikringer gir avkortning ved lekkasje fra så gamle beredere. Bytt den nå, før den lekker.",
       "svarUgyldig": "Skriv et årstall mellom {fra} og {til}.",
       "forbehold": "Veiledende · sjekk vilkårene i din forsikring",
       "personvern": "Årstallet blir i nettleseren din. Ingenting lagres eller sendes.",
-      "utenJs": "Under 15 år: følg med på tanken. 15 til 19 år: planlegg et bytte. 20 år eller mer: bytt nå. Mange forsikringer regner en tank som gammel etter rundt 20 år.",
+      "utenJs": "Under 15 år: følg med på berederen. 15 til 19 år: planlegg et bytte. 20 år eller mer: bytt nå. Mange forsikringer regner en bereder som gammel etter rundt 20 år.",
       "snartAr": 15,
       "grenseAr": 20,
       "maksAr": 30,
       "knappUtenJs": "Se fastprisen på bytte",
       "prisEtikett": "Fastpris på arbeidet",
-      "prisNote": "Når ny tank står på samme sted. Tank og deler kommer i tillegg."
+      "prisNote": "Når ny bereder står på samme sted. Bereder og deler kommer i tillegg."
     },
     "hyttesikring": {
       "eyebrow": "Hyttesikring",
@@ -220,9 +220,9 @@
   },
   "sider": {
     "felles": {
-      "menyVarmtvannstank": "Varmtvannstank",
+      "menyVarmtvannstank": "Varmtvannsbereder",
       "menyLekker": "Lekker det?",
-      "bunntekst": "Rørlegger på Hemnes i Aurskog-Høland. Service, varmtvannstank, brønn, hytte og bad.",
+      "bunntekst": "Rørlegger på Hemnes i Aurskog-Høland. Service, varmtvannsbereder, brønn, hytte og bad.",
       "kontaktTittel": "Kontakt",
       "adresseTittel": "Adresse"
     },
@@ -289,8 +289,8 @@
   "lekkerNaa": {
     "tittel": "Lekker det nå?",
     "punkter": [
-      "Steng hovedstoppekranen. Den sitter som regel der vannet kommer inn i huset: i kjelleren, i vaskerommet, under kjøkkenbenken eller ved varmtvannstanken. Har du brønn, kan du også slå av pumpa.",
-      "Slå av strømmen til varmtvannstanken i sikringsskapet, hvis tanken lekker eller vannet er stengt.",
+      "Steng hovedstoppekranen. Den sitter som regel der vannet kommer inn i huset: i kjelleren, i vaskerommet, under kjøkkenbenken eller ved varmtvannsberederen. Har du brønn, kan du også slå av pumpa.",
+      "Slå av strømmen til varmtvannsberederen i sikringsskapet, hvis berederen lekker eller vannet er stengt.",
       "Tørk opp det du kan, og ta bilder av skaden og av det som lekker.",
       "Meld fra til forsikringsselskapet. De fleste har egen skadevakt som kan komme og tørke ut.",
       "Ring Eirik."
@@ -353,11 +353,11 @@
       "byggear": "Omtrent når er huset eller hytta bygget?",
       "adkomst": "Adkomst og tilgang: er veien brøytet, er noen hjemme, eller hvor ligger nøkkelen?",
       "kontaktform": "Vil du helst ha SMS eller en telefonsamtale?",
-      "bildeTypeskilt": "Bilde av typeskiltet på tanken (klistremerket med liter og effekt)",
-      "bildeTank": "Bilde av tanken og gulvet rundt (så Eirik ser sluk og eventuell vannstopper)",
-      "rom": "Hvilket rom står tanken i?",
+      "bildeTypeskilt": "Bilde av typeskiltet på berederen (klistremerket med liter og effekt)",
+      "bildeTank": "Bilde av berederen og gulvet rundt (så Eirik ser sluk og eventuell vannstopper)",
+      "rom": "Hvilket rom står berederen i?",
       "etasje": "Hvilken etasje? (kjeller, 1. etasje …)",
-      "tilkobling": "Står tanken i stikkontakt, eller er den fast tilkoblet?",
+      "tilkobling": "Står berederen i stikkontakt, eller er den fast tilkoblet?",
       "problem": "Hva er problemet?",
       "vannStengt": "Har du stengt vannet?",
       "fukt": "Er det fukt eller vann i gulv eller vegger?",

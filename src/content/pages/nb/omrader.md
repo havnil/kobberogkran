@@ -19,7 +19,7 @@ Det er mange hytter i området, og mange av dem mangler vanlig adresse. Bruk «B
 
 ## Lillestrøm
 
-Vi tar også jobber i Lillestrøm, gjerne planlagte jobber som bytte av varmtvannstank og rørleggerarbeid på bad.
+Vi tar også jobber i Lillestrøm, gjerne planlagte jobber som bytte av varmtvannsbereder og rørleggerarbeid på bad.
 
 ## Utenfor området
 

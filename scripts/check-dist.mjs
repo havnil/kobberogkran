@@ -42,8 +42,8 @@ expectNotContains('index.html', ['data-dognvakt-stripe']);
 expectNotContains('en/index.html', ['data-dognvakt-stripe']);
 // Service pages: all nine exist in both languages, each with a form section for its service.
 const tjenester = {
-  nb: ['lekkasje', 'tett-avlop', 'varmtvannstank', 'bad', 'bronn-og-vann', 'hytte', 'fjos-og-gard', 'bedrift-og-borettslag', 'lekkasjesikker-hytte'],
-  en: ['leaks', 'blocked-drain', 'water-heater', 'bathroom', 'well-and-water', 'cabin', 'barns-and-farms', 'businesses-and-co-ops', 'leak-proof-cabin'],
+  nb: ['lekkasje', 'tett-avlop', 'varmtvannsbereder', 'bad', 'bronn-og-vann', 'hytte', 'landbruk', 'bedrift-og-borettslag', 'lekkasjesikker-hytte'],
+  en: ['leaks', 'blocked-drain', 'water-heater', 'bathroom', 'well-and-water', 'cabin', 'farming', 'businesses-and-co-ops', 'leak-proof-cabin'],
 };
 for (const slug of tjenester.nb) expectContains(`tjenester/${slug}/index.html`, ['lang="nb"', 'id="skjema"', 'data-tjeneste=', 'href="#skjema"', 'application/ld+json']);
 for (const slug of tjenester.en) expectContains(`en/services/${slug}/index.html`, ['lang="en"', 'id="skjema"', 'data-tjeneste=', 'href="#skjema"', 'application/ld+json']);

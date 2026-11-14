@@ -1,10 +1,10 @@
 ---
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
-title: 'Vann i fjøs og på gården'
-kundeTittel: 'Fjøs og gård'
-fagord: 'Vann og avløp i landbruket'
-nummer: 7
+title: 'Vann og avløp i landbruket'
+kundeTittel: 'Landbruk'
+fagord: 'Fjøs, gård og driftsbygning'
+nummer: 9
 kort: 'Vann til dyr og driftsbygning, fra brønn eller kommunalt nett. Drikkekar, vannposter og ledninger som tåler vinteren.'
 fakta:
   - tall: 'Frostfritt'
@@ -19,7 +19,7 @@ faq:
   - sporsmal: 'Vannet har frosset i fjøset. Hva gjør jeg?'
     svar: 'Steng vannet til den delen som har frosset, hvis du kan. Ikke tin med åpen flamme. Ring Eirik og si hvor det har frosset og om dyra har vann fra et annet sted. Når det er tint og reparert, ser han på hvordan ledningen kan sikres bedre, for eksempel med varmekabel eller isolasjon.'
   - sporsmal: 'Kan dere legge vann fram til beitet?'
-    svar: 'Ja. Eirik setter opp frostfrie vannposter og legger ledning fram til der vannet trengs. Selve gravingen gjør en maskinentreprenør, og Eirik samarbeider gjerne med den du bruker.'
+    svar: 'Ja. Eirik setter opp frostfrie vannposter og legger ledning fram til der vannet trengs. Gravingen gjør en maskinentreprenør Eirik samarbeider med, eller den du bruker fra før.'
   - sporsmal: 'Gården har egen brønn. Holder den til dyra?'
     svar: 'Det kommer an på brønnen og hvor mye dyra trenger. Eirik ser på pumpe, trykktank og ledninger, og kan måle hvor mye vann anlegget gir. Er vannkvaliteten usikker, bør det tas en vannprøve. Se også siden om brønn og vann.'
   - sporsmal: 'Hva koster det?'
@@ -56,6 +56,6 @@ Vann til dyra kan ikke vente til våren. Det er mange gårdsbruk rundt Hemnes, S
 - **Bilder** av der vannet kommer inn i fjøset, og av pumpe og trykktank
 - **Adkomst** til fjøset og hvilke tider som passer med dyra
 
-## Det tar vi ikke
+## Samarbeidspartnere
 
-Brønnboring, graving og elektrisk arbeid gjør andre. Eirik samarbeider gjerne med dem du bruker.
+Brønnboring, graving og elektrisk arbeid gjør faste samarbeidspartnere. Eirik ordner kontakten og planlegger jobben sammen med dem, eller samarbeider med dem du bruker fra før.

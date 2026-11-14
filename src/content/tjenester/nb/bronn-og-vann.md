@@ -2,9 +2,9 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: 'Brønn, pumpe og vannbehandling'
-kundeTittel: 'Brunt vann, lukt eller lavt trykk'
+kundeTittel: 'Problemer med privat vann'
 fagord: 'Brønn, pumpe og vannbehandling'
-nummer: 5
+nummer: 6
 kort: 'Pumpa går hele tida, vannet er brunt eller lukter egg? Eirik ser på pumpe, trykktank, filter og UV, også i fjøset.'
 fakta:
   - tall: 'Brønn'
@@ -27,7 +27,7 @@ faq:
   - sporsmal: 'Hjelper dere med vann i fjøset?'
     svar: 'Ja. Eirik tar vannledninger og drikkekar i fjøs, frostfrie vannposter på tunet og i beitet, og trykkanlegg for gårdsbruk. Landbruket her ute trenger vann som virker også i januar.'
   - sporsmal: 'Borer dere brønner?'
-    svar: 'Nei. Selve boringen gjør en brønnborer. Eirik tar alt fra brønnen og inn: pumpe, trykktank, filter, UV og ledningene i huset.'
+    svar: 'Nei, men Eirik samarbeider med en brønnborer og ordner kontakten. Selv tar han alt fra brønnen og inn: pumpe, trykktank, filter, UV og ledningene i huset.'
   - sporsmal: 'Hva koster det?'
     svar: 'Feilsøking og service tas på timepris. Nytt filter, UV-anlegg eller ny pumpe får du prisoverslag eller fastpris på, når Eirik vet hva som trengs. Se prissiden for timepris og servicebil.'
 bilder:
@@ -61,8 +61,8 @@ Riktig vannbehandling starter med å vite hva som er i vannet. Et filter for jer
 
 ## Fjøs og gård
 
-Vann til dyra kan ikke vente til våren. Eirik legger og reparerer vannledninger i fjøs, monterer drikkekar og setter opp frostfrie vannposter, så du har vann på tunet og i beitet også når det er kaldt. Les mer om [vann i fjøs og på gården](/tjenester/fjos-og-gard/).
+Vann til dyra kan ikke vente til våren. Eirik legger og reparerer vannledninger i fjøs, monterer drikkekar og setter opp frostfrie vannposter, så du har vann på tunet og i beitet også når det er kaldt. Les mer om [vann i landbruket](/tjenester/landbruk/).
 
-## Det tar vi ikke
+## Samarbeidspartnere
 
-Brønnboring og graving av grøfter gjør andre. Eirik samarbeider gjerne med dem du bruker.
+Brønnboring og graving gjør faste samarbeidspartnere. Trenger vannet rensing, samarbeider Eirik med en leverandør av vannrenseanlegg. Han ordner kontakten, så du slipper å lete selv.

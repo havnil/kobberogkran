@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: "A plumber for businesses, housing co-ops and owners' associations"
 kundeTittel: "Businesses and co-ops"
 fagord: "Service for businesses and housing co-ops"
-nummer: 8
+nummer: 10
 kort: "Service and repairs for businesses, housing co-ops and owners' associations. One plumber to call, invoices with the org. number and records for the board."
 fakta:
   - tall: "Invoice"
@@ -58,6 +58,6 @@ Small businesses, housing co-ops and owners' associations also need a plumber wh
 2. **Eirik gives you a price.** Small jobs are charged at the hourly rate. Bigger jobs get an estimate or a fixed price.
 3. **The job is done and documented.** You get an invoice with VAT shown and records of what was done.
 
-## What we don't do
+## Partners
 
-Round-the-clock call-outs, jetting of main drains and full refurbishments of whole systems are done by others. Eirik will tell you and help you on your way.
+Jetting of main drains and full refurbishments of whole systems are done by regular partners. Eirik arranges the contact and follows the job through.

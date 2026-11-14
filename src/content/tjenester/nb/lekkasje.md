@@ -15,7 +15,7 @@ fakta:
     tekst: 'Eirik finner hvor vannet kommer fra, ikke bare der det renner ut.'
 faq:
   - sporsmal: 'Det lekker nå. Hva gjør jeg først?'
-    svar: 'Steng hovedstoppekranen. Den sitter som regel der vannet kommer inn i huset, ofte i kjelleren, i vaskerommet eller under kjøkkenbenken. Slå av strømmen til varmtvannstanken hvis det lekker fra den. Tørk opp det du kan, ta bilder og ring Eirik.'
+    svar: 'Steng hovedstoppekranen. Den sitter som regel der vannet kommer inn i huset, ofte i kjelleren, i vaskerommet eller under kjøkkenbenken. Slå av strømmen til varmtvannsberederen hvis det lekker fra den. Tørk opp det du kan, ta bilder og ring Eirik.'
   - sporsmal: 'Hva koster det å få fikset en dryppende kran?'
     svar: 'Små reparasjoner tas på timepris. Du betaler for tiden, servicebil og forbruksmateriell, pluss deler. På prissiden står et regneeksempel for en jobb på én time, så du vet omtrent hva du går til.'
   - sporsmal: 'Det er en våt flekk i taket eller på gulvet. Hva gjør jeg?'
@@ -61,6 +61,6 @@ En kran som drypper, en pakning som har gitt seg eller litt vann under oppvaskma
 - Rydd under vasken eller rundt det som skal fikses.
 - Samle opp småjobbene, så de kan tas på samme besøk.
 
-## Det tar vi ikke
+## Samarbeidspartnere
 
-Elektrisk arbeid og utbedring av gulv og vegger etter en vannskade gjør andre. Trenger jobben det, sier Eirik fra og hjelper deg videre.
+Trenger jobben elektriker, eller må gulv og vegger utbedres etter en vannskade, har Eirik faste samarbeidspartnere han tar kontakt med. Du har fortsatt én person å forholde deg til.

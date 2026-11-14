@@ -1,10 +1,10 @@
 ---
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
-title: "Water in barns and on farms"
-kundeTittel: "Barns and farms"
-fagord: "Water and drains in farming"
-nummer: 7
+title: "Water and drains in farming"
+kundeTittel: "Farming"
+fagord: "Barns, farms and farm buildings"
+nummer: 9
 kort: "Water for animals and farm buildings, from a well or the mains. Drinking bowls, water posts and pipes that survive the winter."
 fakta:
   - tall: "Frost-free"
@@ -19,7 +19,7 @@ faq:
   - sporsmal: "The water has frozen in the barn. What do I do?"
     svar: "Turn off the water to the frozen part if you can. Don't thaw it with an open flame. Call Eirik and say where it has frozen and whether the animals have water from somewhere else. Once it is thawed and repaired, he looks at how to protect the pipe better, for example with heating cable or insulation."
   - sporsmal: "Can you run water out to the pasture?"
-    svar: "Yes. Eirik puts up frost-free water posts and runs a pipe to where the water is needed. The digging is done by an excavation contractor, and Eirik is happy to work with the one you use."
+    svar: "Yes. Eirik puts up frost-free water posts and runs a pipe to where the water is needed. The digging is done by an excavation contractor Eirik works with, or the one you already use."
   - sporsmal: "The farm has its own well. Is it enough for the animals?"
     svar: "It depends on the well and how much the animals need. Eirik looks at the pump, pressure tank and pipes, and can measure how much water the system gives. If the water quality is uncertain, a water test is a good idea. See also the page on wells and water."
   - sporsmal: "What does it cost?"
@@ -56,6 +56,6 @@ Water for the animals can't wait until spring. There are many farms around Hemne
 - **Photos** of where the water enters the barn, and of the pump and pressure tank
 - **Access** to the barn and which times suit the animals
 
-## What we don't do
+## Partners
 
-Well drilling, digging and electrical work are done by others. Eirik is happy to work with the ones you use.
+Well drilling, digging and electrical work are done by regular partners. Eirik arranges the contact and plans the job with them, or works with the ones you already use.

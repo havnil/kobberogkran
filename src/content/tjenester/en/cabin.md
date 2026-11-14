@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: "Cabins: opening, winterising and frozen pipes"
 kundeTittel: "Water on and off at the cabin"
 fagord: "Opening, winterising and frost damage"
-nummer: 6
+nummer: 7
 kort: "Water off before the frost and back on in spring, done properly so the pipes survive the winter. Eirik also helps when something has frozen."
 sesong:
   host: "Winterising before the frost: Eirik drains the pipes and closes the cabin properly, so you avoid frost damage."

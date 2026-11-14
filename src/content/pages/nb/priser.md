@@ -2,7 +2,7 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: 'Priser'
-description: 'Timepris, servicebil og forbruksmateriell med mva, regneeksempel og fastpris på bytte av varmtvannstank. Slik prises jobbene hos Kobber og Kran.'
+description: 'Timepris, servicebil og forbruksmateriell med mva, regneeksempel og fastpris på bytte av varmtvannsbereder. Slik prises jobbene hos Kobber og Kran.'
 translationKey: priser
 locale: nb
 ---
@@ -23,7 +23,7 @@ Er jobben større, men det er vanskelig å vite nøyaktig hva den krever, får d
 
 ### Fastpris
 
-**Fastpris** betyr at prisen er avtalt og ikke endres, selv om jobben tar lengre tid. Vi har fastpris på arbeidet når varmtvannstanken byttes på samme sted, og kan gi fastpris på andre jobber når vi vet nok om dem. Det står alltid hva fastprisen dekker, og hva som ikke er med.
+**Fastpris** betyr at prisen er avtalt og ikke endres, selv om jobben tar lengre tid. Vi har fastpris på arbeidet når varmtvannsberederen byttes på samme sted, og kan gi fastpris på andre jobber når vi vet nok om dem. Det står alltid hva fastprisen dekker, og hva som ikke er med.
 
 ## Dette betaler du for
 

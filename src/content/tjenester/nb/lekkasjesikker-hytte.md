@@ -4,7 +4,7 @@ utkast: 'AI-utkast – må godkjennes'
 title: 'Lekkasjesikker hytte: vannstopper og fjernstenging'
 kundeTittel: 'Hyttesikring'
 fagord: 'Vannstopper på hytta'
-nummer: 9
+nummer: 8
 kort: 'Eirik åpner eller stenger hytta og monterer vannstopper på hovedledningen. Lekker det, stenges vannet, og du får vite det.'
 fakta:
   - tall: 'Du er borte'
@@ -13,7 +13,7 @@ fakta:
     tekst: 'Har hytta nett, får du varsel og kan stenge vannet hjemmefra.'
 faq:
   - sporsmal: 'Hva er en vannstopper?'
-    svar: 'En vannstopper er en ventil på hovedledningen som stenger vannet når en sensor merker vann der det ikke skal være, for eksempel under varmtvannstanken eller oppvaskmaskinen. Noen modeller kan også stenges og åpnes fra en app på mobilen.'
+    svar: 'En vannstopper er en ventil på hovedledningen som stenger vannet når en sensor merker vann der det ikke skal være, for eksempel under varmtvannsberederen eller oppvaskmaskinen. Noen modeller kan også stenges og åpnes fra en app på mobilen.'
   - sporsmal: 'Hytta har ikke nett. Virker det likevel?'
     svar: 'Ja. En vannstopper uten nett stenger vannet på stedet når sensoren merker vann. Du får ikke varsel på mobilen, men lekkasjen stopper. Har hytta nett eller kan få det, kan du velge en modell med varsel og fjernstenging.'
   - sporsmal: 'Trenger hytta strøm?'
@@ -36,12 +36,12 @@ translationKey: lekkasjesikker-hytte
 locale: nb
 ---
 
-En hytte står tom store deler av året. Sprekker et rør eller lekker varmtvannstanken, kan vannet renne i dagevis før noen merker det. Med en vannstopper på hovedledningen stenges vannet når det lekker. Har hytta nett, får du varsel på mobilen og kan stenge vannet hjemmefra.
+En hytte står tom store deler av året. Sprekker et rør eller lekker varmtvannsberederen, kan vannet renne i dagevis før noen merker det. Med en vannstopper på hovedledningen stenges vannet når det lekker. Har hytta nett, får du varsel på mobilen og kan stenge vannet hjemmefra.
 
 ## Slik går det til
 
 1. **Eirik åpner eller stenger hytta.** Om våren settes vannet på, om høsten stenges og tømmes anlegget, som vanlig.
-2. **Vannstopperen monteres og testes.** Ventilen settes på hovedledningen, og sensorene legges der det oftest lekker: ved varmtvannstanken, kjøkkenet og badet.
+2. **Vannstopperen monteres og testes.** Ventilen settes på hovedledningen, og sensorene legges der det oftest lekker: ved varmtvannsberederen, kjøkkenet og badet.
 3. **Du får bilder og beskjed.** Har modellen app, hjelper Eirik deg å koble den til telefonen.
 
 ## Velg utstyr

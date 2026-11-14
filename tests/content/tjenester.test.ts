@@ -33,15 +33,15 @@ describe('tjenester', () => {
       'bad.md',
       'bedrift-og-borettslag.md',
       'bronn-og-vann.md',
-      'fjos-og-gard.md',
+      'landbruk.md',
       'hytte.md',
       'lekkasje.md',
       'lekkasjesikker-hytte.md',
       'tett-avlop.md',
-      'varmtvannstank.md',
+      'varmtvannsbereder.md',
     ]);
     expect(readdirSync('src/content/tjenester/en').sort()).toEqual([
-      'barns-and-farms.md',
+      'farming.md',
       'bathroom.md',
       'blocked-drain.md',
       'businesses-and-co-ops.md',

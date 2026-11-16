@@ -58,16 +58,56 @@ He gets an email invite and must accept it.
 > - open PRs, and merge them once `ci` is green **and you have approved them** (the
 >   ruleset requires one approval from someone other than the last pusher)
 > - use `@claude` in issues and PRs
-> - edit through the CMS, **but CMS saves to `main` are rejected** by the ruleset
->
-> To let his CMS saves go straight to `main` as the spec intends, pick one:
-> 1. **Recommended:** move the repo into a free GitHub organization (repo **Settings** →
->    **Transfer**), then give him the **Admin** role on the repo. The ruleset's Admin
->    exemption then covers him. After the transfer, update the repo name in
->    `public/admin/config.yml` (`backend.repo`), `CLAUDE.md`, the runbooks and
->    the watchdog assignee, and reconnect the repo in Cloudflare Workers Builds. GitHub
->    redirects the old URLs, but don't rely on that.
-> 2. Leave it as is. He edits through PRs (or asks `@claude`), and you merge.
+> - edit through the CMS: each save becomes a PR (see 3b), which you approve
+
+Contributor guide in Norwegian, for him and for Eirik: [slik-bidrar-du.md](slik-bidrar-du.md).
+
+## 3b. CMS for the brother and Eirik (editorial workflow)
+
+The CMS runs with `publish_mode: editorial_workflow` (`public/admin/config.yml`): every save goes to
+a branch `cms/<collection>/<slug>` with a PR, and **Publish** merges it. If `ci` is still running,
+the CMS turns on auto-merge and waits ([Sveltia docs](https://sveltiacms.app/en/docs/workflows/editorial)).
+So no CMS save lands on `main` without a green `ci`, and your own saves go the same way.
+
+1. Add Eirik as a collaborator, as in step 3. Put his and the brother's e-mail in the Cloudflare
+   Access policy, so they can open the preview links.
+2. Allow auto-merge in the repo (needed for publishing while `ci` runs):
+
+   ```sh
+   gh api -X PATCH repos/havnil/kobberogkran -F allow_auto_merge=true
+   ```
+
+3. With nothing more, an entry from Eirik or the brother waits for **your approval**: approve the
+   PR on GitHub, or mark the entry **Ready** in the CMS. Nobody can approve their own PR.
+
+### Optional: Eirik publishes without waiting for you
+
+GitHub lets a single user bypass a repository ruleset (since May 2026,
+[changelog](https://github.blog/changelog/2026-05-07-repository-rulesets-user-bypass-and-branch-renaming)).
+A bypass skips **every** rule in that ruleset, so the `main` ruleset is split in two first:
+`main-ci` ([main-ruleset-ci.json](main-ruleset-ci.json): `ci`, no force-push, no deletion) has no
+user bypass, and `main-godkjenning` ([main-ruleset-godkjenning.json](main-ruleset-godkjenning.json):
+a PR with one approval) gets Eirik in `pull_request` mode. His PRs then still need a green `ci`,
+and he still can't push to `main` directly, but he doesn't need an approval.
+
+Create the two new rulesets **before** deleting the old one, so `main` is never unprotected:
+
+```sh
+gh api repos/havnil/kobberogkran/rulesets -X POST --input docs/runbooks/main-ruleset-ci.json
+EIRIK_ID=$(gh api users/<eiriks-brukernavn> --jq .id)
+jq --argjson id "$EIRIK_ID" '.bypass_actors += [{"actor_id": $id, "actor_type": "User", "bypass_mode": "pull_request"}]' \
+  docs/runbooks/main-ruleset-godkjenning.json | gh api repos/havnil/kobberogkran/rulesets -X POST --input -
+gh api repos/havnil/kobberogkran/rulesets --jq '.[] | "\(.id) \(.name)"'
+gh api -X DELETE repos/havnil/kobberogkran/rulesets/<id of the old "main">
+```
+
+- If the second command fails with an error about `User` (the changelog doesn't say whether
+  personal repos get user bypass), delete `main-ci` again and keep the old `main`. Then approve
+  Eirik's entries yourself (step 3), or move the repo to a free organization, where a team can be
+  the bypass actor.
+- The bypass covers **any** PR Eirik opens, not just CMS entries. The CMS refuses to publish a PR
+  that contains files other than the entry's own. If he will also edit on GitHub, add a check that
+  fails when his PR touches anything outside `src/content/` and `public/images/uploads/`.
 
 ## 4. Manual ruleset check
 
@@ -95,8 +135,8 @@ gh api repos/havnil/kobberogkran/rulesets -X POST --input docs/runbooks/main-rul
 Check it once now, and again whenever someone is added:
 
 1. **As the owner (admin):** a small direct push to `main` succeeds. GitHub prints a
-   note that you bypassed the rules. A CMS save, made while signed in as you, appears as
-   a commit on `main`.
+   note that you bypassed the rules. A CMS save, made while signed in as you, opens a PR
+   (editorial workflow, step 3b).
 2. **As a collaborator with write access** (for example, the brother):
    - `git push origin main` with a new commit → **rejected** ("Changes must be made through
      a pull request" / "Required status check `ci` is expected").

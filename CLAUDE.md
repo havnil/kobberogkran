@@ -127,7 +127,9 @@ the `needs-human` label (`gh issue edit <n> --add-label needs-human`), and stop.
   `npm run build`, then `npx wrangler deploy`. The site is live within minutes.
 - Every other branch gets a **preview build**. Cloudflare comments the preview URL on the
   PR and adds a check run.
-- CMS saves at `/admin` commit straight to `main`, so they deploy like any other push.
+- CMS saves at `/admin` open a PR (`publish_mode: editorial_workflow`). Publishing in the CMS merges it
+  once `ci` is green and it is approved, so it deploys like any other merge. See
+  [`docs/runbooks/github-setup.md`](docs/runbooks/github-setup.md) step 3b.
 - Rollback: [`docs/runbooks/rollback.md`](docs/runbooks/rollback.md).
 - The Worker name (`wrangler.jsonc` `name: "kobberogkran"`) must match the Worker in
   Cloudflare. Don't rename it.

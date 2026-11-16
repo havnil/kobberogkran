@@ -97,12 +97,19 @@ Godt å vite:
 Når du vil gjøre større ting selv. Installer Claude-appen, åpne fanen **Code**, og velg repoet. Spør
 Håvard om hjelp første gang. Prosjektets regler står i `CLAUDE.md`, og Claude følger dem.
 
-## Innholdsverktøyet (`/admin`)
+## Måte 0: Innholdsverktøyet (`/admin`)
 
-Nettsiden har et redigeringsverktøy på `/admin` der man kan endre tekst, priser og referanser i
-et skjema i stedet for i filer. Det er foreløpig bare Håvard som kan lagre der, fordi `main` er
-beskyttet. Vi jobber med en løsning, så Eirik kan legge ut referanser selv. Inntil da: bruk måte 1
-eller 2.
+Nettsiden har et redigeringsverktøy på `kobberogkran.no/admin`. Der endrer du tekst, priser og
+referanser i et skjema, uten å se filer. Det er den enkleste måten for Eirik å legge ut nye
+referanseprosjekter.
+
+1. Gå til `/admin` og logg inn med GitHub.
+2. Velg for eksempel **Referanser → Ny**. Fyll ut, last opp bildene og trykk **Lagre**. Lagringen
+   blir et utkast med en egen PR, og ingenting er live ennå.
+3. Trykk **Publiser**. Når den automatiske sjekken (`ci`) er grønn, går det live etter noen minutter.
+   Har du ikke lov til å publisere uten godkjenning, venter utkastet til Håvard godkjenner det.
+
+Verktøyet virker først når Håvard har satt opp innloggingen (se `cloudflare-setup.md`).
 
 ## Når noe går galt
 

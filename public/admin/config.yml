@@ -1,5 +1,9 @@
 # Sveltia CMS configuration: https://sveltiacms.app/en/docs
-# Saves commit straight to `main` (no editorial workflow) and go live after the next deploy.
+# Editorial workflow: each save goes to a branch `cms/<collection>/<slug>` with a pull request, and
+# «Publish» merges it once `ci` is green (and it is approved, unless the user bypasses that rule; see
+# docs/runbooks/github-setup.md, step 3b). `main` is protected, so direct saves would be rejected for
+# everyone but the owner. https://sveltiacms.app/en/docs/workflows/editorial
+publish_mode: editorial_workflow
 backend:
   name: github
   repo: havnil/kobberogkran

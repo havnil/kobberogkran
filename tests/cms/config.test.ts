@@ -18,8 +18,9 @@ describe('Sveltia CMS config', () => {
     expect(config.backend.branch).toBe('main');
   });
 
-  it('commits straight to main (no editorial workflow)', () => {
-    expect(config).not.toHaveProperty('publish_mode');
+  it('saves through pull requests (editorial workflow), since `main` is protected', () => {
+    expect(config.publish_mode).toBe('editorial_workflow');
+    expect(config.backend.branch).toBe('main');
   });
 
   it('edits nb and en in locale folders', () => {

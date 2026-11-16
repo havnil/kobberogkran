@@ -97,7 +97,7 @@ Godt å vite:
 Når du vil gjøre større ting selv. Installer Claude-appen, åpne fanen **Code**, og velg repoet. Spør
 Håvard om hjelp første gang. Prosjektets regler står i `CLAUDE.md`, og Claude følger dem.
 
-## Måte 0: Innholdsverktøyet (`/admin`)
+## Måte 4: Innholdsverktøyet (`/admin`), for referanser og tekst
 
 Nettsiden har et redigeringsverktøy på `kobberogkran.no/admin`. Der endrer du tekst, priser og
 referanser i et skjema, uten å se filer. Det er den enkleste måten for Eirik å legge ut nye

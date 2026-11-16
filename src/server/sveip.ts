@@ -8,6 +8,9 @@
 //   ikke gi evige forsøk. Status blir stående, og hendelsen 'varsel_feil' viser hva som skjedde.
 // - Låsen i sorterOgVarsle gjør det trygt om API-et sender samtidig. AI-en kalles ikke på nytt for
 //   'sortert' (forrige sortering gjenbrukes).
+// - Også varslede forespørsler med et tillegg som ikke ble sendt (e-posten feilet, eller Workeren ble
+//   stoppet i samlevinduet før den rakk å sende). Uten dette ville et slikt tillegg ventet på neste
+//   tillegg fra kunden, som kanskje aldri kommer.
 import type { Env } from './env';
 import { sorterOgVarsle, type SorterOgVarsleDeps } from './sortering/index';
 import { varsleTillegg } from './tillegg';
@@ -22,16 +25,25 @@ export async function sveipUvarslede(env: Env, deps: SorterOgVarsleDeps = {}): P
   const naa = (deps.naa ?? (() => new Date()))();
   let ider: string[];
   try {
+    const gammel = new Date(naa.getTime() - SVEIP_ALDER_MS).toISOString();
+    const forGammel = new Date(naa.getTime() - SVEIP_MAKS_ALDER_MS).toISOString();
+    // Uvarslede forespørsler, og varslede med et tillegg som ingen varsel har dekket ennå (samme
+    // `dekket` som i tillegg.ts). Et tillegg yngre enn SVEIP_ALDER_MS kan fortsatt være i et samlevindu.
     const r = await env.DB.prepare(
-      `SELECT id FROM foresporsler
-        WHERE status IN ('ny', 'sortert') AND opprettet < ? AND opprettet > ?
-        ORDER BY opprettet LIMIT ?`,
+      `SELECT f.id FROM foresporsler f
+        WHERE f.opprettet > ?
+          AND ((f.status IN ('ny', 'sortert') AND f.opprettet < ?)
+            OR (f.status = 'varslet' AND EXISTS (
+                 SELECT 1 FROM hendelser t
+                  WHERE t.foresporsel_id = f.id AND t.type = 'tillegg' AND t.opprettet < ?
+                    AND t.rowid > COALESCE((
+                      SELECT MAX(CAST(json_extract(h.data_json, '$.dekket') AS INTEGER)) FROM hendelser h
+                       WHERE h.foresporsel_id = f.id
+                         AND h.type IN ('varsel_ok', 'tillegg_varsel', 'tillegg_varsel_direkte')
+                         AND json_extract(h.data_json, '$.dekket') IS NOT NULL), 0))))
+        ORDER BY f.opprettet LIMIT ?`,
     )
-      .bind(
-        new Date(naa.getTime() - SVEIP_ALDER_MS).toISOString(),
-        new Date(naa.getTime() - SVEIP_MAKS_ALDER_MS).toISOString(),
-        SVEIP_MAKS_ANTALL,
-      )
+      .bind(forGammel, gammel, gammel, SVEIP_MAKS_ANTALL)
       .all<{ id: string }>();
     ider = r.results.map((x) => x.id);
   } catch (e) {

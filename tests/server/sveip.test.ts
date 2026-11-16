@@ -7,6 +7,7 @@ import { hentForesporsel, opprettForesporsel, settStatus } from '../../src/serve
 import type { Env } from '../../src/server/env';
 import { FalskSorterer } from '../../src/server/sortering/ai';
 import { sveipUvarslede, SVEIP_ALDER_MS } from '../../src/server/sveip';
+import { loggTillegg } from '../../src/server/tillegg';
 import type { Varsler } from '../../src/server/varsling';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -57,6 +58,37 @@ describe('sveipUvarslede', () => {
     expect((await hentForesporsel(db, fersk))!.status).toBe('ny');
     expect((await hentForesporsel(db, varslet))!.status).toBe('varslet');
     expect((await hentForesporsel(db, lukket))!.status).toBe('lukket');
+  });
+
+  it('sender tillegg som ble stående uten varsel (Workeren stoppet i waitUntil), men ikke ferske eller dekkede', async () => {
+    const tillegg = async (id: string, opprettet: string) => {
+      await loggTillegg(db, id, { hva: 'steg2' });
+      await db.prepare(`UPDATE hendelser SET opprettet = ? WHERE foresporsel_id = ? AND type = 'tillegg'`).bind(opprettet, id).run();
+    };
+    const glemt = await ny(siden(SVEIP_ALDER_MS * 4), 'varslet');
+    await tillegg(glemt, siden(SVEIP_ALDER_MS * 2));
+    const fersk = await ny(siden(SVEIP_ALDER_MS * 4), 'varslet');
+    await tillegg(fersk, siden(60_000));
+    const dekket = await ny(siden(SVEIP_ALDER_MS * 4), 'varslet');
+    await tillegg(dekket, siden(SVEIP_ALDER_MS * 2));
+    const rad = await db.prepare(`SELECT MAX(rowid) AS r FROM hendelser WHERE foresporsel_id = ?`).bind(dekket).first<{ r: number }>();
+    await db
+      .prepare(`INSERT INTO hendelser (id, foresporsel_id, type, data_json, opprettet) VALUES (?, ?, 'tillegg_varsel', ?, ?)`)
+      .bind(crypto.randomUUID(), dekket, JSON.stringify({ dekket: rad!.r, antall: 1 }), siden(SVEIP_ALDER_MS * 2))
+      .run();
+
+    const send = vi.fn(async () => {});
+    const deps = {
+      sorterer: new FalskSorterer({ sammendrag: 's', hast: 'snart', svarutkast: 'u' }),
+      varsler: { send } as Varsler,
+      naa: () => naa,
+    };
+    expect(await sveipUvarslede(env(), deps)).toBe(1);
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(String((send.mock.calls[0] as unknown[])[1])).toMatch(/^Tillegg/);
+    // Nå er tillegget dekket, så neste sveip sender ikke på nytt.
+    expect(await sveipUvarslede(env(), deps)).toBe(0);
+    expect(send).toHaveBeenCalledTimes(1);
   });
 
   it('gir opp forespørsler eldre enn 7 dager (unngår evige forsøk)', async () => {

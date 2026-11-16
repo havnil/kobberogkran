@@ -15,7 +15,8 @@
 //   venter TILLEGG_SAMLE_MS og sender alt nytt i én e-post. Reservasjonen er én betinget INSERT, så av
 //   flere samtidige opplastinger får bare én den; de andre kommer med i samme e-post. En støt med 8
 //   bilder gir derfor én e-post. Vinduet er kort fordi `waitUntil` bare lever ca. 30 s etter svaret:
-//   et lengre vindu ville latt tillegg som kommer etter innsamlingen, bli liggende uten varsel.
+//   vindu (15 s) + AI (maks 8 s) lar ca. 7 s stå igjen til D1 og e-posten. Blir Workeren likevel
+//   stoppet før sendingen, tar sveipen (sveip.ts) tillegget etter fem minutter.
 // - Etter hovedvarselet (`samle: false`) sendes det som kom inn mens AI-en sorterte, med en gang.
 // - Mens status er 'ny' eller 'sortert', sendes ikke tillegg (hovedvarselet tar det med; et tillegg
 //   i den statusen starter i stedet et nytt forsøk på hovedvarselet, se skjema.ts). Etter 'lukket'
@@ -32,10 +33,10 @@ import { aiLinjer, BILDELENKE_GYLDIG_SEK, erAkutt, loggTrygt, regelLinjer, svarL
 import { ClaudeSorterer, type Sortering, type Sorterer } from './sortering/ai';
 import { regelsjekk, type Regelsjekk } from './sortering/regler';
 
-export const TILLEGG_SAMLE_MS = 20_000;
+export const TILLEGG_SAMLE_MS = 15_000;
 /**
  * Tidsavbrudd for AI-kallet i et tillegg. `waitUntil` lever ca. 30 s etter svaret, og samlevinduet
- * bruker 20 av dem, så AI-en får kortere tid enn i hovedvarselet. Svarer den ikke i tide, sendes
+ * bruker 15 av dem, så AI-en får kortere tid enn i hovedvarselet. Svarer den ikke i tide, sendes
  * tillegget med bare reglene.
  */
 export const TILLEGG_AI_MS = 8_000;

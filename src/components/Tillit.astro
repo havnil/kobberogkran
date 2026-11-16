@@ -1,0 +1,114 @@
+---
+// The brown trust strip on the front page: two to four short reasons to choose us, each with a line icon.
+// Replaces the earlier illustrated band. Copy: `forside.tillit` in tekster.
+import type { Tekster } from '../lib/innhold';
+
+interface Props {
+  tekst: Tekster['forside']['tillit'];
+}
+
+const { tekst } = Astro.props;
+
+// 24×24 line icons, drawn with the current colour.
+const IKONER: Record<Tekster['forside']['tillit']['punkter'][number]['ikon'], string> = {
+  pris: 'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3',
+  fastpris: 'M3 12V4h8l10 10-8 8zM7.5 8.5h.01',
+  dokumentasjon: 'M14 3H6v18h12V7zM14 3v4h4M9 14l2 2 4-4',
+  lokal: 'M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21zM12 12.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+  partnere: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.2a3.5 3.5 0 0 1 0 6.6M18.5 14a6.5 6.5 0 0 1 3 6',
+  svartid: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
+};
+---
+
+<section class="tillit" aria-labelledby="tillit-tittel">
+  <div class="ramme">
+    <h2 id="tillit-tittel" class="visuelt-skjult">{tekst.tittel}</h2>
+    <ul class:list={['punkter', `antall-${tekst.punkter.length}`]}>
+      {
+        tekst.punkter.map((p) => (
+          <li>
+            <svg class="ikon" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+              <path d={IKONER[p.ikon]} />
+            </svg>
+            <p class="tittel">{p.tittel}</p>
+            <p class="tekst">{p.tekst}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tillit {
+    background: var(--color-brown);
+    color: var(--color-cream);
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .visuelt-skjult {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .punkter {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2rem 2.5rem;
+  }
+
+  li {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+
+  .ikon {
+    margin-bottom: 0.4rem;
+    fill: none;
+    stroke: var(--color-orange-light);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tittel {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
+    font-style: italic;
+    font-synthesis: style;
+    font-weight: 800;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .tekst {
+    margin: 0;
+    color: rgb(247 242 236 / 0.82);
+    font-size: 0.9875rem;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 620px) {
+    .punkter {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .antall-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .antall-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

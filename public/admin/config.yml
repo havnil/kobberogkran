@@ -225,13 +225,20 @@ collections:
                   - { name: prisEtikett, label: Etikett på fastprisen, widget: string }
                   - { name: prisNote, label: Merknad under fastprisen, widget: string }
                   - { name: knapp, label: Knapp (til siden om lekkasjesikker hytte), widget: string }
-              - name: band
-                label: Brunt bånd
+              - name: tillit
+                label: Tillitslinje (brunt bånd)
                 widget: object
                 fields:
-                  - { name: eyebrow, label: Etikett, widget: string }
-                  - { name: tittel, label: Tittel, widget: string }
-                  - { name: tittelAksent, label: Siste linje (aksentfarge), widget: string }
+                  - { name: tittel, label: Overskrift for skjermlesere, widget: string }
+                  - name: punkter
+                    label: Punkter (2 til 4)
+                    widget: list
+                    min: 2
+                    max: 4
+                    fields:
+                      - { name: ikon, label: Ikon, widget: select, options: [pris, fastpris, dokumentasjon, lokal, partnere, svartid] }
+                      - { name: tittel, label: Tittel, widget: string }
+                      - { name: tekst, label: Tekst, widget: string }
               - name: priser
                 label: Priser i korte trekk
                 widget: object
@@ -279,6 +286,7 @@ collections:
                   - { name: ingress, label: Ingress, widget: text }
                   - { name: base, label: Merke på basen, widget: string }
                   - { name: utenfor, label: Utenfor området, widget: string }
+                  - { name: kartNote, label: 'Tekst under kartet ({base} = basen)', widget: string }
                   - { name: omtaleEyebrow, label: Etikett - omtaler, widget: string }
               - name: skjema
                 label: Skjemaseksjonen
@@ -552,7 +560,12 @@ collections:
                 label: Område
                 widget: object
                 fields:
-                  - { name: steder, label: Steder, widget: list, field: { name: sted, label: Sted, widget: string } }
+                  - name: regioner
+                    label: Steder etter region (første sted er basen)
+                    widget: list
+                    fields:
+                      - { name: navn, label: Region, widget: string }
+                      - { name: steder, label: Steder, widget: list, field: { name: sted, label: Sted, widget: string } }
                   - { name: maksKjoretidMin, label: Maks kjøretid (min), widget: object, fields: *verdiNum }
 
   - name: omtale

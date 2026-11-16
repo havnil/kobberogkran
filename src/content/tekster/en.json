@@ -162,10 +162,30 @@
       "prisNote": "The valve and equipment you choose come on top.",
       "knapp": "How it works"
     },
-    "band": {
-      "eyebrow": "Kobber og Kran · Hemnes",
-      "tittel": "On the road in Hemnes and",
-      "tittelAksent": "Aurskog-Høland"
+    "tillit": {
+      "tittel": "Why choose Kobber og Kran",
+      "punkter": [
+        {
+          "ikon": "pris",
+          "tittel": "Price before we start",
+          "tekst": "You know what the job costs before we begin."
+        },
+        {
+          "ikon": "fastpris",
+          "tittel": "Fixed prices on common jobs",
+          "tekst": "Water heater, outdoor tap, toilet and more."
+        },
+        {
+          "ikon": "dokumentasjon",
+          "tittel": "Proper documentation",
+          "tekst": "You get the paperwork for the job when we are done."
+        },
+        {
+          "ikon": "lokal",
+          "tittel": "Local",
+          "tekst": "Based in Hemnes, working in Aurskog-Høland and Indre Østfold."
+        }
+      ]
     },
     "priser": {
       "tittel": "Prices at a glance",
@@ -215,7 +235,8 @@
       "ingress": "Based in Hemnes. Eirik drives all over Aurskog-Høland and Indre Østfold, and to Lillestrøm.",
       "base": "Base",
       "utenfor": "Outside the area: larger jobs, by arrangement",
-      "omtaleEyebrow": "Reviews"
+      "omtaleEyebrow": "Reviews",
+      "kartNote": "The rings show straight-line distance from {base}."
     },
     "skjema": {
       "tittel": "Send a request",

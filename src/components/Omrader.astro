@@ -1,10 +1,12 @@
 ---
-// «Her jobber vi» on the service pages and the areas page: section head and the places as chips, with
-// Hemnes marked as the base. The areas page also shows the drawn map.
-import Illustrasjon from './Illustrasjon.astro';
+// «Her jobber vi» on the service pages and the areas page: section head and the places grouped by region,
+// Hemnes marked as the base. The areas page also shows the map, next to the places on wide screens.
+import Omradekart from './Omradekart.astro';
+import Regionliste from './Regionliste.astro';
 import { ordstil } from '../lib/ordstil';
 import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
+import { alleSteder } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
 
 interface Props {
@@ -17,57 +19,60 @@ interface Props {
   medKart?: boolean;
 }
 
-const { locale, tekst, tittel, eyebrow, omrade, medKart = false } = Astro.props;
-const [base, ...andre] = omrade.steder;
+const { tekst, tittel, eyebrow, omrade, medKart = false } = Astro.props;
+const base = alleSteder(omrade)[0] ?? '';
+const kartNote = tekst.kartNote.replace('{base}', base);
 ---
 
 <section class="seksjon" aria-labelledby="omrader-tittel">
-  <div class="ramme">
-    <div class="hode">
-      <div>
-        <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
-        <h2 id="omrader-tittel" class="display" style={ordstil(tittel ?? tekst.tittel)}>{tittel ?? tekst.tittel}</h2>
+  {
+    medKart ? (
+      <div class="ramme med-kart">
+        <div class="tekst">
+          <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
+          <h2 id="omrader-tittel" class="display" style={ordstil(tittel ?? tekst.tittel)}>{tittel ?? tekst.tittel}</h2>
+          <p class="ingress">{tekst.ingress}</p>
+          <Regionliste omrade={omrade} base={tekst.base} />
+          <p class="utenfor">{tekst.utenfor}</p>
+        </div>
+        <Omradekart omrade={omrade} tittel={tittel ?? tekst.tittel} note={kartNote} />
       </div>
-      <p class="hode-ingress">{tekst.ingress}</p>
-    </div>
-    <ul class="chips">
-      <li class="base">{base} <span class="merke">{tekst.base}</span></li>
-      {andre.map((sted) => <li>{sted}</li>)}
-    </ul>
-    <p class="utenfor">{tekst.utenfor}</p>
-    {medKart && <Illustrasjon class="kart" src="/images/uploads/illustrasjon-omrade.svg" width={1200} height={900} locale={locale} plassholder />}
-  </div>
+    ) : (
+      <div class="ramme">
+        <div class="hode">
+          <div>
+            <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
+            <h2 id="omrader-tittel" class="display" style={ordstil(tittel ?? tekst.tittel)}>{tittel ?? tekst.tittel}</h2>
+          </div>
+          <p class="hode-ingress">{tekst.ingress}</p>
+        </div>
+        <Regionliste omrade={omrade} base={tekst.base} kolonner />
+        <p class="utenfor">{tekst.utenfor}</p>
+      </div>
+    )
+  }
 </section>
 
 <style>
-  .chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-
-  .chips li {
-    display: inline-flex;
+  .med-kart {
+    display: grid;
+    gap: var(--space-5);
     align-items: center;
-    gap: 0.6rem;
-    min-height: 3rem;
-    padding: 0.5rem 1.1rem;
-    background: var(--color-white);
-    border: 1px solid var(--color-border-strong);
-    font-weight: 800;
   }
 
-  .merke {
-    padding: 0.1rem 0.45rem;
-    background: var(--color-orange);
-    color: var(--color-on-orange);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  .tekst {
+    container-type: inline-size;
+    min-width: 0;
+  }
+
+  .tekst h2.display {
+    margin-bottom: var(--space-3);
+  }
+
+  .ingress {
+    max-width: 34rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
   }
 
   .utenfor {
@@ -80,13 +85,10 @@ const [base, ...andre] = omrade.steder;
     text-transform: uppercase;
   }
 
-  /* The whole map (4:3), so the places to the south (Indre Østfold) are not cropped. */
-  .ramme :global(.kart) {
-    margin-top: 3rem;
-    margin-inline: auto;
-    max-width: 960px;
-    aspect-ratio: 4 / 3;
-    border-radius: 0;
-    border: 1px solid var(--color-border);
+  @media (min-width: 1000px) {
+    .med-kart {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 4.5rem;
+    }
   }
 </style>

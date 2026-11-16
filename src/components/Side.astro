@@ -22,7 +22,7 @@ import { localizePath } from '../i18n/alternates';
 import { navPath } from '../i18n/nav';
 import type { PageEntry } from '../i18n/pages';
 import { ui } from '../i18n/ui';
-import { getFirma } from '../lib/firma';
+import { alleSteder, getFirma } from '../lib/firma';
 import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
 import { launchVerdi } from '../lib/lansering';
 import { getTekster } from '../lib/tekster';
@@ -46,7 +46,8 @@ const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: en
 const juridisk = nokkel === 'personvern' || nokkel === 'vilkar';
 const harSkjema = nokkel === 'kontakt';
 const skjemaHref = harSkjema ? '#skjema' : navPath(locale, 'kontakt');
-const base = firma.omrade.steder[0] ?? '';
+const steder = alleSteder(firma.omrade);
+const base = steder[0] ?? '';
 
 // Illustration and fact card per page. The legal pages have neither.
 const bilder: Record<string, string> = {
@@ -65,7 +66,7 @@ const prisCeller: Celle[] = [
 const stedCeller: Celle[] = [
   { etikett: f.omrader.base, tekst: base },
   { etikett: nk.kjoretid, verdi: firma.omrade.maksKjoretidMin, enhet: nk.kjoretidEnhet },
-  { etikett: f.omrader.eyebrow, tekst: firma.omrade.steder.join(' · '), bred: true },
+  { etikett: f.omrader.eyebrow, tekst: steder.join(' · '), bred: true },
 ];
 const kontaktCeller: Celle[] = [
   { etikett: s.kontakt.telefonNavn, tekst: firma.telefon.verdi, bred: true },

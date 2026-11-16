@@ -2,6 +2,7 @@
 // Front page: the places we work (Hemnes marked as base) on the left and what customers say on the right.
 // No score and no stars until real reviews exist. Example entries render only outside launch builds, with
 // an «Eksempel» badge; with nothing to show, the places take the full width.
+import Regionliste from './Regionliste.astro';
 import type { Tekster, Omtale } from '../lib/innhold';
 import { ordstil } from '../lib/ordstil';
 import type { Firma } from '../lib/firma';
@@ -19,7 +20,6 @@ interface Props {
 
 const { locale, tekst, omtaleTittel, omrade, omtale } = Astro.props;
 const sitater = omtale.filter((o) => o.type !== 'godkjenning');
-const [base, ...andre] = omrade.steder;
 ---
 
 <section class="seksjon" id="omrader" aria-labelledby="omrader-tittel">
@@ -28,10 +28,7 @@ const [base, ...andre] = omrade.steder;
       <p class="eyebrow">{tekst.eyebrow}</p>
       <h2 id="omrader-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
       <p class="ingress">{tekst.ingress}</p>
-      <ul class="steder">
-        <li class="base"><span>{base}</span><span class="merke">{tekst.base}</span></li>
-        {andre.map((sted) => <li><span>{sted}</span></li>)}
-      </ul>
+      <Regionliste omrade={omrade} base={tekst.base} kolonner={sitater.length === 0} />
       <p class="utenfor">{tekst.utenfor}</p>
     </div>
     {
@@ -72,46 +69,6 @@ const [base, ...andre] = omrade.steder;
     color: var(--color-muted);
   }
 
-  .steder {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    column-gap: 1.5rem;
-    border-top: 1px solid var(--color-border-strong);
-  }
-
-  .steder li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--color-border-strong);
-    font-weight: 800;
-    font-size: 1.0625rem;
-  }
-
-  .merke {
-    position: relative;
-    isolation: isolate;
-    padding: 0.2rem 0.7rem;
-    color: var(--color-on-orange);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .merke::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--color-orange);
-    transform: skewX(-12deg);
-  }
 
   .utenfor {
     margin: var(--space-3) 0 0;
@@ -160,11 +117,6 @@ const [base, ...andre] = omrade.steder;
     text-transform: uppercase;
   }
 
-  @media (min-width: 620px) {
-    .steder {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
 
   @media (min-width: 1000px) {
     .to-spalter {
@@ -174,10 +126,6 @@ const [base, ...andre] = omrade.steder;
 
     .uten-omtale {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .uten-omtale .steder {
-      grid-template-columns: repeat(4, 1fr);
     }
   }
 </style>

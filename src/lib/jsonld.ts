@@ -1,6 +1,6 @@
 // Structured data (schema.org JSON-LD). Plain TypeScript so tests can import it without Astro.
 // Fields whose value is still a placeholder are left out, so placeholder copy never reaches search engines.
-import type { Firma, Verdi } from './firma';
+import { alleSteder, type Firma, type Verdi } from './firma';
 import type { Tjeneste } from './innhold';
 import type { Locale } from '../i18n/locales';
 import { NETTSTED } from './nettsted';
@@ -41,7 +41,7 @@ export function orgJsonLd(firma: Firma, locale: Locale): object {
     email: ekte(firma.epost),
     vatID: orgnr ? `NO${orgnr.replace(/\D/g, '')}MVA` : undefined,
     address: adresse ? { '@type': 'PostalAddress', streetAddress: adresse, addressCountry: 'NO' } : undefined,
-    areaServed: firma.omrade.steder,
+    areaServed: alleSteder(firma.omrade),
   });
 }
 

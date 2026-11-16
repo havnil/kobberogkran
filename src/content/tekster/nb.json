@@ -162,10 +162,30 @@
       "prisNote": "Vannstopperen og utstyret du velger kommer i tillegg.",
       "knapp": "Slik sikrer du hytta"
     },
-    "band": {
-      "eyebrow": "Kobber og Kran · Hemnes",
-      "tittel": "På vei i Hemnes og",
-      "tittelAksent": "Aurskog-Høland"
+    "tillit": {
+      "tittel": "Hvorfor velge Kobber og Kran",
+      "punkter": [
+        {
+          "ikon": "pris",
+          "tittel": "Pris før start",
+          "tekst": "Du vet hva jobben koster før vi begynner."
+        },
+        {
+          "ikon": "fastpris",
+          "tittel": "Fastpris på vanlige jobber",
+          "tekst": "Bereder, utekran, toalett og mer."
+        },
+        {
+          "ikon": "dokumentasjon",
+          "tittel": "Ryddig dokumentasjon",
+          "tekst": "Du får papirene på jobben når vi er ferdige."
+        },
+        {
+          "ikon": "lokal",
+          "tittel": "Lokalt",
+          "tekst": "Base på Hemnes, i Aurskog-Høland og Indre Østfold."
+        }
+      ]
     },
     "priser": {
       "tittel": "Priser i korte trekk",
@@ -215,7 +235,8 @@
       "ingress": "Base på Hemnes. Eirik kjører i hele Aurskog-Høland og Indre Østfold, og til Lillestrøm.",
       "base": "Base",
       "utenfor": "Utenfor området: større jobber, etter avtale",
-      "omtaleEyebrow": "Omtaler"
+      "omtaleEyebrow": "Omtaler",
+      "kartNote": "Ringene viser avstand i luftlinje fra {base}."
     },
     "skjema": {
       "tittel": "Send forespørsel",

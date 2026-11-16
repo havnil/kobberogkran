@@ -3,6 +3,9 @@
 import { z } from 'astro/zod';
 import { FASTPRIS_NOKLER } from './fastpriser';
 
+/** Icons the trust strip can show (drawn in src/components/Tillit.astro). */
+export const TILLIT_IKONER = ['pris', 'fastpris', 'dokumentasjon', 'lokal', 'partnere', 'svartid'] as const;
+
 export const tjenesteSchema = z.object({
   title: z.string(),
   /** The customer's own words. */
@@ -119,8 +122,15 @@ export const forsideSchema = z.object({
     prisNote: z.string(),
     knapp: z.string(),
   }),
-  /** The full-width brown band. */
-  band: z.object({ eyebrow: z.string(), tittel: z.string(), tittelAksent: z.string() }),
+  /** The brown trust strip: two to four short reasons to choose us, each with an icon. */
+  tillit: z.object({
+    /** Heading for screen readers (the strip shows only the points). */
+    tittel: z.string(),
+    punkter: z
+      .array(z.object({ ikon: z.enum(TILLIT_IKONER), tittel: z.string(), tekst: z.string() }))
+      .min(2)
+      .max(4),
+  }),
   priser: z.object({
     tittel: z.string(),
     timepris: z.string(),
@@ -144,6 +154,8 @@ export const forsideSchema = z.object({
     ingress: z.string(),
     base: z.string(),
     utenfor: z.string(),
+    /** Caption under the map; `{base}` is replaced by the base (Hemnes). */
+    kartNote: z.string(),
     omtaleEyebrow: z.string(),
   }),
   skjema: z.object({ eyebrow: z.string(), tittel: z.string(), merknad: z.string(), ringDirekte: z.string() }),

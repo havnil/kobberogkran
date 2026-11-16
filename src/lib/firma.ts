@@ -39,10 +39,19 @@ export const firmaSchema = z.object({
   adresse: verdi(z.string()),
   priser: priserSchema,
   omrade: z.object({
-    steder: z.array(z.string()),
+    /**
+     * The places we work, grouped by region (municipality or district). The first place of the first region
+     * is the base (Hemnes). Places with known coordinates (src/lib/kart.ts) are drawn on the map.
+     */
+    regioner: z.array(z.object({ navn: z.string(), steder: z.array(z.string()).min(1) })).min(1),
     maksKjoretidMin: verdi(z.number()),
   }),
 });
+
+/** Every place in region order; the first is the base. */
+export function alleSteder(omrade: { regioner: { steder: string[] }[] }): string[] {
+  return omrade.regioner.flatMap((r) => r.steder);
+}
 
 export type Priser = z.infer<typeof priserSchema>;
 export type Firma = z.infer<typeof firmaSchema>;

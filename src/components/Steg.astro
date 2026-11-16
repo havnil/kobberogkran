@@ -1,6 +1,7 @@
 ---
 // «Slik bestiller du»: three panels with coloured top lines (orange, copper, brown).
 import type { Tekster } from '../lib/innhold';
+import { ordstil } from '../lib/ordstil';
 
 interface Props {
   tekst: Tekster['forside']['steg'];
@@ -14,7 +15,7 @@ const { tekst } = Astro.props;
     <div class="hode">
       <div>
         <p class="eyebrow">{tekst.eyebrow}</p>
-        <h2 id="steg-tittel" class="display">{tekst.tittel}</h2>
+        <h2 id="steg-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
       </div>
       <p class="hode-ingress">{tekst.ingress}</p>
     </div>

@@ -2,6 +2,7 @@
 // The price list on the prices page: ruled rows with the figure in monospace on the right, and the worked
 // example as a dark panel. All prices come from `firma` and keep their placeholder mark.
 import Tall from './Tall.astro';
+import { ordstil } from '../lib/ordstil';
 import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
@@ -30,7 +31,7 @@ const rader = [
     <div class="hode">
       <div>
         <p class="eyebrow">{side.listeEyebrow}</p>
-        <h2 id="priser-tittel" class="display">{side.listeTittel}</h2>
+        <h2 id="priser-tittel" class="display" style={ordstil(side.listeTittel)}>{side.listeTittel}</h2>
       </div>
       <p class="hode-ingress">{side.mvaNote}</p>
     </div>

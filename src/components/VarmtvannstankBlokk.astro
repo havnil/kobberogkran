@@ -2,6 +2,7 @@
 // Fixed price for replacing a water heater, in detail: the two prices and what is and is not included.
 // Used on the water-heater page and the prices page.
 import Tall from './Tall.astro';
+import { ordstil } from '../lib/ordstil';
 import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
@@ -20,7 +21,7 @@ const { locale, tekst, priser } = Astro.props;
     <div class="hode">
       <div>
         <p class="eyebrow">{tekst.eyebrow}</p>
-        <h2 id="varmtvann-tittel" class="display">{tekst.tittel}</h2>
+        <h2 id="varmtvann-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
       </div>
       <p class="hode-ingress">{tekst.ingress}</p>
     </div>

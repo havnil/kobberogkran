@@ -4,6 +4,7 @@
 // request form with this service preselected. The water-heater page also gets the fixed price in detail
 // and the tank check.
 import { ruterKlasse } from '../lib/ruter';
+import { ordstil } from '../lib/ordstil';
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Faktakort from './Faktakort.astro';
@@ -121,7 +122,7 @@ const celler = [...prisCelle, ...tj.fakta.map((f, i) => ({ etikett: String(prisC
       <div class="hode">
         <div>
           <p class="eyebrow">{s.tjeneste.andreEyebrow}</p>
-          <h2 id="andre-tittel" class="display">{s.tjeneste.andreTittel}</h2>
+          <h2 id="andre-tittel" class="display" style={ordstil(s.tjeneste.andreTittel)}>{s.tjeneste.andreTittel}</h2>
         </div>
       </div>
       <ol class:list={['ruter', ruterKlasse(andre.length)]}>

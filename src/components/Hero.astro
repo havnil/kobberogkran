@@ -10,6 +10,7 @@ import type { Firma } from '../lib/firma';
 import { ui } from '../i18n/ui';
 import type { Locale } from '../i18n/locales';
 import { telHref } from '../lib/telefon';
+import { ordstil } from '../lib/ordstil';
 
 interface Props {
   locale: Locale;
@@ -55,7 +56,7 @@ const harKort = kortHtml.trim() !== '';
       }
       {/* A middle dot stays at the end of a line, never at the start of the next. */}
       {eyebrow && <p class="eyebrow">{eyebrow.replaceAll(' · ', ' · ')}</p>}
-      <h1 id="hero-tittel" class="display hero-tittel">
+      <h1 id="hero-tittel" class="display hero-tittel" style={ordstil(tittel, aksent)}>
         <span class="linje">{tittel}</span>
         {aksent && <span class="aksent linje">{aksent}</span>}
       </h1>
@@ -164,7 +165,7 @@ const harKort = kortHtml.trim() !== '';
      on one line from about 600 px of column. */
   .hero-tittel {
     margin: 0 0 var(--space-4);
-    font-size: clamp(1.9rem, 9.2cqi, 5rem);
+    --display-str: clamp(1.9rem, 9.2cqi, 5rem);
     line-height: 0.95;
   }
 
@@ -199,7 +200,7 @@ const harKort = kortHtml.trim() !== '';
   }
 
   .kompakt .hero-tittel {
-    font-size: clamp(2rem, 7cqi, 4.25rem);
+    --display-str: clamp(2rem, 7cqi, 4.25rem);
   }
 
   @media (min-width: 1000px) {
@@ -231,11 +232,11 @@ const harKort = kortHtml.trim() !== '';
     }
 
     .hero-tittel {
-      font-size: clamp(2.25rem, 8cqi, 5rem);
+      --display-str: clamp(2.25rem, 8cqi, 5rem);
     }
 
     .kompakt .hero-tittel {
-      font-size: clamp(2.25rem, 7cqi, 4.25rem);
+      --display-str: clamp(2.25rem, 7cqi, 4.25rem);
     }
 
     .hero-kort {
@@ -264,7 +265,7 @@ const harKort = kortHtml.trim() !== '';
     }
 
     .uten-kort .hero-tittel {
-      font-size: clamp(2.25rem, 6cqi, 4.25rem);
+      --display-str: clamp(2.25rem, 6cqi, 4.25rem);
       max-width: 20ch;
     }
   }

@@ -1,6 +1,7 @@
 ---
 // Full-width chocolate band with the service-van illustration and one big title at the bottom left.
 import Illustrasjon from './Illustrasjon.astro';
+import { ordstil } from '../lib/ordstil';
 import type { Tekster } from '../lib/innhold';
 import type { Locale } from '../i18n/locales';
 
@@ -16,7 +17,7 @@ const { locale, tekst } = Astro.props;
   <Illustrasjon class="stemning-bilde" src="/images/uploads/illustrasjon-eirik.svg" width={800} height={1000} locale={locale} plassholder />
   <div class="ramme stemning-tekst">
     <p class="eyebrow">{tekst.eyebrow}</p>
-    <h2 id="band-tittel" class="display">
+    <h2 id="band-tittel" class="display" style={ordstil(tekst.tittel, tekst.tittelAksent)}>
       {tekst.tittel}
       <span class="aksent">{tekst.tittelAksent}</span>
     </h2>
@@ -72,7 +73,7 @@ const { locale, tekst } = Astro.props;
 
   h2.display {
     max-width: 16ch;
-    font-size: clamp(2.25rem, 7vw, 6rem);
+    --display-str: clamp(2.25rem, 7vw, 6rem);
   }
 
   @media (min-width: 1000px) {

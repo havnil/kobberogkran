@@ -239,12 +239,17 @@ img {
   text-transform: uppercase;
   overflow-wrap: break-word;
   hyphens: manual;
+  /* Each title sets `--display-str` (its size) and, through `ordstil()`, `--lengste-ord` (its longest
+     word). The size is capped so that word fits the column: a Rubik 800 italic capital is about 0.7 em
+     wide, so 0.74 em per letter leaves room for the slant. Long words such as «varmtvannsberederen» then
+     shrink the title instead of breaking mid-word on a phone. */
+  font-size: min(var(--display-str, 1em), calc(100cqi / (var(--lengste-ord, 1) * 0.74)));
 }
 
-/* Sized by the column the title sits in (a size container, see `.hode`), so long words such as
-   «varmtvannstanken» never break and two lines are used where two are enough. */
+/* Sized by the column the title sits in (a size container, see `.hode`), so two lines are used where two
+   are enough. */
 h2.display {
-  font-size: clamp(1.9rem, 8.4cqi, 4.25rem);
+  --display-str: clamp(1.9rem, 8.4cqi, 4.25rem);
 }
 
 .display .aksent {

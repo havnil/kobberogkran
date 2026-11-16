@@ -3,6 +3,7 @@
 // intro and the phone number on the left, the form in a white panel on the right.
 // `tjeneste` is the translationKey of the service to preselect; empty where no service is implied.
 import LekkerNaa from './LekkerNaa.astro';
+import { ordstil } from '../lib/ordstil';
 import Plassholder from './Plassholder.astro';
 import Skjema from './Skjema.astro';
 import type { Locale } from '../i18n/locales';
@@ -28,7 +29,7 @@ const [firma, tekster] = await Promise.all([getFirma(), getTekster(locale)]);
   <div class="ramme ss">
     <div class="ss-venstre">
       <p class="eyebrow">{(eyebrow ?? tekst.eyebrow).replaceAll(' · ', ' · ')}</p>
-      <h2 id="skjema-tittel" class="display">{tekst.tittel}</h2>
+      <h2 id="skjema-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
       <p class="ss-merknad">{tekst.merknad}</p>
       <p class="ss-ring">{tekst.ringDirekte}</p>
       <p class="ss-nummer"><a href={telHref(firma.telefon.verdi)}><Plassholder verdi={firma.telefon} locale={locale} /></a></p>
@@ -59,7 +60,7 @@ const [firma, tekster] = await Promise.all([getFirma(), getTekster(locale)]);
   /* «Send forespørsel» on one line in the column it has. */
   h2.display {
     margin-bottom: var(--space-3);
-    font-size: clamp(1.75rem, 9.4cqi, 3.75rem);
+    --display-str: clamp(1.75rem, 9.4cqi, 3.75rem);
   }
 
   .ss-merknad {

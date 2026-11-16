@@ -2,6 +2,7 @@
 // «Her jobber vi» on the service pages and the areas page: section head and the places as chips, with
 // Hemnes marked as the base. The areas page also shows the drawn map.
 import Illustrasjon from './Illustrasjon.astro';
+import { ordstil } from '../lib/ordstil';
 import type { Tekster } from '../lib/innhold';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
@@ -25,7 +26,7 @@ const [base, ...andre] = omrade.steder;
     <div class="hode">
       <div>
         <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
-        <h2 id="omrader-tittel" class="display">{tittel ?? tekst.tittel}</h2>
+        <h2 id="omrader-tittel" class="display" style={ordstil(tittel ?? tekst.tittel)}>{tittel ?? tekst.tittel}</h2>
       </div>
       <p class="hode-ingress">{tekst.ingress}</p>
     </div>

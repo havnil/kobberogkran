@@ -3,6 +3,7 @@
 // No score and no stars until real reviews exist. Example entries render only outside launch builds, with
 // an «Eksempel» badge; with nothing to show, the places take the full width.
 import type { Tekster, Omtale } from '../lib/innhold';
+import { ordstil } from '../lib/ordstil';
 import type { Firma } from '../lib/firma';
 import type { Locale } from '../i18n/locales';
 import { ui } from '../i18n/ui';
@@ -25,7 +26,7 @@ const [base, ...andre] = omrade.steder;
   <div class:list={['ramme', 'to-spalter', { 'uten-omtale': sitater.length === 0 }]}>
     <div>
       <p class="eyebrow">{tekst.eyebrow}</p>
-      <h2 id="omrader-tittel" class="display">{tekst.tittel}</h2>
+      <h2 id="omrader-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
       <p class="ingress">{tekst.ingress}</p>
       <ul class="steder">
         <li class="base"><span>{base}</span><span class="merke">{tekst.base}</span></li>

@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { tittel, eyebrow, faq } = Astro.props;
+import { ordstil } from '../lib/ordstil';
 ---
 
 {
@@ -15,7 +16,7 @@ const { tittel, eyebrow, faq } = Astro.props;
       <div class="ramme">
         <div class="faq">
           {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-          <h2 id="faq-tittel" class="display">{tittel}</h2>
+          <h2 id="faq-tittel" class="display" style={ordstil(tittel)}>{tittel}</h2>
           <div class="faq-liste">
             {faq.map((q) => (
               <details>

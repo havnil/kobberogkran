@@ -2,7 +2,7 @@
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
 title: "Areas we cover"
-description: "Kobber og Kran is based in Hemnes and takes jobs in Aurskog-Høland, Indre Østfold and Lillestrøm: Hemnes, Bjørkelangen, Aurskog, Løken, Setskog, Rømskog, Trøgstad, Askim, Mysen and Lillestrøm."
+description: "Plumber based in Hemnes, working in Aurskog-Høland, Indre Østfold and Lillestrøm: Bjørkelangen, Aurskog, Løken, Setskog, Rømskog, Trøgstad, Askim and Mysen."
 translationKey: omrader
 locale: en
 ---

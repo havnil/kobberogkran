@@ -66,6 +66,8 @@ expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);
 read('sitemap-index.xml');
 read('robots.txt');
+// Browsers and crawlers ask for /favicon.ico even when the page links the SVG icon.
+read('favicon.ico');
 read('admin/index.html');
 read('admin/config.yml');
 

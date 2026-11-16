@@ -1,7 +1,7 @@
 ---
 "plassholder": true
 utkast: 'AI-utkast – må godkjennes'
-title: "A plumber for businesses, housing co-ops and owners' associations"
+title: "Plumber for businesses, co-ops and owners' associations"
 kundeTittel: "Businesses and co-ops"
 fagord: "Service for businesses and housing co-ops"
 nummer: 10

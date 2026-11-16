@@ -8,6 +8,9 @@ import Faktakort from './Faktakort.astro';
 import Hero from './Hero.astro';
 import Kroker from './Kroker.astro';
 import Tillit from './Tillit.astro';
+import ProsjektSeksjon from './ProsjektSeksjon.astro';
+import { navPath } from '../i18n/nav';
+import { getProsjekter, synligeProsjekter } from '../lib/prosjekter';
 import OmraderForside from './OmraderForside.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
 import Steg from './Steg.astro';
@@ -25,9 +28,13 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const [firma, tekster, tjenester, omtale] = await Promise.all([getFirma(), getTekster(locale), getServices(locale), getOmtale()]);
+const [firma, tekster, tjenester, omtale, alleProsjekter] = await Promise.all([getFirma(), getTekster(locale), getServices(locale), getOmtale(), getProsjekter()]);
 // `LAUNCH` is read at build time via import.meta.env (see src/lib/lansering.ts).
-const synlig = synligeOmtale(omtale, visEksempler(import.meta.env.PROD, launchVerdi()));
+const eksempler = visEksempler(import.meta.env.PROD, launchVerdi());
+const synlig = synligeOmtale(omtale, eksempler);
+const prosjekter = synligeProsjekter(alleProsjekter, eksempler).slice(0, 3);
+const tjenesteNavn = Object.fromEntries(tjenester.map((e) => [e.data.translationKey, e.data.kundeTittel]));
+const ref = tekster.sider.referanser;
 const f = tekster.forside;
 const hrefFor = (key: string) => {
   const e = tjenester.find((s) => s.data.translationKey === key);
@@ -81,6 +88,7 @@ const ruter = f.tjenester.ruter.flatMap((r) => {
 
 <Kroker locale={locale} tank={f.tanksjekk} hytte={f.hyttesikring} priser={firma.priser} tankHref={tankHref} hytteHref={hrefFor('lekkasjesikker-hytte')} />
 <Tillit tekst={f.tillit} />
+<ProsjektSeksjon locale={locale} prosjekter={prosjekter} tjenesteNavn={tjenesteNavn} eyebrow={ref.eyebrow} tittel={ref.forsideTittel} flereBilder={ref.flereBilder} seAlle={{ tekst: ref.seAlle, href: navPath(locale, 'referanser') }} />
 <OmraderForside locale={locale} tekst={f.omrader} omtaleTittel={f.omEirik.anmeldelserTittel} omrade={firma.omrade} omtale={synlig} />
 <Steg tekst={f.steg} />
 <Skjemaseksjon locale={locale} tekst={f.skjema} lekker />

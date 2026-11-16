@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ui } from '../../src/i18n/ui';
 
 const required = ['nav', 'ring', 'whatsapp', 'skjemaKnapp', 'meny', 'lukk'];
-const navKeys = ['tjenester', 'priser', 'omrader', 'om', 'kontakt'];
+const navKeys = ['tjenester', 'priser', 'referanser', 'omrader', 'om', 'kontakt'];
 
 /** Every leaf of a (possibly nested) strings object as `path -> value`. */
 function leaves(value: unknown, path = ''): [string, unknown][] {

@@ -16,6 +16,11 @@ import Skjemaseksjon from './Skjemaseksjon.astro';
 import Tanksjekk from './Tanksjekk.astro';
 import TjenesteKort from './TjenesteKort.astro';
 import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
+import ProsjektSeksjon from './ProsjektSeksjon.astro';
+import { navPath } from '../i18n/nav';
+import { getProsjekter, synligeProsjekter } from '../lib/prosjekter';
+import { visEksempler } from '../lib/omtale';
+import { launchVerdi } from '../lib/lansering';
 import type { Alternate } from '../i18n/alternates';
 import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath, serviceTrail, type ServiceEntry } from '../i18n/services';
@@ -33,7 +38,11 @@ interface Props {
 
 const { locale, entry, alternates } = Astro.props;
 const tj = entry.data;
-const [firma, tekster, alle, { Content }] = await Promise.all([getFirma(), getTekster(locale), getServices(locale), render(entry)]);
+const [firma, tekster, alle, { Content }, alleProsjekter] = await Promise.all([getFirma(), getTekster(locale), getServices(locale), render(entry), getProsjekter()]);
+// Jobs of this service, newest first (examples only outside launch builds).
+const prosjekter = synligeProsjekter(alleProsjekter, visEksempler(import.meta.env.PROD, launchVerdi()))
+  .filter((p) => p.data.tjeneste === entry.data.translationKey)
+  .slice(0, 3);
 const s = tekster.sider;
 const trail = serviceTrail(locale, entry);
 const egenHref = servicePath(locale, serviceSlugOf(entry));
@@ -130,6 +139,16 @@ const celler = [...prisCelle, ...tj.fakta.map((f, i) => ({ etikett: String(prisC
       </ol>
     </div>
   </section>
+
+  <ProsjektSeksjon
+    locale={locale}
+    prosjekter={prosjekter}
+    tjenesteNavn={{ [entry.data.translationKey]: entry.data.kundeTittel }}
+    eyebrow={s.referanser.eyebrow}
+    tittel={s.referanser.tjenesteTittel}
+    flereBilder={s.referanser.flereBilder}
+    seAlle={{ tekst: s.referanser.seAlle, href: navPath(locale, 'referanser') }}
+  />
 
   <Omrader locale={locale} tekst={tekster.forside.omrader} tittel={s.tjeneste.omraderTittel} eyebrow={s.tjeneste.omraderEyebrow} omrade={firma.omrade} />
 

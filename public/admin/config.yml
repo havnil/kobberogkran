@@ -568,6 +568,57 @@ collections:
                       - { name: steder, label: Steder, widget: list, field: { name: sted, label: Sted, widget: string } }
                   - { name: maksKjoretidMin, label: Maks kjøretid (min), widget: object, fields: *verdiNum }
 
+  - name: prosjekter
+    label: Referanser
+    label_singular: Referanseprosjekt
+    folder: src/content/prosjekter
+    extension: md
+    format: frontmatter
+    create: true
+    # Newest first on the site (by «Måned»). Only entries with «Ekte» ticked show in the launched site.
+    slug: '{{fields.dato}}-{{slug}}'
+    identifier_field: tittel
+    summary: '{{dato}} · {{sted}} · {{tittel}}'
+    sortable_fields: [dato, tittel, sted]
+    fields:
+      - { name: tittel, label: Tittel, widget: string, hint: 'Kort, f.eks. «Ny varmtvannsbereder i kjeller»' }
+      - { name: sted, label: Sted, widget: string }
+      - name: tjeneste
+        label: Tjeneste
+        widget: select
+        options:
+          - { label: 'Nytt bad', value: bad }
+          - { label: 'Bedrift og borettslag', value: bedrift-og-borettslag }
+          - { label: 'Problemer med privat vann', value: bronn-og-vann }
+          - { label: 'Vann på og av hytta', value: hytte }
+          - { label: 'Landbruk', value: fjos-og-gard }
+          - { label: 'Det lekker', value: service-og-reparasjon }
+          - { label: 'Hyttesikring', value: lekkasjesikker-hytte }
+          - { label: 'Tett avløp', value: tett-avlop }
+          - { label: 'Varmeanlegg', value: varmeanlegg }
+          - { label: 'Varmtvannsbereder', value: varmtvannstank }
+      - { name: dato, label: Måned, widget: string, pattern: ['^\d{4}-(0[1-9]|1[0-2])$', 'Skriv år og måned, f.eks. 2026-05'] }
+      - name: bilder
+        label: Bilder (det første vises størst)
+        widget: list
+        min: 1
+        fields:
+          - { name: bilde, label: Bilde, widget: image }
+          - { name: alt, label: 'Hva viser bildet? (for blinde og Google)', widget: string }
+          - { name: altEn, label: Hva viser bildet - engelsk, widget: string, required: false }
+      - { name: body, label: Tekst, widget: markdown, hint: 'Hva var problemet, hva gjorde vi, hvordan ble det. To til fire setninger.' }
+      - { name: tittelEn, label: Tittel - engelsk, widget: string, required: false }
+      - { name: tekstEn, label: Tekst - engelsk, widget: text, required: false }
+      - name: sitat
+        label: Sitat fra kunden
+        widget: object
+        required: false
+        fields:
+          - { name: tekst, label: Sitat, widget: text }
+          - { name: navn, label: 'Navn eller beskrivelse, f.eks. «Hytteeier, Rømskog»', widget: string }
+          - { name: samtykke, label: Kunden har sagt ja til at sitatet brukes, widget: boolean, default: false }
+      - { name: ekte, label: Ekte prosjekt (ikke eksempel), widget: boolean, default: true }
+
   - name: omtale
     label: Omtale
     label_singular: Omtale

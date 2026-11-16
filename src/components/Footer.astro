@@ -54,6 +54,7 @@ const ar = new Date().getFullYear();
     <p class="bunnlinje">
       <span>© {ar} {firma.juridiskNavn}</span>
       <span>{t.orgnr} <Plassholder verdi={firma.orgnr} locale={locale} /> MVA</span>
+      <a href={navPath(locale, 'referanser')}>{t.nav.referanser}</a>
       <a href={navPath(locale, 'om')}>{t.nav.om}</a>
       <a href={navPath(locale, 'kontakt')}>{t.nav.kontakt}</a>
       <a href={navPath(locale, 'personvern')}>{t.personvern}</a>

@@ -23,12 +23,11 @@ const [firma, tekster, alle] = await Promise.all([getFirma(), getTekster(locale)
 const felles = tekster.sider.felles;
 const home = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
 const tjenester = alle.map((e) => ({ href: servicePath(locale, serviceSlugOf(e)), label: e.data.kundeTittel, key: e.data.translationKey }));
-const tank = tjenester.find((s) => s.key === 'varmtvannstank');
 const tjenesterHref = navPath(locale, 'tjenester');
 const items = [
   { href: tjenesterHref, label: t.nav.tjenester, undermeny: true },
   { href: navPath(locale, 'priser'), label: t.nav.priser },
-  ...(tank ? [{ href: tank.href, label: felles.menyVarmtvannstank }] : []),
+  { href: navPath(locale, 'referanser'), label: t.nav.referanser },
   { href: `${home}#lekker-naa`, label: felles.menyLekker },
   { href: navPath(locale, 'omrader'), label: t.nav.omrader },
   { href: navPath(locale, 'om'), label: t.nav.om },

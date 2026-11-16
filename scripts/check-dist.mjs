@@ -61,6 +61,9 @@ expectNotContains('en/services/bathroom/index.html', ['data-pris']);
 expectContains('priser/index.html', ['data-pris']);
 expectContains('en/prices/index.html', ['data-pris']);
 expectContains('kontakt/index.html', ['id="skjema"']);
+// The references page has its project section (cards, or the «coming soon» text in a launch build without real projects).
+expectContains('referanser/index.html', ['id="prosjekter"']);
+expectContains('en/projects/index.html', ['id="prosjekter"']);
 expectContains('en/contact/index.html', ['id="skjema"']);
 expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);

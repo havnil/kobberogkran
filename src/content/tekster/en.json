@@ -246,6 +246,14 @@
     }
   },
   "sider": {
+    "referanser": {
+      "eyebrow": "Projects",
+      "forsideTittel": "Recent jobs",
+      "tjenesteTittel": "Jobs we have done",
+      "seAlle": "See all projects",
+      "tom": "Photos and descriptions of our jobs will appear here.",
+      "flereBilder": "{antall} more photos"
+    },
     "felles": {
       "menyVarmtvannstank": "Water heater",
       "menyLekker": "A leak?",

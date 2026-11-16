@@ -16,6 +16,8 @@ import Sideboks from './Sideboks.astro';
 import Skjemaseksjon from './Skjemaseksjon.astro';
 import TjenesteKort from './TjenesteKort.astro';
 import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
+import ProsjektSeksjon from './ProsjektSeksjon.astro';
+import { getProsjekter, synligeProsjekter } from '../lib/prosjekter';
 import type { Locale } from '../i18n/locales';
 import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
 import { localizePath } from '../i18n/alternates';
@@ -35,7 +37,9 @@ interface Props {
 const { locale, entry } = Astro.props;
 const nokkel = entry.data.translationKey;
 const [firma, tekster, { Content }] = await Promise.all([getFirma(), getTekster(locale), render(entry)]);
-const tjenester = nokkel === 'tjenester' ? await getServices(locale) : [];
+const tjenester = nokkel === 'tjenester' || nokkel === 'referanser' ? await getServices(locale) : [];
+const prosjekter = nokkel === 'referanser' ? synligeProsjekter(await getProsjekter(), visEksempler(import.meta.env.PROD, launchVerdi())) : [];
+const tjenesteNavn = Object.fromEntries(tjenester.map((e) => [e.data.translationKey, e.data.kundeTittel]));
 const synlig = nokkel === 'om' ? synligeOmtale(await getOmtale(), visEksempler(import.meta.env.PROD, launchVerdi())) : [];
 const f = tekster.forside;
 const s = tekster.sider;
@@ -55,6 +59,7 @@ const bilder: Record<string, string> = {
   priser: '/images/uploads/illustrasjon-varmtvannstank.svg',
   omrader: '/images/uploads/illustrasjon-omrade.svg',
   om: '/images/uploads/illustrasjon-eirik.svg',
+  referanser: '/images/uploads/illustrasjon-bad.svg',
   kontakt: '/images/uploads/illustrasjon-hero.svg',
 };
 const prisCeller: Celle[] = [
@@ -158,6 +163,12 @@ const bildeSrc = juridisk ? undefined : bilder[nokkel];
 {nokkel === 'om' && <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />}
 
 {nokkel === 'kontakt' && <Skjemaseksjon locale={locale} tekst={f.skjema} />}
+
+{
+  nokkel === 'referanser' && (
+    <ProsjektSeksjon locale={locale} prosjekter={prosjekter} tjenesteNavn={tjenesteNavn} eyebrow={s.referanser.eyebrow} flereBilder={s.referanser.flereBilder} tom={s.referanser.tom} />
+  )
+}
 
 <style>
   .kort-plass {

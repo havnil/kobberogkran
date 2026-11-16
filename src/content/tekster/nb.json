@@ -246,6 +246,14 @@
     }
   },
   "sider": {
+    "referanser": {
+      "eyebrow": "Referanser",
+      "forsideTittel": "Siste jobber",
+      "tjenesteTittel": "Jobber vi har gjort",
+      "seAlle": "Se alle referanser",
+      "tom": "Her kommer bilder og beskrivelser av jobber vi har gjort.",
+      "flereBilder": "{antall} bilder til"
+    },
     "felles": {
       "menyVarmtvannstank": "Varmtvannsbereder",
       "menyLekker": "Lekker det?",

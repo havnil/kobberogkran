@@ -3,7 +3,7 @@ import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { LOCALES } from './i18n/locales';
 import { firmaSchema } from './lib/firma';
-import { omtaleSchema, tekstSchema, tjenesteSchema } from './lib/innhold';
+import { omtaleSchema, prosjektSchema, tekstSchema, tjenesteSchema } from './lib/innhold';
 
 /**
  * Pages live in `src/content/pages/<locale>/<slug>.md`, so entry ids are `<locale>/<slug>`.
@@ -52,4 +52,10 @@ const omtale = defineCollection({
   schema: omtaleSchema,
 });
 
-export const collections = { pages, firma, tjenester, tekster, omtale };
+/** Reference projects, one Markdown file each (`src/content/prosjekter/<slug>.md`), written in the CMS. */
+const prosjekter = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/prosjekter' }),
+  schema: prosjektSchema,
+});
+
+export const collections = { pages, firma, tjenester, tekster, omtale, prosjekter };

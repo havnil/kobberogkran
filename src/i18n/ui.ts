@@ -13,7 +13,7 @@ export interface UiStrings {
   hovedmeny: string;
   bunnlinje: string;
   /** Short menu labels. */
-  nav: { tjenester: string; priser: string; omrader: string; om: string; kontakt: string };
+  nav: { tjenester: string; priser: string; referanser: string; omrader: string; om: string; kontakt: string };
   ring: string;
   whatsapp: string;
   /** Text of the request-form button. Placeholder until the owner picks the final wording. */
@@ -48,7 +48,7 @@ export const ui: Record<Locale, UiStrings> = {
     skipLink: 'Hopp til innholdet',
     hovedmeny: 'Hovedmeny',
     bunnlinje: 'Hurtigvalg',
-    nav: { tjenester: 'Tjenester', priser: 'Priser', omrader: 'Områder', om: 'Om Eirik', kontakt: 'Kontakt' },
+    nav: { tjenester: 'Tjenester', priser: 'Priser', referanser: 'Referanser', omrader: 'Områder', om: 'Om oss', kontakt: 'Kontakt' },
     ring: 'Ring',
     whatsapp: 'WhatsApp',
     skjemaKnapp: 'Send forespørsel',
@@ -74,7 +74,7 @@ export const ui: Record<Locale, UiStrings> = {
     skipLink: 'Skip to content',
     hovedmeny: 'Main menu',
     bunnlinje: 'Quick actions',
-    nav: { tjenester: 'Services', priser: 'Prices', omrader: 'Areas', om: 'About Eirik', kontakt: 'Contact' },
+    nav: { tjenester: 'Services', priser: 'Prices', referanser: 'Projects', omrader: 'Areas', om: 'About us', kontakt: 'Contact' },
     ring: 'Call',
     whatsapp: 'WhatsApp',
     skjemaKnapp: 'Send request',

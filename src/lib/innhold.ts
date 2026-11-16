@@ -163,6 +163,17 @@ export const forsideSchema = z.object({
 
 /** Copy for the service template and the other pages. Working titles until a human writes the final text. */
 export const siderSchema = z.object({
+  /** Reference projects: the page, the newest on the front page, related jobs on the service pages. */
+  referanser: z.object({
+    eyebrow: z.string(),
+    forsideTittel: z.string(),
+    tjenesteTittel: z.string(),
+    seAlle: z.string(),
+    /** Shown on the page while no project may be shown. */
+    tom: z.string(),
+    /** Label of the link to the other photos of a project; `{antall}` is replaced by their number. */
+    flereBilder: z.string(),
+  }),
   /** Shared by every page: the two extra menu items and the footer. */
   felles: z.object({
     menyVarmtvannstank: z.string(),
@@ -384,3 +395,26 @@ export const omtaleSchema = z.object({
 export type Tjeneste = z.infer<typeof tjenesteSchema>;
 export type Tekster = z.infer<typeof tekstSchema>;
 export type Omtale = z.infer<typeof omtaleSchema>;
+
+/**
+ * A reference project (`src/content/prosjekter/*.md`), written in the CMS. The markdown body is the
+ * Norwegian text; `tittelEn`/`tekstEn` are optional, and the English pages fall back to Norwegian.
+ * Only `ekte: true` projects render in a launch build (examples render elsewhere, with a badge).
+ */
+export const prosjektSchema = z.object({
+  plassholder: z.boolean().optional(),
+  utkast: z.string().optional(),
+  tittel: z.string(),
+  tittelEn: z.string().optional(),
+  sted: z.string(),
+  /** translationKey of the service page the job belongs to (e.g. `varmtvannstank`). */
+  tjeneste: z.string(),
+  /** Year and month, `YYYY-MM`. Newest first on the site. */
+  dato: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),
+  bilder: z.array(z.object({ bilde: z.string(), alt: z.string(), altEn: z.string().optional() })).min(1),
+  tekstEn: z.string().optional(),
+  /** A customer quote; shown only with the customer's consent. */
+  sitat: z.object({ tekst: z.string(), navn: z.string(), samtykke: z.boolean() }).optional(),
+  ekte: z.boolean(),
+});
+export type Prosjekt = z.infer<typeof prosjektSchema>;

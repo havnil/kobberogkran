@@ -35,13 +35,16 @@ jobs:
       # Internal links only (--offline). dist/client is the adapter's static output dir
       # (same constant as scripts/check-dist.mjs). --root-dir must be absolute so that
       # root-relative links like /en/ resolve; --index-files requires each linked
-      # directory to have an index.html, as a real page would.
+      # directory to have an index.html, as a real page would. /api/ routes are served by
+      # the Worker (src/pages/api/), not as files, so the form's action="/api/foresporsel"
+      # is excluded.
       - name: Check internal links
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
             --offline
             --no-progress
+            --exclude '/dist/client/api/'
             --root-dir ${{ github.workspace }}/dist/client
             --index-files index.html
             'dist/client/**/*.html'

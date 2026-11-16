@@ -44,8 +44,27 @@ export interface Kart {
   skala: number;
   base: { x: number; y: number } | null;
   punkter: Kartpunkt[];
+  /** Per region: the corners of the smallest convex shape around its places, in drawing order. */
+  former: { x: number; y: number }[][];
   /** Places without coordinates (listed, not drawn). */
   utenKoordinater: string[];
+}
+
+/** Convex hull (Andrew's monotone chain), so a region's shape never folds in on itself. */
+export function konveksHull<T extends { x: number; y: number }>(punkter: T[]): { x: number; y: number }[] {
+  const p = [...new Map(punkter.map((q) => [`${q.x},${q.y}`, { x: q.x, y: q.y }])).values()].sort((a, b) => a.x - b.x || a.y - b.y);
+  if (p.length < 3) return p;
+  const kryss = (o: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+  const halv = (liste: { x: number; y: number }[]) => {
+    const ut: { x: number; y: number }[] = [];
+    for (const q of liste) {
+      while (ut.length >= 2 && kryss(ut[ut.length - 2], ut[ut.length - 1], q) <= 0) ut.pop();
+      ut.push(q);
+    }
+    ut.pop();
+    return ut;
+  };
+  return [...halv(p), ...halv([...p].reverse())];
 }
 
 /**
@@ -56,7 +75,7 @@ export function lagKart(regioner: { steder: string[] }[], bredde = 600, marg = 7
   const alle = regioner.flatMap((r, region) => r.steder.map((navn, i) => ({ navn, region, base: region === 0 && i === 0 })));
   const kjente = alle.filter((p) => KOORDINATER[p.navn]);
   const utenKoordinater = alle.filter((p) => !KOORDINATER[p.navn]).map((p) => p.navn);
-  if (kjente.length === 0) return { bredde, hoyde: 0, skala: 0, base: null, punkter: [], utenKoordinater };
+  if (kjente.length === 0) return { bredde, hoyde: 0, skala: 0, base: null, punkter: [], former: [], utenKoordinater };
 
   const lat0 = (kjente.reduce((s, p) => s + KOORDINATER[p.navn][0], 0) / kjente.length) * (Math.PI / 180);
   const km = (navn: string) => {
@@ -81,5 +100,6 @@ export function lagKart(regioner: { steder: string[] }[], bredde = 600, marg = 7
     km: basePos ? Math.round(avstandKm(basePos, KOORDINATER[p.navn])) : 0,
   }));
   const b = punkter.find((p) => p.base);
-  return { bredde, hoyde, skala, base: b ? { x: b.x, y: b.y } : null, punkter, utenKoordinater };
+  const former = regioner.map((_, i) => konveksHull(punkter.filter((p) => p.region === i)));
+  return { bredde, hoyde, skala, base: b ? { x: b.x, y: b.y } : null, punkter, former, utenKoordinater };
 }

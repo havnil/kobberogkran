@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { avstandKm, KOORDINATER, lagKart } from '../src/lib/kart';
+import { avstandKm, KOORDINATER, konveksHull, lagKart } from '../src/lib/kart';
 import { alleSteder, firmaSchema } from '../src/lib/firma';
 
 const firma = firmaSchema.parse(JSON.parse(readFileSync('src/content/firma/firma.json', 'utf8')).firma);
@@ -39,5 +39,12 @@ describe('områdekartet', () => {
     const k = lagKart([{ steder: ['Hemnes', 'Fetsund'] }]);
     expect(k.utenKoordinater).toEqual(['Fetsund']);
     expect(k.punkter.map((p) => p.navn)).toEqual(['Hemnes']);
+  });
+
+  it('draws each region as a convex shape around its places', () => {
+    const hull = konveksHull([{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 5, y: 2 }, { x: 10, y: 10 }, { x: 0, y: 10 }]);
+    expect(hull).toHaveLength(4);
+    expect(hull).not.toContainEqual({ x: 5, y: 2 });
+    expect(konveksHull([{ x: 1, y: 1 }])).toEqual([{ x: 1, y: 1 }]);
   });
 });

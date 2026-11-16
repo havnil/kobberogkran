@@ -19,11 +19,8 @@ const RINGER = [15, 30];
 // Region tints: the base region in orange, the others in brown and sand.
 const FARGER = ['var(--color-orange)', 'var(--color-copper)', 'var(--color-brown-muted)'];
 const farge = (i: number) => FARGER[i % FARGER.length];
-// A region's shape: the path through its places, drawn with a very wide round stroke (a padded hull).
-const former = omrade.regioner.map((_, i) => {
-  const p = k.punkter.filter((x) => x.region === i);
-  return p.length === 0 ? '' : `M${p.map((x) => `${x.x} ${x.y}`).join(' L')}${p.length > 2 ? ' Z' : ''}`;
-});
+// A region's shape: the convex hull of its places, drawn with a very wide round stroke (a padded hull).
+const former = k.former.map((p) => (p.length === 0 ? '' : `M${p.map((x) => `${x.x} ${x.y}`).join(' L')}${p.length > 2 ? ' Z' : ''}`));
 const venstre = (x: number) => x > k.bredde * 0.66;
 ---
 

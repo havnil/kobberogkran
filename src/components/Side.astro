@@ -57,7 +57,7 @@ const base = steder[0] ?? '';
 const bilder: Record<string, string> = {
   tjenester: '/images/uploads/illustrasjon-service-og-reparasjon.svg',
   priser: '/images/uploads/illustrasjon-varmtvannstank.svg',
-  omrader: '/images/uploads/illustrasjon-omrade.svg',
+  omrader: '/images/uploads/illustrasjon-hero.svg',
   om: '/images/uploads/illustrasjon-eirik.svg',
   referanser: '/images/uploads/illustrasjon-bad.svg',
   kontakt: '/images/uploads/illustrasjon-hero.svg',
@@ -110,7 +110,7 @@ const bildeSrc = juridisk ? undefined : bilder[nokkel];
 
 <div class="seksjon">
   {
-    juridisk ? (
+    juridisk || nokkel === 'referanser' ? (
       <div class="ramme">
         <article class="artikkel">
           <Content />

@@ -3,18 +3,18 @@
     "plassholder": true,
     "merknad": "AI draft written with simulated personas. Must be read and approved by a human."
   },
-  "kvittering": "Thank you! Your request has reached Eirik at Kobber og Kran. He will look at it and get in touch. To send more photos, use this link: {sendBilderLenke} Is water leaking right now? Turn off the main stopcock and call.",
-  "taptAnrop": "Hi, this is Kobber og Kran. Eirik couldn't take your call just now. Feel free to send a short request with a photo, so he has what he needs when he calls back: {skjemaLenke} Or write on WhatsApp: {whatsappLenke}",
-  "whatsappHilsen": "Hi Eirik! I need help from a plumber.[ It's about: {tjeneste}.][ (From: {kilde})]",
+  "kvittering": "Thank you! Your request has reached Kobber og Kran. We will look at it and get in touch. To send more photos, use this link: {sendBilderLenke} Is water leaking right now? Turn off the main stopcock and call.",
+  "taptAnrop": "Hi, this is Kobber og Kran. We couldn't take your call just now. Feel free to send a short request with a photo, so we have what we need when we call back: {skjemaLenke} Or write on WhatsApp: {whatsappLenke}",
+  "whatsappHilsen": "Hi! I need help from a plumber.[ It's about: {tjeneste}.][ (From: {kilde})]",
   "forside": {
     "hero": {
       "stedslinje": "Kobber og Kran · Aurskog-Høland · Indre Østfold",
       "tittel": "Plumber in Hemnes, Aurskog-Høland",
-      "ingress": "Your local plumber: you talk to Eirik himself, get a price before the job starts, and he turns up when agreed.",
+      "ingress": "Your local plumber: you talk to the plumber who does the job, get a price before the job starts, and we turn up when agreed.",
       "lover": [
         "A price before the job starts",
         "Turns up when agreed",
-        "You deal with Eirik all the way"
+        "One contact all the way"
       ],
       "tittelAksent": "Aurskog-Høland",
       "sesongmerke": {
@@ -123,7 +123,7 @@
         "Difficult access, such as a cramped cellar or crawl space"
       ],
       "eyebrow": "Fixed price · water heater",
-      "ingress": "When the new tank goes in the same place as the old one, the work is a fixed price. Send a photo of the rating plate and the floor around the tank, and Eirik can tell whether the fixed price applies."
+      "ingress": "When the new tank goes in the same place as the old one, the work is a fixed price. Send a photo of the rating plate and the floor around the tank, and we can tell whether the fixed price applies."
     },
     "tanksjekk": {
       "eyebrow": "Tank check",
@@ -152,7 +152,7 @@
     "hyttesikring": {
       "eyebrow": "Cabin protection",
       "tittel": "Leak-proof cabin",
-      "ingress": "Eirik opens or winterises the cabin and fits a water stop valve on the main line. If the cabin has internet, you can shut off the water from your phone.",
+      "ingress": "We open or winterise the cabin and fits a water stop valve on the main line. If the cabin has internet, you can shut off the water from your phone.",
       "punkter": [
         "Opening in spring or winterising in autumn",
         "A water stop valve with remote shut-off, fitted and tested",
@@ -203,21 +203,21 @@
           "tekst": "Say briefly what it is and where. A photo of the problem often saves a site visit."
         },
         {
-          "tittel": "Eirik looks at it and gives you a price",
+          "tittel": "We look at it and give you a price",
           "tekst": "You find out whether it is an hourly rate, an estimate or a fixed price, and you agree on a time."
         },
         {
           "tittel": "The job is done and documented",
-          "tekst": "Eirik turns up when agreed, tidies up after himself and gives you documentation of the work."
+          "tekst": "We turn up when agreed, tidy up after ourselves and give you documentation of the work."
         }
       ],
       "eyebrow": "From request to finished job",
-      "ingress": "You deal with Eirik all the way. No middlemen.",
+      "ingress": "You have the same contact all the way. No middlemen.",
       "stegEtikett": "Step"
     },
     "omEirik": {
-      "tittel": "About Eirik",
-      "tekst": "Kobber og Kran is a small plumbing firm in Hemnes, owned and run by Eirik, who is also the plumber. When you call, you talk to Eirik, and he is the one who comes. He knows the village, the wells, the cabins and the winters here, and wants to be the one you call next time too.",
+      "tittel": "Who we are",
+      "tekst": "Kobber og Kran is a small plumbing firm in Hemnes, started by Eirik, who owns it and is in charge of the work. We know the village, the wells, the cabins and the winters here, and want to be the ones you call next time too.",
       "godkjenningerTittel": "Approvals",
       "anmeldelserTittel": "What customers say"
     },
@@ -232,7 +232,7 @@
     "omrader": {
       "tittel": "Where we work",
       "eyebrow": "Areas",
-      "ingress": "Based in Hemnes. Eirik drives all over Aurskog-Høland and Indre Østfold, and to Lillestrøm.",
+      "ingress": "Based in Hemnes. We drive all over Aurskog-Høland and Indre Østfold, and to Lillestrøm.",
       "base": "Base",
       "utenfor": "Outside the area: larger jobs, by arrangement",
       "omtaleEyebrow": "Reviews",
@@ -240,7 +240,7 @@
     },
     "skjema": {
       "tittel": "Send a request",
-      "merknad": "It takes half a minute. Tell us what it is, where the job is and how Eirik can reach you. You can add photos afterwards, and e-mail is optional. Leaking right now? Turn off the water and call instead.",
+      "merknad": "It takes half a minute. Tell us what it is, where the job is and how we can reach you. You can add photos afterwards, and e-mail is optional. Leaking right now? Turn off the water and call instead.",
       "eyebrow": "Request",
       "ringDirekte": "Or call directly"
     }
@@ -264,9 +264,9 @@
     "tjeneste": {
       "faktaTittel": "In short",
       "sideboksTittel": "Quickest way to get help",
-      "sideboksTekst": "Call Eirik, or send a request with a photo. If water is leaking now, turn off the main stopcock first.",
+      "sideboksTekst": "Call us, or send a request with a photo. If water is leaking now, turn off the main stopcock first.",
       "faqTittel": "Common questions",
-      "andreTittel": "Other things Eirik can help with",
+      "andreTittel": "Other things we can help with",
       "omraderTittel": "Where we work",
       "skjemaEyebrow": "Request",
       "prisForStart": "Price before we start",
@@ -284,7 +284,7 @@
       "fastpriser": {
         "eyebrow": "Fixed prices",
         "tittel": "Fixed prices on common jobs",
-        "ingress": "Eirik does these jobs often, so he knows what they take. If the new one goes where the old one was, the work has a fixed price. Send a photo of what is being replaced, and he confirms the price.",
+        "ingress": "We do these jobs often, so we know what they take. If the new one goes where the old one was, the work has a fixed price. Send a photo of what is being replaced, and we confirm the price.",
         "note": "Fixed price on the work. Call-out fee, equipment and parts come on top.",
         "rader": [
           {
@@ -334,7 +334,7 @@
         },
         {
           "tittel": "Site visit",
-          "tekst": "Eirik looks at the bathroom, the pipes and the drain, and what it takes to make the room watertight and up to current standards."
+          "tekst": "We look at the bathroom, the pipes and the drain, and what it takes to make the room watertight and up to current standards."
         },
         {
           "tittel": "Written offer",
@@ -342,7 +342,7 @@
         },
         {
           "tittel": "Plan and start date",
-          "tekst": "You agree on a start date and the order of work. Eirik coordinates with the other tradespeople, so you don't have to be the project manager."
+          "tekst": "We agree on a start date and the order of work together, and we coordinate with the other tradespeople, so you don't have to be the project manager."
         },
         {
           "tittel": "Work and checks",
@@ -353,8 +353,8 @@
           "tekst": "The fittings are installed and tested. You get FDV documentation and documentation of the plumbing work in the wet room."
         }
       ],
-      "ansvarTittel": "Eirik is responsible to you",
-      "ansvar": "When an electrician and a tiler work through Kobber og Kran, your agreement is with Eirik. You have one person to call and one person to deal with if something is not as agreed. If you bring your own tradespeople, you agree in writing who is responsible for what before work starts."
+      "ansvarTittel": "We are responsible to you",
+      "ansvar": "When an electrician and a tiler work through Kobber og Kran, your agreement is with Kobber og Kran. You have one number to call and one firm to deal with if something is not as agreed. If you bring your own tradespeople, you agree in writing who is responsible for what before work starts."
     },
     "kontakt": {
       "telefonNavn": "Phone",
@@ -371,9 +371,9 @@
       "Switch off the power to the water heater at the fuse box if the tank is leaking or the water is turned off.",
       "Mop up what you can, and take photos of the damage and of what is leaking.",
       "Report it to your insurer. Most have their own emergency service that can come and dry things out.",
-      "Call Eirik."
+      "Call us."
     ],
-    "ingenDognvakt": "Eirik takes urgent jobs when he can, but Kobber og Kran does not have a 24-hour emergency service. If he can't answer, your insurer's emergency service is the quickest help."
+    "ingenDognvakt": "We take urgent jobs when we can, but Kobber og Kran does not have a 24-hour emergency service. If we can't answer, your insurer's emergency service is the quickest help."
   },
   "skjema": {
     "hva": "What is it about?",
@@ -408,7 +408,7 @@
     "kvitteringTittel": "Thank you, your request has been sent",
     "kvitteringLenke": "Want to send more photos later? Use this link:",
     "steg2Tittel": "Want to tell us a bit more? (optional)",
-    "steg2Ingress": "Your request has already been sent. Photos and a few short answers help Eirik bring the right parts and give a better price. You can skip all of this.",
+    "steg2Ingress": "Your request has already been sent. Photos and a few short answers help us bring the right parts and give a better price. You can skip all of this.",
     "sporsmalTittel": "About the house and the job",
     "sendSteg2": "Send the extra details",
     "steg2Ok": "Thank you, the extra details have arrived.",
@@ -432,7 +432,7 @@
       "adkomst": "Access: is the road cleared of snow, will someone be home, or where is the key?",
       "kontaktform": "Would you rather have a text message or a phone call?",
       "bildeTypeskilt": "Photo of the rating plate on the tank (the label showing litres and power)",
-      "bildeTank": "Photo of the tank and the floor around it (so Eirik can see the drain and any leak stop)",
+      "bildeTank": "Photo of the tank and the floor around it (so we can see the drain and any leak stop)",
       "rom": "Which room is the tank in?",
       "etasje": "Which floor? (cellar, ground floor …)",
       "tilkobling": "Is the tank plugged into a socket, or hard-wired?",
@@ -490,13 +490,13 @@
   "skjemaSvar": {
     "takkTittel": "Thank you! Your request has been sent",
     "feilTittel": "Something is missing in the form",
-    "feilTekst": "Go back and check the marked fields, or call Eirik.",
+    "feilTekst": "Go back and check the marked fields, or call us.",
     "sendBilderTittel": "Send more photos",
     "sendBilderTekst": "Here you can add more photos to your request. One from a distance and one close up is ideal, plus the rating plate if there is one.",
     "sendBilderSend": "Send the photo",
     "sendBilderOk": "The photo has arrived. You can send another one.",
-    "sendBilderFeil": "The photo didn't arrive. Try again, or call Eirik.",
+    "sendBilderFeil": "The photo didn't arrive. Try again, or call us.",
     "ugyldigLenkeTittel": "The link doesn't work",
-    "ugyldigLenkeTekst": "The link is incomplete. Use the link in the message you received, or call Eirik."
+    "ugyldigLenkeTekst": "The link is incomplete. Use the link in the message you received, or call us."
   }
 }

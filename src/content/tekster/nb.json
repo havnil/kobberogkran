@@ -3,18 +3,18 @@
     "plassholder": true,
     "merknad": "AI-utkast skrevet med simulerte personaer. Må leses og godkjennes av et menneske."
   },
-  "kvittering": "Takk! Forespørselen din er kommet fram til Eirik i Kobber og Kran. Han ser på den og tar kontakt. Vil du sende flere bilder, kan du bruke denne lenken: {sendBilderLenke} Lekker det nå? Steng hovedstoppekranen og ring.",
-  "taptAnrop": "Hei, dette er Kobber og Kran. Eirik fikk ikke tatt telefonen akkurat nå. Send gjerne en kort forespørsel med bilde, så har han det han trenger når han ringer tilbake: {skjemaLenke} Eller skriv på WhatsApp: {whatsappLenke}",
-  "whatsappHilsen": "Hei Eirik! Jeg trenger hjelp av en rørlegger.[ Det gjelder: {tjeneste}.][ (Fra: {kilde})]",
+  "kvittering": "Takk! Forespørselen din er kommet fram til Kobber og Kran. Vi ser på den og tar kontakt. Vil du sende flere bilder, kan du bruke denne lenken: {sendBilderLenke} Lekker det nå? Steng hovedstoppekranen og ring.",
+  "taptAnrop": "Hei, dette er Kobber og Kran. Vi fikk ikke tatt telefonen akkurat nå. Send gjerne en kort forespørsel med bilde, så har vi det vi trenger når vi ringer tilbake: {skjemaLenke} Eller skriv på WhatsApp: {whatsappLenke}",
+  "whatsappHilsen": "Hei! Jeg trenger hjelp av en rørlegger.[ Det gjelder: {tjeneste}.][ (Fra: {kilde})]",
   "forside": {
     "hero": {
       "stedslinje": "Kobber og Kran · Aurskog-Høland · Indre Østfold",
       "tittel": "Rørlegger på Hemnes i Aurskog-Høland",
-      "ingress": "Bygdas egen rørlegger: du snakker med Eirik selv, får pris før jobben starter, og han kommer når det er avtalt.",
+      "ingress": "Bygdas egen rørlegger: du snakker med rørleggeren som gjør jobben, får pris før jobben starter, og vi kommer når det er avtalt.",
       "lover": [
         "Pris før jobben starter",
         "Kommer når det er avtalt",
-        "Du har med Eirik å gjøre hele veien"
+        "Én kontakt hele veien"
       ],
       "tittelAksent": "i Aurskog-Høland",
       "sesongmerke": {
@@ -123,7 +123,7 @@
         "Vanskelig adkomst, for eksempel trang kjeller eller krypkjeller"
       ],
       "eyebrow": "Fastpris · varmtvannsbereder",
-      "ingress": "Står den nye berederen på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt berederen, så ser Eirik om fastprisen holder."
+      "ingress": "Står den nye berederen på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt berederen, så ser vi om fastprisen holder."
     },
     "tanksjekk": {
       "eyebrow": "Tanksjekk",
@@ -152,7 +152,7 @@
     "hyttesikring": {
       "eyebrow": "Hyttesikring",
       "tittel": "Lekkasjesikker hytte",
-      "ingress": "Eirik åpner eller stenger hytta og monterer vannstopper på hovedledningen. Har hytta nett, kan du stenge vannet fra mobilen.",
+      "ingress": "Vi åpner eller stenger hytta og monterer vannstopper på hovedledningen. Har hytta nett, kan du stenge vannet fra mobilen.",
       "punkter": [
         "Åpning om våren eller vinterstengning om høsten",
         "Vannstopper med fjernstenging, montert og testet",
@@ -203,21 +203,21 @@
           "tekst": "Fortell kort hva det gjelder og hvor. Et bilde av problemet sparer ofte en befaring."
         },
         {
-          "tittel": "Eirik ser på det og gir pris",
+          "tittel": "Vi ser på det og gir pris",
           "tekst": "Du får vite om det blir timepris, prisoverslag eller fastpris, og dere avtaler tidspunkt."
         },
         {
           "tittel": "Jobben blir gjort og dokumentert",
-          "tekst": "Eirik kommer når det er avtalt, rydder etter seg og gir deg dokumentasjon på det som er gjort."
+          "tekst": "Vi kommer når det er avtalt, rydder etter oss og gir deg dokumentasjon på det som er gjort."
         }
       ],
       "eyebrow": "Fra forespørsel til ferdig jobb",
-      "ingress": "Du har med Eirik å gjøre hele veien. Ingen mellomledd.",
+      "ingress": "Du har samme kontakt hele veien. Ingen mellomledd.",
       "stegEtikett": "Steg"
     },
     "omEirik": {
-      "tittel": "Om Eirik",
-      "tekst": "Kobber og Kran er et lite rørleggerfirma på Hemnes, med Eirik som eier og rørlegger. Ringer du, er det Eirik du snakker med, og det er han som kommer. Han kjenner bygda, brønnene, hyttene og vintrene her, og vil være den du ringer neste gang også.",
+      "tittel": "Hvem vi er",
+      "tekst": "Kobber og Kran er et lite rørleggerfirma på Hemnes, startet av Eirik, som er eier og fagansvarlig. Vi kjenner bygda, brønnene, hyttene og vintrene her, og vil være dem du ringer neste gang også.",
       "godkjenningerTittel": "Godkjenninger",
       "anmeldelserTittel": "Dette sier kundene"
     },
@@ -232,7 +232,7 @@
     "omrader": {
       "tittel": "Her jobber vi",
       "eyebrow": "Områder",
-      "ingress": "Base på Hemnes. Eirik kjører i hele Aurskog-Høland og Indre Østfold, og til Lillestrøm.",
+      "ingress": "Base på Hemnes. Vi kjører i hele Aurskog-Høland og Indre Østfold, og til Lillestrøm.",
       "base": "Base",
       "utenfor": "Utenfor området: større jobber, etter avtale",
       "omtaleEyebrow": "Omtaler",
@@ -240,7 +240,7 @@
     },
     "skjema": {
       "tittel": "Send forespørsel",
-      "merknad": "Det tar et halvt minutt. Fortell hva det gjelder, hvor jobben er og hvordan Eirik når deg. Bilder kan du legge til etterpå, og e-post er valgfritt. Lekker det nå? Steng vannet og ring heller.",
+      "merknad": "Det tar et halvt minutt. Fortell hva det gjelder, hvor jobben er og hvordan vi når deg. Bilder kan du legge til etterpå, og e-post er valgfritt. Lekker det nå? Steng vannet og ring heller.",
       "eyebrow": "Forespørsel",
       "ringDirekte": "Eller ring direkte"
     }
@@ -264,9 +264,9 @@
     "tjeneste": {
       "faktaTittel": "Kort fortalt",
       "sideboksTittel": "Raskeste vei til hjelp",
-      "sideboksTekst": "Ring Eirik, eller send en forespørsel med bilde. Lekker det nå, steng hovedstoppekranen først.",
+      "sideboksTekst": "Ring oss, eller send en forespørsel med bilde. Lekker det nå, steng hovedstoppekranen først.",
       "faqTittel": "Det folk lurer på",
-      "andreTittel": "Andre ting Eirik hjelper med",
+      "andreTittel": "Andre ting vi hjelper med",
       "omraderTittel": "Her jobber vi",
       "skjemaEyebrow": "Forespørsel",
       "prisForStart": "Pris før start",
@@ -284,7 +284,7 @@
       "fastpriser": {
         "eyebrow": "Fastpriser",
         "tittel": "Fastpris på vanlige jobber",
-        "ingress": "Disse jobbene gjør Eirik ofte, så han vet hva de tar. Står det nye der det gamle stod, er arbeidet fastpris. Send et bilde av det som skal byttes, så bekrefter han prisen.",
+        "ingress": "Disse jobbene gjør vi ofte, så vi vet hva de tar. Står det nye der det gamle stod, er arbeidet fastpris. Send et bilde av det som skal byttes, så bekrefter vi prisen.",
         "note": "Fastpris på arbeidet. Servicebil, utstyr og deler kommer i tillegg.",
         "rader": [
           {
@@ -334,7 +334,7 @@
         },
         {
           "tittel": "Befaring",
-          "tekst": "Eirik ser på badet, rørene og avløpet, og hva som må til for at badet blir tett og etter dagens krav."
+          "tekst": "Vi ser på badet, rørene og avløpet, og hva som må til for at badet blir tett og etter dagens krav."
         },
         {
           "tittel": "Skriftlig tilbud",
@@ -342,7 +342,7 @@
         },
         {
           "tittel": "Plan og oppstart",
-          "tekst": "Dere avtaler oppstart og rekkefølge. Eirik koordinerer med de andre håndverkerne, så du slipper å være prosjektleder."
+          "tekst": "Vi avtaler oppstart og rekkefølge sammen, og vi koordinerer med de andre håndverkerne, så du slipper å være prosjektleder."
         },
         {
           "tittel": "Arbeid og kontroll",
@@ -353,8 +353,8 @@
           "tekst": "Utstyret monteres og testes. Du får FDV-dokumentasjon og dokumentasjon på rørleggerarbeidet i våtrommet."
         }
       ],
-      "ansvarTittel": "Eirik har ansvaret mot deg",
-      "ansvar": "Når elektriker og flislegger er med gjennom Kobber og Kran, er det Eirik du har avtalen med. Du har én å ringe og én å forholde deg til hvis noe ikke blir som avtalt. Har du egne håndverkere, avtaler dere skriftlig hvem som har ansvaret for hva før arbeidet starter."
+      "ansvarTittel": "Vi har ansvaret mot deg",
+      "ansvar": "Når elektriker og flislegger er med gjennom Kobber og Kran, er det Kobber og Kran du har avtalen med. Du har ett nummer å ringe og én å forholde deg til hvis noe ikke blir som avtalt. Har du egne håndverkere, avtaler dere skriftlig hvem som har ansvaret for hva før arbeidet starter."
     },
     "kontakt": {
       "telefonNavn": "Telefon",
@@ -371,9 +371,9 @@
       "Slå av strømmen til varmtvannsberederen i sikringsskapet, hvis berederen lekker eller vannet er stengt.",
       "Tørk opp det du kan, og ta bilder av skaden og av det som lekker.",
       "Meld fra til forsikringsselskapet. De fleste har egen skadevakt som kan komme og tørke ut.",
-      "Ring Eirik."
+      "Ring oss."
     ],
-    "ingenDognvakt": "Eirik tar akutte oppdrag når han kan, men Kobber og Kran har ikke døgnvakt. Når han ikke svarer, er forsikringens skadevakt den raskeste hjelpen."
+    "ingenDognvakt": "Vi tar akutte oppdrag når vi kan, men Kobber og Kran har ikke døgnvakt. Når vi ikke svarer, er forsikringens skadevakt den raskeste hjelpen."
   },
   "skjema": {
     "hva": "Hva gjelder det?",
@@ -408,7 +408,7 @@
     "kvitteringTittel": "Takk, forespørselen er sendt",
     "kvitteringLenke": "Vil du sende flere bilder senere? Bruk denne lenken:",
     "steg2Tittel": "Vil du fortelle litt mer? (valgfritt)",
-    "steg2Ingress": "Forespørselen er allerede sendt. Bilder og noen korte svar gjør at Eirik kan ta med riktige deler og gi bedre pris. Du kan hoppe over alt her.",
+    "steg2Ingress": "Forespørselen er allerede sendt. Bilder og noen korte svar gjør at vi kan ta med riktige deler og gi bedre pris. Du kan hoppe over alt her.",
     "sporsmalTittel": "Om huset og jobben",
     "sendSteg2": "Send tillegget",
     "steg2Ok": "Takk, tillegget er kommet fram.",
@@ -432,7 +432,7 @@
       "adkomst": "Adkomst og tilgang: er veien brøytet, er noen hjemme, eller hvor ligger nøkkelen?",
       "kontaktform": "Vil du helst ha SMS eller en telefonsamtale?",
       "bildeTypeskilt": "Bilde av typeskiltet på berederen (klistremerket med liter og effekt)",
-      "bildeTank": "Bilde av berederen og gulvet rundt (så Eirik ser sluk og eventuell vannstopper)",
+      "bildeTank": "Bilde av berederen og gulvet rundt (så vi ser sluk og eventuell vannstopper)",
       "rom": "Hvilket rom står berederen i?",
       "etasje": "Hvilken etasje? (kjeller, 1. etasje …)",
       "tilkobling": "Står berederen i stikkontakt, eller er den fast tilkoblet?",
@@ -490,13 +490,13 @@
   "skjemaSvar": {
     "takkTittel": "Takk! Forespørselen er sendt",
     "feilTittel": "Noe mangler i skjemaet",
-    "feilTekst": "Gå tilbake og sjekk feltene som er merket, eller ring Eirik.",
+    "feilTekst": "Gå tilbake og sjekk feltene som er merket, eller ring oss.",
     "sendBilderTittel": "Send flere bilder",
     "sendBilderTekst": "Her kan du legge til flere bilder i forespørselen din. Ta gjerne ett bilde på avstand og ett nært, og ett av typeskiltet hvis det finnes.",
     "sendBilderSend": "Send bildet",
     "sendBilderOk": "Bildet er kommet fram. Du kan sende ett til.",
-    "sendBilderFeil": "Bildet kom ikke fram. Prøv igjen, eller ring Eirik.",
+    "sendBilderFeil": "Bildet kom ikke fram. Prøv igjen, eller ring oss.",
     "ugyldigLenkeTittel": "Lenken virker ikke",
-    "ugyldigLenkeTekst": "Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring Eirik."
+    "ugyldigLenkeTekst": "Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring oss."
   }
 }

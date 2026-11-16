@@ -5,7 +5,7 @@ title: "Wells, pumps and water treatment"
 kundeTittel: "Problems with private water"
 fagord: "Wells, pumps and water treatment"
 nummer: 6
-kort: "Is the pump running all the time, or is the water brown or smelling of eggs? Eirik sees to the pump, pressure tank, filter and UV, in the barn too."
+kort: "Is the pump running all the time, or is the water brown or smelling of eggs? We see to the pump, pressure tank, filter and UV, in the barn too."
 fakta:
   - tall: "Wells"
     tekst: "Drilled and dug wells, pump, pressure tank and the pipe into the house."
@@ -25,11 +25,11 @@ faq:
   - sporsmal: "Do I need a UV system?"
     svar: "UV light kills bacteria in the water and is common where the test shows bacteria, for example in dug wells. It doesn't remove iron, manganese or smells, so it is often combined with a filter. The lamp needs replacing regularly, usually once a year."
   - sporsmal: "Do you help with water in the barn?"
-    svar: "Yes. Eirik does water pipes and drinking bowls in barns, frost-free water posts in the yard and on pasture, and pressure systems for farms. Farms out here need water that works in January too."
+    svar: "Yes. We do water pipes and drinking bowls in barns, frost-free water posts in the yard and on pasture, and pressure systems for farms. Farms out here need water that works in January too."
   - sporsmal: "Do you drill wells?"
-    svar: "No, but Eirik works with a well driller and arranges the contact. He does everything from the well and in: pump, pressure tank, filter, UV and the pipes in the house."
+    svar: "No, but we work with a well driller and arrange the contact. We do everything from the well and in: pump, pressure tank, filter, UV and the pipes in the house."
   - sporsmal: "What does it cost?"
-    svar: "Troubleshooting and servicing are charged at the hourly rate. For a new filter, UV system or pump you get an estimate or a fixed price once Eirik knows what is needed. See the prices page for the hourly rate and service van."
+    svar: "Troubleshooting and servicing are charged at the hourly rate. For a new filter, UV system or pump you get an estimate or a fixed price once we know what is needed. See the prices page for the hourly rate and service van."
 bilder:
   - src: /images/uploads/illustrasjon-bronn-og-vann.svg
     plassholder: true
@@ -37,9 +37,9 @@ translationKey: bronn-og-vann
 locale: en
 ---
 
-Many people in Aurskog-Høland have their own well. It gives good water when everything works, but the pump, pressure tank and filter need looking after. Eirik helps with everything from the well into the house, in homes, cabins and barns.
+Many people in Aurskog-Høland have their own well. It gives good water when everything works, but the pump, pressure tank and filter need looking after. We help with everything from the well into the house, in homes, cabins and barns.
 
-## What Eirik helps with
+## What we help with
 
 - **Pump and pressure tank:** the pump runs all the time, starts and stops often, or the pressure is low
 - **Brown water and stains:** iron and manganese that build up in basins and laundry
@@ -50,9 +50,9 @@ Many people in Aurskog-Høland have their own well. It gives good water when eve
 
 ## The water test comes first
 
-The right water treatment starts with knowing what is in the water. An iron filter doesn't help against bacteria, and a UV system doesn't remove smells. If you have a water test, send it. If not, Eirik can tell you what it should test for.
+The right water treatment starts with knowing what is in the water. An iron filter doesn't help against bacteria, and a UV system doesn't remove smells. If you have a water test, send it. If not, we can tell you what it should test for.
 
-## What Eirik needs from you
+## What we need from you
 
 - Whether it is a **drilled well or a dug well**
 - **A photo of the pump and pressure tank**, ideally with the gauge
@@ -61,8 +61,8 @@ The right water treatment starts with knowing what is in the water. An iron filt
 
 ## Barns and farms
 
-Water for animals can't wait until spring. Eirik lays and repairs water pipes in barns, fits drinking bowls and installs frost-free water posts, so you have water in the yard and on the pasture when it is cold too. Read more about [water for farming](/en/services/farming/).
+Water for animals can't wait until spring. We lay and repair water pipes in barns, fit drinking bowls and install frost-free water posts, so you have water in the yard and on the pasture when it is cold too. Read more about [water for farming](/en/services/farming/).
 
 ## Partners
 
-Well drilling and digging are done by regular partners. If the water needs treatment, Eirik works with a supplier of water treatment systems. He arranges the contact, so you do not have to search yourself.
+Well drilling and digging are done by regular partners. If the water needs treatment, we work with a supplier of water treatment systems. We arrange the contact, so you do not have to search yourself.

@@ -7,7 +7,7 @@ translationKey: priser
 locale: en
 ---
 
-At Kobber og Kran you can see the prices before you get in touch. All prices include VAT, and you are told which kind of price applies before Eirik starts. The figures are further down the page.
+At Kobber og Kran you can see the prices before you get in touch. All prices include VAT, and you are told which kind of price applies before we start. The figures are further down the page.
 
 ## Three ways to price a job
 
@@ -15,11 +15,11 @@ We use the same terms as the Norwegian Craftsman Services Act (håndverkertjenes
 
 ### Hourly rate
 
-Most service and repair jobs are charged at the **hourly rate** (timepris). You pay for the time the job takes, plus the service van, consumables and parts. Time is counted from when Eirik arrives until the job is done. He works efficiently and tells you along the way if it will take much longer than expected.
+Most service and repair jobs are charged at the **hourly rate** (timepris). You pay for the time the job takes, plus the service van, consumables and parts. Time is counted from when we arrive until the job is done. We work efficiently and tells you along the way if it will take much longer than expected.
 
 ### Estimate
 
-If the job is bigger but it is hard to know exactly what it will take, you get an **estimate** (prisoverslag). It is a forecast of what the job will cost. Under the Craftsman Services Act an estimate may not be exceeded significantly. In practice, around 15% above the estimate is regarded as the limit. If Eirik sees it may cost more, he tells you before carrying on.
+If the job is bigger but it is hard to know exactly what it will take, you get an **estimate** (prisoverslag). It is a forecast of what the job will cost. Under the Craftsman Services Act an estimate may not be exceeded significantly. In practice, around 15% above the estimate is regarded as the limit. If we see it may cost more, we tell you before carrying on.
 
 ### Fixed price
 

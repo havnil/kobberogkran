@@ -5,7 +5,7 @@ title: 'Brønn, pumpe og vannbehandling'
 kundeTittel: 'Problemer med privat vann'
 fagord: 'Brønn, pumpe og vannbehandling'
 nummer: 6
-kort: 'Pumpa går hele tida, vannet er brunt eller lukter egg? Eirik ser på pumpe, trykktank, filter og UV, også i fjøset.'
+kort: 'Pumpa går hele tida, vannet er brunt eller lukter egg? Vi ser på pumpe, trykktank, filter og UV, også i fjøset.'
 fakta:
   - tall: 'Brønn'
     tekst: 'Borebrønn og gravd brønn, pumpe, trykktank og ledning inn i huset.'
@@ -25,11 +25,11 @@ faq:
   - sporsmal: 'Trenger jeg UV-anlegg?'
     svar: 'UV-lys dreper bakterier i vannet og er vanlig der vannprøven viser bakterier, for eksempel i gravde brønner. Det fjerner ikke jern, mangan eller lukt, så det kombineres ofte med filter. Lampa må byttes jevnlig, som regel en gang i året.'
   - sporsmal: 'Hjelper dere med vann i fjøset?'
-    svar: 'Ja. Eirik tar vannledninger og drikkekar i fjøs, frostfrie vannposter på tunet og i beitet, og trykkanlegg for gårdsbruk. Landbruket her ute trenger vann som virker også i januar.'
+    svar: 'Ja. Vi tar vannledninger og drikkekar i fjøs, frostfrie vannposter på tunet og i beitet, og trykkanlegg for gårdsbruk. Landbruket her ute trenger vann som virker også i januar.'
   - sporsmal: 'Borer dere brønner?'
-    svar: 'Nei, men Eirik samarbeider med en brønnborer og ordner kontakten. Selv tar han alt fra brønnen og inn: pumpe, trykktank, filter, UV og ledningene i huset.'
+    svar: 'Nei, men vi samarbeider med en brønnborer og ordner kontakten. Selv tar vi alt fra brønnen og inn: pumpe, trykktank, filter, UV og ledningene i huset.'
   - sporsmal: 'Hva koster det?'
-    svar: 'Feilsøking og service tas på timepris. Nytt filter, UV-anlegg eller ny pumpe får du prisoverslag eller fastpris på, når Eirik vet hva som trengs. Se prissiden for timepris og servicebil.'
+    svar: 'Feilsøking og service tas på timepris. Nytt filter, UV-anlegg eller ny pumpe får du prisoverslag eller fastpris på, når vi vet hva som trengs. Se prissiden for timepris og servicebil.'
 bilder:
   - src: /images/uploads/illustrasjon-bronn-og-vann.svg
     plassholder: true
@@ -37,9 +37,9 @@ translationKey: bronn-og-vann
 locale: nb
 ---
 
-Mange i Aurskog-Høland har egen brønn. Det gir godt vann når alt virker, men pumpe, trykktank og filter trenger tilsyn. Eirik hjelper med det som går fra brønnen og inn i huset, i bolig, på hytta og i fjøset.
+Mange i Aurskog-Høland har egen brønn. Det gir godt vann når alt virker, men pumpe, trykktank og filter trenger tilsyn. Vi hjelper med det som går fra brønnen og inn i huset, i bolig, på hytta og i fjøset.
 
-## Dette hjelper Eirik med
+## Dette hjelper vi med
 
 - **Pumpe og trykktank:** pumpa går hele tida, starter og stopper ofte, eller trykket er lavt
 - **Brunt vann og flekker:** jern og mangan som setter seg i servanter og vaskeklær
@@ -50,9 +50,9 @@ Mange i Aurskog-Høland har egen brønn. Det gir godt vann når alt virker, men 
 
 ## Vannprøven først
 
-Riktig vannbehandling starter med å vite hva som er i vannet. Et filter for jern hjelper ikke mot bakterier, og et UV-anlegg tar ikke bort lukt. Har du en vannprøve, send den med. Har du ikke, kan Eirik fortelle hva den bør teste for.
+Riktig vannbehandling starter med å vite hva som er i vannet. Et filter for jern hjelper ikke mot bakterier, og et UV-anlegg tar ikke bort lukt. Har du en vannprøve, send den med. Har du ikke, kan vi fortelle hva den bør teste for.
 
-## Dette trenger Eirik fra deg
+## Dette trenger vi fra deg
 
 - Om det er **borebrønn eller gravd brønn**
 - **Bilde av pumpa og trykktanken**, gjerne med manometeret
@@ -61,8 +61,8 @@ Riktig vannbehandling starter med å vite hva som er i vannet. Et filter for jer
 
 ## Fjøs og gård
 
-Vann til dyra kan ikke vente til våren. Eirik legger og reparerer vannledninger i fjøs, monterer drikkekar og setter opp frostfrie vannposter, så du har vann på tunet og i beitet også når det er kaldt. Les mer om [vann i landbruket](/tjenester/landbruk/).
+Vann til dyra kan ikke vente til våren. Vi legger og reparerer vannledninger i fjøs, monterer drikkekar og setter opp frostfrie vannposter, så du har vann på tunet og i beitet også når det er kaldt. Les mer om [vann i landbruket](/tjenester/landbruk/).
 
 ## Samarbeidspartnere
 
-Brønnboring og graving gjør faste samarbeidspartnere. Trenger vannet rensing, samarbeider Eirik med en leverandør av vannrenseanlegg. Han ordner kontakten, så du slipper å lete selv.
+Brønnboring og graving gjør faste samarbeidspartnere. Trenger vannet rensing, samarbeider vi med en leverandør av vannrenseanlegg. Vi ordner kontakten, så du slipper å lete selv.

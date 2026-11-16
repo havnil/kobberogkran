@@ -7,6 +7,6 @@ translationKey: tjenester
 locale: nb
 ---
 
-Kobber og Kran er et lite firma med fem ting vi gjør skikkelig. Velg det som passer best. Er du usikker, send en forespørsel med et bilde, så finner Eirik ut av det.
+Kobber og Kran er et lite firma med fem ting vi gjør skikkelig. Velg det som passer best. Er du usikker, send en forespørsel med et bilde, så finner vi ut av det.
 
-Alle jobbene har det samme utgangspunktet: du får vite prisen før Eirik starter, han kommer når det er avtalt, og du får dokumentasjon på det som er gjort.
+Alle jobbene har det samme utgangspunktet: du får vite prisen før vi starter, vi kommer når det er avtalt, og du får dokumentasjon på det som er gjort.

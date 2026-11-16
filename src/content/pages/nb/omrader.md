@@ -7,11 +7,11 @@ translationKey: omrader
 locale: nb
 ---
 
-Kobber og Kran har base på Hemnes, og jobbene er i Aurskog-Høland og Indre Østfold. Kort vei betyr at Eirik bruker tiden på jobben, ikke i bilen.
+Kobber og Kran har base på Hemnes, og jobbene er i Aurskog-Høland og Indre Østfold. Kort vei betyr at vi bruker tiden på jobben, ikke i bilen.
 
 ## Hele Aurskog-Høland
 
-Vi tar jobber i hele kommunen: på Hemnes og Løken, på Bjørkelangen og i Aurskog, og ut mot Setskog og Rømskog. Mange her har egen brønn og privat avløp, og det er vanlig kost for Eirik.
+Vi tar jobber i hele kommunen: på Hemnes og Løken, på Bjørkelangen og i Aurskog, og ut mot Setskog og Rømskog. Mange her har egen brønn og privat avløp, og det er vanlig kost for oss.
 
 ## Indre Østfold
 

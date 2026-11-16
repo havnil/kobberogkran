@@ -23,11 +23,11 @@ Formålet er å vurdere jobben, gi deg pris, avtale tid og gjøre jobben. Grunnl
 
 ## Bildene
 
-Med skjemaet blir bildene gjort mindre i nettleseren før de sendes, og metadata, også posisjonen fra mobilkameraet, blir fjernet. Serveren fjerner i tillegg slike data fra JPEG- og PNG-bilder før de lagres. Sender du et HEIC- eller WebP-bilde fra siden for å sende flere bilder senere, uten at JavaScript er slått på, kan bildet bli lagret uendret, med eventuell posisjon. Bildene vises bare for Eirik, via lenker som utløper.
+Med skjemaet blir bildene gjort mindre i nettleseren før de sendes, og metadata, også posisjonen fra mobilkameraet, blir fjernet. Serveren fjerner i tillegg slike data fra JPEG- og PNG-bilder før de lagres. Sender du et HEIC- eller WebP-bilde fra siden for å sende flere bilder senere, uten at JavaScript er slått på, kan bildet bli lagret uendret, med eventuell posisjon. Bildene vises bare for Kobber og Kran, via lenker som utløper.
 
 ## AI-sortering
 
-Når en forespørsel kommer inn, lager et AI-verktøy (Claude fra Anthropic) et kort sammendrag for Eirik, slik at han raskt ser hva som haster og hva som mangler. AI-en skriver aldri til deg, og Eirik leser alt selv.
+Når en forespørsel kommer inn, lager et AI-verktøy (Claude fra Anthropic) et kort sammendrag for oss, slik at vi raskt ser hva som haster og hva som mangler. AI-en skriver aldri til deg, og vi leser alt selv.
 
 - **Sendes til AI-tjenesten:** hva det gjelder, hvor fort det haster, beskrivelsen og svarene dine, hva slags bilder du har sendt (ikke selve bildene), omtrentlig kjøretid og om jobben er innenfor området. Telefonnumre og e-postadresser i beskrivelsen fjernes først.
 - **Sendes ikke:** navnet ditt, telefonnummeret, e-posten, adressen eller gårds- og bruksnummeret, posisjonen eller bildene.
@@ -36,7 +36,7 @@ Skriver du en adresse i beskrivelsen, blir den med. Anthropic er vår databehand
 
 ## Hvor opplysningene lagres
 
-Nettsiden, forespørslene og bildene ligger hos Cloudflare, og forespørsler og bilder lagres i datasentre i Europa. Eirik får beskjed om nye forespørsler på e-post.
+Nettsiden, forespørslene og bildene ligger hos Cloudflare, og forespørsler og bilder lagres i datasentre i Europa. Kobber og Kran får beskjed om nye forespørsler på e-post.
 
 Andre som behandler opplysninger for oss:
 
@@ -46,7 +46,7 @@ Andre som behandler opplysninger for oss:
 
 ## Tapte anrop
 
-Ringer du uten at Eirik får svart, lagres telefonnummeret ditt og tidspunktet, og du får en melding med lenke til skjemaet. Du får ikke mer enn én slik melding innen en halvtime.
+Ringer du uten at vi får svart, lagres telefonnummeret ditt og tidspunktet, og du får en melding med lenke til skjemaet. Du får ikke mer enn én slik melding innen en halvtime.
 
 ## Ingen sporing og ingen informasjonskapsler
 

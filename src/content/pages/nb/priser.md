@@ -7,7 +7,7 @@ translationKey: priser
 locale: nb
 ---
 
-Hos Kobber og Kran ser du prisene før du tar kontakt. Alle priser er med mva, og du får vite hvilken prisform som gjelder før Eirik starter. Tallene står lenger ned på siden.
+Hos Kobber og Kran ser du prisene før du tar kontakt. Alle priser er med mva, og du får vite hvilken prisform som gjelder før vi starter. Tallene står lenger ned på siden.
 
 ## Tre måter å prise en jobb på
 
@@ -15,11 +15,11 @@ Vi bruker de samme ordene som håndverkertjenesteloven, så du vet hva du har av
 
 ### Timepris
 
-De fleste service- og reparasjonsjobber tas på **timepris**. Du betaler for tiden jobben tar, pluss servicebil, forbruksmateriell og deler. Tiden regnes fra Eirik kommer til jobben er ferdig. Han jobber effektivt og sier fra underveis hvis det tar vesentlig lengre tid enn ventet.
+De fleste service- og reparasjonsjobber tas på **timepris**. Du betaler for tiden jobben tar, pluss servicebil, forbruksmateriell og deler. Tiden regnes fra vi kommer til jobben er ferdig. Vi jobber effektivt og sier fra underveis hvis det tar vesentlig lengre tid enn ventet.
 
 ### Prisoverslag
 
-Er jobben større, men det er vanskelig å vite nøyaktig hva den krever, får du et **prisoverslag**. Det er et anslag på hva jobben vil koste. Etter håndverkertjenesteloven kan et prisoverslag ikke overskrides vesentlig. I praksis regnes omtrent 15 % over overslaget som grensen. Ser Eirik at det kan bli dyrere, sier han fra før han fortsetter.
+Er jobben større, men det er vanskelig å vite nøyaktig hva den krever, får du et **prisoverslag**. Det er et anslag på hva jobben vil koste. Etter håndverkertjenesteloven kan et prisoverslag ikke overskrides vesentlig. I praksis regnes omtrent 15 % over overslaget som grensen. Ser vi at det kan bli dyrere, sier vi fra før vi fortsetter.
 
 ### Fastpris
 

@@ -23,11 +23,11 @@ The purpose is to assess the job, give you a price, agree a time and do the work
 
 ## Photos
 
-With the form, photos are made smaller in your browser before they are sent, and metadata, including the location from your phone camera, is removed. The server also removes such data from JPEG and PNG images before storing them. If you send a HEIC or WebP image from the page for sending more photos later, with JavaScript switched off, the image may be stored unchanged, including any location. Photos are only shown to Eirik, through links that expire.
+With the form, photos are made smaller in your browser before they are sent, and metadata, including the location from your phone camera, is removed. The server also removes such data from JPEG and PNG images before storing them. If you send a HEIC or WebP image from the page for sending more photos later, with JavaScript switched off, the image may be stored unchanged, including any location. Photos are only shown to Kobber og Kran, through links that expire.
 
 ## AI sorting
 
-When a request comes in, an AI tool (Claude from Anthropic) writes a short summary for Eirik, so he can quickly see what is urgent and what is missing. The AI never writes to you, and Eirik reads everything himself.
+When a request comes in, an AI tool (Claude from Anthropic) writes a short summary for us, so we can quickly see what is urgent and what is missing. The AI never writes to you, and we read everything ourselves.
 
 - **Sent to the AI service:** what it's about, how urgent it is, your description and answers, what kind of photos you sent (not the photos themselves), the approximate driving time and whether the job is within our area. Phone numbers and e-mail addresses in the description are removed first.
 - **Not sent:** your name, phone number, e-mail, the address or farm and title number, your location or the photos.
@@ -36,7 +36,7 @@ If you write an address in the description, it is included. Anthropic is our dat
 
 ## Where the information is stored
 
-The website, the requests and the photos are hosted by Cloudflare, and requests and photos are stored in data centres in Europe. Eirik is notified of new requests by e-mail.
+The website, the requests and the photos are hosted by Cloudflare, and requests and photos are stored in data centres in Europe. Kobber og Kran is notified of new requests by e-mail.
 
 Others who process information for us:
 
@@ -46,7 +46,7 @@ Others who process information for us:
 
 ## Missed calls
 
-If you call and Eirik can't answer, your phone number and the time are stored, and you get a message with a link to the form. You won't get more than one such message within half an hour.
+If you call and we can't answer, your phone number and the time are stored, and you get a message with a link to the form. You won't get more than one such message within half an hour.
 
 ## No tracking and no cookies
 

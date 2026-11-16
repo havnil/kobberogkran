@@ -5,7 +5,7 @@ title: "Leak-proof cabin: water stop valve and remote shut-off"
 kundeTittel: "Cabin protection"
 fagord: "Water stop valve at the cabin"
 nummer: 8
-kort: "Eirik opens or winterises the cabin and fits a water stop valve on the main line. If it leaks, the water is shut off, and you get to know."
+kort: "We open or winterise the cabin and fit a water stop valve on the main line. If it leaks, the water is shut off, and you get to know."
 fakta:
   - tall: "While you're away"
     tekst: "The valve shuts off the water when it leaks, even when the cabin stands empty."
@@ -17,17 +17,17 @@ faq:
   - sporsmal: "The cabin has no internet. Does it still work?"
     svar: "Yes. A valve without internet shuts off the water on site when the sensor detects water. You don't get an alert on your phone, but the leak stops. If the cabin has or can get internet, you can choose a model with alerts and remote shut-off."
   - sporsmal: "Does the cabin need power?"
-    svar: "Most water stop valves need power, either from a socket or a battery. Models that must be wired in need an electrician. Eirik helps you choose a solution that suits the cabin, and tells you if an electrician is needed."
+    svar: "Most water stop valves need power, either from a socket or a battery. Models that must be wired in need an electrician. We help you choose a solution that suits the cabin, and tell you if an electrician is needed."
   - sporsmal: "The cabin has a well. Is that possible?"
-    svar: "Yes. The valve then goes after the pump and pressure tank, where the water enters the cabin. Eirik looks at the whole system, and can deal with the pump and pressure tank at the same time if needed."
+    svar: "Yes. The valve then goes after the pump and pressure tank, where the water enters the cabin. We look at the whole system, and can deal with the pump and pressure tank at the same time if needed."
   - sporsmal: "What does the fixed price include?"
-    svar: "The fixed price covers the work of fitting and testing the water stop valve on the main line and the sensors that go with it, and help with the app if the model has one. The valve and the equipment you choose come on top. If the pipe has to be rebuilt to make room, you are told before Eirik starts."
+    svar: "The fixed price covers the work of fitting and testing the water stop valve on the main line and the sensors that go with it, and help with the app if the model has one. The valve and the equipment you choose come on top. If the pipe has to be rebuilt to make room, you are told before we start."
   - sporsmal: "Can it be done at the same time as opening or winterising?"
-    svar: "Yes, and that is the simplest. Eirik is there anyway, the water is off, and you only pay for the service van once. Say in your request that you want both."
+    svar: "Yes, and that is the simplest. We are there anyway, the water is off, and you only pay for the service van once. Say in your request that you want both."
   - sporsmal: "Will my insurer give me a discount?"
     svar: "It varies. Some insurers give a discount or require a water stop valve, others don't. Check your insurance terms. You get documentation of what was fitted, which you can show them."
   - sporsmal: "Do I need to be at the cabin?"
-    svar: "No. Agree where the key is, or use a key box. If the model has an app, Eirik helps you set it up on your phone afterwards. You get photos and a message when the job is done."
+    svar: "No. Agree where the key is, or use a key box. If the model has an app, we help you set it up on your phone afterwards. You get photos and a message when the job is done."
 bilder:
   - src: /images/uploads/illustrasjon-lekkasjesikker-hytte.svg
     plassholder: true
@@ -40,9 +40,9 @@ A cabin stands empty for much of the year. If a pipe bursts or the water heater 
 
 ## How it works
 
-1. **Eirik opens or winterises the cabin.** In spring the water goes on, in autumn the system is closed and drained, as usual.
+1. **We open or winterise the cabin.** In spring the water goes on, in autumn the system is closed and drained, as usual.
 2. **The valve is fitted and tested.** The valve goes on the main line, and the sensors go where leaks are most common: by the water heater, the kitchen and the bathroom.
-3. **You get photos and a message.** If the model has an app, Eirik helps you connect it to your phone.
+3. **You get photos and a message.** If the model has an app, we help you connect it to your phone.
 
 ## Choose your equipment
 
@@ -50,9 +50,9 @@ A cabin stands empty for much of the year. If a pipe bursts or the water heater 
 - **With an app:** you get an alert on your phone when something leaks
 - **With remote shut-off:** you can close and open the water from home
 
-The work has a fixed price. You choose the equipment with Eirik, and it comes on top. Models that must be wired in need an electrician.
+The work has a fixed price. You choose the equipment with us, and it comes on top. Models that must be wired in need an electrician.
 
-## What Eirik needs from you
+## What we need from you
 
 - **Where the cabin is:** the address, “Use where I am now”, or the farm and title number
 - **Water:** mains water or a well

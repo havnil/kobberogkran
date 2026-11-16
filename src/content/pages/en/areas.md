@@ -7,11 +7,11 @@ translationKey: omrader
 locale: en
 ---
 
-Kobber og Kran is based in Hemnes, and the jobs are in Aurskog-Høland and Indre Østfold. A short drive means Eirik spends his time on the job, not in the van.
+Kobber og Kran is based in Hemnes, and the jobs are in Aurskog-Høland and Indre Østfold. A short drive means we spend our time on the job, not in the van.
 
 ## All of Aurskog-Høland
 
-We take jobs throughout the municipality: in Hemnes and Løken, in Bjørkelangen and Aurskog, and out towards Setskog and Rømskog. Many people here have their own well and a private drain, and that is everyday work for Eirik.
+We take jobs throughout the municipality: in Hemnes and Løken, in Bjørkelangen and Aurskog, and out towards Setskog and Rømskog. Many people here have their own well and a private drain, and that is everyday work for us.
 
 ## Indre Østfold
 

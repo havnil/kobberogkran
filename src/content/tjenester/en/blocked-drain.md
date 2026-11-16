@@ -5,27 +5,27 @@ title: "Blocked drains in sinks, showers and toilets"
 kundeTittel: "Blocked drain"
 fagord: "Drains and pipe camera"
 nummer: 2
-kort: "A sink, shower drain or toilet that won't drain away. Eirik clears the drain and finds out why it keeps blocking."
+kort: "A sink, shower drain or toilet that won't drain away. We clear the drain and find out why it keeps blocking."
 fakta:
   - tall: "Hourly"
-    tekst: "You pay for the time the job takes, plus the service van and parts. You know before he starts."
+    tekst: "You pay for the time the job takes, plus the service van and parts. You know before we start."
   - tall: "Camera"
-    tekst: "With a pipe camera Eirik can see inside the drain before anything is opened up."
+    tekst: "With a pipe camera we can see inside the drain before anything is opened up."
   - tall: "Honest"
-    tekst: "If the job needs a jetting truck, Eirik tells you and helps you find the right company."
+    tekst: "If the job needs a jetting truck, we tell you and help you find the right company."
 faq:
   - sporsmal: "The sink is blocked. What should I do before calling?"
     svar: "Try a plunger, and clean the trap under the sink if you can. Avoid strong chemicals. They can damage the pipes and are dangerous for whoever opens the pipe afterwards."
   - sporsmal: "Several drains are blocked at once. What does that mean?"
-    svar: "When the toilet, shower and sink are all slow, the blockage is often further out, in the main drain or on the way to the septic tank or the mains sewer. Mention it in your request. If the job needs jetting with a dedicated truck, Eirik will tell you honestly."
+    svar: "When the toilet, shower and sink are all slow, the blockage is often further out, in the main drain or on the way to the septic tank or the mains sewer. Mention it in your request. If the job needs jetting with a dedicated truck, we will tell you honestly."
   - sporsmal: "The drain smells. Is it blocked?"
-    svar: "Not always. A smell often comes from a trap that has dried out, for example in a drain that is rarely used. Pour a bucket of water into it. If the smell comes back, there may be a crack or a poor joint, and Eirik should take a look."
+    svar: "Not always. A smell often comes from a trap that has dried out, for example in a drain that is rarely used. Pour a bucket of water into it. If the smell comes back, there may be a crack or a poor joint, and we should take a look."
   - sporsmal: "The drain gurgles. Why?"
     svar: "Gurgling often means the drain isn't getting enough air, or that a blockage is starting further out. It is an early sign, and it is cheaper to deal with now than when it is fully blocked."
   - sporsmal: "What does it cost to clear a blocked drain?"
-    svar: "Clearing a drain is charged at the hourly rate, plus the service van and consumables. A simple blockage in the trap is quick. If it is further in, it takes longer. Eirik tells you before he carries on if the job turns out bigger than expected."
+    svar: "Clearing a drain is charged at the hourly rate, plus the service van and consumables. A simple blockage in the trap is quick. If it is further in, it takes longer. We tell you before we carry on if the job turns out bigger than expected."
   - sporsmal: "Why does the drain keep blocking?"
-    svar: "The pipe may have too little fall, a kink, roots or built-up fat. With a pipe camera Eirik can see what it is and suggest a lasting fix, instead of clearing it again every month."
+    svar: "The pipe may have too little fall, a kink, roots or built-up fat. With a pipe camera we can see what it is and suggest a lasting fix, instead of clearing it again every month."
   - sporsmal: "The house has a septic tank. Is it the same?"
     svar: "The drains inside the house are the same. If the tank is full or needs emptying, the municipality or an emptying company does that. Say in your request whether the house has a septic tank or is on the mains sewer."
 bilder:
@@ -36,7 +36,7 @@ translationKey: tett-avlop
 locale: en
 ---
 
-A drain rarely blocks overnight. It gets slower every week, until one day the water just stands there. Eirik clears sinks, shower drains and toilets, and finds out why they block, so it doesn't happen again next month.
+A drain rarely blocks overnight. It gets slower every week, until one day the water just stands there. We clear sinks, shower drains and toilets, and find out why they block, so it doesn't happen again next month.
 
 ## Typical jobs
 
@@ -50,8 +50,8 @@ A drain rarely blocks overnight. It gets slower every week, until one day the wa
 ## How it works
 
 1. **You send a request or call.** Say which drains are blocked, and whether it is one or several. A photo of the drain or sink helps.
-2. **Eirik gives you a price.** Clearing drains is charged at the hourly rate, and you know before he starts.
-3. **The drain is cleared.** If something will make it come back, Eirik tells you and suggests what should be done.
+2. **We give you a price.** Clearing drains is charged at the hourly rate, and you know before we start.
+3. **The drain is cleared.** If something will make it come back, we tell you and suggest what should be done.
 
 ## What you can do yourself
 
@@ -61,4 +61,4 @@ A drain rarely blocks overnight. It gets slower every week, until one day the wa
 
 ## Partners
 
-Jetting of main drains and emptying septic tanks are done by a drain company Eirik works with. If the job needs it, he arranges the contact.
+Jetting of main drains and emptying septic tanks are done by a drain company we work with. If the job needs it, we arrange the contact.

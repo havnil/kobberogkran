@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Foresporsel } from '../../src/server/db';
 import { kjoretidMin, regelsjekk } from '../../src/server/sortering/regler';
+import { KOORDINATER } from '../../src/lib/kart';
 import { ClaudeSorterer, FalskSorterer, lagBrukermelding } from '../../src/server/sortering/ai';
 
 const foresporsel = (over: Partial<Foresporsel> = {}): Foresporsel => ({
@@ -26,15 +27,21 @@ const foresporsel = (over: Partial<Foresporsel> = {}): Foresporsel => ({
 });
 
 describe('kjoretidMin', () => {
-  it('Lillestrøm gir mellom 25 og 45 minutter', () => {
+  it('Lillestrøm gir mellom 40 og 60 minutter (ca. 37 km i luftlinje)', () => {
     const min = kjoretidMin(59.956, 11.0492);
     expect(min).not.toBeNull();
-    expect(min!).toBeGreaterThanOrEqual(25);
-    expect(min!).toBeLessThanOrEqual(45);
+    expect(min!).toBeGreaterThanOrEqual(40);
+    expect(min!).toBeLessThanOrEqual(60);
   });
 
-  it('Hemnes sentrum gir 0', () => {
-    expect(kjoretidMin(59.9497, 11.4686)).toBe(0);
+  it('Hemnes sentrum gir 0, målt fra samme punkt som kartet', () => {
+    expect(kjoretidMin(...KOORDINATER.Hemnes)).toBe(0);
+  });
+
+  it('Mysen og Askim er innenfor området, Aurskog er ikke 0 minutter unna', () => {
+    expect(kjoretidMin(...KOORDINATER.Mysen)!).toBeLessThan(35);
+    expect(kjoretidMin(...KOORDINATER.Askim)!).toBeLessThan(35);
+    expect(kjoretidMin(...KOORDINATER.Aurskog)!).toBeGreaterThan(20);
   });
 
   it('gir et heltall', () => {

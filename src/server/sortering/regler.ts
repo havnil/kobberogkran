@@ -2,11 +2,12 @@
 // Resultatet går bare til Eirik (i varselet og som grunnlag for AI-sammendraget).
 import firmaJson from '../../content/firma/firma.json';
 import { firmaSchema, type Firma } from '../../lib/firma';
+import { KOORDINATER } from '../../lib/kart';
 import { regneeksempel } from '../../lib/priser';
 import type { Foresporsel } from '../db';
 
-/** Hemnes sentrum. */
-export const HEMNES = { lat: 59.9497, lon: 11.4686 } as const;
+/** Hemnes sentrum, samme punkt som midten av områdekartet (src/lib/kart.ts). */
+export const HEMNES = { lat: KOORDINATER.Hemnes[0], lon: KOORDINATER.Hemnes[1] } as const;
 /** Veien er lengre enn luftlinjen. */
 const VEIFAKTOR = 1.4;
 const SNITTFART_KMT = 60;

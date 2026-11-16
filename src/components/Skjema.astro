@@ -38,7 +38,8 @@ const t = tekster.skjema;
 const turnstileNokkel = turnstileNokkelForBygg(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '', erLansering());
 
 const tjenesteNavn = (k: string) => {
-  const e = tjenester.find((x) => x.data.translationKey === k);
+  // The page with this key, else the page that sends its customers to this service (landbruk).
+  const e = tjenester.find((x) => x.data.translationKey === k) ?? tjenester.find((x) => x.data.skjemaTjeneste === k);
   return e ? (e.data.skjemaNavn ?? e.data.kundeTittel) : t.tjenesteAnnet;
 };
 const forhandsvalgt = (TJENESTER as readonly string[]).includes(tjeneste) ? tjeneste : '';

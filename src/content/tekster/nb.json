@@ -419,7 +419,8 @@
       "maal": "Omtrentlige mål på badet",
       "oppstart": "Når ønsker du å starte?",
       "egneHandverkere": "Har du egne håndverkere (for eksempel flislegger eller elektriker)?",
-      "styregodkjenning": "Har styret godkjent arbeidet (borettslag eller sameie)?"
+      "styregodkjenning": "Har styret godkjent arbeidet (borettslag eller sameie)?",
+      "varmeOppdrag": "Hva skal gjøres med varmeanlegget?"
     },
     "valg": {
       "ja": "Ja",
@@ -439,7 +440,11 @@
       "flere": "Flere",
       "borebronn": "Borebrønn",
       "gravd": "Gravd brønn",
-      "ikkeBorettslag": "Ikke borettslag eller sameie"
+      "ikkeBorettslag": "Ikke borettslag eller sameie",
+      "nyttAnlegg": "Nytt anlegg",
+      "utskifting": "Bytte ut det gamle",
+      "utvidelse": "Utvide anlegget",
+      "service": "Service eller serviceavtale"
     },
     "feil": {
       "mangler": "Fyll ut dette feltet. Du kan også ringe:",

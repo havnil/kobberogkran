@@ -3,8 +3,20 @@
 // Feilsvar har alltid formen `{ feil: Feilkode, felt?: string }`. `feil` er en fast kode, ikke tekst
 // til kunden: klienten viser godkjent tekst for koden ved feltet (tekst skrives av mennesker).
 
-/** Tjenestene i skjemaet (`tjeneste`). Samme nøkler som tjenestesidene (translationKey), pluss «annet». */
-export const TJENESTER = ['service-og-reparasjon', 'varmtvannstank', 'bronn-og-vann', 'hytte', 'bad', 'annet'] as const;
+/**
+ * Tjenestene i skjemaet (`tjeneste`), i rekkefølgen kunden ser dem. Nøkkelen er tjenestesidens translationKey,
+ * eller `skjemaTjeneste` der sidens nøkkel er beholdt fra et tidligere navn (landbruk: `fjos-og-gard`). Pluss «annet».
+ */
+export const TJENESTER = [
+  'service-og-reparasjon',
+  'varmtvannstank',
+  'varmeanlegg',
+  'bronn-og-vann',
+  'landbruk',
+  'hytte',
+  'bad',
+  'annet',
+] as const;
 export type TjenesteNokkel = (typeof TJENESTER)[number];
 
 /** «Det lekker nå», «snart» og «kan planlegges» (`hast`). */

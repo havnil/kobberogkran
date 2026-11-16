@@ -419,7 +419,8 @@
       "maal": "Rough measurements of the bathroom",
       "oppstart": "When would you like to start?",
       "egneHandverkere": "Do you have your own tradespeople (for example a tiler or electrician)?",
-      "styregodkjenning": "Has the board approved the work (housing co-op or owners' association)?"
+      "styregodkjenning": "Has the board approved the work (housing co-op or owners' association)?",
+      "varmeOppdrag": "What needs doing with the heating system?"
     },
     "valg": {
       "ja": "Yes",
@@ -439,7 +440,11 @@
       "flere": "Several",
       "borebronn": "Drilled well",
       "gravd": "Dug well",
-      "ikkeBorettslag": "Not a housing co-op or owners' association"
+      "ikkeBorettslag": "Not a housing co-op or owners' association",
+      "nyttAnlegg": "New system",
+      "utskifting": "Replace the old one",
+      "utvidelse": "Extend the system",
+      "service": "Service or a service agreement"
     },
     "feil": {
       "mangler": "Please fill in this field. You can also call:",

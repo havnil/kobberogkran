@@ -303,6 +303,7 @@ export const tekstSchema = z.object({
       oppstart: z.string(),
       egneHandverkere: z.string(),
       styregodkjenning: z.string(),
+      varmeOppdrag: z.string(),
     }),
     /** Option labels, by option key (`valgNokkel` of the value). */
     valg: z.object({
@@ -324,6 +325,10 @@ export const tekstSchema = z.object({
       borebronn: z.string(),
       gravd: z.string(),
       ikkeBorettslag: z.string(),
+      nyttAnlegg: z.string(),
+      utskifting: z.string(),
+      utvidelse: z.string(),
+      service: z.string(),
     }),
     /** Error texts by code. The phone number is always added after the text. */
     feil: z.object({

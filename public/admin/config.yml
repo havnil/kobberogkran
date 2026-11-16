@@ -452,6 +452,7 @@ collections:
                   - { name: oppstart, label: Bad - oppstart, widget: string }
                   - { name: egneHandverkere, label: Bad - egne håndverkere, widget: string }
                   - { name: styregodkjenning, label: Bad - styregodkjenning, widget: string }
+                  - { name: varmeOppdrag, label: Varmeanlegg - hva skal gjøres, widget: string }
               - name: valg
                 label: Svaralternativer
                 widget: object
@@ -474,6 +475,10 @@ collections:
                   - { name: borebronn, label: Borebrønn, widget: string }
                   - { name: gravd, label: Gravd, widget: string }
                   - { name: ikkeBorettslag, label: Ikke borettslag, widget: string }
+                  - { name: nyttAnlegg, label: Varmeanlegg - nytt anlegg, widget: string }
+                  - { name: utskifting, label: Varmeanlegg - bytte ut, widget: string }
+                  - { name: utvidelse, label: Varmeanlegg - utvide, widget: string }
+                  - { name: service, label: Varmeanlegg - service, widget: string }
               - name: feil
                 label: Feilmeldinger (telefonnummeret legges til)
                 widget: object

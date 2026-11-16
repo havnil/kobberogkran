@@ -29,7 +29,7 @@ faq:
 bilder:
   - src: /images/uploads/illustrasjon-fjos-og-gard.svg
     plassholder: true
-skjemaTjeneste: bronn-og-vann
+skjemaTjeneste: landbruk
 translationKey: fjos-og-gard
 locale: en
 ---

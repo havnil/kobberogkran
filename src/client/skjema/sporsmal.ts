@@ -75,6 +75,8 @@ export const TJENESTE_SPORSMAL: Readonly<Record<string, readonly Sporsmal[]>> = 
     valg('vannprove', JA_NEI),
   ],
   bad: [tekst('maal'), tekst('oppstart'), valg('egneHandverkere', JA_NEI), valg('styregodkjenning', ['ja', 'nei', 'ikke-borettslag'])],
+  varmeanlegg: [valg('varmeOppdrag', ['nytt-anlegg', 'utskifting', 'utvidelse', 'service'])],
+  landbruk: [],
   hytte: [],
   annet: [],
 };

@@ -96,6 +96,7 @@ function prisanslag(tjeneste: string): { fra: number; til: number } | null {
   switch (tjeneste) {
     case 'service-og-reparasjon':
     case 'bronn-og-vann':
+    case 'landbruk':
     case 'hytte':
       // Timearbeid: regneeksempelet for 1–2 timer, pluss deler.
       return { fra: regneeksempel(p, 1), til: regneeksempel(p, 2) };
@@ -103,7 +104,7 @@ function prisanslag(tjeneste: string): { fra: number; til: number } | null {
       // Fastpris for arbeidet, opp til typisk total med tank.
       return { fra: p.varmtvannstankArbeid.verdi, til: p.varmtvannstankTypiskTotal.verdi };
     default:
-      // bad: ingen pris (spesifikasjonen). annet: ukjent jobb.
+      // bad: ingen pris (spesifikasjonen). varmeanlegg: fra service til nytt anlegg, ingen typisk pris. annet: ukjent jobb.
       return null;
   }
 }

@@ -29,7 +29,7 @@ faq:
 bilder:
   - src: /images/uploads/illustrasjon-varmeanlegg.svg
     plassholder: true
-skjemaTjeneste: annet
+skjemaTjeneste: varmeanlegg
 translationKey: varmeanlegg
 locale: nb
 ---

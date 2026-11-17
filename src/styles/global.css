@@ -6,23 +6,79 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Anchors land below the sticky header. */
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (min-width: 720px) {
+  :root {
+    --gutter: 1.5rem;
+    --seksjon-luft: 7.5rem;
+  }
+}
+
 body {
   margin: 0;
-  background: var(--color-bg);
+  /* A faint diagonal texture on the cream, like a drawing sheet. */
+  background:
+    repeating-linear-gradient(135deg, rgb(74 36 18 / 0.018) 0 1px, transparent 1px 7px),
+    var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
-  line-height: 1.5;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+/* Headings never leave a short word alone on a line: lines are balanced everywhere. */
+h1,
+h2,
+h3,
+h4,
+summary,
+.eyebrow,
+.skra,
+dt,
+dd {
+  text-wrap: balance;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-heading);
-  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 a {
   color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brown);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
 }
 
 .container {
@@ -31,23 +87,419 @@ a {
   padding: var(--space-3);
 }
 
-.site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+/* The content frame used by every full-width section. */
+.ramme {
+  width: 100%;
+  max-width: calc(var(--ramme) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
 }
 
 .skip-link {
   position: absolute;
   left: var(--space-3);
   top: -100%;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   padding: var(--space-2) var(--space-3);
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
+  background: var(--color-brown);
+  color: var(--color-cream);
 }
 
 .skip-link:focus {
   top: var(--space-2);
+}
+
+.visuelt-skjult {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * Buttons are parallelograms: the slanted surface is a pseudo-element, so the text stays upright and the
+ * focus outline is never clipped. Orange with --color-on-orange text (5.50:1), brown with cream, or white
+ * with brown text and a thin border.
+ */
+.knapp {
+  --knapp-bg: var(--color-orange);
+  --knapp-bg-hover: var(--color-orange-light);
+  --knapp-fg: var(--color-on-orange);
+  --knapp-kant: transparent;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.375rem;
+  padding: 0.75rem 1.75rem;
+  margin-inline: 0.4rem;
+  border: 0;
+  background: transparent;
+  color: var(--knapp-fg);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.knapp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--knapp-bg);
+  border: 2px solid var(--knapp-kant);
+  transform: skewX(-12deg);
+  transition: background-color 0.15s ease;
+}
+
+.knapp:hover {
+  --knapp-bg: var(--knapp-bg-hover);
+}
+
+.knapp-brun {
+  --knapp-bg: var(--color-brown);
+  --knapp-bg-hover: var(--color-brown-dark);
+  --knapp-fg: var(--color-cream);
+}
+
+.knapp-omriss,
+.knapp-flat {
+  --knapp-bg: var(--color-white);
+  --knapp-bg-hover: var(--color-sand);
+  --knapp-fg: var(--color-brown);
+  --knapp-kant: var(--color-border-strong);
+}
+
+.knapp .ikon {
+  flex: none;
+}
+
+/* Badge from <Plassholder>: small, visible, brand colours. */
+.plassholder-merke {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  border-radius: 3px;
+  background: var(--color-orange);
+  color: var(--color-on-orange);
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+/* Sections: generous vertical air, like the reference. */
+.seksjon {
+  padding-block: var(--seksjon-luft);
+}
+
+.seksjon + .seksjon {
+  padding-top: 0;
+}
+
+/* Eyebrow: small, spaced monospace in dark orange (6:1 on white). */
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Display titles: Rubik 800, uppercase, slanted. The accent line is dark orange on light backgrounds. */
+.display {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  font-synthesis: style;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  /* Each title sets `--display-str` (its size) and, through `ordstil()`, `--lengste-ord` (its longest
+     word). The size is capped so that word fits the column: a Rubik 800 italic capital is about 0.7 em
+     wide, so 0.74 em per letter leaves room for the slant. Long words such as «varmtvannsberederen» then
+     shrink the title instead of breaking mid-word on a phone. */
+  font-size: min(var(--display-str, 1em), calc(100cqi / (var(--lengste-ord, 1) * 0.74)));
+}
+
+/* Sized by the column the title sits in (a size container, see `.hode`), so two lines are used where two
+   are enough. */
+h2.display {
+  --display-str: clamp(1.9rem, 8.4cqi, 4.25rem);
+}
+
+.display .aksent {
+  display: block;
+  color: var(--color-accent);
+}
+
+/* Small slanted card title (tiles, steps, article headings). */
+.skra {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  font-synthesis: style;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+/* Section head: eyebrow and big title on the left, a short grey intro on the right. */
+.hode {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: 3rem;
+}
+
+.hode > :first-child {
+  container-type: inline-size;
+}
+
+.hode-ingress {
+  margin: 0;
+  max-width: 44ch;
+  color: var(--color-muted);
+}
+
+@media (min-width: 1000px) {
+  .hode {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+    align-items: center;
+    column-gap: var(--space-5);
+    margin-bottom: 3.5rem;
+  }
+}
+
+/* Monospace figures with a small unit: «1 125 kr», «45 min». */
+.tall {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.tall .enhet {
+  margin-left: 0.2em;
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--color-muted);
+}
+
+/* White panel with a thin border and a soft shadow. */
+.panel {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 18px 40px -28px rgb(74 36 18 / 0.35);
+}
+
+/* Full-width chocolate band. */
+.band {
+  background: var(--color-brown);
+  color: var(--color-cream);
+}
+
+.band .eyebrow {
+  color: var(--color-orange-light);
+}
+
+.band .display .aksent {
+  color: var(--color-orange-light);
+}
+
+.band a:not(.knapp) {
+  color: var(--color-cream);
+}
+
+.band :focus-visible {
+  outline-color: var(--color-cream);
+}
+
+/* Draft banner (builds that are not for launch). In the page flow, so it never covers content.
+   Cream on brown is 11.9:1. */
+.utkast-banner {
+  margin: 0;
+  padding: 0.4rem var(--space-3);
+  background: var(--color-brown);
+  color: var(--color-cream);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.utkast-banner::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+  vertical-align: 0.1em;
+}
+
+/* Elements marked `.vis` slide in once when they scroll into view (only with JS and without reduced motion). */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-vis .vis:not(.inne) {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+
+  html.js-vis .vis {
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+}
+
+/* Four-column grid of numbered tiles, joined by thin lines. */
+.ruter {
+  list-style: none;
+  margin: 0;
+  padding: 1px;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.ruter > li {
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    0 20px 40px -36px rgb(74 36 18 / 0.5);
+}
+
+@media (min-width: 620px) {
+  .ruter {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .ruter {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Three columns when that fills every row (see src/lib/ruter.ts). */
+  .ruter-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Article next to the sticky side box (service pages and the other pages). */
+.artikkel-rad {
+  display: grid;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (min-width: 1000px) {
+  .artikkel-rad {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: 6rem;
+  }
+}
+
+/* Body text written in markdown: slanted capital headings, drop bullets, numbered steps in monospace. */
+.artikkel {
+  max-width: 46rem;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.artikkel > :first-child {
+  margin-top: 0;
+}
+
+.artikkel h2 {
+  margin: 3.5rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1rem + 1.6vw, 2.25rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.artikkel h3 {
+  margin: 2rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.artikkel p {
+  margin: 0 0 1.1rem;
+}
+
+.artikkel ul {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.artikkel ul > li {
+  position: relative;
+  margin-bottom: 0.6rem;
+  padding-left: 1.75rem;
+}
+
+/* A small orange drop as the bullet. */
+.artikkel ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0.2rem;
+  top: 0.5em;
+  width: 0.65rem;
+  height: 0.85rem;
+  background: var(--color-orange);
+  clip-path: path('M5.2 0C5.2 0 0 6.2 0 9.6a5.2 5.2 0 0 0 10.4 0C10.4 6.2 5.2 0 5.2 0z');
+}
+
+.artikkel ol {
+  margin: 0 0 1.25rem;
+  padding-left: 2rem;
+}
+
+.artikkel ol > li {
+  margin-bottom: 0.6rem;
+}
+
+.artikkel ol > li::marker {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.artikkel a {
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
 }

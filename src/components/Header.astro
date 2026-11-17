@@ -1,0 +1,421 @@
+---
+// Sticky header: logo, seven menu items in spaced capitals, the language link and a slanted orange call
+// button. Below 1200 px the menu folds into «Meny», which opens a full-screen panel.
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import type { Alternate } from '../i18n/alternates';
+import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';
+import { navPath } from '../i18n/nav';
+import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+import { getTekster } from '../lib/tekster';
+import { telHref } from '../lib/telefon';
+
+interface Props {
+  locale: Locale;
+  alternates: Alternate[];
+  skjemaHref: string;
+}
+
+const { locale, alternates } = Astro.props;
+const t = ui[locale];
+const [firma, tekster, alle] = await Promise.all([getFirma(), getTekster(locale), getServices(locale)]);
+const felles = tekster.sider.felles;
+const home = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
+const tjenester = alle.map((e) => ({ href: servicePath(locale, serviceSlugOf(e)), label: e.data.kundeTittel, key: e.data.translationKey }));
+const tjenesterHref = navPath(locale, 'tjenester');
+const items = [
+  { href: tjenesterHref, label: t.nav.tjenester, undermeny: true },
+  { href: navPath(locale, 'priser'), label: t.nav.priser },
+  { href: navPath(locale, 'referanser'), label: t.nav.referanser },
+  { href: `${home}#lekker-naa`, label: felles.menyLekker },
+  { href: navPath(locale, 'omrader'), label: t.nav.omrader },
+  { href: navPath(locale, 'om'), label: t.nav.om },
+  { href: navPath(locale, 'kontakt'), label: t.nav.kontakt },
+];
+const current = Astro.url.pathname;
+---
+
+<header class="topp">
+  <div class="topp-inner ramme">
+    <a class="logo" href={home} aria-label={firma.navn}>
+      <picture>
+        <source media="(max-width: 719px)" srcset="/logo/kobber-og-kran-b.svg" />
+        <img src="/logo/kobber-og-kran-a.svg" alt="" width="166" height="56" />
+      </picture>
+    </a>
+
+    <nav id="hovedmeny" class="hovedmeny" aria-label={t.hovedmeny}>
+      <ul class="meny-liste">
+        {
+          items.map((item) => (
+            <li class={item.undermeny ? 'har-undermeny' : undefined}>
+              <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+              {item.undermeny && (
+                <>
+                  <button
+                    class="undermeny-knapp"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="undermeny-tjenester"
+                    aria-label={t.visUndermeny}
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 12 8" width="12" height="8"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+                  </button>
+                  <ul id="undermeny-tjenester" class="undermeny">
+                    {tjenester.map((s) => (
+                      <li>
+                        <a href={s.href} aria-current={current === s.href ? 'page' : undefined}>
+                          {s.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="meny-sprak">
+        <LanguageSwitcher locale={locale} alternates={alternates} />
+      </div>
+    </nav>
+
+    <div class="topp-hoyre">
+      <div class="sprak">
+        <LanguageSwitcher locale={locale} alternates={alternates} kort />
+      </div>
+      <a class="knapp topp-ring" href={telHref(firma.telefon.verdi)}>
+        <svg class="ikon" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.5.55 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.55 3.5a1 1 0 0 1-.25 1z" /></svg>
+        <span>{t.ring}</span>
+        <span class="topp-nummer" data-plassholder={firma.telefon.plassholder ? '' : undefined}>{firma.telefon.verdi}</span>
+      </a>
+      <button class="meny-knapp" type="button" aria-expanded="false" aria-controls="hovedmeny" data-apne={t.meny} data-lukk={t.lukk}>
+        <span class="meny-knapp-tekst">{t.meny}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var knapp = document.querySelector('.meny-knapp');
+    var meny = document.getElementById('hovedmeny');
+    if (!knapp || !meny) return;
+    var rot = document.documentElement;
+    rot.classList.add('js');
+    var tekst = knapp.querySelector('.meny-knapp-tekst');
+    function sett(apen) {
+      knapp.setAttribute('aria-expanded', apen ? 'true' : 'false');
+      meny.classList.toggle('apen', apen);
+      rot.classList.toggle('meny-apen', apen);
+      tekst.textContent = apen ? knapp.getAttribute('data-lukk') : knapp.getAttribute('data-apne');
+      if (apen) {
+        var forste = meny.querySelector('a');
+        if (forste) forste.focus();
+      }
+    }
+    knapp.addEventListener('click', function () {
+      sett(knapp.getAttribute('aria-expanded') !== 'true');
+    });
+    // A link in the panel closes it (anchors on the same page would otherwise stay covered).
+    meny.addEventListener('click', function (e) {
+      if (e.target.closest('a') && knapp.getAttribute('aria-expanded') === 'true') sett(false);
+    });
+    var underKnapp = document.querySelector('.undermeny-knapp');
+    var under = document.getElementById('undermeny-tjenester');
+    function settUnder(apen) {
+      underKnapp.setAttribute('aria-expanded', apen ? 'true' : 'false');
+      under.classList.toggle('apen', apen);
+    }
+    if (underKnapp && under) {
+      underKnapp.addEventListener('click', function () {
+        settUnder(underKnapp.getAttribute('aria-expanded') !== 'true');
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.har-undermeny')) settUnder(false);
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && underKnapp && underKnapp.getAttribute('aria-expanded') === 'true') {
+        settUnder(false);
+        underKnapp.focus();
+        return;
+      }
+      if (e.key === 'Escape' && knapp.getAttribute('aria-expanded') === 'true') {
+        sett(false);
+        knapp.focus();
+      }
+    });
+  })();
+</script>
+
+<style>
+  .topp {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgb(255 255 255 / 0.94);
+    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: saturate(1.2) blur(10px);
+  }
+
+  .topp-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    height: var(--header-h);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    flex: none;
+    margin-right: auto;
+  }
+
+  .logo img {
+    display: block;
+    height: 3rem;
+    width: auto;
+  }
+
+  .topp-hoyre {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .topp-ring {
+    min-height: 2.75rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  .topp-ring,
+  .sprak {
+    display: none;
+  }
+
+  .meny-knapp {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.25rem 0.5rem 0.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-brown);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  /* Menu links: spaced capitals. */
+  .hovedmeny a {
+    display: block;
+    color: var(--color-brown);
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .hovedmeny a:hover,
+  .hovedmeny a[aria-current='page'] {
+    color: var(--color-orange-dark);
+  }
+
+  .meny-liste,
+  .undermeny {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .undermeny a {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+
+  .undermeny-knapp {
+    display: none;
+  }
+
+  /* Mobile panel: full screen under the header. Without JavaScript the menu is a plain list. */
+  .hovedmeny {
+    padding-block: var(--space-3);
+  }
+
+  :global(html.js) .hovedmeny {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    padding: var(--space-4) var(--gutter);
+    background: var(--color-cream);
+    border-top: 1px solid var(--color-border);
+  }
+
+  :global(html.js) .hovedmeny:not(.apen) {
+    display: none;
+  }
+
+  :global(html.meny-apen) {
+    overflow: hidden;
+  }
+
+  .meny-liste > li > a {
+    padding: 0.6rem 0;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 0;
+  }
+
+  .undermeny {
+    margin: 0 0 var(--space-2) var(--space-3);
+  }
+
+  .undermeny a {
+    padding: 0.5rem 0;
+  }
+
+  .meny-sprak {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 720px) {
+    .topp-ring {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 719px) {
+    .logo img {
+      height: 2.25rem; /* set B: 191 px wide, above the 140 px minimum */
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .meny-knapp,
+    .meny-sprak {
+      display: none;
+    }
+
+    .sprak {
+      display: block;
+    }
+
+    .logo {
+      margin-right: 0;
+    }
+
+    .hovedmeny,
+    :global(html.js) .hovedmeny,
+    :global(html.js) .hovedmeny:not(.apen) {
+      display: block;
+      position: static;
+      height: auto;
+      overflow: visible;
+      margin-inline: auto;
+      padding: 0;
+      background: none;
+      border: 0;
+    }
+
+    .meny-liste {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+    }
+
+    .meny-liste > li > a {
+      padding: 0.75rem 0;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-style: normal;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    .har-undermeny {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+    }
+
+    :global(html.js) .undermeny-knapp {
+      display: grid;
+      place-items: center;
+      width: 1.75rem;
+      height: 2.75rem;
+      border: 0;
+      background: transparent;
+      color: var(--color-brown);
+      cursor: pointer;
+    }
+
+    .undermeny-knapp svg {
+      transition: transform 0.15s;
+    }
+
+    .undermeny-knapp[aria-expanded='true'] svg {
+      transform: rotate(180deg);
+    }
+
+    .undermeny {
+      position: absolute;
+      top: 100%;
+      left: -1rem;
+      z-index: 70;
+      min-width: 18rem;
+      margin: 0;
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-top: 3px solid var(--color-orange);
+      box-shadow: 0 18px 40px -24px rgb(74 36 18 / 0.45);
+      display: none;
+    }
+
+    /* Without JavaScript: open on hover or keyboard focus. With it: the button opens it. */
+    .har-undermeny:hover .undermeny,
+    .har-undermeny:focus-within .undermeny,
+    :global(html.js) .undermeny.apen {
+      display: block;
+    }
+
+    :global(html.js) .har-undermeny:hover .undermeny:not(.apen),
+    :global(html.js) .har-undermeny:focus-within .undermeny:not(.apen) {
+      display: none;
+    }
+
+    .topp-hoyre {
+      gap: var(--space-3);
+    }
+  }
+
+  @media (min-width: 1200px) and (max-width: 1339px) {
+    .meny-liste {
+      gap: 1.1rem;
+    }
+
+    .topp-nummer {
+      display: none;
+    }
+  }
+</style>

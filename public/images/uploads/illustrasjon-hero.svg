@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 1000">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <g id="bjork">
+      <path d="M-3 0h6v-60h-6z" fill="#FBF7F1"/>
+      <path d="M-3-18h4v3h-4zM-1-38h4v3h-4zM-3-50h3v2h-3z" fill="#4A2412"/>
+      <circle cx="0" cy="-74" r="20"/>
+      <circle cx="-13" cy="-60" r="14"/>
+      <circle cx="14" cy="-62" r="15"/>
+    </g>
+    <g id="kran">
+      <rect x="0" y="34" width="9" height="34" rx="3"/>
+      <path d="M9 44h44q26 0 26 26v10H67V70q0-10-10-10H9z"/>
+      <path d="M26 60a16 13 0 0 0 32 0z"/>
+      <rect x="37" y="24" width="12" height="22"/>
+      <rect x="31" y="34" width="24" height="6" rx="2"/>
+      <rect x="26" y="16" width="34" height="9" rx="4.5"/>
+      <circle cx="26" cy="20.5" r="7"/>
+      <circle cx="60" cy="20.5" r="7"/>
+      <rect x="39" y="8" width="8" height="12" rx="3"/>
+    </g>
+    <path id="drape" d="M0 0c0 0-8 11-8 17a8 8 0 0 0 16 0C8 11 0 0 0 0z"/>
+  </defs>
+
+  <!-- sky -->
+  <rect width="1600" height="1000" fill="#F7F2EC"/>
+  <circle cx="1170" cy="270" r="190" fill="#FBE6D3"/>
+  <circle cx="1170" cy="270" r="118" fill="#F9C9A0"/>
+  <path d="M250 200h170a24 24 0 0 0 0-48h-20a34 34 0 0 0-66-8 26 26 0 0 0-84 30 13 13 0 0 0 0 26z" fill="#FFFFFF" opacity=".85"/>
+  <path d="M760 130h120a18 18 0 0 0 0-36h-14a26 26 0 0 0-50-6 20 20 0 0 0-56 20 11 11 0 0 0 0 22z" fill="#FFFFFF" opacity=".8"/>
+
+  <!-- far hills -->
+  <path d="M0 500c140-70 300-90 470-60 140 24 230 10 380-40 160-52 330-40 470 10 120 42 200 40 280 20v570H0z" fill="#EADCCB"/>
+  <path d="M0 560c180-40 330-30 520-6 200 24 360-10 560-30 200-20 360 0 520 20v456H0z" fill="#DFCCB6"/>
+
+  <!-- far forest -->
+  <g fill="#8F8C6E">
+    <use href="#gran" transform="translate(30 572) scale(.5)"/><use href="#gran" transform="translate(62 566) scale(.62)"/><use href="#gran" transform="translate(96 572) scale(.48)"/>
+    <use href="#gran" transform="translate(130 568) scale(.58)"/><use href="#gran" transform="translate(166 572) scale(.44)"/><use href="#gran" transform="translate(196 566) scale(.6)"/>
+    <use href="#gran" transform="translate(232 568) scale(.5)"/><use href="#gran" transform="translate(890 556) scale(.55)"/><use href="#gran" transform="translate(922 552) scale(.66)"/>
+    <use href="#gran" transform="translate(956 556) scale(.5)"/><use href="#gran" transform="translate(988 552) scale(.6)"/><use href="#gran" transform="translate(1022 556) scale(.46)"/>
+    <use href="#gran" transform="translate(1052 550) scale(.62)"/><use href="#gran" transform="translate(1088 556) scale(.5)"/><use href="#gran" transform="translate(1440 572) scale(.55)"/>
+    <use href="#gran" transform="translate(1474 568) scale(.64)"/><use href="#gran" transform="translate(1508 572) scale(.5)"/><use href="#gran" transform="translate(1542 566) scale(.6)"/><use href="#gran" transform="translate(1578 572) scale(.5)"/>
+  </g>
+
+  <!-- lake -->
+  <path d="M0 580c260-14 520-6 800-12 280-6 540 2 800-6v90H0z" fill="#CBD8D2"/>
+  <path d="M120 600h180M420 612h120M700 598h220M1040 610h140M1300 600h180" stroke="#F7F2EC" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- near land -->
+  <path d="M0 640c220-30 470-20 720-4 260 16 520 6 880-26v390H0z" fill="#E6D1AC"/>
+  <path d="M0 760c300-40 560-30 820 0 280 32 520 20 780-18v258H0z" fill="#DCC193"/>
+  <path d="M60 720c120-8 230-6 330 4M980 700c150 6 280 2 420-14M140 840c160-12 300-10 420 2M1080 860c140 4 260-2 380-18" stroke="#CFB07C" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+  <!-- dark forest behind cabin -->
+  <g fill="#3E4A33">
+    <use href="#gran" transform="translate(1180 640) scale(1.1)"/><use href="#gran" transform="translate(1226 632) scale(1.35)"/>
+    <use href="#gran" transform="translate(1440 628) scale(1.3)"/><use href="#gran" transform="translate(1490 636) scale(1.05)"/><use href="#gran" transform="translate(1540 630) scale(1.4)"/>
+  </g>
+  <g fill="#56603F">
+    <use href="#gran" transform="translate(1204 646) scale(.9)"/><use href="#gran" transform="translate(1466 644) scale(.95)"/><use href="#gran" transform="translate(1580 650) scale(1)"/>
+  </g>
+
+  <!-- cabin -->
+  <g transform="translate(1270 560)">
+    <path d="M-6 50 70 4l76 46z" fill="#56603F"/>
+    <path d="M-6 50 70 4l76 46" fill="none" stroke="#3E4A33" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="4" y="50" width="132" height="70" fill="#6B4A38"/>
+    <path d="M4 64h132M4 78h132M4 92h132M4 106h132" stroke="#4A2412" stroke-width="3"/>
+    <rect x="22" y="70" width="30" height="26" fill="#F7883F"/>
+    <path d="M37 70v26M22 83h30" stroke="#4A2412" stroke-width="3"/>
+    <rect x="22" y="70" width="30" height="26" fill="none" stroke="#FBF7F1" stroke-width="3"/>
+    <rect x="86" y="72" width="28" height="48" fill="#4A2412"/>
+    <rect x="96" y="-6" width="14" height="30" fill="#4A2412"/>
+    <path d="M103-14c-6-14 10-18 4-32" stroke="#E6D9CB" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- road -->
+  <path d="M700 1000C720 900 660 850 580 806 530 778 490 758 482 742h50c30 18 120 40 260 84 200 62 330 110 400 174z" fill="#F3E8D9"/>
+  <path d="M940 1000C900 900 760 850 640 812 580 792 530 770 508 746" fill="none" stroke="#E2CDB0" stroke-width="4" stroke-dasharray="18 16"/>
+
+  <!-- birches -->
+  <g fill="#F26A0F">
+    <use href="#bjork" transform="translate(150 740) scale(1.4)"/>
+    <use href="#bjork" transform="translate(610 704) scale(1.1)"/>
+  </g>
+  <g fill="#F7883F">
+    <use href="#bjork" transform="translate(205 752) scale(1.05)"/>
+    <use href="#bjork" transform="translate(660 712) scale(.85)"/>
+  </g>
+
+  <!-- red house -->
+  <g transform="translate(270 520)">
+    <rect x="236" y="44" width="22" height="50" fill="#4A2412"/>
+    <path d="M-14 104 64 30h244l70 74z" fill="#4A2412"/>
+    <rect x="0" y="104" width="356" height="110" fill="#A8361F"/>
+    <path d="M0 122h356M0 140h356M0 158h356M0 176h356M0 194h356" stroke="#8E2A1B" stroke-width="2"/>
+    <path d="M-6 214h368" stroke="#FBF7F1" stroke-width="8"/>
+    <path d="M-14 104h392" stroke="#FBF7F1" stroke-width="7"/>
+    <g fill="#F9C9A0" stroke="#FBF7F1" stroke-width="7">
+      <rect x="32" y="128" width="46" height="50"/>
+      <rect x="110" y="128" width="46" height="50"/>
+      <rect x="276" y="128" width="46" height="50"/>
+    </g>
+    <path d="M55 128v50M32 153h46M133 128v50M110 153h46M299 128v50M276 153h46" stroke="#FBF7F1" stroke-width="4"/>
+    <rect x="196" y="134" width="44" height="80" fill="#FBF7F1"/>
+    <rect x="204" y="142" width="28" height="72" fill="#4A2412"/>
+    <rect x="188" y="210" width="60" height="10" fill="#CDBBA9"/>
+  </g>
+
+  <!-- foreground spruces -->
+  <g fill="#3E4A33">
+    <use href="#gran" transform="translate(40 800) scale(2.3)"/>
+    <use href="#gran" transform="translate(96 830) scale(1.6)"/>
+    
+  </g>
+  <use href="#gran" transform="translate(1560 760) scale(1.3)" fill="#56603F"/>
+
+  <!-- van -->
+  <g transform="translate(760 742)">
+    <ellipse cx="200" cy="168" rx="214" ry="14" fill="#4A2412" opacity=".18"/>
+    <path d="M10 22Q10 0 34 0h252q22 0 38 16l56 62q34 8 38 36v34q0 12-12 12H22q-12 0-12-12z" fill="#FFFFFF" stroke="#4A2412" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M298 18l62 64h-62z" fill="#4A2412"/>
+    <path d="M308 30l18 18" stroke="#6B4A38" stroke-width="6" stroke-linecap="round"/>
+    <path d="M222 10v138M290 10v138" stroke="#E8DCCF" stroke-width="4"/>
+    <path d="M12 124c130-4 260-14 382-34l2 14C272 124 140 134 12 138z" fill="#F26A0F"/>
+    <path d="M12 116c130-4 260-12 380-32" stroke="#4A2412" stroke-width="5" fill="none"/>
+    <path d="M44 74V54q0-10 10-10h120" stroke="#F26A0F" stroke-width="9" fill="none"/>
+    <path d="M60 39v10M156 39v10" stroke="#FFFFFF" stroke-width="3"/>
+    <use href="#kran" transform="translate(172 24) scale(.46)" fill="#F26A0F"/>
+    <use href="#drape" transform="translate(206 72) scale(.7)" fill="#F26A0F"/>
+    <rect x="56" y="62" width="62" height="14" rx="4" fill="#4A2412"/>
+    <rect x="124" y="62" width="22" height="14" rx="4" fill="#4A2412"/>
+    <rect x="152" y="62" width="44" height="14" rx="4" fill="#4A2412"/>
+    <rect x="68" y="86" width="116" height="5" rx="2.5" fill="#F26A0F"/>
+    <rect x="386" y="96" width="14" height="10" rx="3" fill="#F7883F"/>
+    <rect x="8" y="30" width="8" height="34" rx="3" fill="#A84508"/>
+    <rect x="6" y="138" width="410" height="22" rx="8" fill="#2E170B"/>
+    <g fill="#2E170B"><circle cx="92" cy="156" r="32"/><circle cx="326" cy="156" r="32"/></g>
+    <g fill="#CDBBA9"><circle cx="92" cy="156" r="13"/><circle cx="326" cy="156" r="13"/></g>
+  </g>
+
+  <!-- copper pipe with tap -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M-20 972H1340q40 0 40-40V906q0-26 26-26h10" stroke="#A84508" stroke-width="20"/>
+    <path d="M-20 966H1336q36 0 36-36V906q0-32 32-32h8" stroke="#F7883F" stroke-width="5" opacity=".7"/>
+  </g>
+  <g fill="#F26A0F">
+    <rect x="230" y="956" width="14" height="32" rx="3"/><rect x="250" y="956" width="14" height="32" rx="3"/>
+    <rect x="980" y="956" width="14" height="32" rx="3"/><rect x="1000" y="956" width="14" height="32" rx="3"/>
+  </g>
+  <use href="#kran" transform="translate(1412 824) scale(1.1)" fill="#F26A0F"/>
+  <use href="#drape" transform="translate(1492 928) scale(1.3)" fill="#F26A0F"/>
+</svg>

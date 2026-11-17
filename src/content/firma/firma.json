@@ -1,0 +1,33 @@
+{
+  "firma": {
+    "navn": "Kobber og Kran",
+    "juridiskNavn": "Kobber og Kran AS",
+    "telefon": { "verdi": "000 00 000", "plassholder": true },
+    "whatsapp": { "verdi": "+4700000000", "plassholder": true },
+    "visWhatsapp": false,
+    "epost": { "verdi": "post@kobberogkran.no", "plassholder": true },
+    "orgnr": { "verdi": "000 000 000", "plassholder": true },
+    "adresse": { "verdi": "Hemnes, 1970 Hemnes", "plassholder": true },
+    "priser": {
+      "timepris": { "verdi": 1125, "plassholder": true },
+      "servicebil": { "verdi": 625, "plassholder": true },
+      "forbruk": { "verdi": 125, "plassholder": true },
+      "varmtvannstankArbeid": { "verdi": 8125, "plassholder": true },
+      "varmtvannstankTypiskTotal": { "verdi": 18000, "plassholder": true },
+      "hyttesikringArbeid": { "verdi": 4000, "plassholder": true },
+      "utekranArbeid": { "verdi": 3125, "plassholder": true },
+      "kjokkenbatteriArbeid": { "verdi": 1875, "plassholder": true },
+      "servantskapArbeid": { "verdi": 3750, "plassholder": true },
+      "toalettArbeid": { "verdi": 3125, "plassholder": true },
+      "stoppekranArbeid": { "verdi": 2500, "plassholder": true }
+    },
+    "omrade": {
+      "regioner": [
+        { "navn": "Aurskog-Høland", "steder": ["Hemnes", "Bjørkelangen", "Aurskog", "Løken", "Setskog", "Rømskog"] },
+        { "navn": "Indre Østfold", "steder": ["Trøgstad", "Askim", "Mysen"] },
+        { "navn": "Lillestrøm", "steder": ["Lillestrøm"] }
+      ],
+      "maksKjoretidMin": { "verdi": 45, "plassholder": true }
+    }
+  }
+}

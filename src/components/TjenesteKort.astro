@@ -1,0 +1,108 @@
+---
+// A numbered tile: number in monospace, slanted title, one line and «Se mer →». Used in the four-column
+// grids (`.ruter`) on the front page, the services page and under each service. Each tile spans four rows
+// of the grid (subgrid), so numbers, titles, texts and «Se mer» line up across a row even when one title
+// wraps to two lines; «Se mer» sits at the bottom.
+interface Props {
+  href: string;
+  nummer: number;
+  tittel: string;
+  tekst: string;
+  seMer: string;
+}
+
+const { href, nummer, tittel, tekst, seMer } = Astro.props;
+---
+
+<li class="rute vis">
+  <a href={href}>
+    <span class="rute-nr" aria-hidden="true">{String(nummer).padStart(2, '0')}</span>
+    <h3 class="skra">{tittel}</h3>
+    <p>{tekst}</p>
+    <span class="rute-mer" aria-hidden="true">{seMer} →</span>
+  </a>
+</li>
+
+<style>
+  .rute {
+    position: relative;
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    background: var(--color-white);
+  }
+
+  a {
+    display: grid;
+    grid-row: 1 / -1;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    padding: 2rem 1.25rem 1.75rem;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* An orange line slides in under the tile on hover and focus. */
+  a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 3px;
+    background: var(--color-orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  a:hover::after,
+  a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  a:focus-visible {
+    outline-offset: -3px;
+  }
+
+  .rute-nr {
+    margin-bottom: 0.75rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.25rem;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    color: var(--color-muted);
+    font-size: 0.9875rem;
+    line-height: 1.55;
+  }
+
+  .rute-mer {
+    align-self: end;
+    color: var(--color-accent);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  a:hover h3 {
+    color: var(--color-orange-dark);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a::after {
+      transition: none;
+    }
+  }
+</style>

@@ -1,8 +1,10 @@
 ---
-title: Kobber og Kran AS
-description: Kobber og Kran AS – nettsiden kommer snart.
+"plassholder": true
+utkast: 'AI-utkast – må godkjennes'
+title: 'Rørlegger på Hemnes og i Aurskog-Høland | Kobber og Kran'
+description: 'Kobber og Kran er rørleggeren på Hemnes. Lekkasje, tett avløp, varmtvannsbereder, brønn, hytte og bad i Aurskog-Høland. Pris før jobben starter.'
 translationKey: home
 locale: nb
 ---
 
-Kobber og Kran AS – nettsiden kommer snart.
+Kobber og Kran er rørleggeren på Hemnes. Vi tar service og reparasjon, bytte av varmtvannsbereder, brønn og vannbehandling, hytter og rørleggerdelen av bad i Aurskog-Høland, Indre Østfold og Lillestrøm.

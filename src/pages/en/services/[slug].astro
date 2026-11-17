@@ -1,0 +1,18 @@
+---
+import Tjenesteside from '../../../components/Tjenesteside.astro';
+import { servicePaths, type ServiceEntry } from '../../../i18n/services';
+import type { Alternate } from '../../../i18n/alternates';
+
+export async function getStaticPaths() {
+  return servicePaths('en');
+}
+
+interface Props {
+  entry: ServiceEntry;
+  alternates: Alternate[];
+}
+
+const { entry, alternates } = Astro.props;
+---
+
+<Tjenesteside locale="en" entry={entry} alternates={alternates} />

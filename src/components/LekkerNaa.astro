@@ -1,0 +1,85 @@
+---
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+import { telHref } from '../lib/telefon';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['lekkerNaa'];
+  firma: Firma;
+  /** Element id (the box is also copied into the form, which needs its own ids). */
+  id?: string;
+}
+
+const { locale, tekst, firma, id = 'lekker-naa' } = Astro.props;
+const t = ui[locale];
+---
+
+<section class="lekker-naa band" id={id} aria-labelledby={`${id}-tittel`}>
+  <p class="lekker-merke" aria-hidden="true">!</p>
+  <h2 id={`${id}-tittel`} class="skra">{tekst.tittel}</h2>
+  <ol>
+    {tekst.punkter.map((punkt) => <li>{punkt}</li>)}
+  </ol>
+  <p class="ingen-dognvakt">{tekst.ingenDognvakt}</p>
+  <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
+</section>
+
+<style>
+  .lekker-naa {
+    position: relative;
+    padding: 2rem var(--space-3) 2.25rem;
+    border-left: 5px solid var(--color-orange);
+  }
+
+  .lekker-merke {
+    position: absolute;
+    top: 1.75rem;
+    right: 1.5rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+    border-radius: 50%;
+    background: var(--color-orange);
+    color: var(--color-on-orange);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+
+  h2 {
+    margin: 0 3rem var(--space-3) 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  ol {
+    margin: 0 0 var(--space-3);
+    padding-left: 1.5rem;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  ol li::marker {
+    color: var(--color-orange-light);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .ingen-dognvakt {
+    margin: 0 0 var(--space-4);
+    max-width: 40rem;
+    color: var(--color-cream);
+    opacity: 0.92;
+    font-size: 0.9375rem;
+  }
+
+  @media (min-width: 720px) {
+    .lekker-naa {
+      padding: 2.25rem 2.25rem 2.5rem;
+    }
+  }
+</style>

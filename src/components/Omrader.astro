@@ -1,0 +1,94 @@
+---
+// «Her jobber vi» on the service pages and the areas page: section head and the places grouped by region,
+// Hemnes marked as the base. The areas page also shows the map, next to the places on wide screens.
+import Omradekart from './Omradekart.astro';
+import Regionliste from './Regionliste.astro';
+import { ordstil } from '../lib/ordstil';
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+import { alleSteder } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['omrader'];
+  /** Title override (the service pages have their own). */
+  tittel?: string;
+  eyebrow?: string;
+  omrade: Firma['omrade'];
+  medKart?: boolean;
+}
+
+const { tekst, tittel, eyebrow, omrade, medKart = false } = Astro.props;
+const base = alleSteder(omrade)[0] ?? '';
+const kartNote = tekst.kartNote.replace('{base}', base);
+---
+
+<section class="seksjon" aria-labelledby="omrader-tittel">
+  {
+    medKart ? (
+      <div class="ramme med-kart">
+        <div class="tekst">
+          <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
+          <h2 id="omrader-tittel" class="display" style={ordstil(tittel ?? tekst.tittel)}>{tittel ?? tekst.tittel}</h2>
+          <p class="ingress">{tekst.ingress}</p>
+          <Regionliste omrade={omrade} base={tekst.base} />
+          <p class="utenfor">{tekst.utenfor}</p>
+        </div>
+        <Omradekart omrade={omrade} tittel={tittel ?? tekst.tittel} note={kartNote} />
+      </div>
+    ) : (
+      <div class="ramme">
+        <div class="hode">
+          <div>
+            <p class="eyebrow">{eyebrow ?? tekst.eyebrow}</p>
+            <h2 id="omrader-tittel" class="display" style={ordstil(tittel ?? tekst.tittel)}>{tittel ?? tekst.tittel}</h2>
+          </div>
+          <p class="hode-ingress">{tekst.ingress}</p>
+        </div>
+        <Regionliste omrade={omrade} base={tekst.base} kolonner />
+        <p class="utenfor">{tekst.utenfor}</p>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .med-kart {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .tekst {
+    container-type: inline-size;
+    min-width: 0;
+  }
+
+  .tekst h2.display {
+    margin-bottom: var(--space-3);
+  }
+
+  .ingress {
+    max-width: 34rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
+  }
+
+  .utenfor {
+    margin: var(--space-3) 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 1000px) {
+    .med-kart {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 4.5rem;
+    }
+  }
+</style>

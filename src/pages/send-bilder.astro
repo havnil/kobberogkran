@@ -1,0 +1,11 @@
+---
+import SendBilderSide from '../components/SendBilderSide.astro';
+
+export const prerender = false;
+
+// Tokenet står i adressen: ikke cache siden, og ikke send adressen videre som Referer.
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('Referrer-Policy', 'no-referrer');
+---
+
+<SendBilderSide locale="nb" />

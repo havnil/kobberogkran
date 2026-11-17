@@ -1,7 +1,9 @@
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { LOCALES } from './i18n/locales';
+import { firmaSchema } from './lib/firma';
+import { omtaleSchema, prosjektSchema, tekstSchema, tjenesteSchema } from './lib/innhold';
 
 /**
  * Pages live in `src/content/pages/<locale>/<slug>.md`, so entry ids are `<locale>/<slug>`.
@@ -22,4 +24,38 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { pages };
+/** Company data: one entry, id `firma`. Edit `src/content/firma/firma.json`. */
+const firma = defineCollection({
+  loader: file('./src/content/firma/firma.json'),
+  schema: firmaSchema,
+});
+
+/** The five services: `src/content/tjenester/<locale>/<slug>.md`, entry ids `<locale>/<slug>`. */
+const tjenester = defineCollection({
+  loader: glob({
+    pattern: '**/*.md',
+    base: './src/content/tjenester',
+    generateId: ({ entry }) => entry.replace(/\\/g, '/').replace(/\.md$/, ''),
+  }),
+  schema: tjenesteSchema,
+});
+
+/** UI texts, one JSON file per language (ids `nb`, `en`). */
+const tekster = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/tekster' }),
+  schema: tekstSchema,
+});
+
+/** Approvals, references and reviews. Only entries with `ekte: true` may be shown. */
+const omtale = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/omtale' }),
+  schema: omtaleSchema,
+});
+
+/** Reference projects, one Markdown file each (`src/content/prosjekter/<slug>.md`), written in the CMS. */
+const prosjekter = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/prosjekter' }),
+  schema: prosjektSchema,
+});
+
+export const collections = { pages, firma, tjenester, tekster, omtale, prosjekter };

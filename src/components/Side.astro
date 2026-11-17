@@ -1,0 +1,182 @@
+---
+// Body of the generic pages (everything except the front page and the services), in the same system as the
+// service template: hero with breadcrumbs and a fact card on the pipe, the markdown text next to the sticky
+// side box, then the blocks each page needs (picked by `translationKey`). The legal pages get a short hero
+// and the text alone.
+import { ruterKlasse } from '../lib/ruter';
+import { ordstil } from '../lib/ordstil';
+import { render } from 'astro:content';
+import Faktakort, { type Celle } from './Faktakort.astro';
+import Hero from './Hero.astro';
+import OmEirik from './OmEirik.astro';
+import Omrader from './Omrader.astro';
+import PrisBlokk from './PrisBlokk.astro';
+import FastprisBlokk from './FastprisBlokk.astro';
+import Sideboks from './Sideboks.astro';
+import Skjemaseksjon from './Skjemaseksjon.astro';
+import TjenesteKort from './TjenesteKort.astro';
+import VarmtvannstankBlokk from './VarmtvannstankBlokk.astro';
+import ProsjektSeksjon from './ProsjektSeksjon.astro';
+import { getProsjekter, synligeProsjekter } from '../lib/prosjekter';
+import type { Locale } from '../i18n/locales';
+import { getServices, serviceSlugOf, servicePath } from '../i18n/services';
+import { localizePath } from '../i18n/alternates';
+import { navPath } from '../i18n/nav';
+import type { PageEntry } from '../i18n/pages';
+import { ui } from '../i18n/ui';
+import { alleSteder, getFirma } from '../lib/firma';
+import { getOmtale, synligeOmtale, visEksempler } from '../lib/omtale';
+import { launchVerdi } from '../lib/lansering';
+import { getTekster } from '../lib/tekster';
+
+interface Props {
+  locale: Locale;
+  entry: PageEntry;
+}
+
+const { locale, entry } = Astro.props;
+const nokkel = entry.data.translationKey;
+const [firma, tekster, { Content }] = await Promise.all([getFirma(), getTekster(locale), render(entry)]);
+const tjenester = nokkel === 'tjenester' || nokkel === 'referanser' ? await getServices(locale) : [];
+const prosjekter = nokkel === 'referanser' ? synligeProsjekter(await getProsjekter(), visEksempler(import.meta.env.PROD, launchVerdi())) : [];
+const tjenesteNavn = Object.fromEntries(tjenester.map((e) => [e.data.translationKey, e.data.kundeTittel]));
+const synlig = nokkel === 'om' ? synligeOmtale(await getOmtale(), visEksempler(import.meta.env.PROD, launchVerdi())) : [];
+const f = tekster.forside;
+const s = tekster.sider;
+const t = ui[locale];
+const nk = f.nokkeltall;
+const p = firma.priser;
+const trail = [{ name: t.hjem, href: localizePath(locale, 'index') }, { name: entry.data.title }];
+const juridisk = nokkel === 'personvern' || nokkel === 'vilkar';
+const harSkjema = nokkel === 'kontakt';
+const skjemaHref = harSkjema ? '#skjema' : navPath(locale, 'kontakt');
+const steder = alleSteder(firma.omrade);
+const base = steder[0] ?? '';
+
+// Illustration and fact card per page. The legal pages have neither.
+const bilder: Record<string, string> = {
+  tjenester: '/images/uploads/illustrasjon-service-og-reparasjon.svg',
+  priser: '/images/uploads/illustrasjon-varmtvannstank.svg',
+  omrader: '/images/uploads/illustrasjon-hero.svg',
+  om: '/images/uploads/illustrasjon-eirik.svg',
+  referanser: '/images/uploads/illustrasjon-bad.svg',
+  kontakt: '/images/uploads/illustrasjon-hero.svg',
+};
+const prisCeller: Celle[] = [
+  { etikett: nk.timepris, verdi: p.timepris, enhet: 'kr', pris: true },
+  { etikett: nk.servicebil, verdi: p.servicebil, enhet: 'kr', pris: true },
+  { etikett: f.priser.forbruk, verdi: p.forbruk, enhet: 'kr', pris: true },
+  { etikett: nk.tank, verdi: p.varmtvannstankArbeid, enhet: 'kr', pris: true },
+];
+const stedCeller: Celle[] = [
+  { etikett: f.omrader.base, tekst: base },
+  { etikett: nk.kjoretid, verdi: firma.omrade.maksKjoretidMin, enhet: nk.kjoretidEnhet },
+  { etikett: f.omrader.eyebrow, tekst: steder.join(' · '), bred: true },
+];
+const kontaktCeller: Celle[] = [
+  { etikett: s.kontakt.telefonNavn, tekst: firma.telefon.verdi, bred: true },
+  { etikett: s.kontakt.epostNavn, tekst: firma.epost.verdi, bred: true },
+  { etikett: s.kontakt.adresseNavn, tekst: firma.adresse.verdi, bred: true },
+];
+const kort: { venstre: string; hoyre: string; celler: Celle[] } | undefined = {
+  tjenester: { venstre: nk.eyebrow, hoyre: nk.merke, celler: prisCeller },
+  priser: { venstre: s.priser.listeEyebrow, hoyre: nk.merke, celler: prisCeller },
+  omrader: { venstre: f.omrader.eyebrow, hoyre: base, celler: stedCeller },
+  om: { venstre: f.omrader.eyebrow, hoyre: base, celler: stedCeller },
+  kontakt: { venstre: s.kontakt.kortEyebrow, hoyre: s.kontakt.rolle, celler: kontaktCeller },
+}[nokkel];
+const kontaktPlassholder = [firma.telefon, firma.epost, firma.adresse].some((v) => v.plassholder);
+const bildeSrc = juridisk ? undefined : bilder[nokkel];
+---
+
+<Hero
+  locale={locale}
+  firma={firma}
+  trail={trail}
+  tittel={entry.data.title}
+  ingress={entry.data.description}
+  skjemaHref={skjemaHref}
+  bilde={bildeSrc ? { src: bildeSrc, width: 1200, height: 900, plassholder: true } : undefined}
+  kompakt
+>
+  {
+    kort && (
+      <div slot="kort" class="kort-plass" data-plassholder={nokkel === 'kontakt' && kontaktPlassholder ? '' : undefined}>
+        <Faktakort locale={locale} venstre={kort.venstre} hoyre={kort.hoyre} celler={kort.celler} bunn={nk.prisForStart} />
+      </div>
+    )
+  }
+</Hero>
+
+<div class="seksjon">
+  {
+    juridisk || nokkel === 'referanser' ? (
+      <div class="ramme">
+        <article class="artikkel">
+          <Content />
+        </article>
+      </div>
+    ) : (
+      <div class="ramme artikkel-rad">
+        <article class="artikkel">
+          <Content />
+        </article>
+        <Sideboks locale={locale} firma={firma} tittel={s.tjeneste.sideboksTittel} tekst={s.tjeneste.sideboksTekst} skjemaHref={skjemaHref} />
+      </div>
+    )
+  }
+</div>
+
+{
+  nokkel === 'tjenester' && (
+    <section class="seksjon" aria-labelledby="tjenester-tittel">
+      <div class="ramme">
+        <div class="hode">
+          <div>
+            <p class="eyebrow">{f.tjenester.eyebrow.replace('{antall}', String(tjenester.length))}</p>
+            <h2 id="tjenester-tittel" class="display" style={ordstil(f.tjenester.tittel)}>{f.tjenester.tittel}</h2>
+          </div>
+          <p class="hode-ingress">{f.tjenester.ingress}</p>
+        </div>
+        <ol class:list={['ruter', ruterKlasse(tjenester.length)]}>
+          {tjenester.map((e) => (
+            <TjenesteKort href={servicePath(locale, serviceSlugOf(e))} nummer={e.data.nummer} tittel={e.data.kundeTittel} tekst={e.data.kort} seMer={f.tjenester.seMer} />
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+{
+  nokkel === 'priser' && (
+    <>
+      <PrisBlokk locale={locale} tekst={f.priser} side={s.priser} priser={firma.priser} />
+      <FastprisBlokk locale={locale} tekst={s.priser.fastpriser} priser={firma.priser} />
+      <VarmtvannstankBlokk locale={locale} tekst={f.varmtvann} priser={firma.priser} />
+    </>
+  )
+}
+
+{nokkel === 'omrader' && <Omrader locale={locale} tekst={f.omrader} omrade={firma.omrade} medKart />}
+
+{nokkel === 'om' && <OmEirik locale={locale} tekst={f.omEirik} dokumentasjon={f.dokumentasjon} omtale={synlig} />}
+
+{nokkel === 'kontakt' && <Skjemaseksjon locale={locale} tekst={f.skjema} />}
+
+{
+  nokkel === 'referanser' && (
+    <ProsjektSeksjon locale={locale} prosjekter={prosjekter} tjenesteNavn={tjenesteNavn} eyebrow={s.referanser.eyebrow} flereBilder={s.referanser.flereBilder} tom={s.referanser.tom} />
+  )
+}
+
+<style>
+  .kort-plass {
+    width: 100%;
+  }
+
+  .kort-plass :global(.fk-tekst) {
+    font-size: 1.125rem;
+    overflow-wrap: anywhere;
+  }
+</style>

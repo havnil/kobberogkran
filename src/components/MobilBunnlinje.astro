@@ -1,0 +1,61 @@
+---
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+import { getFirma } from '../lib/firma';
+import WhatsAppKnapp from './WhatsAppKnapp.astro';
+import { telHref } from '../lib/telefon';
+
+interface Props {
+  locale: Locale;
+  skjemaHref: string;
+}
+
+const { locale, skjemaHref } = Astro.props;
+const t = ui[locale];
+const firma = await getFirma();
+---
+
+<nav class="mobil-bunnlinje" aria-label={t.bunnlinje}>
+  <a class="knapp" href={telHref(firma.telefon.verdi)}>{t.ring}</a>
+  <WhatsAppKnapp class="knapp knapp-omriss knapp-wa" locale={locale}>{t.whatsapp}</WhatsAppKnapp>
+  <a class="knapp knapp-brun" href={skjemaHref}>{t.skjemaKnapp}</a>
+</nav>
+
+<style>
+  .mobil-bunnlinje {
+    /* Sticky at the end of the page flow: stays at the bottom of the screen but never covers content. */
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+    background: var(--color-cream);
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .mobil-bunnlinje :global(.knapp) {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 0.5rem;
+    text-align: center;
+    line-height: 1.15;
+    font-size: 0.8125rem;
+    text-wrap: balance;
+  }
+
+  .mobil-bunnlinje :global(.knapp-brun) {
+    flex: 2.2;
+  }
+
+  .mobil-bunnlinje :global(.knapp-wa) {
+    flex: 1.4;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 1000px) {
+    .mobil-bunnlinje {
+      display: none;
+    }
+  }
+</style>

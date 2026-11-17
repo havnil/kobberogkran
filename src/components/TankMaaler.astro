@@ -1,0 +1,441 @@
+---
+// The tank-age calculator used by «Tanksjekk»: the year field, a half-circle gauge and the answer. Runs in
+// the browser only, with no storage and no network. The fixed price on the work is revealed with a valid
+// answer (`[data-ts-resultat]`), next to a button that pre-selects the water-heater service in the form
+// (`data-velg`). Without JavaScript the field and the result stay hidden: the rule of thumb stands as text
+// and a link opens the water-heater page, where the price and the form are.
+// `kompakt`: laid out for the hook card on the front page; otherwise a white panel in two columns.
+import Tall from './Tall.astro';
+import type { Tekster } from '../lib/innhold';
+import type { Verdi } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['tanksjekk'];
+  tankHref: string;
+  /** Fixed price on the work, from `firma.priser.varmtvannstankArbeid`. */
+  pris: Verdi<number>;
+  id: string;
+  kompakt?: boolean;
+}
+
+const { locale, tekst, tankHref, pris, id, kompakt = false } = Astro.props;
+const R = 105;
+const CX = 130;
+const CY = 140;
+const punkt = (andel: number, r = R) => {
+  const vinkel = Math.PI * (1 - andel);
+  return { x: +(CX + r * Math.cos(vinkel)).toFixed(2), y: +(CY - r * Math.sin(vinkel)).toFixed(2) };
+};
+const lengde = +(Math.PI * R).toFixed(2);
+const grense = tekst.grenseAr / tekst.maksAr;
+const g = punkt(grense);
+const gInne = punkt(grense, R - 18);
+const gUte = punkt(grense, R + 16);
+const bue = `M${CX - R} ${CY} A${R} ${R} 0 0 1 ${CX + R} ${CY}`;
+const sone = `M${g.x} ${g.y} A${R} ${R} 0 0 1 ${CX + R} ${CY}`;
+const klientTekster = {
+  start: tekst.svarStart,
+  ok: tekst.svarOk,
+  snart: tekst.svarSnart,
+  naa: tekst.svarNaa,
+  ugyldig: tekst.svarUgyldig,
+};
+---
+
+<div
+  class:list={['ts', { kompakt }]}
+  data-tanksjekk
+  data-snart={tekst.snartAr}
+  data-grense={tekst.grenseAr}
+  data-maks={tekst.maksAr}
+  data-lengde={lengde}
+  data-tekster={JSON.stringify(klientTekster)}
+>
+  <div class="ts-inn">
+    <div class="ts-felt" data-ts-felt hidden>
+      <label class="ts-etikett" for={`${id}-ar`}>{tekst.arEtikett}</label>
+      <input id={`${id}-ar`} class="ts-ar" type="text" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="2008" aria-describedby={`${id}-hjelp`} />
+      <p class="ts-hjelp" id={`${id}-hjelp`}>{tekst.arHjelp}</p>
+    </div>
+    <a class="knapp knapp-flat ts-utenjs" href={tankHref} data-ts-utenjs>{tekst.knappUtenJs}</a>
+    {!kompakt && <p class="ts-personvern">{tekst.personvern}</p>}
+  </div>
+
+  <div class="ts-ut" data-status="tom">
+    <svg class="ts-maaler" viewBox="0 0 260 160" aria-hidden="true">
+      <path d={bue} fill="none" stroke="var(--color-sand)" stroke-width="22" />
+      <path d={sone} fill="none" stroke="var(--color-copper-light)" stroke-opacity="0.45" stroke-width="22" />
+      <path class="ts-verdi" d={bue} fill="none" stroke-width="22" stroke-dasharray={lengde} stroke-dashoffset={lengde} data-ts-bue />
+      <path d={`M${gInne.x} ${gInne.y} L${gUte.x} ${gUte.y}`} stroke="var(--color-brown)" stroke-width="3" />
+      <text x={gUte.x + 4} y={gUte.y - 4} class="ts-skala">{tekst.grenseAr}</text>
+      <text x={CX - R} y={CY + 18} text-anchor="middle" class="ts-skala">0</text>
+      <text x={CX + R} y={CY + 18} text-anchor="middle" class="ts-skala">{tekst.maksAr}+</text>
+    </svg>
+    <p class="ts-grense"><span aria-hidden="true">▲</span> {tekst.grenseAr} {tekst.alderEnhet} · {tekst.maalerGrense}</p>
+    <p class="ts-tall" aria-hidden="true"><span data-ts-alder>–</span><span class="enhet">{tekst.alderEnhet}</span></p>
+  </div>
+
+  <div class="ts-svar-rad">
+    <p class="ts-svar" role="status" data-ts-svar>{tekst.utenJs}</p>
+    <div class="ts-resultat" data-ts-resultat hidden>
+      <p class="ts-pris">
+        <span class="ts-pris-etikett">{tekst.prisEtikett}</span>
+        <Tall verdi={pris} enhet="kr" locale={locale} pris class="ts-pris-tall" />
+      </p>
+      <p class="ts-pris-note">{tekst.prisNote}</p>
+      <a class="knapp" href={`${tankHref}#skjema`} data-velg="varmtvannstank">{tekst.knapp}</a>
+    </div>
+    <p class="ts-forbehold">{tekst.forbehold}{kompakt && <span> · {tekst.personvern}</span>}</p>
+  </div>
+</div>
+
+<script>
+  import { ELDSTE_AR, lesAr, maalerAndel, vurderTank } from '../lib/tanksjekk';
+
+  for (const rot of document.querySelectorAll<HTMLElement>('[data-tanksjekk]')) {
+    const felt = rot.querySelector<HTMLElement>('[data-ts-felt]')!;
+    const input = felt.querySelector<HTMLInputElement>('input')!;
+    const ut = rot.querySelector<HTMLElement>('.ts-ut')!;
+    const bue = rot.querySelector<SVGPathElement>('[data-ts-bue]')!;
+    const alderEl = rot.querySelector<HTMLElement>('[data-ts-alder]')!;
+    const svar = rot.querySelector<HTMLElement>('[data-ts-svar]')!;
+    const resultat = rot.querySelector<HTMLElement>('[data-ts-resultat]')!;
+    const utenJs = rot.querySelector<HTMLElement>('[data-ts-utenjs]');
+    const t = JSON.parse(rot.dataset.tekster ?? '{}') as Record<string, string>;
+    const grenser = { snartAr: Number(rot.dataset.snart), grenseAr: Number(rot.dataset.grense) };
+    const maks = Number(rot.dataset.maks);
+    const lengde = Number(rot.dataset.lengde);
+    const iAr = new Date().getFullYear();
+
+    const tom = (melding: string) => {
+      ut.dataset.status = 'tom';
+      bue.style.strokeDashoffset = String(lengde);
+      alderEl.textContent = '–';
+      svar.textContent = melding;
+      resultat.hidden = true;
+    };
+
+    const vis = () => {
+      const tekst = input.value.trim();
+      if (tekst === '') {
+        tom(t.start);
+        input.removeAttribute('aria-invalid');
+        return;
+      }
+      const v = vurderTank(lesAr(tekst), iAr, grenser);
+      if (v.status === 'ugyldig') {
+        // Only complain once four characters are typed.
+        tom(tekst.length >= 4 ? t.ugyldig.replace('{fra}', String(ELDSTE_AR)).replace('{til}', String(iAr)) : t.start);
+        if (tekst.length >= 4) input.setAttribute('aria-invalid', 'true');
+        return;
+      }
+      input.removeAttribute('aria-invalid');
+      ut.dataset.status = v.status;
+      bue.style.strokeDashoffset = String(lengde * (1 - maalerAndel(v.alder, maks)));
+      alderEl.textContent = String(v.alder);
+      svar.textContent = t[v.status].replace('{alder}', String(v.alder));
+      // The fixed price and the button come with the answer, once the customer has engaged.
+      resultat.hidden = false;
+    };
+
+    felt.hidden = false;
+    if (utenJs) utenJs.hidden = true;
+    svar.textContent = t.start;
+    input.addEventListener('input', vis);
+  }
+</script>
+
+<style>
+  .ts {
+    display: grid;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 30px 60px -40px rgb(74 36 18 / 0.5);
+  }
+
+  .ts-inn,
+  .ts-ut,
+  .ts-svar-rad {
+    padding: 2.5rem var(--space-3);
+  }
+
+  .ts-inn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ts-felt {
+    width: 100%;
+  }
+
+  .ts-felt[hidden],
+  .ts-utenjs[hidden],
+  .ts-resultat[hidden] {
+    display: none;
+  }
+
+  .ts-etikett {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ts-ar {
+    width: 100%;
+    max-width: 22rem;
+    padding: 0.25rem 0 0.5rem;
+    border: 0;
+    border-bottom: 2px solid var(--color-border-field);
+    background: transparent;
+    color: var(--color-brown);
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ts-ar::placeholder {
+    color: var(--color-border-strong);
+  }
+
+  .ts-ar:focus-visible {
+    outline: none;
+    border-bottom-color: var(--color-orange);
+    box-shadow: 0 2px 0 0 var(--color-orange);
+  }
+
+  .ts-ar[aria-invalid='true'] {
+    border-bottom-color: var(--color-accent);
+  }
+
+  .ts-hjelp,
+  .ts-personvern {
+    margin: 0.5rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+  }
+
+  .ts-personvern {
+    margin: 0;
+  }
+
+  .ts-ut {
+    text-align: center;
+  }
+
+  .ts-maaler {
+    display: block;
+    width: 100%;
+    max-width: 22rem;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  .ts-verdi {
+    stroke: var(--color-copper);
+    transition:
+      stroke-dashoffset 0.6s ease,
+      stroke 0.3s;
+  }
+
+  [data-status='snart'] .ts-verdi {
+    stroke: var(--color-orange);
+  }
+
+  [data-status='naa'] .ts-verdi {
+    stroke: var(--color-orange-dark);
+  }
+
+  .ts-skala {
+    fill: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .ts-grense {
+    margin: 0.25rem 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ts-tall {
+    margin: 0.75rem 0 0;
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .ts-tall .enhet {
+    margin-left: 0.3rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-style: normal;
+  }
+
+  .ts-svar-rad {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ts-svar {
+    max-width: 40rem;
+    margin: 0;
+  }
+
+  .ts-resultat {
+    display: grid;
+    justify-items: start;
+    gap: 0.5rem;
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: var(--color-cream);
+    border-left: 4px solid var(--color-orange);
+  }
+
+  .ts-pris {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+  }
+
+  .ts-pris-etikett {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ts-pris :global(.ts-pris-tall) {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .ts-pris-note {
+    margin: 0 0 0.5rem;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  .ts-resultat .knapp {
+    margin-left: 0.4rem;
+  }
+
+  [data-status='naa'] ~ .ts-svar-rad .ts-svar {
+    font-weight: 600;
+  }
+
+  .ts-forbehold {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .ts:not(.kompakt) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ts:not(.kompakt) .ts-inn,
+    .ts:not(.kompakt) .ts-ut,
+    .ts:not(.kompakt) .ts-svar-rad {
+      padding: 3rem;
+    }
+
+    .ts:not(.kompakt) .ts-inn {
+      justify-content: center;
+      border-bottom: 0;
+      border-right: 1px solid var(--color-border);
+    }
+
+    .ts:not(.kompakt) .ts-svar-rad {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* The hook card: no panel of its own; the field and the gauge side by side when the card (the size container) is wide enough. */
+  .kompakt {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kompakt .ts-inn,
+  .kompakt .ts-ut,
+  .kompakt .ts-svar-rad {
+    padding: 0;
+    border: 0;
+  }
+
+  .kompakt .ts-inn {
+    padding-bottom: var(--space-3);
+  }
+
+  .kompakt .ts-ar {
+    font-size: 2.75rem;
+    max-width: 12rem;
+  }
+
+  .kompakt .ts-maaler {
+    max-width: 15rem;
+  }
+
+  .kompakt .ts-tall {
+    margin-top: 0.25rem;
+    font-size: 2.5rem;
+  }
+
+  .kompakt .ts-svar-rad {
+    padding-top: var(--space-3);
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @container (min-width: 30rem) {
+    .kompakt {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
+      column-gap: var(--space-4);
+      align-items: center;
+    }
+
+    .kompakt .ts-inn {
+      padding-bottom: 0;
+    }
+
+    .kompakt .ts-svar-rad {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ts-verdi {
+      transition: none;
+    }
+  }
+</style>

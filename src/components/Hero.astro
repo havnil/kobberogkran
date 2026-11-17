@@ -1,0 +1,285 @@
+---
+// The hero used on every page, in the reference's layout: the big slanted title (last line in the accent
+// colour), intro and two buttons on the left over a full-width illustration that fades into the cream; a
+// fact card hanging from the copper pipe on the right (`kort` slot). Above the title: the seasonal badge on
+// the front page, breadcrumbs on the other pages.
+import Brodsmuler from './Brodsmuler.astro';
+import Henger from './Henger.astro';
+import Illustrasjon from './Illustrasjon.astro';
+import type { Firma } from '../lib/firma';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+import { telHref } from '../lib/telefon';
+import { ordstil } from '../lib/ordstil';
+
+interface Props {
+  locale: Locale;
+  firma: Firma;
+  tittel: string;
+  /** The accent line, shown after `tittel` on its own line. */
+  aksent?: string;
+  ingress: string;
+  skjemaHref: string;
+  eyebrow?: string;
+  sesong?: { tekst: string; href: string };
+  trail?: { name: string; href?: string }[];
+  bilde?: { src: string; width: number; height: number; plassholder: boolean };
+  /** Shorter hero for pages without a fact card or with less to say. */
+  kompakt?: boolean;
+}
+
+const { locale, firma, tittel, aksent, ingress, skjemaHref, eyebrow, sesong, trail, bilde, kompakt = false } = Astro.props;
+const t = ui[locale];
+// A conditional slot can be present but empty (pages without a card): render it once to find out.
+const kortHtml = Astro.slots.has('kort') ? await Astro.slots.render('kort') : '';
+const harKort = kortHtml.trim() !== '';
+---
+
+<section class:list={['hero', { kompakt, 'uten-kort': !harKort }]} aria-labelledby="hero-tittel">
+  {
+    bilde && (
+      <div class="hero-bakgrunn">
+        <Illustrasjon class="hero-bilde" src={bilde.src} width={bilde.width} height={bilde.height} locale={locale} plassholder={bilde.plassholder} loading="eager" />
+      </div>
+    )
+  }
+  <div class="hero-inner ramme">
+    <div class="hero-tekst">
+      {trail && <div class="brodsmuler-plass"><Brodsmuler locale={locale} trail={trail} /></div>}
+      {
+        sesong && (
+          <a class="sesong" href={sesong.href}>
+            <svg aria-hidden="true" viewBox="0 0 16 20" width="14" height="18"><path d="M8 1S1.5 9 1.5 13a6.5 6.5 0 0 0 13 0C14.5 9 8 1 8 1z" fill="var(--color-orange)" /></svg>
+            <span>{sesong.tekst}</span>
+          </a>
+        )
+      }
+      {/* A middle dot stays at the end of a line, never at the start of the next. */}
+      {eyebrow && <p class="eyebrow">{eyebrow.replaceAll(' · ', ' · ')}</p>}
+      <h1 id="hero-tittel" class="display hero-tittel" style={ordstil(tittel, aksent)}>
+        <span class="linje">{tittel}</span>
+        {aksent && <span class="aksent linje">{aksent}</span>}
+      </h1>
+      <p class="ingress">{ingress}</p>
+      <div class="hero-knapper">
+        <a class="knapp" href={skjemaHref}>{t.skjemaKnapp}</a>
+        <a class="knapp knapp-flat" href={telHref(firma.telefon.verdi)}>
+          {t.ring}
+          <span data-plassholder={firma.telefon.plassholder ? '' : undefined}>{firma.telefon.verdi}</span>
+        </a>
+      </div>
+    </div>
+    {
+      harKort && (
+        <div class="hero-kort">
+          <Henger>
+            <Fragment set:html={kortHtml} />
+          </Henger>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  /* The illustration fills the hero; on small screens it sits behind the hanging card at the bottom. */
+  .brodsmuler-plass {
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-bakgrunn {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30rem;
+  }
+
+  .hero-bakgrunn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--color-cream) 0%, rgb(247 242 236 / 0.55) 45%, rgb(247 242 236 / 0.15) 75%, rgb(247 242 236 / 0.6) 100%);
+  }
+
+  .hero :global(.hero-bilde) {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .hero :global(.hero-bilde img) {
+    object-position: 70% 60%;
+  }
+
+  .hero :global(.hero-bilde .illustrasjon-merke) {
+    left: auto;
+    right: var(--gutter);
+    bottom: var(--space-3);
+    z-index: 1;
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: 0;
+  }
+
+  /* The text column is a size container, so the title scales with the room it really has, never with the
+     viewport: it can then never run under the hanging card or the pipe. */
+  .hero-tekst {
+    container-type: inline-size;
+    min-width: 0;
+    padding-block: 2.5rem 1rem;
+  }
+
+  .sesong {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    margin-bottom: var(--space-3);
+    padding: 0.5rem 1rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 24px -18px rgb(74 36 18 / 0.5);
+    color: var(--color-brown);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+
+  .sesong:hover span {
+    text-decoration: underline;
+  }
+
+  /* Each part of the title is its own line (the accent part last); a part wraps only where it must, and
+     then balanced, so no line is left with a lone word. Sized for the front page copy: «Rørlegger på Hemnes»
+     on one line from about 600 px of column. */
+  .hero-tittel {
+    margin: 0 0 var(--space-4);
+    --display-str: clamp(1.9rem, 9.2cqi, 5rem);
+    line-height: 0.95;
+  }
+
+  .hero-tittel .linje {
+    display: block;
+    text-wrap: balance;
+  }
+
+  .ingress {
+    max-width: 30rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
+    font-size: 1.1875rem;
+    line-height: 1.6;
+  }
+
+  .hero-knapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-inline: -0.4rem;
+  }
+
+  .hero-kort {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 3rem;
+  }
+
+  .kompakt .hero-tekst {
+    padding-bottom: 3rem;
+  }
+
+  .kompakt .hero-tittel {
+    --display-str: clamp(2rem, 7cqi, 4.25rem);
+  }
+
+  @media (min-width: 1000px) {
+    .hero {
+      min-height: min(54rem, calc(100svh - var(--header-h)));
+    }
+
+    .hero-bakgrunn {
+      top: 0;
+      left: 28%;
+      height: auto;
+    }
+
+    .hero-bakgrunn::after {
+      background:
+        linear-gradient(90deg, var(--color-cream) 0%, rgb(247 242 236 / 0.94) 30%, rgb(247 242 236 / 0.3) 58%, rgb(247 242 236 / 0) 80%),
+        linear-gradient(180deg, rgb(247 242 236 / 0) 70%, var(--color-cream) 100%);
+    }
+
+    .hero-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
+      column-gap: var(--space-4);
+      min-height: inherit;
+    }
+
+    .hero-tekst {
+      align-self: center;
+      padding-block: 4.5rem 5rem;
+    }
+
+    .hero-tittel {
+      --display-str: clamp(2.25rem, 8cqi, 5rem);
+    }
+
+    .kompakt .hero-tittel {
+      --display-str: clamp(2.25rem, 7cqi, 4.25rem);
+    }
+
+    .hero-kort {
+      justify-content: flex-end;
+      padding-bottom: 6rem;
+    }
+
+    .kompakt {
+      min-height: min(44rem, calc(78svh - var(--header-h)));
+    }
+
+    .kompakt.uten-kort {
+      min-height: 0;
+    }
+
+    .kompakt .hero-tekst {
+      padding-block: 4rem 5rem;
+    }
+
+    .kompakt .hero-kort {
+      padding-bottom: 5rem;
+    }
+
+    .uten-kort .hero-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .uten-kort .hero-tittel {
+      --display-str: clamp(2.25rem, 6cqi, 4.25rem);
+      max-width: 20ch;
+    }
+  }
+
+  /* Keep the illustration's badge clear of the fixed copper pipe at the right edge (from 1380 px). */
+  @media (min-width: 1380px) {
+    .hero :global(.hero-bilde .illustrasjon-merke) {
+      right: 5rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 27.5rem);
+    }
+  }
+</style>

@@ -1,0 +1,502 @@
+{
+  "utkast": {
+    "plassholder": true,
+    "merknad": "AI-utkast skrevet med simulerte personaer. Må leses og godkjennes av et menneske."
+  },
+  "kvittering": "Takk! Forespørselen din er kommet fram til Kobber og Kran. Vi ser på den og tar kontakt. Vil du sende flere bilder, kan du bruke denne lenken: {sendBilderLenke} Lekker det nå? Steng hovedstoppekranen og ring.",
+  "taptAnrop": "Hei, dette er Kobber og Kran. Vi fikk ikke tatt telefonen akkurat nå. Send gjerne en kort forespørsel med bilde, så har vi det vi trenger når vi ringer tilbake: {skjemaLenke} Eller skriv på WhatsApp: {whatsappLenke}",
+  "whatsappHilsen": "Hei! Jeg trenger hjelp av en rørlegger.[ Det gjelder: {tjeneste}.][ (Fra: {kilde})]",
+  "forside": {
+    "hero": {
+      "stedslinje": "Kobber og Kran · Aurskog-Høland · Indre Østfold",
+      "tittel": "Rørlegger på Hemnes i Aurskog-Høland",
+      "ingress": "Bygdas egen rørlegger: du snakker med rørleggeren som gjør jobben, får pris før jobben starter, og vi kommer når det er avtalt.",
+      "lover": [
+        "Pris før jobben starter",
+        "Kommer når det er avtalt",
+        "Én kontakt hele veien"
+      ],
+      "tittelAksent": "i Aurskog-Høland",
+      "sesongmerke": {
+        "host": {
+          "tekst": "Vinterstengning av hytta: meld deg på",
+          "anker": "vinterstengning-om-høsten"
+        },
+        "var": {
+          "tekst": "Oppstart av hytta: bestill vann på",
+          "anker": "åpning-om-våren"
+        }
+      }
+    },
+    "nokkeltall": {
+      "eyebrow": "Nøkkeltall",
+      "merke": "Med mva",
+      "timepris": "Timepris",
+      "tank": "Varmtvannsbereder, arbeid",
+      "servicebil": "Servicebil",
+      "kjoretid": "Kjøretid fra Hemnes",
+      "kjoretidEnhet": "min",
+      "prisForStart": "Pris før start"
+    },
+    "tjenester": {
+      "tittel": "Hva trenger du hjelp med?",
+      "eyebrow": "{antall} oppdrag",
+      "ruterTittel": "Hva har skjedd?",
+      "ingress": "Velg det som ligner mest. Hver rute går til siden om jobben, med skjema nederst.",
+      "seMer": "Se mer",
+      "ruter": [
+        {
+          "tittel": "Det lekker",
+          "tekst": "Drypp fra kranen, vann under vasken eller fukt der det ikke skal være.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": ""
+        },
+        {
+          "tittel": "Tett avløp",
+          "tekst": "Vask, sluk eller do som ikke vil renne unna.",
+          "tjeneste": "tett-avlop",
+          "anker": ""
+        },
+        {
+          "tittel": "Varmtvannsbereder",
+          "tekst": "Bytte til fastpris på arbeidet når berederen står på samme sted.",
+          "tjeneste": "varmtvannstank",
+          "anker": ""
+        },
+        {
+          "tittel": "Nytt bad",
+          "tekst": "Rørleggerdelen av badet, med skriftlig tilbud etter befaring.",
+          "tjeneste": "bad",
+          "anker": ""
+        },
+        {
+          "tittel": "Varmeanlegg",
+          "tekst": "Vannbåren varme: nytt anlegg, utskifting, utbygging og serviceavtale.",
+          "tjeneste": "varmeanlegg",
+          "anker": ""
+        },
+        {
+          "tittel": "Privat vann",
+          "tekst": "Brønn, pumpe, trykktank og vannrensing.",
+          "tjeneste": "bronn-og-vann",
+          "anker": ""
+        },
+        {
+          "tittel": "Hytta",
+          "tekst": "Vinterstengning om høsten og vann på igjen om våren.",
+          "tjeneste": "hytte",
+          "anker": ""
+        },
+        {
+          "tittel": "Landbruk",
+          "tekst": "Vann til dyr og driftsbygning, fra brønn eller kommunalt nett.",
+          "tjeneste": "fjos-og-gard",
+          "anker": ""
+        },
+        {
+          "tittel": "Bedrift og borettslag",
+          "tekst": "Service og reparasjon for bedrifter, borettslag og sameier.",
+          "tjeneste": "bedrift-og-borettslag",
+          "anker": ""
+        }
+      ]
+    },
+    "varmtvann": {
+      "tittel": "Fastpris på bytte av varmtvannsbereder",
+      "arbeidMerke": "fastpris på arbeidet",
+      "typiskTotalMerke": "typisk totalpris med ny bereder",
+      "medTittel": "Med i fastprisen",
+      "med": [
+        "Tømming og frakobling av den gamle berederen",
+        "Montering av ny bereder på samme sted",
+        "Montering av sikkerhetsventil og blandeventil som hører til berederen",
+        "Tilkobling av vann og trykkprøving",
+        "Bortkjøring av den gamle berederen",
+        "FDV-dokumentasjon på det som er montert"
+      ],
+      "ikkeMedTittel": "Ikke med i fastprisen",
+      "ikkeMed": [
+        "Selve berederen og deler (kommer i tillegg)",
+        "Flytting av berederen til et annet sted",
+        "Nytt sluk eller lekkasjesikring etter dagens krav",
+        "Elektriker, hvis berederen skal fast tilkobles",
+        "Vanskelig adkomst, for eksempel trang kjeller eller krypkjeller"
+      ],
+      "eyebrow": "Fastpris · varmtvannsbereder",
+      "ingress": "Står den nye berederen på samme sted som den gamle, er arbeidet fastpris. Send et bilde av typeskiltet og gulvet rundt berederen, så ser vi om fastprisen holder."
+    },
+    "tanksjekk": {
+      "eyebrow": "Tanksjekk",
+      "tittel": "Er varmtvannsberederen din gammel?",
+      "ingress": "Skriv inn produksjonsåret fra typeskiltet, så ser du alderen mot det forsikringen pleier å regne som gammelt.",
+      "arEtikett": "Produksjonsår · fra typeskiltet",
+      "arHjelp": "Står ofte som «Prod.» eller som de første sifrene i serienummeret.",
+      "knapp": "Send bilde av berederen",
+      "alderEnhet": "år",
+      "maalerGrense": "Forsikring",
+      "svarStart": "Skriv inn årstallet, så ser du hvor gammel berederen er.",
+      "svarOk": "Berederen er {alder} år. Følg med på den: se etter rust, drypp og vann under berederen.",
+      "svarSnart": "Berederen er {alder} år og nærmer seg alderen forsikringen regner som gammel. Planlegg et bytte det neste året eller to.",
+      "svarNaa": "Berederen er {alder} år. Mange forsikringer gir avkortning ved lekkasje fra så gamle beredere. Bytt den nå, før den lekker.",
+      "svarUgyldig": "Skriv et årstall mellom {fra} og {til}.",
+      "forbehold": "Veiledende · sjekk vilkårene i din forsikring",
+      "personvern": "Årstallet blir i nettleseren din. Ingenting lagres eller sendes.",
+      "utenJs": "Under 15 år: følg med på berederen. 15 til 19 år: planlegg et bytte. 20 år eller mer: bytt nå. Mange forsikringer regner en bereder som gammel etter rundt 20 år.",
+      "snartAr": 15,
+      "grenseAr": 20,
+      "maksAr": 30,
+      "knappUtenJs": "Se fastprisen på bytte",
+      "prisEtikett": "Fastpris på arbeidet",
+      "prisNote": "Når ny bereder står på samme sted. Bereder og deler kommer i tillegg."
+    },
+    "hyttesikring": {
+      "eyebrow": "Hyttesikring",
+      "tittel": "Lekkasjesikker hytte",
+      "ingress": "Vi åpner eller stenger hytta og monterer vannstopper på hovedledningen. Har hytta nett, kan du stenge vannet fra mobilen.",
+      "punkter": [
+        "Åpning om våren eller vinterstengning om høsten",
+        "Vannstopper med fjernstenging, montert og testet",
+        "Bilder og beskjed når jobben er gjort"
+      ],
+      "prisEtikett": "Fastpris på arbeidet",
+      "prisNote": "Vannstopperen og utstyret du velger kommer i tillegg.",
+      "knapp": "Slik sikrer du hytta"
+    },
+    "tillit": {
+      "tittel": "Hvorfor velge Kobber og Kran",
+      "punkter": [
+        {
+          "ikon": "pris",
+          "tittel": "Pris før start",
+          "tekst": "Du vet hva jobben koster før vi begynner."
+        },
+        {
+          "ikon": "fastpris",
+          "tittel": "Fastpris på vanlige jobber",
+          "tekst": "Bereder, utekran, toalett og mer."
+        },
+        {
+          "ikon": "dokumentasjon",
+          "tittel": "Ryddig dokumentasjon",
+          "tekst": "Du får papirene på jobben når vi er ferdige."
+        },
+        {
+          "ikon": "lokal",
+          "tittel": "Lokalt",
+          "tekst": "Base på Hemnes, i Aurskog-Høland og Indre Østfold."
+        }
+      ]
+    },
+    "priser": {
+      "tittel": "Priser i korte trekk",
+      "timepris": "Timepris",
+      "servicebil": "Servicebil per oppdrag",
+      "forbruk": "Forbruksmateriell per oppdrag",
+      "regneeksempel": "Eksempel: en jobb på én time, med servicebil og forbruksmateriell",
+      "delerNote": "Pluss deler. Alle priser er med mva."
+    },
+    "steg": {
+      "tittel": "Slik bestiller du",
+      "steg": [
+        {
+          "tittel": "Ring eller send forespørsel",
+          "tekst": "Fortell kort hva det gjelder og hvor. Et bilde av problemet sparer ofte en befaring."
+        },
+        {
+          "tittel": "Vi ser på det og gir pris",
+          "tekst": "Du får vite om det blir timepris, prisoverslag eller fastpris, og dere avtaler tidspunkt."
+        },
+        {
+          "tittel": "Jobben blir gjort og dokumentert",
+          "tekst": "Vi kommer når det er avtalt, rydder etter oss og gir deg dokumentasjon på det som er gjort."
+        }
+      ],
+      "eyebrow": "Fra forespørsel til ferdig jobb",
+      "ingress": "Du har samme kontakt hele veien. Ingen mellomledd.",
+      "stegEtikett": "Steg"
+    },
+    "omEirik": {
+      "tittel": "Hvem vi er",
+      "tekst": "Kobber og Kran er et lite rørleggerfirma på Hemnes, startet av Eirik, som er eier og fagansvarlig. Vi kjenner bygda, brønnene, hyttene og vintrene her, og vil være dem du ringer neste gang også.",
+      "godkjenningerTittel": "Godkjenninger",
+      "anmeldelserTittel": "Dette sier kundene"
+    },
+    "dokumentasjon": {
+      "tittel": "Du får dokumentasjon",
+      "punkter": [
+        "FDV-dokumentasjon (forvaltning, drift og vedlikehold) på det som monteres, til boligmappa og forsikringen",
+        "Dokumentasjon på rørleggerarbeidet i våtrom, med bilder underveis av det som skjules i vegg og gulv",
+        "Bilder før og etter jobben, hvis du ønsker det"
+      ]
+    },
+    "omrader": {
+      "tittel": "Her jobber vi",
+      "eyebrow": "Områder",
+      "ingress": "Base på Hemnes. Vi kjører i hele Aurskog-Høland og Indre Østfold, og til Lillestrøm.",
+      "base": "Base",
+      "utenfor": "Utenfor området: større jobber, etter avtale",
+      "omtaleEyebrow": "Omtaler",
+      "kartNote": "Ringene viser avstand i luftlinje fra {base}."
+    },
+    "skjema": {
+      "tittel": "Send forespørsel",
+      "merknad": "Det tar et halvt minutt. Fortell hva det gjelder, hvor jobben er og hvordan vi når deg. Bilder kan du legge til etterpå, og e-post er valgfritt. Lekker det nå? Steng vannet og ring heller.",
+      "eyebrow": "Forespørsel",
+      "ringDirekte": "Eller ring direkte"
+    }
+  },
+  "sider": {
+    "referanser": {
+      "eyebrow": "Referanser",
+      "forsideTittel": "Siste jobber",
+      "tjenesteTittel": "Jobber vi har gjort",
+      "seAlle": "Se alle referanser",
+      "tom": "Her kommer bilder og beskrivelser av jobber vi har gjort.",
+      "flereBilder": "{antall} bilder til"
+    },
+    "felles": {
+      "menyVarmtvannstank": "Varmtvannsbereder",
+      "menyLekker": "Lekker det?",
+      "bunntekst": "Rørlegger på Hemnes, for Aurskog-Høland og Indre Østfold. Service, varmtvannsbereder, varmeanlegg, brønn, hytte og bad.",
+      "kontaktTittel": "Kontakt",
+      "adresseTittel": "Adresse"
+    },
+    "tjeneste": {
+      "faktaTittel": "Kort fortalt",
+      "sideboksTittel": "Raskeste vei til hjelp",
+      "sideboksTekst": "Ring oss, eller send en forespørsel med bilde. Lekker det nå, steng hovedstoppekranen først.",
+      "faqTittel": "Det folk lurer på",
+      "andreTittel": "Andre ting vi hjelper med",
+      "omraderTittel": "Her jobber vi",
+      "skjemaEyebrow": "Forespørsel",
+      "prisForStart": "Pris før start",
+      "faqEyebrow": "Spørsmål og svar",
+      "andreEyebrow": "Henger sammen med",
+      "omraderEyebrow": "Områder",
+      "stedslinje": "Rørlegger · Aurskog-Høland og Indre Østfold"
+    },
+    "priser": {
+      "kveldHelgNavn": "Kveld og helg",
+      "kveldHelgVerdi": "etter avtale",
+      "mvaNote": "Alle priser er oppgitt med 25 % mva. Bedrifter får faktura med mva spesifisert.",
+      "listeEyebrow": "Prisliste",
+      "listeTittel": "Priser med mva",
+      "fastpriser": {
+        "eyebrow": "Fastpriser",
+        "tittel": "Fastpris på vanlige jobber",
+        "ingress": "Disse jobbene gjør vi ofte, så vi vet hva de tar. Står det nye der det gamle stod, er arbeidet fastpris. Send et bilde av det som skal byttes, så bekrefter vi prisen.",
+        "note": "Fastpris på arbeidet. Servicebil, utstyr og deler kommer i tillegg.",
+        "rader": [
+          {
+            "pris": "varmtvannstankArbeid",
+            "navn": "Bytte av varmtvannsbereder",
+            "merknad": "Ny bereder på samme sted, med sikkerhetsventil og blandeventil"
+          },
+          {
+            "pris": "hyttesikringArbeid",
+            "navn": "Vannstoppventil",
+            "merknad": "Ventil på hovedledningen med sensorer der det oftest lekker"
+          },
+          {
+            "pris": "utekranArbeid",
+            "navn": "Frostfri utekran",
+            "merknad": "Ny utekran på yttervegg, koblet til ledningen innenfor"
+          },
+          {
+            "pris": "servantskapArbeid",
+            "navn": "Servantskap",
+            "merknad": "Montering av skap, servant og batteri der det gamle stod"
+          },
+          {
+            "pris": "kjokkenbatteriArbeid",
+            "navn": "Kjøkkenbatteri",
+            "merknad": "Bytte av blandebatteri på kjøkkenet"
+          },
+          {
+            "pris": "toalettArbeid",
+            "navn": "Bytte av toalett",
+            "merknad": "Gulvstående toalett på samme sted"
+          },
+          {
+            "pris": "stoppekranArbeid",
+            "navn": "Ny hovedstoppekran",
+            "merknad": "Bytte av stoppekranen der vannet kommer inn"
+          }
+        ]
+      }
+    },
+    "bad": {
+      "prosessTittel": "Slik går det til",
+      "prosess": [
+        {
+          "tittel": "Forespørsel med bilder og mål",
+          "tekst": "Send bilder av badet slik det er i dag, omtrentlige mål og hva du ønsker deg. Bor du i borettslag, sjekk med styret tidlig."
+        },
+        {
+          "tittel": "Befaring",
+          "tekst": "Vi ser på badet, rørene og avløpet, og hva som må til for at badet blir tett og etter dagens krav."
+        },
+        {
+          "tittel": "Skriftlig tilbud",
+          "tekst": "Du får et skriftlig tilbud på rørleggerdelen, med fastpris eller prisoverslag, og hvem som gjør hva hvis elektriker og flislegger er med."
+        },
+        {
+          "tittel": "Plan og oppstart",
+          "tekst": "Vi avtaler oppstart og rekkefølge sammen, og vi koordinerer med de andre håndverkerne, så du slipper å være prosjektleder."
+        },
+        {
+          "tittel": "Arbeid og kontroll",
+          "tekst": "Rørene legges, membran og sluk kontrolleres, og det tas bilder av alt som skjules før veggene lukkes."
+        },
+        {
+          "tittel": "Ferdig og dokumentert",
+          "tekst": "Utstyret monteres og testes. Du får FDV-dokumentasjon og dokumentasjon på rørleggerarbeidet i våtrommet."
+        }
+      ],
+      "ansvarTittel": "Vi har ansvaret mot deg",
+      "ansvar": "Når elektriker og flislegger er med gjennom Kobber og Kran, er det Kobber og Kran du har avtalen med. Du har ett nummer å ringe og én å forholde deg til hvis noe ikke blir som avtalt. Har du egne håndverkere, avtaler dere skriftlig hvem som har ansvaret for hva før arbeidet starter."
+    },
+    "kontakt": {
+      "telefonNavn": "Telefon",
+      "epostNavn": "E-post",
+      "adresseNavn": "Adresse",
+      "kortEyebrow": "Kontakt",
+      "rolle": "Eier og rørlegger"
+    }
+  },
+  "lekkerNaa": {
+    "tittel": "Lekker det nå?",
+    "punkter": [
+      "Steng hovedstoppekranen. Den sitter som regel der vannet kommer inn i huset: i kjelleren, i vaskerommet, under kjøkkenbenken eller ved varmtvannsberederen. Har du brønn, kan du også slå av pumpa.",
+      "Slå av strømmen til varmtvannsberederen i sikringsskapet, hvis berederen lekker eller vannet er stengt.",
+      "Tørk opp det du kan, og ta bilder av skaden og av det som lekker.",
+      "Meld fra til forsikringsselskapet. De fleste har egen skadevakt som kan komme og tørke ut.",
+      "Ring oss."
+    ],
+    "ingenDognvakt": "Vi tar akutte oppdrag når vi kan, men Kobber og Kran har ikke døgnvakt. Når vi ikke svarer, er forsikringens skadevakt den raskeste hjelpen."
+  },
+  "skjema": {
+    "hva": "Hva gjelder det?",
+    "haster": "Hvor fort trenger du hjelp?",
+    "hasterLekkerNaa": "Det lekker nå",
+    "hasterSnart": "Snart, i løpet av noen dager",
+    "hasterKanPlanlegges": "Det kan planlegges",
+    "adresse": "Adresse",
+    "bruketMinPosisjon": "Bruk der jeg er nå",
+    "navn": "Navn",
+    "telefon": "Telefon",
+    "epost": "E-post (valgfritt)",
+    "bilder": "Bilder",
+    "beskrivelse": "Beskriv kort hva som har skjedd eller hva du ønsker",
+    "samtykkePaminnelser": "Ja takk, send meg en påminnelse når det er tid for service eller sesongarbeid (for eksempel vinterstengning av hytta). Du kan si nei takk når som helst.",
+    "send": "Send forespørsel",
+    "tjenesteAnnet": "Noe annet",
+    "stedTittel": "Hvor er jobben?",
+    "stedHjelp": "Skriv adressen, eller trykk «Bruk der jeg er nå» hvis du står der. Har hytta ingen adresse, kan du beskrive veien.",
+    "stedUtenAdresse": "Hytte uten adresse? Oppgi gårds- og bruksnummer",
+    "gnr": "Gårdsnummer (gnr.)",
+    "bnr": "Bruksnummer (bnr.)",
+    "posisjonHentes": "Henter posisjonen din …",
+    "posisjonFunnet": "Posisjonen er lagt inn.",
+    "posisjonFeilet": "Fant ikke posisjonen. Skriv adressen eller beskriv stedet i stedet.",
+    "kundetype": "Er du privatkunde eller bedrift?",
+    "kundetypePrivat": "Privat",
+    "kundetypeBedrift": "Bedrift, borettslag eller sameie",
+    "firmanavn": "Navn på bedriften",
+    "orgnr": "Organisasjonsnummer",
+    "sender": "Sender …",
+    "kvitteringTittel": "Takk, forespørselen er sendt",
+    "kvitteringLenke": "Vil du sende flere bilder senere? Bruk denne lenken:",
+    "steg2Tittel": "Vil du fortelle litt mer? (valgfritt)",
+    "steg2Ingress": "Forespørselen er allerede sendt. Bilder og noen korte svar gjør at vi kan ta med riktige deler og gi bedre pris. Du kan hoppe over alt her.",
+    "sporsmalTittel": "Om huset og jobben",
+    "sendSteg2": "Send tillegget",
+    "steg2Ok": "Takk, tillegget er kommet fram.",
+    "bildeLaster": "Laster opp …",
+    "bildeOk": "Bildet er kommet fram.",
+    "bildeFrakoblet": "Venter på nett …",
+    "bildeFeilet": "Bildet kom ikke fram. Du kan sende det senere fra lenken i kvitteringen over.",
+    "bildeForMange": "Du kan sende høyst 8 bilder her. Send resten fra lenken i kvitteringen.",
+    "hvorHorte": "Hvor hørte du om oss? (valgfritt)",
+    "hvorHorteValg": {
+      "google": "Google",
+      "anbefaling": "Anbefalt av noen",
+      "sosialeMedier": "Facebook eller andre sosiale medier",
+      "bilen": "Så bilen",
+      "annet": "Annet"
+    },
+    "sporsmal": {
+      "vann": "Har du kommunalt vann eller brønn?",
+      "avlop": "Er avløpet kommunalt eller privat (septiktank, minirenseanlegg)?",
+      "byggear": "Omtrent når er huset eller hytta bygget?",
+      "adkomst": "Adkomst og tilgang: er veien brøytet, er noen hjemme, eller hvor ligger nøkkelen?",
+      "kontaktform": "Vil du helst ha SMS eller en telefonsamtale?",
+      "bildeTypeskilt": "Bilde av typeskiltet på berederen (klistremerket med liter og effekt)",
+      "bildeTank": "Bilde av berederen og gulvet rundt (så vi ser sluk og eventuell vannstopper)",
+      "rom": "Hvilket rom står berederen i?",
+      "etasje": "Hvilken etasje? (kjeller, 1. etasje …)",
+      "tilkobling": "Står berederen i stikkontakt, eller er den fast tilkoblet?",
+      "problem": "Hva er problemet?",
+      "vannStengt": "Har du stengt vannet?",
+      "fukt": "Er det fukt eller vann i gulv eller vegger?",
+      "forsikringMeldt": "Har du meldt fra til forsikringen?",
+      "antallAvlop": "Gjelder det ett avløp eller flere?",
+      "bronntype": "Er det borebrønn eller gravd brønn?",
+      "bildePumpe": "Bilde av pumpa og trykktanken",
+      "symptom": "Hva merker du? (for eksempel lavt trykk, brunt vann, lukt, eller at pumpa går hele tida)",
+      "vannprove": "Er det tatt vannprøve?",
+      "maal": "Omtrentlige mål på badet",
+      "oppstart": "Når ønsker du å starte?",
+      "egneHandverkere": "Har du egne håndverkere (for eksempel flislegger eller elektriker)?",
+      "styregodkjenning": "Har styret godkjent arbeidet (borettslag eller sameie)?",
+      "varmeOppdrag": "Hva skal gjøres med varmeanlegget?"
+    },
+    "valg": {
+      "ja": "Ja",
+      "nei": "Nei",
+      "vetIkke": "Vet ikke",
+      "kommunalt": "Kommunalt",
+      "bronn": "Brønn",
+      "privat": "Privat",
+      "sms": "SMS",
+      "samtale": "Samtale",
+      "stikkontakt": "Stikkontakt",
+      "fast": "Fast tilkoblet",
+      "lekkasje": "Det drypper eller lekker",
+      "tettAvlop": "Tett vask, sluk eller do",
+      "annet": "Noe annet",
+      "ett": "Ett",
+      "flere": "Flere",
+      "borebronn": "Borebrønn",
+      "gravd": "Gravd brønn",
+      "ikkeBorettslag": "Ikke borettslag eller sameie",
+      "nyttAnlegg": "Nytt anlegg",
+      "utskifting": "Bytte ut det gamle",
+      "utvidelse": "Utvide anlegget",
+      "service": "Service eller serviceavtale"
+    },
+    "feil": {
+      "mangler": "Fyll ut dette feltet. Du kan også ringe:",
+      "ugyldig": "Sjekk det du har skrevet her. Du kan også ringe:",
+      "forLang": "Teksten er for lang. Kort den ned, eller ring:",
+      "turnstile": "Vi fikk ikke bekreftet at du ikke er en robot. Prøv igjen, eller ring:",
+      "nettverk": "Fikk ikke kontakt. Sjekk nettet og prøv igjen, eller ring:",
+      "server": "Noe gikk galt hos oss. Prøv igjen om litt, eller ring:"
+    },
+    "utenJs": "Skjemaet trenger JavaScript for å virke. Ring i stedet:",
+    "samtykkeWhatsapp": "Jeg vil gjerne få svar på WhatsApp",
+    "forslagAntall": "{antall} adresseforslag. Bruk piltastene for å velge."
+  },
+  "skjemaSvar": {
+    "takkTittel": "Takk! Forespørselen er sendt",
+    "feilTittel": "Noe mangler i skjemaet",
+    "feilTekst": "Gå tilbake og sjekk feltene som er merket, eller ring oss.",
+    "sendBilderTittel": "Send flere bilder",
+    "sendBilderTekst": "Her kan du legge til flere bilder i forespørselen din. Ta gjerne ett bilde på avstand og ett nært, og ett av typeskiltet hvis det finnes.",
+    "sendBilderSend": "Send bildet",
+    "sendBilderOk": "Bildet er kommet fram. Du kan sende ett til.",
+    "sendBilderFeil": "Bildet kom ikke fram. Prøv igjen, eller ring oss.",
+    "ugyldigLenkeTittel": "Lenken virker ikke",
+    "ugyldigLenkeTekst": "Lenken er ufullstendig. Bruk lenken i meldingen du fikk, eller ring oss."
+  }
+}

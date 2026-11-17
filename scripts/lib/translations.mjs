@@ -30,3 +30,13 @@ export function findMissingTranslations(entries, locales) {
   }
   return result;
 }
+
+/**
+ * Namespaces the keys of one collection (`<collection>:<key>`) so they can't clash with page keys.
+ * @param {PageEntry[]} entries
+ * @param {string} collection
+ * @returns {PageEntry[]}
+ */
+export function withCollection(entries, collection) {
+  return entries.map((e) => ({ ...e, translationKey: `${collection}:${e.translationKey}` }));
+}

@@ -1,0 +1,131 @@
+---
+// Front page: the places we work (Hemnes marked as base) on the left and what customers say on the right.
+// No score and no stars until real reviews exist. Example entries render only outside launch builds, with
+// an «Eksempel» badge; with nothing to show, the places take the full width.
+import Regionliste from './Regionliste.astro';
+import type { Tekster, Omtale } from '../lib/innhold';
+import { ordstil } from '../lib/ordstil';
+import type { Firma } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['omrader'];
+  omtaleTittel: string;
+  omrade: Firma['omrade'];
+  /** Already filtered: only entries that may be shown. */
+  omtale: Omtale[];
+}
+
+const { locale, tekst, omtaleTittel, omrade, omtale } = Astro.props;
+const sitater = omtale.filter((o) => o.type !== 'godkjenning');
+---
+
+<section class="seksjon" id="omrader" aria-labelledby="omrader-tittel">
+  <div class:list={['ramme', 'to-spalter', { 'uten-omtale': sitater.length === 0 }]}>
+    <div>
+      <p class="eyebrow">{tekst.eyebrow}</p>
+      <h2 id="omrader-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
+      <p class="ingress">{tekst.ingress}</p>
+      <Regionliste omrade={omrade} base={tekst.base} kolonner={sitater.length === 0} />
+      <p class="utenfor">{tekst.utenfor}</p>
+    </div>
+    {
+      sitater.length > 0 && (
+        <div class="omtale">
+          <p class="eyebrow">{tekst.omtaleEyebrow}</p>
+          <h3 class="skra omtale-tittel">{omtaleTittel}</h3>
+          <ul class="sitater">
+            {sitater.map((o) => (
+              <li>
+                <blockquote>«{o.tekst}»</blockquote>
+                <p class="navn">
+                  {o.navn}
+                  {!o.ekte && <small class="plassholder-merke">{ui[locale].eksempelMerke}</small>}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .to-spalter {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  h2.display {
+    margin-bottom: var(--space-3);
+  }
+
+  .ingress {
+    max-width: 36rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
+  }
+
+
+  .utenfor {
+    margin: var(--space-3) 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .omtale-tittel {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  }
+
+  .sitater {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .sitater li {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  blockquote {
+    margin: 0 0 0.6rem;
+    font-size: 1.125rem;
+    line-height: 1.55;
+  }
+
+  .navn {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+
+  @media (min-width: 1000px) {
+    .to-spalter {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 4.5rem;
+    }
+
+    .uten-omtale {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

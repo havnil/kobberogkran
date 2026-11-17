@@ -6,6 +6,10 @@ Goal: Cloudflare builds and hosts the site from GitHub, `kobberogkran.no` and
 You do every step here yourself in the Cloudflare and GitHub dashboards. Agents never
 change Cloudflare settings.
 
+The form, image storage, e-mail alerts and message channels (D1, R2, Turnstile, secrets,
+vendors, launch day) are in [nettside-eiersteg.md](nettside-eiersteg.md). This file only covers
+hosting, domains, CMS login and the watchdog.
+
 Order:
 
 1. Connect the repo (section 1). You can do this right away; the site gets a

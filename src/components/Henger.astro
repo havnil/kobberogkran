@@ -1,0 +1,70 @@
+---
+// A copper pipe that comes down from the top, ends in a T, and two pipe clamps that hold whatever is in the
+// slot (the fact card in a hero). Drawn here; nothing moves.
+---
+
+<div class="henger">
+  <span class="henger-ror" aria-hidden="true"></span>
+  <svg class="henger-klammer" aria-hidden="true" viewBox="0 0 440 130" preserveAspectRatio="xMidYMax meet">
+    <defs>
+      <linearGradient id="kobber-vannrett" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E09A63" />
+        <stop offset="0.45" stop-color="#B5652B" />
+        <stop offset="1" stop-color="#8A4A1D" />
+      </linearGradient>
+      <linearGradient id="kobber-loddrett" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8A4A1D" />
+        <stop offset="0.35" stop-color="#E09A63" />
+        <stop offset="0.7" stop-color="#B5652B" />
+        <stop offset="1" stop-color="#8A4A1D" />
+      </linearGradient>
+      <pattern id="gjenger" width="6" height="4" patternUnits="userSpaceOnUse">
+        <rect width="6" height="4" fill="#6B4A38" />
+        <path d="M0 3.5h6" stroke="#4A2412" stroke-width="1" />
+      </pattern>
+    </defs>
+    <rect x="214" y="0" width="12" height="12" fill="url(#kobber-loddrett)" />
+    <rect x="28" y="14" width="384" height="12" rx="6" fill="url(#kobber-vannrett)" />
+    <rect x="22" y="10" width="10" height="20" rx="2" fill="#8A4A1D" />
+    <rect x="408" y="10" width="10" height="20" rx="2" fill="#8A4A1D" />
+    <rect x="204" y="7" width="32" height="26" rx="5" fill="#8A4A1D" />
+    <rect x="209" y="11" width="22" height="4" rx="2" fill="#E09A63" opacity="0.6" />
+    {
+      [70, 370].map((x) => (
+        <g>
+          <rect x={x - 12} y="7" width="24" height="26" rx="4" fill="none" stroke="#4A2412" stroke-width="4" />
+          <rect x={x - 15} y="31" width="30" height="7" rx="2" fill="#4A2412" />
+          <rect x={x - 3} y="38" width="6" height="76" fill="url(#gjenger)" />
+          <rect x={x - 8} y="110" width="16" height="9" rx="1.5" fill="#4A2412" />
+          <rect x={x - 20} y="119" width="40" height="11" rx="1.5" fill="#4A2412" />
+        </g>
+      ))
+    }
+  </svg>
+  <slot />
+</div>
+
+<style>
+  .henger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 27.5rem;
+    height: 100%;
+  }
+
+  .henger-ror {
+    display: block;
+    flex: 1;
+    min-height: 3rem;
+    width: calc(12 / 440 * 100%);
+    background: linear-gradient(90deg, #8a4a1d, var(--color-copper-light) 35%, var(--color-copper) 70%, #8a4a1d);
+  }
+
+  .henger-klammer {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

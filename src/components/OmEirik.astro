@@ -1,0 +1,165 @@
+---
+// The about page block: portrait illustration, documentation, approvals and what customers say.
+// Examples render only outside launch builds, with an «Eksempel» badge.
+import Illustrasjon from './Illustrasjon.astro';
+import { ordstil } from '../lib/ordstil';
+import type { Tekster, Omtale } from '../lib/innhold';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['omEirik'];
+  dokumentasjon: Tekster['forside']['dokumentasjon'];
+  /** Already filtered: only entries that may be shown. */
+  omtale: Omtale[];
+}
+
+const { locale, tekst, dokumentasjon, omtale } = Astro.props;
+const eksempelMerke = ui[locale].eksempelMerke;
+const godkjenninger = omtale.filter((o) => o.type === 'godkjenning');
+const anmeldelser = omtale.filter((o) => o.type !== 'godkjenning');
+---
+
+<section class="seksjon" aria-labelledby="om-eirik-tittel">
+  <div class="ramme om-eirik">
+    <Illustrasjon class="foto" src="/images/uploads/illustrasjon-eirik.svg" width={800} height={1000} locale={locale} plassholder />
+    <div class="innhold">
+      <h2 id="om-eirik-tittel" class="display" style={ordstil(tekst.tittel)}>{tekst.tittel}</h2>
+      <p class="ingress">{tekst.tekst}</p>
+
+      {
+        dokumentasjon.punkter.length > 0 && (
+          <div class="blokk">
+            <h3 class="skra">{dokumentasjon.tittel}</h3>
+            <ul class="dokumentasjon">
+              {dokumentasjon.punkter.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        godkjenninger.length > 0 && (
+          <div class="blokk">
+            <h3 class="skra">{tekst.godkjenningerTittel}</h3>
+            <ul class="rader">
+              {godkjenninger.map((o) => (
+                <li>
+                  {o.tekst}
+                  {!o.ekte && <small class="plassholder-merke">{eksempelMerke}</small>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        anmeldelser.length > 0 && (
+          <div class="blokk">
+            <h3 class="skra">{tekst.anmeldelserTittel}</h3>
+            <ul class="rader">
+              {anmeldelser.map((o) => (
+                <li>
+                  <blockquote>«{o.tekst}»</blockquote>
+                  <p class="navn">
+                    {o.navn}
+                    {!o.ekte && <small class="plassholder-merke">{eksempelMerke}</small>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .om-eirik {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .om-eirik :global(.foto) {
+    aspect-ratio: 4 / 5;
+    max-width: 28rem;
+    border-radius: 0;
+    border: 1px solid var(--color-border);
+    border-top: 4px solid var(--color-orange);
+  }
+
+  h2.display {
+    margin-bottom: var(--space-3);
+  }
+
+  .ingress {
+    max-width: 40rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
+    font-size: 1.125rem;
+  }
+
+  .blokk + .blokk {
+    margin-top: var(--space-4);
+  }
+
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+  }
+
+  .dokumentasjon {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .dokumentasjon li::marker {
+    color: var(--color-orange-dark);
+  }
+
+  .rader {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .rader li {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .rader .plassholder-merke {
+    margin-left: 0.5rem;
+  }
+
+  blockquote {
+    margin: 0 0 0.5rem;
+    font-size: 1.0625rem;
+  }
+
+  .navn {
+    margin: 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .om-eirik {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+      gap: 4rem;
+    }
+  }
+</style>

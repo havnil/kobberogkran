@@ -6,9 +6,11 @@ import { ui } from '../i18n/ui';
 interface Props {
   locale: Locale;
   alternates: Alternate[];
+  /** Header: the language code in small spaced capitals, with the full name as the accessible name. */
+  kort?: boolean;
 }
 
-const { locale, alternates } = Astro.props;
+const { locale, alternates, kort = false } = Astro.props;
 // Only languages that actually have this page are linked; a missing translation is hidden.
 const others = alternates.filter((alt) => alt.locale !== locale);
 ---
@@ -16,11 +18,18 @@ const others = alternates.filter((alt) => alt.locale !== locale);
 {
   others.length > 0 && (
     <nav aria-label={ui[locale].switcherLabel}>
-      <ul class="language-switcher">
+      <ul class:list={['language-switcher', { kort }]}>
         {others.map((alt) => (
           <li>
             <a href={alt.href} hreflang={alt.locale} lang={alt.locale}>
-              {ui[locale].languageNames[alt.locale]}
+              {kort ? (
+                <>
+                  <span aria-hidden="true">{alt.locale === 'nb' ? 'NO' : alt.locale.toUpperCase()}</span>
+                  <span class="visuelt-skjult">{ui[locale].languageNames[alt.locale]}</span>
+                </>
+              ) : (
+                ui[locale].languageNames[alt.locale]
+              )}
             </a>
           </li>
         ))}
@@ -36,5 +45,22 @@ const others = alternates.filter((alt) => alt.locale !== locale);
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  .kort a {
+    display: grid;
+    place-items: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    color: var(--color-brown);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+  }
+
+  .kort a:hover {
+    color: var(--color-orange-dark);
   }
 </style>

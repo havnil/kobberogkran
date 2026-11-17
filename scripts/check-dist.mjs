@@ -26,12 +26,51 @@ function expectContains(file, needles) {
   }
 }
 
-expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"']);
-expectContains('en/index.html', ['lang="en"']);
+function expectNotContains(file, needles) {
+  const html = read(file);
+  if (html === null) return;
+  for (const needle of needles) {
+    if (html.includes(needle)) failures.push(`${join(STATIC_DIR, file)} contains ${needle}`);
+  }
+}
+
+// WhatsApp links appear only when `firma.visWhatsapp` is on; when it is off they must be gone.
+const visWhatsapp = JSON.parse(readFileSync('src/content/firma/firma.json', 'utf8')).firma.visWhatsapp === true;
+const waLenke = 'href="https://wa.me/';
+const chrome = ['class="mobil-bunnlinje"', 'href="tel:', ...(visWhatsapp ? [waLenke] : [])];
+if (!visWhatsapp) {
+  expectNotContains('index.html', [waLenke]);
+  expectNotContains('en/index.html', [waLenke]);
+}
+expectContains('index.html', ['lang="nb"', 'hreflang="en"', 'hreflang="x-default"', ...chrome, 'id="lekker-naa"', 'id="skjema"', 'href="#skjema"']);
+expectContains('en/index.html', ['lang="en"', ...chrome, 'id="lekker-naa"', 'id="skjema"', 'href="#skjema"']);
+// The full-width night-duty stripe is not part of the brand; the marker must never appear.
+expectNotContains('index.html', ['data-dognvakt-stripe']);
+expectNotContains('en/index.html', ['data-dognvakt-stripe']);
+// Service pages: all ten exist in both languages, each with a form section for its service.
+const tjenester = {
+  nb: ['lekkasje', 'tett-avlop', 'varmtvannsbereder', 'bad', 'varmeanlegg', 'bronn-og-vann', 'hytte', 'landbruk', 'bedrift-og-borettslag', 'lekkasjesikker-hytte'],
+  en: ['leaks', 'blocked-drain', 'water-heater', 'bathroom', 'heating', 'well-and-water', 'cabin', 'farming', 'businesses-and-co-ops', 'leak-proof-cabin'],
+};
+for (const slug of tjenester.nb) expectContains(`tjenester/${slug}/index.html`, ['lang="nb"', 'id="skjema"', 'data-tjeneste=', 'href="#skjema"', 'application/ld+json']);
+for (const slug of tjenester.en) expectContains(`en/services/${slug}/index.html`, ['lang="en"', 'id="skjema"', 'data-tjeneste=', 'href="#skjema"', 'application/ld+json']);
+// The bathroom page must not show any price (no `data-pris` element at all).
+expectNotContains('tjenester/bad/index.html', ['data-pris']);
+expectNotContains('en/services/bathroom/index.html', ['data-pris']);
+// The price page shows prices and the contact page has the form.
+expectContains('priser/index.html', ['data-pris']);
+expectContains('en/prices/index.html', ['data-pris']);
+expectContains('kontakt/index.html', ['id="skjema"']);
+// The references page has its project section (cards, or the «coming soon» text in a launch build without real projects).
+expectContains('referanser/index.html', ['id="prosjekter"']);
+expectContains('en/projects/index.html', ['id="prosjekter"']);
+expectContains('en/contact/index.html', ['id="skjema"']);
 expectContains('404.html', ['lang="nb"']);
 expectContains('en/404.html', ['lang="en"']);
 read('sitemap-index.xml');
 read('robots.txt');
+// Browsers and crawlers ask for /favicon.ico even when the page links the SVG icon.
+read('favicon.ico');
 read('admin/index.html');
 read('admin/config.yml');
 

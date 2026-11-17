@@ -1,0 +1,103 @@
+---
+// The places we work, grouped by region: a ruled row per region with its name and its places. The first
+// place of the first region is the base and gets the «Base» mark.
+import type { Firma } from '../lib/firma';
+
+interface Props {
+  omrade: Firma['omrade'];
+  /** Label of the base mark («Base»). */
+  base: string;
+  /** Regions side by side from this width (the service pages); default: stacked. */
+  kolonner?: boolean;
+}
+
+const { omrade, base, kolonner = false } = Astro.props;
+---
+
+<ul class:list={['regioner', { kolonner }]}>
+  {
+    omrade.regioner.map((r, ri) => (
+      <li class="region">
+        <p class="region-navn">{r.navn}</p>
+        <ul class="steder">
+          {r.steder.map((sted, si) =>
+            ri === 0 && si === 0 ? (
+              <li class="base">
+                {sted} <span class="merke">{base}</span>
+              </li>
+            ) : (
+              <li>{sted}</li>
+            ),
+          )}
+        </ul>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .regioner {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .region {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .region-navn {
+    margin: 0;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .steder {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.4rem;
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+
+  .steder li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .merke {
+    padding: 0.1rem 0.45rem;
+    background: var(--color-orange);
+    color: var(--color-on-orange);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 760px) {
+    .kolonner {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      column-gap: 2.5rem;
+      border-top: 0;
+    }
+
+    .kolonner .region {
+      border-top: 1px solid var(--color-border-strong);
+      align-content: start;
+    }
+  }
+</style>

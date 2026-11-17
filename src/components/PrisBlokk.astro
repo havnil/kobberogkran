@@ -1,0 +1,155 @@
+---
+// The price list on the prices page: ruled rows with the figure in monospace on the right, and the worked
+// example as a dark panel. All prices come from `firma` and keep their placeholder mark.
+import Tall from './Tall.astro';
+import { ordstil } from '../lib/ordstil';
+import type { Tekster } from '../lib/innhold';
+import type { Firma } from '../lib/firma';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+import { formatKr, regneeksempel } from '../lib/priser';
+
+interface Props {
+  locale: Locale;
+  tekst: Tekster['forside']['priser'];
+  side: Tekster['sider']['priser'];
+  priser: Firma['priser'];
+}
+
+const { locale, tekst, side, priser } = Astro.props;
+const eksempel = regneeksempel(priser);
+const eksempelErPlassholder = [priser.timepris, priser.servicebil, priser.forbruk].some((p) => p.plassholder);
+const rader = [
+  { navn: tekst.timepris, verdi: priser.timepris },
+  { navn: tekst.servicebil, verdi: priser.servicebil },
+  { navn: tekst.forbruk, verdi: priser.forbruk },
+];
+---
+
+<section class="seksjon" id="prisliste" aria-labelledby="priser-tittel">
+  <div class="ramme">
+    <div class="hode">
+      <div>
+        <p class="eyebrow">{side.listeEyebrow}</p>
+        <h2 id="priser-tittel" class="display" style={ordstil(side.listeTittel)}>{side.listeTittel}</h2>
+      </div>
+      <p class="hode-ingress">{side.mvaNote}</p>
+    </div>
+    <div class="pris-rutenett">
+      <ol class="pris-liste">
+        {
+          rader.map((r, i) => (
+            <li>
+              <span class="pris-nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span class="pris-navn">{r.navn}</span>
+              <Tall class="pris-verdi" verdi={r.verdi} enhet="kr" locale={locale} pris />
+            </li>
+          ))
+        }
+        <li>
+          <span class="pris-nr" aria-hidden="true">{String(rader.length + 1).padStart(2, '0')}</span>
+          <span class="pris-navn">{side.kveldHelgNavn}</span>
+          <span class="pris-verdi tall">{side.kveldHelgVerdi}</span>
+        </li>
+      </ol>
+      <div class="eksempel band">
+        <p class="eyebrow">{tekst.tittel}</p>
+        <p class="eksempel-tekst">{tekst.regneeksempel}</p>
+        <p class="eksempel-sum">
+          {
+            eksempelErPlassholder ? (
+              <span data-pris data-plassholder>
+                {formatKr(eksempel, locale)} <small class="plassholder-merke">{ui[locale].plassholderMerke}</small>
+              </span>
+            ) : (
+              <span data-pris>{formatKr(eksempel, locale)}</span>
+            )
+          }
+        </p>
+        <p class="eksempel-note">{tekst.delerNote}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pris-rutenett {
+    display: grid;
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .pris-liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .pris-nr {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .pris-navn {
+    font-size: 1.0625rem;
+    font-weight: 800;
+  }
+
+  li :global(.pris-verdi) {
+    justify-self: end;
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
+
+  li :global(.pris-verdi .enhet) {
+    font-size: 0.875rem;
+  }
+
+  .eksempel {
+    padding: 2rem 1.75rem;
+    border-left: 5px solid var(--color-orange);
+  }
+
+  .eksempel p {
+    margin: 0;
+  }
+
+  .eksempel-tekst {
+    margin-bottom: 1rem !important;
+  }
+
+  .eksempel-sum {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 7vw, 3.75rem);
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1.1;
+    color: var(--color-orange-light);
+  }
+
+  .eksempel-note {
+    margin-top: 1rem !important;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 1000px) {
+    .pris-rutenett {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 4rem;
+    }
+  }
+</style>

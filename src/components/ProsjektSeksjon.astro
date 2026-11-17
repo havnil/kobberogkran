@@ -1,0 +1,90 @@
+---
+// A section of reference projects: the references page (all of them), the front page (the newest three, with
+// a link to all) and the service pages (jobs of that service). Renders nothing when there is nothing to show,
+// unless `tom` is given (the references page then says what will come).
+import ProsjektKort from './ProsjektKort.astro';
+import type { CollectionEntry } from 'astro:content';
+import { ordstil } from '../lib/ordstil';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  prosjekter: CollectionEntry<'prosjekter'>[];
+  /** translationKey → customer-facing service name. */
+  tjenesteNavn: Record<string, string>;
+  eyebrow: string;
+  /** Section title; without it the cards' titles are h2 (the references page, under its hero). */
+  tittel?: string;
+  flereBilder: string;
+  seAlle?: { tekst: string; href: string };
+  /** Text shown when the list is empty; without it an empty list renders nothing. */
+  tom?: string;
+}
+
+const { locale, prosjekter, tjenesteNavn, eyebrow, tittel, flereBilder, seAlle, tom } = Astro.props;
+const vis = prosjekter.length > 0 || tom !== undefined;
+---
+
+{
+  vis && (
+    <section class="seksjon" id="prosjekter" aria-labelledby={tittel ? 'prosjekter-tittel' : undefined} aria-label={tittel ? undefined : eyebrow}>
+      <div class="ramme">
+        {tittel && (
+          <div class="hode">
+            <div>
+              <p class="eyebrow">{eyebrow}</p>
+              <h2 id="prosjekter-tittel" class="display" style={ordstil(tittel)}>
+                {tittel}
+              </h2>
+            </div>
+            {seAlle && (
+              <a class="se-alle" href={seAlle.href}>
+                {seAlle.tekst} →
+              </a>
+            )}
+          </div>
+        )}
+        {prosjekter.length > 0 ? (
+          <div class="kort">
+            {prosjekter.map((p) => (
+              <ProsjektKort locale={locale} prosjekt={p} tjenesteNavn={tjenesteNavn[p.data.tjeneste]} flereBilder={flereBilder} niva={tittel ? 'h3' : 'h2'} />
+            ))}
+          </div>
+        ) : (
+          <p class="tom">{tom}</p>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .kort {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .se-alle {
+    align-self: end;
+    font-weight: 700;
+  }
+
+  .tom {
+    max-width: 40rem;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 1.125rem;
+  }
+
+  @media (min-width: 680px) {
+    .kort {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .kort {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

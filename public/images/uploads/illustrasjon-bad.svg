@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <pattern id="vegg" width="80" height="120" patternUnits="userSpaceOnUse" x="0" y="20">
+      <rect width="80" height="120" fill="#FBF7F1"/>
+      <path d="M0 1h80M1 0v120" stroke="#E8DCCF" stroke-width="3"/>
+    </pattern>
+    <path id="drape" d="M0 0c0 0-8 11-8 17a8 8 0 0 0 16 0C8 11 0 0 0 0z"/>
+  </defs>
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <rect x="80" y="60" width="1040" height="560" rx="24" fill="url(#vegg)"/>
+  <rect x="80" y="60" width="1040" height="560" rx="24" fill="none" stroke="#E8DCCF" stroke-width="4"/>
+
+  <!-- floor in perspective -->
+  <path d="M80 620h1040l80 280H0z" fill="#E3D5C5"/>
+  <g stroke="#CDBBA9" stroke-width="3">
+    <path d="M60 690h1080M36 770h1128M12 850h1176"/>
+    <path d="M210 620l-80 280M340 620l-40 280M470 620l-14 280M600 620v280M730 620l14 280M860 620l40 280M990 620l80 280"/>
+  </g>
+  <!-- fall arrows toward the drain -->
+  <g fill="none" stroke="#A84508" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".55">
+    <path d="M430 760h90m-16-12 16 12-16 12"/>
+    <path d="M770 760h-90m16-12-16 12 16 12"/>
+  </g>
+  <!-- floor drain -->
+  <path d="M548 734h104l12 52H536z" fill="#CDBBA9" stroke="#4A2412" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M556 746h88M552 760h96M548 774h104" stroke="#4A2412" stroke-width="4"/>
+
+  <!-- shower -->
+  <rect x="150" y="150" width="14" height="380" rx="7" fill="#CDBBA9" stroke="#4A2412" stroke-width="4"/>
+  <path d="M157 180h70q20 0 20 20v20" fill="none" stroke="#A84508" stroke-width="12" stroke-linecap="round"/>
+  <path d="M206 222h82l-10 26h-62z" fill="#F26A0F" stroke="#4A2412" stroke-width="5" stroke-linejoin="round"/>
+  <g stroke="#A9BDBA" stroke-width="5" stroke-linecap="round" stroke-dasharray="14 22">
+    <path d="M222 270l-10 330M246 270v330M270 270l10 330"/>
+  </g>
+  <rect x="148" y="420" width="44" height="36" rx="8" fill="#4A2412"/>
+  <circle cx="170" cy="438" r="9" fill="#F26A0F"/>
+  <!-- glass wall -->
+  <rect x="330" y="110" width="20" height="520" fill="#CBD8D2" opacity=".55"/>
+  <path d="M340 110v520" stroke="#6B4A38" stroke-width="6"/>
+  <rect x="200" y="110" width="140" height="520" fill="#CBD8D2" opacity=".35"/>
+  <path d="M230 140l60-60M240 220l90-90" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+
+  <!-- mirror -->
+  <rect x="720" y="130" width="260" height="210" rx="105" fill="#E5ECE8" stroke="#4A2412" stroke-width="6"/>
+  <path d="M770 220l60-60M790 270l90-90" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  <!-- wall-hung basin -->
+  <rect x="680" y="400" width="340" height="40" rx="12" fill="#FFFFFF" stroke="#4A2412" stroke-width="6"/>
+  <path d="M700 440h300q-6 60-70 66H770q-64-6-70-66z" fill="#FFFFFF" stroke="#4A2412" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M836 400v-40q0-14 14-14h30q14 0 14 14v12" fill="none" stroke="#A84508" stroke-width="14" stroke-linecap="round"/>
+  <rect x="824" y="380" width="26" height="22" rx="4" fill="#4A2412"/>
+  <use href="#drape" transform="translate(894 384) scale(.9)" fill="#F26A0F"/>
+  <path d="M850 506v114" stroke="#CDBBA9" stroke-width="12"/>
+  <!-- towel -->
+  <rect x="1036" y="250" width="76" height="14" rx="7" fill="#4A2412"/>
+  <path d="M1042 262h64v150q0 12-12 12h-40q-12 0-12-12z" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <path d="M1046 396h56" stroke="#F7883F" stroke-width="8"/>
+  <!-- floor heating hint -->
+  <g fill="none" stroke="#F7883F" stroke-width="4" stroke-linecap="round" opacity=".6">
+    <path d="M820 830q20-20 0-40t0-40"/><path d="M860 830q20-20 0-40t0-40"/><path d="M900 830q20-20 0-40t0-40"/>
+  </g>
+</svg>

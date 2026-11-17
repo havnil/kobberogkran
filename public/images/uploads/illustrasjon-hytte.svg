@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <path id="gran" d="M0-100 13-74H7l17 30h-9l20 34H4V0h-8v-10h-28l20-34h-9l17-30h-6z"/>
+    <path id="sno" d="M0-100 9-82H-9zM-12-72h24l6 6h-36zM-17-44h34l6 6h-46z"/>
+    <path id="fnugg" d="M0-8V8M-7-4 7 4M-7 4 7-4"/>
+  </defs>
+  <rect width="1200" height="900" fill="#F7F2EC"/>
+  <circle cx="920" cy="230" r="150" fill="#FBE6D3"/>
+  <circle cx="920" cy="230" r="92" fill="#F9C9A0"/>
+  <path d="M0 470c200-90 360-110 560-70s360 20 640-40v540H0z" fill="#E5E7E2"/>
+
+  <!-- spruces -->
+  <g fill="#3E4A33">
+    <use href="#gran" transform="translate(90 560) scale(2.2)"/><use href="#gran" transform="translate(180 540) scale(1.6)"/>
+    <use href="#gran" transform="translate(980 560) scale(1.8)"/><use href="#gran" transform="translate(1080 570) scale(2.4)"/><use href="#gran" transform="translate(1150 540) scale(1.5)"/>
+  </g>
+  <g fill="#FFFFFF">
+    <use href="#sno" transform="translate(90 560) scale(2.2)"/><use href="#sno" transform="translate(180 540) scale(1.6)"/>
+    <use href="#sno" transform="translate(980 560) scale(1.8)"/><use href="#sno" transform="translate(1080 570) scale(2.4)"/><use href="#sno" transform="translate(1150 540) scale(1.5)"/>
+  </g>
+
+  <!-- cabin -->
+  <g transform="translate(340 300)">
+    <rect x="300" y="-10" width="40" height="80" fill="#4A2412"/>
+    <rect x="292" y="-22" width="56" height="18" rx="6" fill="#FFFFFF"/>
+    <path d="M320-40c-14-20 14-30 0-56s14-34 0-58" fill="none" stroke="#E6D9CB" stroke-width="8" stroke-linecap="round"/>
+    <rect x="20" y="120" width="420" height="200" fill="#6B4A38"/>
+    <path d="M20 148h420M20 176h420M20 204h420M20 232h420M20 260h420M20 288h420" stroke="#4A2412" stroke-width="4"/>
+    <path d="M-30 130 230 0l260 130z" fill="#4A2412"/>
+    <path d="M-40 134 230-4l270 138-10 14-260-128-260 128z" fill="#FFFFFF"/>
+    <path d="M-10 118 230-2l240 120" fill="none" stroke="#FFFFFF" stroke-width="24" stroke-linejoin="round"/>
+    <g fill="#F7883F" stroke="#FBF7F1" stroke-width="7">
+      <rect x="70" y="170" width="80" height="70"/><rect x="320" y="170" width="80" height="70"/>
+    </g>
+    <path d="M110 170v70M70 205h80M360 170v70M320 205h80" stroke="#FBF7F1" stroke-width="5"/>
+    <rect x="196" y="190" width="70" height="130" fill="#4A2412"/>
+    <circle cx="252" cy="258" r="5" fill="#F26A0F"/>
+    <path d="M60 170h100M310 170h100" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  <path d="M0 640c260-40 500-30 760-10s300 10 440-10v280H0z" fill="#FFFFFF"/>
+  <path d="M120 700c120-10 220-8 330 2M780 720c120 6 220 2 320-12" stroke="#E5E7E2" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+  <!-- cutaway with main water valve -->
+  <path d="M600 900V760q0-40 40-40h420q40 0 40 40v140z" fill="#B89A7C"/>
+  <path d="M600 900V760q0-40 40-40h420q40 0 40 40v140" fill="none" stroke="#4A2412" stroke-width="6"/>
+  <path d="M630 820H1110" stroke="#A84508" stroke-width="22"/>
+  <path d="M630 814H1110" stroke="#F7883F" stroke-width="5" opacity=".7"/>
+  <rect x="820" y="790" width="80" height="62" rx="10" fill="#4A2412"/>
+  <rect x="850" y="740" width="20" height="52" fill="#4A2412"/>
+  <ellipse cx="860" cy="736" rx="54" ry="14" fill="#F26A0F" stroke="#4A2412" stroke-width="5"/>
+  <path d="M812 736h96M860 724v24" stroke="#4A2412" stroke-width="5"/>
+  <g fill="none" stroke="#4A2412" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M760 690a110 46 0 0 1 200 0"/>
+    <path d="M944 666l16 24 22-18"/>
+  </g>
+
+  <!-- snowflakes -->
+  <g stroke="#CDBBA9" stroke-width="4" stroke-linecap="round">
+    <use href="#fnugg" transform="translate(120 140)"/><use href="#fnugg" transform="translate(300 90) scale(1.3)"/><use href="#fnugg" transform="translate(520 170)"/>
+    <use href="#fnugg" transform="translate(680 80) scale(1.2)"/><use href="#fnugg" transform="translate(1100 110)"/><use href="#fnugg" transform="translate(240 330) scale(.9)"/>
+    <use href="#fnugg" transform="translate(1110 380)"/><use href="#fnugg" transform="translate(60 380) scale(1.2)"/>
+  </g>
+</svg>

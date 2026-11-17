@@ -1,0 +1,85 @@
+---
+// «Send flere bilder senere»: lenken i kvitteringen (`?id=…&token=…`). Tokenet sjekkes på serveren.
+// Gyldig lenke gir et enkelt skjema uten JavaScript som poster ett bilde til /api/bilde (svaret er
+// 303 tilbake hit med `ok=1` eller `feil=…`). Med JavaScript brukes samme opplasting som skjemaet
+// (src/client/skjema/send-bilder.ts): flere bilder, klargjort i nettleseren, med nye forsøk.
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Plassholder from './Plassholder.astro';
+import { getFirma } from '../lib/firma';
+import { telHref } from '../lib/telefon';
+import { getTekster } from '../lib/tekster';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+import type { Env } from '../server/env';
+import { verifiserSkjemaToken } from '../server/token';
+import { BILDETYPER } from '../server/validering';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const tekster = await getTekster(locale);
+const firma = await getFirma();
+const t = tekster.skjemaSvar;
+const id = Astro.url.searchParams.get('id') ?? '';
+const token = Astro.url.searchParams.get('token') ?? '';
+const hemmelighet = (env as Env | undefined)?.SKJEMA_HMAC;
+const gyldig = !!hemmelighet && (await verifiserSkjemaToken(id, token, hemmelighet));
+const ok = Astro.url.searchParams.get('ok') === '1';
+const feil = Astro.url.searchParams.has('feil');
+const tittel = gyldig ? t.sendBilderTittel : t.ugyldigLenkeTittel;
+const action = `/api/bilde?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`;
+const { bildeLaster, bildeOk, bildeFrakoblet, bildeFeilet } = tekster.skjema;
+const klientTekster = { bildeLaster, bildeOk, bildeFrakoblet, bildeFeilet };
+---
+
+<BaseLayout locale={locale} title={`${tittel} – Kobber og Kran AS`} description={tittel} alternates={[]} noindex>
+  <section class="seksjon" data-send-bilder={gyldig ? 'gyldig' : 'ugyldig'}>
+    <h1>{tittel}</h1>
+    {
+      gyldig ? (
+        <>
+          <p>{t.sendBilderTekst}</p>
+          {ok && <p role="status">{t.sendBilderOk}</p>}
+          {feil && (
+            <p role="alert">
+              {t.sendBilderFeil}{' '}
+              <a href={telHref(firma.telefon.verdi)} data-telefon><Plassholder verdi={firma.telefon} locale={locale} /></a>
+            </p>
+          )}
+          <form
+            method="post"
+            action={action}
+            enctype="multipart/form-data"
+            data-send-bilder-skjema
+            data-id={id}
+            data-token={token}
+            data-locale={locale}
+            data-tekster={JSON.stringify(klientTekster)}
+          >
+            <input type="hidden" name="locale" value={locale} />
+            <p>
+              <label for="bilde">{tekster.skjema.bilder}</label>
+              <input id="bilde" type="file" name="bilde" accept={[...BILDETYPER, '.heic'].join(',')} required />
+            </p>
+            <button type="submit">{t.sendBilderSend}</button>
+            <ul data-bildeliste aria-live="polite"></ul>
+          </form>
+        </>
+      ) : (
+        <>
+          <p role="alert">
+            {t.ugyldigLenkeTekst}{' '}
+            <a href={telHref(firma.telefon.verdi)} data-telefon><Plassholder verdi={firma.telefon} locale={locale} /></a>
+          </p>
+          <p><a href={locale === 'en' ? '/en/' : '/'}>{ui[locale].notFoundHomeLink}</a></p>
+        </>
+      )
+    }
+  </section>
+  <script>
+    import '../client/skjema/send-bilder';
+  </script>
+</BaseLayout>

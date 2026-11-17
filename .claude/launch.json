@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "kk-dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "4399"], "port": 4399 }
+  ]
+}

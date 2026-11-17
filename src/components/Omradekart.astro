@@ -1,0 +1,195 @@
+---
+// The area map, drawn from real coordinates (src/lib/kart.ts): each region as a soft tinted shape around its
+// places, dashed rings at 15 and 30 km straight-line distance from the base, the base as an orange marker.
+// No roads, trees or compass: a clean, flat map that stays correct when a place is added in the CMS.
+import { lagKart } from '../lib/kart';
+import type { Firma } from '../lib/firma';
+
+interface Props {
+  omrade: Firma['omrade'];
+  /** Accessible name of the map. */
+  tittel: string;
+  /** Caption, e.g. «Ringene viser avstand i luftlinje fra Hemnes». */
+  note: string;
+}
+
+const { omrade, tittel, note } = Astro.props;
+const k = lagKart(omrade.regioner);
+const RINGER = [15, 30];
+// Region tints: the base region in orange, the others in brown and sand.
+const FARGER = ['var(--color-orange)', 'var(--color-copper)', 'var(--color-brown-muted)'];
+const farge = (i: number) => FARGER[i % FARGER.length];
+// A region's shape: the convex hull of its places, drawn with a very wide round stroke (a padded hull).
+const former = k.former.map((p) => (p.length === 0 ? '' : `M${p.map((x) => `${x.x} ${x.y}`).join(' L')}${p.length > 2 ? ' Z' : ''}`));
+const venstre = (x: number) => x > k.bredde * 0.66;
+---
+
+{
+  k.punkter.length > 0 && (
+    <figure class="omradekart">
+      <svg viewBox={`0 0 ${k.bredde} ${k.hoyde}`} role="img" aria-label={tittel}>
+        <defs>
+          <clipPath id="kart-klipp">
+            <rect width={k.bredde} height={k.hoyde} rx="16" />
+          </clipPath>
+        </defs>
+        <g clip-path="url(#kart-klipp)">
+          <rect class="flate" width={k.bredde} height={k.hoyde} />
+          {former.map((d, i) => d && <path d={d} class="region" style={`--farge: ${farge(i)}`} />)}
+          {k.base &&
+            RINGER.map((km) => (
+              <g class="ring">
+                <circle cx={k.base!.x} cy={k.base!.y} r={km * k.skala} />
+                <text x={k.base!.x} y={k.base!.y - km * k.skala - 6} text-anchor="middle">
+                  {km} km
+                </text>
+              </g>
+            ))}
+          {k.punkter
+            .filter((p) => !p.base)
+            .map((p) => (
+              <g class="sted">
+                <circle cx={p.x} cy={p.y} r="5" style={`--farge: ${farge(p.region)}`} />
+                <text x={venstre(p.x) ? p.x - 11 : p.x + 11} y={p.y + 5} text-anchor={venstre(p.x) ? 'end' : 'start'}>
+                  {p.navn}
+                </text>
+              </g>
+            ))}
+          {k.punkter
+            .filter((p) => p.base)
+            .map((p) => (
+              <g class="base">
+                <circle cx={p.x} cy={p.y} r="20" class="glorie" />
+                <circle cx={p.x} cy={p.y} r="9" class="prikk" />
+                <text x={venstre(p.x) ? p.x - 16 : p.x + 16} y={p.y + 6} text-anchor={venstre(p.x) ? 'end' : 'start'}>
+                  {p.navn}
+                </text>
+              </g>
+            ))}
+        </g>
+      </svg>
+      <figcaption>
+        <ul class="tegnforklaring">
+          {omrade.regioner.map((r, i) => (
+            <li>
+              <span class="farge" style={`--farge: ${farge(i)}`} aria-hidden="true" />
+              {r.navn}
+            </li>
+          ))}
+        </ul>
+        <span class="note">{note}</span>
+      </figcaption>
+    </figure>
+  )
+}
+
+<style>
+  .omradekart {
+    margin: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    font-family: var(--font-body);
+  }
+
+  .flate {
+    fill: var(--color-sand);
+  }
+
+  .region {
+    fill: var(--farge);
+    stroke: var(--farge);
+    stroke-width: 64;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    opacity: 0.13;
+  }
+
+  .ring circle {
+    fill: none;
+    stroke: var(--color-brown-muted);
+    stroke-opacity: 0.45;
+    stroke-width: 1.25;
+    stroke-dasharray: 3 6;
+  }
+
+  .ring text {
+    fill: var(--color-brown-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .sted circle {
+    fill: var(--color-white);
+    stroke: var(--farge);
+    stroke-width: 3;
+  }
+
+  .sted text,
+  .base text {
+    fill: var(--color-brown);
+    font-size: 16px;
+    font-weight: 600;
+    paint-order: stroke;
+    stroke: var(--color-sand);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+
+  .base .glorie {
+    fill: var(--color-orange);
+    opacity: 0.18;
+  }
+
+  .base .prikk {
+    fill: var(--color-orange);
+    stroke: var(--color-white);
+    stroke-width: 3;
+  }
+
+  .base text {
+    font-size: 19px;
+    font-weight: 800;
+  }
+
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+  }
+
+  .tegnforklaring {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+  }
+
+  .tegnforklaring li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .farge {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    border: 2.5px solid var(--farge);
+    background: var(--color-white);
+  }
+</style>

@@ -1,0 +1,502 @@
+{
+  "utkast": {
+    "plassholder": true,
+    "merknad": "AI draft written with simulated personas. Must be read and approved by a human."
+  },
+  "kvittering": "Thank you! Your request has reached Kobber og Kran. We will look at it and get in touch. To send more photos, use this link: {sendBilderLenke} Is water leaking right now? Turn off the main stopcock and call.",
+  "taptAnrop": "Hi, this is Kobber og Kran. We couldn't take your call just now. Feel free to send a short request with a photo, so we have what we need when we call back: {skjemaLenke} Or write on WhatsApp: {whatsappLenke}",
+  "whatsappHilsen": "Hi! I need help from a plumber.[ It's about: {tjeneste}.][ (From: {kilde})]",
+  "forside": {
+    "hero": {
+      "stedslinje": "Kobber og Kran · Aurskog-Høland · Indre Østfold",
+      "tittel": "Plumber in Hemnes, Aurskog-Høland",
+      "ingress": "Your local plumber: you talk to the plumber who does the job, get a price before the job starts, and we turn up when agreed.",
+      "lover": [
+        "A price before the job starts",
+        "Turns up when agreed",
+        "One contact all the way"
+      ],
+      "tittelAksent": "Aurskog-Høland",
+      "sesongmerke": {
+        "host": {
+          "tekst": "Winterising the cabin: sign up now",
+          "anker": "winterising-in-autumn"
+        },
+        "var": {
+          "tekst": "Opening the cabin: book the water on",
+          "anker": "opening-in-spring"
+        }
+      }
+    },
+    "nokkeltall": {
+      "eyebrow": "Key figures",
+      "merke": "Incl. VAT",
+      "timepris": "Hourly rate",
+      "tank": "Water heater, work",
+      "servicebil": "Service van",
+      "kjoretid": "Drive from Hemnes",
+      "kjoretidEnhet": "min",
+      "prisForStart": "Price before we start"
+    },
+    "tjenester": {
+      "tittel": "What do you need help with?",
+      "eyebrow": "{antall} jobs",
+      "ruterTittel": "What has happened?",
+      "ingress": "Pick the one that fits best. Each tile goes to the page about the job, with a form at the bottom.",
+      "seMer": "See more",
+      "ruter": [
+        {
+          "tittel": "It's leaking",
+          "tekst": "A dripping tap, water under the sink or damp where it should be dry.",
+          "tjeneste": "service-og-reparasjon",
+          "anker": ""
+        },
+        {
+          "tittel": "Blocked drain",
+          "tekst": "A sink, floor drain or toilet that will not drain.",
+          "tjeneste": "tett-avlop",
+          "anker": ""
+        },
+        {
+          "tittel": "Water heater",
+          "tekst": "Replaced at a fixed price for the work when the tank stays in the same place.",
+          "tjeneste": "varmtvannstank",
+          "anker": ""
+        },
+        {
+          "tittel": "New bathroom",
+          "tekst": "The plumbing part of the bathroom, with a written quote after a site visit.",
+          "tjeneste": "bad",
+          "anker": ""
+        },
+        {
+          "tittel": "Heating",
+          "tekst": "Hydronic heating: new systems, replacement, extensions and service agreements.",
+          "tjeneste": "varmeanlegg",
+          "anker": ""
+        },
+        {
+          "tittel": "Private water",
+          "tekst": "Well, pump, pressure tank and water treatment.",
+          "tjeneste": "bronn-og-vann",
+          "anker": ""
+        },
+        {
+          "tittel": "The cabin",
+          "tekst": "Winterising in autumn and the water back on in spring.",
+          "tjeneste": "hytte",
+          "anker": ""
+        },
+        {
+          "tittel": "Farming",
+          "tekst": "Water for animals and farm buildings, from a well or the mains.",
+          "tjeneste": "fjos-og-gard",
+          "anker": ""
+        },
+        {
+          "tittel": "Businesses and co-ops",
+          "tekst": "Service and repairs for businesses, housing co-operatives and owner associations.",
+          "tjeneste": "bedrift-og-borettslag",
+          "anker": ""
+        }
+      ]
+    },
+    "varmtvann": {
+      "tittel": "Fixed price for replacing a water heater",
+      "arbeidMerke": "fixed price for the work",
+      "typiskTotalMerke": "typical total with a new tank",
+      "medTittel": "Included in the fixed price",
+      "med": [
+        "Draining and disconnecting the old tank",
+        "Fitting the new tank in the same place",
+        "Fitting the safety valve and mixing valve that go with the tank",
+        "Connecting the water and pressure testing",
+        "Taking the old tank away",
+        "Documentation (FDV) for what is installed"
+      ],
+      "ikkeMedTittel": "Not included in the fixed price",
+      "ikkeMed": [
+        "The tank itself and parts (charged on top)",
+        "Moving the tank to a different place",
+        "A new floor drain or leak protection to current standards",
+        "An electrician, if the tank is to be hard-wired",
+        "Difficult access, such as a cramped cellar or crawl space"
+      ],
+      "eyebrow": "Fixed price · water heater",
+      "ingress": "When the new tank goes in the same place as the old one, the work is a fixed price. Send a photo of the rating plate and the floor around the tank, and we can tell whether the fixed price applies."
+    },
+    "tanksjekk": {
+      "eyebrow": "Tank check",
+      "tittel": "Is your water heater old?",
+      "ingress": "Type the year from the rating plate to see the tank’s age against what insurers tend to treat as old.",
+      "arEtikett": "Year made · from the rating plate",
+      "arHjelp": "Often shown as «Prod.» or as the first digits of the serial number.",
+      "knapp": "Send a photo of the tank",
+      "alderEnhet": "yrs",
+      "maalerGrense": "Insurance",
+      "svarStart": "Type in the year to see how old the tank is.",
+      "svarOk": "The tank is {alder} years old. Keep an eye on it: look for rust, drips and water under the tank.",
+      "svarSnart": "The tank is {alder} years old and getting close to the age insurers treat as old. Plan a replacement in the next year or two.",
+      "svarNaa": "The tank is {alder} years old. Many insurers reduce the payout for leaks from tanks this old. Replace it now, before it leaks.",
+      "svarUgyldig": "Type a year between {fra} and {til}.",
+      "forbehold": "A guide only · check your insurance terms",
+      "personvern": "The year stays in your browser. Nothing is stored or sent.",
+      "utenJs": "Under 15 years: keep an eye on the tank. 15 to 19 years: plan a replacement. 20 years or more: replace it now. Many insurers treat a tank as old after about 20 years.",
+      "snartAr": 15,
+      "grenseAr": 20,
+      "maksAr": 30,
+      "knappUtenJs": "See the fixed price",
+      "prisEtikett": "Fixed price on the work",
+      "prisNote": "When the new tank goes in the same place. Tank and parts come on top."
+    },
+    "hyttesikring": {
+      "eyebrow": "Cabin protection",
+      "tittel": "Leak-proof cabin",
+      "ingress": "We open or winterise the cabin and fits a water stop valve on the main line. If the cabin has internet, you can shut off the water from your phone.",
+      "punkter": [
+        "Opening in spring or winterising in autumn",
+        "A water stop valve with remote shut-off, fitted and tested",
+        "Photos and a message when the job is done"
+      ],
+      "prisEtikett": "Fixed price on the work",
+      "prisNote": "The valve and equipment you choose come on top.",
+      "knapp": "How it works"
+    },
+    "tillit": {
+      "tittel": "Why choose Kobber og Kran",
+      "punkter": [
+        {
+          "ikon": "pris",
+          "tittel": "Price before we start",
+          "tekst": "You know what the job costs before we begin."
+        },
+        {
+          "ikon": "fastpris",
+          "tittel": "Fixed prices on common jobs",
+          "tekst": "Water heater, outdoor tap, toilet and more."
+        },
+        {
+          "ikon": "dokumentasjon",
+          "tittel": "Proper documentation",
+          "tekst": "You get the paperwork for the job when we are done."
+        },
+        {
+          "ikon": "lokal",
+          "tittel": "Local",
+          "tekst": "Based in Hemnes, working in Aurskog-Høland and Indre Østfold."
+        }
+      ]
+    },
+    "priser": {
+      "tittel": "Prices at a glance",
+      "timepris": "Hourly rate",
+      "servicebil": "Service van per visit",
+      "forbruk": "Consumables per visit",
+      "regneeksempel": "Example: a one-hour job, with service van and consumables",
+      "delerNote": "Plus parts. All prices include VAT."
+    },
+    "steg": {
+      "tittel": "How to book",
+      "steg": [
+        {
+          "tittel": "Call or send a request",
+          "tekst": "Say briefly what it is and where. A photo of the problem often saves a site visit."
+        },
+        {
+          "tittel": "We look at it and give you a price",
+          "tekst": "You find out whether it is an hourly rate, an estimate or a fixed price, and you agree on a time."
+        },
+        {
+          "tittel": "The job is done and documented",
+          "tekst": "We turn up when agreed, tidy up after ourselves and give you documentation of the work."
+        }
+      ],
+      "eyebrow": "From request to finished job",
+      "ingress": "You have the same contact all the way. No middlemen.",
+      "stegEtikett": "Step"
+    },
+    "omEirik": {
+      "tittel": "Who we are",
+      "tekst": "Kobber og Kran is a small plumbing firm in Hemnes, started by Eirik, who owns it and is in charge of the work. We know the village, the wells, the cabins and the winters here, and want to be the ones you call next time too.",
+      "godkjenningerTittel": "Approvals",
+      "anmeldelserTittel": "What customers say"
+    },
+    "dokumentasjon": {
+      "tittel": "You get documentation",
+      "punkter": [
+        "FDV documentation (operation and maintenance) for what is installed, for your home records and your insurer",
+        "Documentation of the plumbing work in wet rooms, with photos of everything hidden in walls and floors",
+        "Before and after photos of the job, if you want them"
+      ]
+    },
+    "omrader": {
+      "tittel": "Where we work",
+      "eyebrow": "Areas",
+      "ingress": "Based in Hemnes. We drive all over Aurskog-Høland and Indre Østfold, and to Lillestrøm.",
+      "base": "Base",
+      "utenfor": "Outside the area: larger jobs, by arrangement",
+      "omtaleEyebrow": "Reviews",
+      "kartNote": "The rings show straight-line distance from {base}."
+    },
+    "skjema": {
+      "tittel": "Send a request",
+      "merknad": "It takes half a minute. Tell us what it is, where the job is and how we can reach you. You can add photos afterwards, and e-mail is optional. Leaking right now? Turn off the water and call instead.",
+      "eyebrow": "Request",
+      "ringDirekte": "Or call directly"
+    }
+  },
+  "sider": {
+    "referanser": {
+      "eyebrow": "Projects",
+      "forsideTittel": "Recent jobs",
+      "tjenesteTittel": "Jobs we have done",
+      "seAlle": "See all projects",
+      "tom": "Photos and descriptions of our jobs will appear here.",
+      "flereBilder": "{antall} more photos"
+    },
+    "felles": {
+      "menyVarmtvannstank": "Water heater",
+      "menyLekker": "A leak?",
+      "bunntekst": "Plumber in Hemnes, for Aurskog-Høland and Indre Østfold. Service, water heaters, heating, wells, cabins and bathrooms.",
+      "kontaktTittel": "Contact",
+      "adresseTittel": "Address"
+    },
+    "tjeneste": {
+      "faktaTittel": "In short",
+      "sideboksTittel": "Quickest way to get help",
+      "sideboksTekst": "Call us, or send a request with a photo. If water is leaking now, turn off the main stopcock first.",
+      "faqTittel": "Common questions",
+      "andreTittel": "Other things we can help with",
+      "omraderTittel": "Where we work",
+      "skjemaEyebrow": "Request",
+      "prisForStart": "Price before we start",
+      "faqEyebrow": "Questions and answers",
+      "andreEyebrow": "Goes with",
+      "omraderEyebrow": "Areas",
+      "stedslinje": "Plumber · Aurskog-Høland and Indre Østfold"
+    },
+    "priser": {
+      "kveldHelgNavn": "Evenings and weekends",
+      "kveldHelgVerdi": "by arrangement",
+      "mvaNote": "All prices include 25% VAT. Businesses get an invoice with VAT shown separately.",
+      "listeEyebrow": "Price list",
+      "listeTittel": "Prices incl. VAT",
+      "fastpriser": {
+        "eyebrow": "Fixed prices",
+        "tittel": "Fixed prices on common jobs",
+        "ingress": "We do these jobs often, so we know what they take. If the new one goes where the old one was, the work has a fixed price. Send a photo of what is being replaced, and we confirm the price.",
+        "note": "Fixed price on the work. Call-out fee, equipment and parts come on top.",
+        "rader": [
+          {
+            "pris": "varmtvannstankArbeid",
+            "navn": "Replacing a water heater",
+            "merknad": "New water heater in the same place, with safety valve and mixing valve"
+          },
+          {
+            "pris": "hyttesikringArbeid",
+            "navn": "Water shut-off valve",
+            "merknad": "A valve on the main line with sensors where leaks are most common"
+          },
+          {
+            "pris": "utekranArbeid",
+            "navn": "Frost-free outdoor tap",
+            "merknad": "New outdoor tap on an outside wall, connected to the pipe inside"
+          },
+          {
+            "pris": "servantskapArbeid",
+            "navn": "Vanity unit",
+            "merknad": "Fitting the cabinet, basin and tap where the old one was"
+          },
+          {
+            "pris": "kjokkenbatteriArbeid",
+            "navn": "Kitchen tap",
+            "merknad": "Replacing the mixer tap in the kitchen"
+          },
+          {
+            "pris": "toalettArbeid",
+            "navn": "Replacing a toilet",
+            "merknad": "Floor-standing toilet in the same place"
+          },
+          {
+            "pris": "stoppekranArbeid",
+            "navn": "New main stopcock",
+            "merknad": "Replacing the stopcock where the water comes in"
+          }
+        ]
+      }
+    },
+    "bad": {
+      "prosessTittel": "How it works",
+      "prosess": [
+        {
+          "tittel": "Request with photos and measurements",
+          "tekst": "Send photos of the bathroom as it is today, rough measurements and what you would like. If you live in a housing co-operative, check with the board early."
+        },
+        {
+          "tittel": "Site visit",
+          "tekst": "We look at the bathroom, the pipes and the drain, and what it takes to make the room watertight and up to current standards."
+        },
+        {
+          "tittel": "Written offer",
+          "tekst": "You get a written offer for the plumbing, as a fixed price or an estimate, stating who does what if an electrician and a tiler are involved."
+        },
+        {
+          "tittel": "Plan and start date",
+          "tekst": "We agree on a start date and the order of work together, and we coordinate with the other tradespeople, so you don't have to be the project manager."
+        },
+        {
+          "tittel": "Work and checks",
+          "tekst": "The pipes go in, the membrane and drain are checked, and everything that will be hidden is photographed before the walls are closed."
+        },
+        {
+          "tittel": "Finished and documented",
+          "tekst": "The fittings are installed and tested. You get FDV documentation and documentation of the plumbing work in the wet room."
+        }
+      ],
+      "ansvarTittel": "We are responsible to you",
+      "ansvar": "When an electrician and a tiler work through Kobber og Kran, your agreement is with Kobber og Kran. You have one number to call and one firm to deal with if something is not as agreed. If you bring your own tradespeople, you agree in writing who is responsible for what before work starts."
+    },
+    "kontakt": {
+      "telefonNavn": "Phone",
+      "epostNavn": "E-mail",
+      "adresseNavn": "Address",
+      "kortEyebrow": "Contact",
+      "rolle": "Owner and plumber"
+    }
+  },
+  "lekkerNaa": {
+    "tittel": "Leaking right now?",
+    "punkter": [
+      "Turn off the main stopcock. It is usually where the water comes into the house: in the cellar, the utility room, under the kitchen sink or by the water heater. If you have a well, you can also switch off the pump.",
+      "Switch off the power to the water heater at the fuse box if the tank is leaking or the water is turned off.",
+      "Mop up what you can, and take photos of the damage and of what is leaking.",
+      "Report it to your insurer. Most have their own emergency service that can come and dry things out.",
+      "Call us."
+    ],
+    "ingenDognvakt": "We take urgent jobs when we can, but Kobber og Kran does not have a 24-hour emergency service. If we can't answer, your insurer's emergency service is the quickest help."
+  },
+  "skjema": {
+    "hva": "What is it about?",
+    "haster": "How soon do you need help?",
+    "hasterLekkerNaa": "It is leaking now",
+    "hasterSnart": "Soon, within a few days",
+    "hasterKanPlanlegges": "It can be planned",
+    "adresse": "Address",
+    "bruketMinPosisjon": "Use where I am now",
+    "navn": "Name",
+    "telefon": "Phone",
+    "epost": "E-mail (optional)",
+    "bilder": "Photos",
+    "beskrivelse": "Briefly describe what has happened or what you would like",
+    "samtykkePaminnelser": "Yes please, remind me when it is time for a service or seasonal work (such as shutting down the cabin for winter). You can say no thanks at any time.",
+    "send": "Send request",
+    "tjenesteAnnet": "Something else",
+    "stedTittel": "Where is the job?",
+    "stedHjelp": "Type the address, or tap “Use where I am now” if you are there. If the cabin has no address, you can describe the way there.",
+    "stedUtenAdresse": "Cabin without an address? Give the farm and title number (gnr./bnr.)",
+    "gnr": "Farm number (gnr.)",
+    "bnr": "Title number (bnr.)",
+    "posisjonHentes": "Finding your location …",
+    "posisjonFunnet": "Your location has been added.",
+    "posisjonFeilet": "Couldn't find your location. Type the address or describe the place instead.",
+    "kundetype": "Are you a private customer or a business?",
+    "kundetypePrivat": "Private",
+    "kundetypeBedrift": "Business, housing co-op or owners' association",
+    "firmanavn": "Business name",
+    "orgnr": "Organisation number",
+    "sender": "Sending …",
+    "kvitteringTittel": "Thank you, your request has been sent",
+    "kvitteringLenke": "Want to send more photos later? Use this link:",
+    "steg2Tittel": "Want to tell us a bit more? (optional)",
+    "steg2Ingress": "Your request has already been sent. Photos and a few short answers help us bring the right parts and give a better price. You can skip all of this.",
+    "sporsmalTittel": "About the house and the job",
+    "sendSteg2": "Send the extra details",
+    "steg2Ok": "Thank you, the extra details have arrived.",
+    "bildeLaster": "Uploading …",
+    "bildeOk": "The photo has arrived.",
+    "bildeFrakoblet": "Waiting for a connection …",
+    "bildeFeilet": "The photo didn't arrive. You can send it later from the link in the receipt above.",
+    "bildeForMange": "You can send up to 8 photos here. Send the rest from the link in the receipt.",
+    "hvorHorte": "How did you hear about us? (optional)",
+    "hvorHorteValg": {
+      "google": "Google",
+      "anbefaling": "Someone recommended you",
+      "sosialeMedier": "Facebook or other social media",
+      "bilen": "Saw the van",
+      "annet": "Other"
+    },
+    "sporsmal": {
+      "vann": "Do you have mains water or a well?",
+      "avlop": "Is the drain on the public sewer or private (septic tank, small treatment plant)?",
+      "byggear": "Roughly when was the house or cabin built?",
+      "adkomst": "Access: is the road cleared of snow, will someone be home, or where is the key?",
+      "kontaktform": "Would you rather have a text message or a phone call?",
+      "bildeTypeskilt": "Photo of the rating plate on the tank (the label showing litres and power)",
+      "bildeTank": "Photo of the tank and the floor around it (so we can see the drain and any leak stop)",
+      "rom": "Which room is the tank in?",
+      "etasje": "Which floor? (cellar, ground floor …)",
+      "tilkobling": "Is the tank plugged into a socket, or hard-wired?",
+      "problem": "What is the problem?",
+      "vannStengt": "Have you turned off the water?",
+      "fukt": "Is there damp or water in the floor or walls?",
+      "forsikringMeldt": "Have you reported it to your insurer?",
+      "antallAvlop": "Is it one drain or several?",
+      "bronntype": "Is it a drilled well or a dug well?",
+      "bildePumpe": "Photo of the pump and the pressure tank",
+      "symptom": "What do you notice? (for example low pressure, brown water, a smell, or the pump running all the time)",
+      "vannprove": "Has the water been tested?",
+      "maal": "Rough measurements of the bathroom",
+      "oppstart": "When would you like to start?",
+      "egneHandverkere": "Do you have your own tradespeople (for example a tiler or electrician)?",
+      "styregodkjenning": "Has the board approved the work (housing co-op or owners' association)?",
+      "varmeOppdrag": "What needs doing with the heating system?"
+    },
+    "valg": {
+      "ja": "Yes",
+      "nei": "No",
+      "vetIkke": "Don't know",
+      "kommunalt": "Public / mains",
+      "bronn": "Well",
+      "privat": "Private",
+      "sms": "Text message",
+      "samtale": "Phone call",
+      "stikkontakt": "Socket",
+      "fast": "Hard-wired",
+      "lekkasje": "Dripping or leaking",
+      "tettAvlop": "Blocked sink, drain or toilet",
+      "annet": "Something else",
+      "ett": "One",
+      "flere": "Several",
+      "borebronn": "Drilled well",
+      "gravd": "Dug well",
+      "ikkeBorettslag": "Not a housing co-op or owners' association",
+      "nyttAnlegg": "New system",
+      "utskifting": "Replace the old one",
+      "utvidelse": "Extend the system",
+      "service": "Service or a service agreement"
+    },
+    "feil": {
+      "mangler": "Please fill in this field. You can also call:",
+      "ugyldig": "Please check what you have written here. You can also call:",
+      "forLang": "The text is too long. Shorten it, or call:",
+      "turnstile": "We couldn't confirm that you are not a robot. Try again, or call:",
+      "nettverk": "Couldn't connect. Check your connection and try again, or call:",
+      "server": "Something went wrong on our side. Try again in a moment, or call:"
+    },
+    "utenJs": "The form needs JavaScript to work. Call instead:",
+    "samtykkeWhatsapp": "I'd like to get a reply on WhatsApp",
+    "forslagAntall": "{antall} address suggestions. Use the arrow keys to choose."
+  },
+  "skjemaSvar": {
+    "takkTittel": "Thank you! Your request has been sent",
+    "feilTittel": "Something is missing in the form",
+    "feilTekst": "Go back and check the marked fields, or call us.",
+    "sendBilderTittel": "Send more photos",
+    "sendBilderTekst": "Here you can add more photos to your request. One from a distance and one close up is ideal, plus the rating plate if there is one.",
+    "sendBilderSend": "Send the photo",
+    "sendBilderOk": "The photo has arrived. You can send another one.",
+    "sendBilderFeil": "The photo didn't arrive. Try again, or call us.",
+    "ugyldigLenkeTittel": "The link doesn't work",
+    "ugyldigLenkeTekst": "The link is incomplete. Use the link in the message you received, or call us."
+  }
+}

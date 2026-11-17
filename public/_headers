@@ -1,0 +1,9 @@
+# Security headers for the static pages (Cloudflare Workers static assets).
+# At build time @astrojs/cloudflare prepends its own Cache-Control rule for /_astro/* to this file;
+# the rules are merged. Pages and API responses from the Worker (SSR) get the same headers from
+# src/middleware.ts. CSP has only frame-ancestors for now (no full CSP yet).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: frame-ancestors 'none'
+  Permissions-Policy: geolocation=(self), camera=(), microphone=()

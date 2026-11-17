@@ -1,0 +1,173 @@
+---
+// One reference project as a card: the first photo, place · service · month, title, text, a link to the
+// other photos and, with consent, the customer's quote. Examples carry the «Eksempel» badge.
+import { render, type CollectionEntry } from 'astro:content';
+import { formaterMaaned, paaSpraak } from '../lib/prosjekter';
+import type { Locale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  prosjekt: CollectionEntry<'prosjekter'>;
+  /** Customer-facing name of the project's service, if the service page exists. */
+  tjenesteNavn?: string;
+  /** «{antall} bilder til»-style label for the extra photos. */
+  flereBilder: string;
+  /** Heading level of the title (h3 under a section heading). */
+  niva?: 'h2' | 'h3';
+}
+
+const { locale, prosjekt, tjenesteNavn, flereBilder, niva = 'h3' } = Astro.props;
+const d = prosjekt.data;
+const s = paaSpraak(d, locale);
+const { Content } = await render(prosjekt);
+const [forste, ...flere] = s.bilder;
+const Tittel = niva;
+---
+
+<article class="prosjekt" data-plassholder={d.plassholder ? '' : undefined} lang={s.norskReserve ? 'nb' : undefined}>
+  <a class="bilde" href={forste.src}>
+    <img src={forste.src} alt={forste.alt} loading="lazy" decoding="async" />
+    {!d.ekte && <small class="eksempel">{ui[locale].eksempelMerke}</small>}
+  </a>
+  <div class="innhold">
+    <p class="meta">
+      {[d.sted, tjenesteNavn, formaterMaaned(d.dato, locale)].filter(Boolean).join(' · ')}
+    </p>
+    <Tittel class="skra tittel">{s.tittel}</Tittel>
+    <div class="tekst">{s.tekstEn ? <p>{s.tekstEn}</p> : <Content />}</div>
+    {
+      flere.length > 0 && (
+        <ul class="flere" aria-label={flereBilder.replace('{antall}', String(flere.length))}>
+          {flere.map((b) => (
+            <li>
+              <a href={b.src}>
+                <img src={b.src} alt={b.alt} loading="lazy" decoding="async" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      d.sitat?.samtykke && (
+        <blockquote class="sitat">
+          <p>«{d.sitat.tekst}»</p>
+          <footer>{d.sitat.navn}</footer>
+        </blockquote>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .prosjekt {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .bilde {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    background: var(--color-sand);
+  }
+
+  .bilde img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .eksempel {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    background: var(--color-white);
+    color: var(--color-brown);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .innhold {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    padding: 1.25rem 1.4rem 1.5rem;
+  }
+
+  .meta {
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .tittel {
+    margin: 0;
+    font-size: 1.375rem;
+    line-height: 1.1;
+  }
+
+  .tekst {
+    color: var(--color-muted);
+    font-size: 0.9875rem;
+    line-height: 1.55;
+  }
+
+  .tekst :global(p) {
+    margin: 0 0 0.6rem;
+  }
+
+  .tekst :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .flere {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .flere img {
+    display: block;
+    width: 4.5rem;
+    height: 3.375rem;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+  }
+
+  .sitat {
+    margin: 0.5rem 0 0;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .sitat p {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+  }
+
+  .sitat footer {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>

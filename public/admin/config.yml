@@ -8,8 +8,8 @@ backend:
   name: github
   repo: havnil/kobberogkran
   branch: main
-  # TODO(runbook cloudflare-setup.md): set to the sveltia-cms-auth Worker URL
-  # base_url: https://sveltia-cms-auth.<account>.workers.dev
+  # Login Worker (sveltia-cms-auth), see docs/runbooks/cloudflare-setup.md section 3.
+  base_url: https://sveltia-cms-auth.hn-b14.workers.dev
 
 site_url: https://kobberogkran.no
 display_url: https://kobberogkran.no

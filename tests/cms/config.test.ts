@@ -18,6 +18,10 @@ describe('Sveltia CMS config', () => {
     expect(config.backend.branch).toBe('main');
   });
 
+  it('signs in through the sveltia-cms-auth Worker', () => {
+    expect(config.backend.base_url).toBe('https://sveltia-cms-auth.hn-b14.workers.dev');
+  });
+
   it('saves through pull requests (editorial workflow), since `main` is protected', () => {
     expect(config.publish_mode).toBe('editorial_workflow');
     expect(config.backend.branch).toBe('main');

@@ -73,38 +73,46 @@ the zone `kobberogkran.no` is **Active**.
 ## 3. CMS login (Sveltia CMS authenticator)
 
 Until this is done, editors can still use **Sign in with token** on `/admin` (a GitHub
-fine-grained personal access token with *Contents: read and write* on this repo only).
+fine-grained personal access token with *Contents* and *Pull requests: read and write* on this
+repo only). Sveltia now uses a **GitHub App**, not a legacy OAuth App
+([sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth)).
+
+Done so far: the Worker runs at `https://sveltia-cms-auth.hn-b14.workers.dev`, and `base_url` in
+`public/admin/config.yml` points at it.
 
 1. Open https://github.com/sveltia/sveltia-cms-auth and click **Deploy to Cloudflare
-   Workers**. Follow the prompts. Note the Worker URL, for example
-   `https://sveltia-cms-auth.<your-subdomain>.workers.dev`.
-2. GitHub → **Settings** → **Developer settings** → **OAuth Apps** → **New OAuth App**:
+   Workers**. Project name `sveltia-cms-auth` (lowercase), **Protect with Cloudflare Access**
+   off (Access would block the login popup), preview builds off. Note the Worker URL.
+2. Register the GitHub App with Sveltia's pre-filled link:
+   <https://github.com/settings/apps/new?name=Kobber+og+Kran+CMS&url=https://github.com/sveltia/sveltia-cms-auth&webhook_active=false&contents=write&pull_requests=write>
    | Field | Value |
    | --- | --- |
-   | Application name | `Kobber og Kran CMS` |
-   | Homepage URL | `https://kobberogkran.no` |
-   | Authorization callback URL | `<worker-url>/callback` |
+   | GitHub App name | `Kobber og Kran CMS` (must be unique on GitHub, max 34 characters) |
+   | Callback URL | `<worker-url>/callback` |
+   | Expire user authorization tokens | on |
+   | Request user authorization (OAuth) during installation | off |
+   | Webhook → Active | off |
+   | Repository permissions | Contents: Read and write, Pull requests: Read and write (the editorial workflow needs it) |
+   | Where can this GitHub App be installed | Only on this account |
 
-   Register it, then **Generate a new client secret**. Copy the Client ID and the secret.
-   Never paste the secret into the repo, an issue, or a chat.
-3. Cloudflare → **Workers & Pages** → `sveltia-cms-auth` → **Settings** → **Variables and
+   **Create GitHub App**, copy the **Client ID**, then **Generate a new client secret** and copy
+   it. Never paste the secret into the repo, an issue, or a chat.
+3. In the app's sidebar: **Install App** → **Install** → **Only select repositories** →
+   `kobberogkran`. Editors with write access only authorize the app on their first sign-in.
+4. Cloudflare → **Workers & Pages** → `sveltia-cms-auth` → **Settings** → **Variables and
    Secrets**:
    | Name | Type | Value |
    | --- | --- | --- |
    | `GITHUB_CLIENT_ID` | Text | the Client ID |
    | `GITHUB_CLIENT_SECRET` | **Secret** (encrypted) | the client secret |
-   | `ALLOWED_DOMAINS` | Text | `kobberogkran.no` |
+   | `ALLOWED_DOMAINS` | Text | `kobberogkran.no, *.hn-b14.workers.dev` |
 
-   Save and deploy.
-4. In `public/admin/config.yml`, under `backend:`, replace the commented-out line
-   `# base_url: …  # TODO(runbook cloudflare-setup.md) …` with
-   `base_url: <worker-url>` (no trailing slash). This is the only repo change; you or
-   `@claude` can make it. Because it's under `public/admin/`, it's never auto-merged.
-5. Check: open `https://kobberogkran.no/admin/` → **Sign in with GitHub** → authorize →
-   the editor shows the pages in both languages.
-
-If you later want to edit from a preview URL too, add that hostname to `ALLOWED_DOMAINS`
-(it takes a comma-separated list, and wildcards work, like `*.workers.dev`).
+   Save and deploy. `*.hn-b14.workers.dev` lets `/admin` log in from the `workers.dev` address
+   and branch previews while the site isn't on `kobberogkran.no`; remove it after launch if you
+   don't edit from previews.
+5. Check: open `https://kobberogkran.hn-b14.workers.dev/admin/` (behind Access) → **Sign in with
+   GitHub** → authorize → the editor shows the pages in both languages. A save opens a PR
+   `cms/…` (editorial workflow, [github-setup.md](github-setup.md) step 3b).
 
 ## 4. Turn on the watchdog (once the site is live)
 

@@ -19,12 +19,12 @@
       "tittelAksent": "Aurskog-Høland",
       "sesongmerke": {
         "host": {
-          "tekst": "Winterising the cabin: sign up now",
-          "anker": "winterising-in-autumn"
+          "tekst": "Winterising the cabin: book now",
+          "anker": "skjema"
         },
         "var": {
           "tekst": "Opening the cabin: book the water on",
-          "anker": "opening-in-spring"
+          "anker": "skjema"
         }
       }
     },

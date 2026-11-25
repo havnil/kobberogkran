@@ -93,12 +93,15 @@ Done so far: the Worker runs at `https://sveltia-cms-auth.hn-b14.workers.dev`, a
    | Request user authorization (OAuth) during installation | off |
    | Webhook → Active | off |
    | Repository permissions | Contents: Read and write, Pull requests: Read and write (the editorial workflow needs it) |
-   | Where can this GitHub App be installed | Only on this account |
+   | Where can this GitHub App be installed | **Any account** (public). The repo is on a personal account, and a private app there can only be authorized by its owner: other collaborators get a GitHub 404 on sign-in ([GitHub docs](https://docs.github.com/en/apps/creating-github-apps/setting-up-a-github-app/making-a-github-app-public-or-private)). Public is safe: a user's token only reaches repos where the app is installed and the user already has access, and `ALLOWED_DOMAINS` limits which sites can sign in. To change an existing app: the app's settings → **Advanced** → **Make public**. |
 
    **Create GitHub App**, copy the **Client ID**, then **Generate a new client secret** and copy
    it. Never paste the secret into the repo, an issue, or a chat.
 3. In the app's sidebar: **Install App** → **Install** → **Only select repositories** →
    `kobberogkran`. Editors with write access only authorize the app on their first sign-in.
+   Access (in front of the `workers.dev` site) needs a login method for them too: Zero Trust →
+   add **One-time PIN** as an identity provider, then tick it (and **Cloudflare**, for you) under the
+   application's **Login methods**.
 4. Cloudflare → **Workers & Pages** → `sveltia-cms-auth` → **Settings** → **Variables and
    Secrets**:
    | Name | Type | Value |

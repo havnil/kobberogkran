@@ -19,12 +19,12 @@
       "tittelAksent": "i Aurskog-Høland",
       "sesongmerke": {
         "host": {
-          "tekst": "Vinterstengning av hytta: meld deg på",
-          "anker": "vinterstengning-om-høsten"
+          "tekst": "Vinterstengning av hytta: bestill nå",
+          "anker": "skjema"
         },
         "var": {
           "tekst": "Oppstart av hytta: bestill vann på",
-          "anker": "åpning-om-våren"
+          "anker": "skjema"
         }
       }
     },

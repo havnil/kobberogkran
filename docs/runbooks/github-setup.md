@@ -59,6 +59,15 @@ He gets an email invite and must accept it.
 >   ruleset requires one approval from someone other than the last pusher)
 > - use `@claude` in issues and PRs
 > - edit through the CMS: each save becomes a PR (see 3b), which you approve
+>
+> **Only the owner's approval counts.** Without more, any collaborator with write access can
+> approve another collaborator's PR (Vegard could approve Eirik's, and the other way round).
+> [`.github/CODEOWNERS`](../../.github/CODEOWNERS) makes `@havnil` the owner of every file, and
+> the `main` ruleset has **Require review from Code Owners** on, so a collaborator's approval
+> no longer satisfies the rule. To turn it on in an existing ruleset: Settings → Rules →
+> Rulesets → `main` → *Require a pull request before merging* → tick **Require review from Code
+> Owners** → Save. Side effect: the `auto-merge` workflow's approval (`github-actions[bot]`) isn't
+> a code owner's, so `auto-fix` PRs also wait for you.
 
 Contributor guide in Norwegian, for him and for Eirik: [slik-bidrar-du.md](slik-bidrar-du.md).
 
@@ -141,7 +150,8 @@ Check it once now, and again whenever someone is added:
    - `git push origin main` with a new commit → **rejected** ("Changes must be made through
      a pull request" / "Required status check `ci` is expected").
    - Open a PR → the **Merge** button stays disabled until the `ci` check is green and
-     you (the owner) have approved it.
+     you (the owner) have approved it. An approval from another collaborator doesn't
+     enable it (GitHub shows "Code owner review required").
 3. **Force-push** to `main` (by anyone without bypass) → rejected.
 4. Look at the rules: `gh api repos/havnil/kobberogkran/rulesets` → one active ruleset
    targeting `main`.

@@ -1,0 +1,4 @@
+# The owner owns every file. With "Require review from Code Owners" on in the main ruleset
+# (docs/runbooks/main-ruleset.json), only the owner's approval counts, so collaborators
+# (Eirik, Vegard) can't approve each other's PRs. See docs/runbooks/github-setup.md section 3.
+* @havnil
